@@ -775,7 +775,6 @@
     </section>
   </main>
 
-  <!-- Real Video Floating Bubble & Full Modal Widget -->
   <div class="video-bubble-container" id="video-bubble-wrap">
     <div class="video-hint-pill" id="video-hint" onclick="openVideoModal()">
       <span>🎙️ ইন্ট্রো শুনতে ট্যাপ করুন!</span>
@@ -784,7 +783,6 @@
     <div class="video-bubble-orb" id="video-bubble-orb" onclick="openVideoModal()">
       <video id="ai-bubble-video" loop muted autoplay playsinline webkit-playsinline preload="auto">
         <source src="https://files.catbox.moe/fmhga1.mp4" type="video/mp4">
-        <source src="InShot_20260904_031501430.mp4" type="video/mp4">
       </video>
       <div class="pulse-ring"></div>
     </div>
@@ -799,8 +797,7 @@
 
       <div class="modal-video-frame">
         <video id="ai-modal-video" loop playsinline webkit-playsinline preload="auto">
-          <source src="intro.mp4" type="video/mp4">
-          <source src="InShot_20260904_031501430.mp4" type="video/mp4">
+          <source src="https://files.catbox.moe/fmhga1.mp4" type="video/mp4">
         </video>
       </div>
 
@@ -1057,7 +1054,7 @@ class ProductionApp:
         const playPromise = bubbleVid.play();
         if (playPromise !== undefined) {
           playPromise.catch(() => {
-            // Mobile fallback if user hasn't touched the screen yet
+            // মোবাইল টাচ ইভেন্ট ফলব্যাক
             document.addEventListener('touchstart', () => {
               bubbleVid.play();
             }, { once: true });
@@ -1101,7 +1098,7 @@ class ProductionApp:
       modalVid.play();
     }
 
-    /* Neural Canvas Animation */
+    /* Neural Synapse Canvas Engine */
     const canvas = document.getElementById('neural-canvas');
     const ctx = canvas.getContext('2d');
     let width, height;

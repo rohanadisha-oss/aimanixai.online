@@ -471,6 +471,135 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     }
 
+    /* ==========================================================
+       AI VIDEO POPUP WIDGET STYLES
+       ========================================================== */
+    .video-bubble-container {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .video-hint-pill {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid #00f2fe;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+      color: #f8fafc;
+      padding: 0.45rem 0.9rem;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+      cursor: pointer;
+      animation: floatPill 3s ease-in-out infinite;
+      white-space: nowrap;
+    }
+
+    @keyframes floatPill {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .video-bubble-orb {
+      width: 85px;
+      height: 85px;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(135deg, #00f2fe, #6366f1);
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .video-bubble-orb:hover {
+      transform: scale(1.08);
+    }
+
+    .video-bubble-orb video {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .pulse-ring {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 14px;
+      height: 14px;
+      background: #10b981;
+      border: 2px solid #030712;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+      pointer-events: none;
+    }
+
+    .video-modal-card {
+      display: none;
+      position: fixed;
+      bottom: 120px;
+      right: 25px;
+      width: 320px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid #00f2fe;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 35px rgba(0, 242, 254, 0.35);
+      border-radius: 20px;
+      padding: 1rem;
+      backdrop-filter: blur(18px);
+      z-index: 10000;
+      animation: modalFadeIn 0.3s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .video-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .video-close-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .video-close-btn:hover { color: #ef4444; }
+
+    .modal-video-frame {
+      width: 100%;
+      height: 290px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      background: #000;
+    }
+
+    .modal-video-frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 14px;
+    }
+
+    .video-action-bar {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 0.9rem;
+    }
+
     @media (max-width: 950px) {
       .hero { grid-template-columns: 1fr; text-align: center; }
       .startup-pill { margin: 0 auto 1.5rem; }
@@ -478,6 +607,7 @@
       .hero-stats { grid-template-columns: repeat(3, 1fr); }
       .spotlight-card { flex-direction: column; text-align: center; gap: 1.5rem; }
       .contact-container { grid-template-columns: 1fr; padding: 2rem; }
+      .video-modal-card { right: 15px; width: calc(100vw - 30px); bottom: 115px; }
     }
   </style>
 </head>
@@ -626,14 +756,14 @@
               <span class="contact-item-icon">📞</span>
               <div>
                 <strong id="lbl-phone">মোবাইল নম্বর:</strong><br>
-                <a href="tel:914318***" class="contact-link" id="view-contact-phone">৯১৪৩১৮১***</a>
+                <a href="tel:9143181401" class="contact-link" id="view-contact-phone">৯১৪৩১৮১৪০১</a>
               </div>
             </li>
             <li class="contact-item">
               <span class="contact-item-icon">✉️</span>
               <div>
                 <strong id="lbl-email">ইমেইল অ্যাড্রেস:</strong><br>
-                <a href="mailto:**hanadisha@gmail.com" class="contact-link">**hanadisha@gmail.com</a>
+                <a href="mailto:rohanadisha@gmail.com" class="contact-link">rohanadisha@gmail.com</a>
               </div>
             </li>
           </ul>
@@ -654,17 +784,53 @@
     </section>
   </main>
 
+  <div class="video-bubble-container" id="video-bubble-wrap">
+    <div class="video-hint-pill" id="video-hint" onclick="toggleVideoPlayer()">
+      <span>🎙️ ইন্ট্রো শুনতে ট্যাপ করুন!</span>
+    </div>
+
+    <div class="video-bubble-orb" id="video-bubble-orb" onclick="toggleVideoPlayer()">
+      <video id="ai-intro-video" loop muted playsinline preload="auto">
+        <source src="InShot_20260904_031501430.mp4" type="video/mp4">
+        <source src="intro.mp4" type="video/mp4">
+        আপনার ব্রাউজারে ভিডিও সাপোর্ট করছে না।
+      </video>
+      <div class="pulse-ring"></div>
+    </div>
+
+    <div class="video-modal-card" id="video-modal-card">
+      <div class="video-modal-header">
+        <div style="font-weight: 700; color: #00f2fe; font-size: 0.95rem;">
+          🤖 Aimanix AI Assistant
+        </div>
+        <button class="video-close-btn" onclick="toggleVideoPlayer()">✕</button>
+      </div>
+
+      <div class="modal-video-frame" id="modal-video-frame">
+        </div>
+
+      <div class="video-action-bar">
+        <button class="btn-glow" style="padding: 0.5rem 1rem; font-size: 0.85rem; width: 100%; justify-content: center;" onclick="restartVideo()">
+          ▶️ আবার শুনুন
+        </button>
+        <a href="https://wa.me/919143181401" target="_blank" class="btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+          WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
   <script>
     /* -----------------------------------------------------------
-       State & Content Engine
+       Content & Translation Engine
        ----------------------------------------------------------- */
     let currentLang = 'bn';
 
     const siteData = {
       photo: "https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg",
-      whatsapp: "919143181**",
-      phoneBn: "৯১৪৩১৮১***",
-      phoneEn: "+91 9143181***",
+      whatsapp: "919143181401",
+      phoneBn: "৯১৪৩১৮১৪০১",
+      phoneEn: "+91 9143181401",
       
       bn: {
         brandName: "Anowar Hossain",
@@ -781,7 +947,7 @@
       }, 70);
     }
 
-    /* Fast Code Type-Fill HUD Terminal */
+    /* Fast Code Terminal Simulation */
     const pythonCodeSnippet = `# Initializing Aimanix AI Engine
 from aimanix import NeuralCore, VibeCoder
 
@@ -818,7 +984,7 @@ class ProductionApp:
       }, 20);
     }
 
-    /* Render UI Elements */
+    /* Render UI */
     function renderUI() {
       const loc = siteData[currentLang];
 
@@ -889,9 +1055,48 @@ class ProductionApp:
       document.getElementById('theme-toggle').textContent = isDark ? '🌙' : '☀️';
     }
 
-    /* -----------------------------------------------------------
-       Next-Gen Synapse Particle Trail (Canvas Engine)
-       ----------------------------------------------------------- */
+    /* Video Player Controller */
+    const videoEl = document.getElementById('ai-intro-video');
+    const bubbleOrb = document.getElementById('video-bubble-orb');
+    const modalVideoFrame = document.getElementById('modal-video-frame');
+    const modalCard = document.getElementById('video-modal-card');
+    const hintPill = document.getElementById('video-hint');
+    let isExpanded = false;
+
+    window.addEventListener('load', () => {
+      videoEl.muted = true;
+      videoEl.play().catch(() => {});
+    });
+
+    function toggleVideoPlayer() {
+      isExpanded = !isExpanded;
+
+      if (isExpanded) {
+        modalCard.style.display = 'block';
+        modalVideoFrame.appendChild(videoEl);
+        hintPill.style.display = 'none';
+        bubbleOrb.style.display = 'none';
+
+        videoEl.muted = false;
+        videoEl.currentTime = 0;
+        videoEl.play();
+      } else {
+        modalCard.style.display = 'none';
+        bubbleOrb.appendChild(videoEl);
+        hintPill.style.display = 'block';
+        bubbleOrb.style.display = 'block';
+
+        videoEl.muted = true;
+        videoEl.play();
+      }
+    }
+
+    function restartVideo() {
+      videoEl.currentTime = 0;
+      videoEl.play();
+    }
+
+    /* Neural Synapse Canvas Engine */
     const canvas = document.getElementById('neural-canvas');
     const ctx = canvas.getContext('2d');
     let width, height;

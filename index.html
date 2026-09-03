@@ -465,9 +465,7 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     }
 
-    /* ==========================================================
-       AI VIDEO POPUP WIDGET
-       ========================================================== */
+    /* Video Bubble Style */
     .video-bubble-container {
       position: fixed;
       bottom: 25px;
@@ -517,6 +515,7 @@
       height: 100%;
       border-radius: 50%;
       object-fit: cover;
+      pointer-events: none;
     }
 
     .pulse-ring {
@@ -783,9 +782,9 @@
     </div>
 
     <div class="video-bubble-orb" id="video-bubble-orb" onclick="openVideoModal()">
-      <video id="ai-bubble-video" loop muted playsinline autoplay preload="auto">
-        <source src="./intro.mp4" type="video/mp4">
-        <source src="InShot_20260904_031501430.mp4">
+      <video id="ai-bubble-video" loop muted autoplay playsinline webkit-playsinline preload="auto">
+        <source src="intro.mp4" type="video/mp4">
+        <source src="InShot_20260904_031501430.mp4" type="video/mp4">
       </video>
       <div class="pulse-ring"></div>
     </div>
@@ -799,9 +798,9 @@
       </div>
 
       <div class="modal-video-frame">
-        <video id="ai-modal-video" loop playsinline preload="auto">
-          <source src="./intro.mp4" type="video/mp4">
-          <source src="./InShot_20260904_031501430.mp4" type="video/mp4">
+        <video id="ai-modal-video" loop playsinline webkit-playsinline preload="auto">
+          <source src="intro.mp4" type="video/mp4">
+          <source src="InShot_20260904_031501430.mp4" type="video/mp4">
         </video>
       </div>
 
@@ -1052,10 +1051,23 @@ class ProductionApp:
     const bubbleOrb = document.getElementById('video-bubble-orb');
     const hintPill = document.getElementById('video-hint');
 
-    window.addEventListener('load', () => {
-      bubbleVid.muted = true;
-      bubbleVid.play().catch(() => {});
-    });
+    function playMutedBubble() {
+      if (bubbleVid) {
+        bubbleVid.muted = true;
+        const playPromise = bubbleVid.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // Mobile fallback if user hasn't touched the screen yet
+            document.addEventListener('touchstart', () => {
+              bubbleVid.play();
+            }, { once: true });
+          });
+        }
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', playMutedBubble);
+    window.addEventListener('load', playMutedBubble);
 
     function openVideoModal() {
       modalCard.style.display = 'block';
@@ -1065,10 +1077,13 @@ class ProductionApp:
       bubbleVid.pause();
       modalVid.currentTime = 0;
       modalVid.muted = false;
-      modalVid.play().catch(() => {
-        modalVid.muted = true;
-        modalVid.play();
-      });
+      const playPromise = modalVid.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          modalVid.muted = true;
+          modalVid.play();
+        });
+      }
     }
 
     function closeVideoModal() {
@@ -1077,11 +1092,12 @@ class ProductionApp:
       hintPill.style.display = 'block';
 
       modalVid.pause();
-      bubbleVid.play().catch(() => {});
+      playMutedBubble();
     }
 
     function restartVideo() {
       modalVid.currentTime = 0;
+      modalVid.muted = false;
       modalVid.play();
     }
 

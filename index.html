@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anowar Hossain | Founder of Aimanix AI</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #030712;
+      --surface: rgba(15, 23, 42, 0.75);
+      --surface-card: rgba(15, 23, 42, 0.85);
+      --surface-border: rgba(56, 189, 248, 0.25);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --cyan: #00f2fe;
+      --blue: #38bdf8;
+      --indigo: #6366f1;
+      --neon-glow: rgba(0, 242, 254, 0.4);
+      --code-bg: rgba(2, 6, 23, 0.95);
+      --admin-bg: #0f172a;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --surface: rgba(255, 255, 255, 0.85);
+      --surface-card: rgba(255, 255, 255, 0.92);
+      --surface-border: rgba(37, 99, 235, 0.2);
+      --text: #0b1329;
+      --text-muted: #475569;
+      --cyan: #0284c7;
+      --blue: #2563eb;
+      --indigo: #4f46e5;
+      --neon-glow: rgba(37, 99, 235, 0.25);
+      --code-bg: rgba(241, 245, 249, 0.95);
+      --admin-bg: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', 'Hind Siliguri', sans-serif;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body:lang(bn) { font-family: 'Hind Siliguri', sans-serif; }
+
+    .cyber-grid {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
+      -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #neural-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    header, main, footer { position: relative; z-index: 2; }
+
+    /* ==========================================================
+       MODERN DYNAMIC TEXT & NEON GLOW BORDER ANIMATIONS
+       ========================================================== */
+    .gradient-text {
+      background: linear-gradient(135deg, var(--cyan), var(--blue), var(--indigo), var(--cyan));
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShimmer 6s ease infinite;
+    }
+
+    @keyframes gradientShimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Rotating Neon Border Wrapper */
+    .neon-border-box {
+      position: relative;
+      border-radius: 20px;
+      background: var(--surface-card);
+      z-index: 1;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .neon-border-box::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 22px;
+      background: linear-gradient(90deg, #00f2fe, #38bdf8, #6366f1, #00f2fe);
+      background-size: 300% 300%;
+      z-index: -1;
+      animation: rotateNeon 4s linear infinite;
+      opacity: 0.7;
+      transition: opacity 0.3s ease, filter 0.3s ease;
+      filter: blur(4px);
+    }
+
+    .neon-border-box:hover::before {
+      opacity: 1;
+      filter: blur(8px);
+    }
+
+    .neon-border-box:hover {
+      transform: translateY(-5px);
+    }
+
+    @keyframes rotateNeon {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Typing Cursor */
+    .typewriter-cursor {
+      display: inline-block;
+      width: 2px;
+      background-color: var(--cyan);
+      margin-left: 4px;
+      animation: blink 0.75s infinite;
+      vertical-align: text-bottom;
+      height: 1.15em;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Navigation */
+    .navbar {
+      position: sticky;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2.5rem;
+      background: var(--surface);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--surface-border);
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-icon {
+      font-family: 'Fira Code', monospace;
+      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      color: #fff;
+      font-weight: 800;
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      box-shadow: 0 0 15px var(--neon-glow);
+    }
+
+    .brand-name { font-weight: 800; font-size: 1.25rem; }
+    .nav-controls { display: flex; align-items: center; gap: 0.7rem; }
+
+    .btn-ctrl {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      padding: 0.5rem 0.9rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .btn-ctrl:hover { border-color: var(--cyan); box-shadow: 0 0 10px var(--neon-glow); }
+    .btn-admin { background: #e11d48; border-color: #f43f5e; color: #fff; }
+
+    /* Hero Section */
+    .hero {
+      max-width: 1300px;
+      margin: 0 auto;
+      min-height: 85vh;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3.5rem;
+      align-items: center;
+      padding: 4rem 2rem 3rem;
+    }
+
+    .startup-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.45rem 1.2rem;
+      border-radius: 50px;
+      background: rgba(0, 242, 254, 0.1);
+      border: 1px solid var(--cyan);
+      box-shadow: 0 0 15px var(--neon-glow);
+      margin-bottom: 1.5rem;
+    }
+
+    .startup-tag {
+      font-family: 'Fira Code', monospace;
+      font-weight: 800;
+      color: var(--cyan);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--cyan);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.7; }
+    }
+
+    .hero-title {
+      font-size: 3.4rem;
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .hero-buttons { display: flex; gap: 1.2rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+
+    .btn-glow {
+      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      color: #fff;
+      padding: 0.85rem 1.8rem;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 0 25px var(--neon-glow);
+      transition: transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-glow:hover { transform: translateY(-2px); }
+
+    .btn-outline {
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text);
+      padding: 0.85rem 1.8rem;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-outline:hover { border-color: var(--cyan); box-shadow: 0 0 15px var(--neon-glow); }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+      border-top: 1px solid var(--surface-border);
+      padding-top: 1.8rem;
+    }
+
+    .stat-box { display: flex; flex-direction: column; }
+    .stat-number { font-size: 1.8rem; font-weight: 800; color: var(--cyan); font-family: 'Fira Code', monospace; }
+    .stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+
+    /* Profile Visual Card */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+      align-items: center;
+    }
+
+    .profile-card {
+      padding: 2.2rem;
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+    }
+
+    .photo-container {
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 1.4rem;
+      border-radius: 50%;
+      padding: 4px;
+      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      box-shadow: 0 0 25px var(--neon-glow);
+      position: relative;
+    }
+
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #0f172a;
+    }
+
+    .photo-badge {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background: #10b981;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 3px solid var(--bg);
+    }
+
+    /* Interactive Fast Type-Fill HUD Terminal */
+    .hud-window {
+      background: var(--code-bg);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 400px;
+      font-family: 'Fira Code', monospace;
+      text-align: left;
+      overflow: hidden;
+      border: 1px solid var(--surface-border);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .hud-bar {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.65rem 1.2rem;
+      border-bottom: 1px solid var(--surface-border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hud-circle { width: 10px; height: 10px; border-radius: 50%; }
+    .c-red { background: #ef4444; }
+    .c-yellow { background: #f59e0b; }
+    .c-green { background: #10b981; }
+
+    .hud-body { 
+      padding: 1.2rem; 
+      font-size: 0.8rem; 
+      line-height: 1.6; 
+      color: #38bdf8; 
+      min-height: 165px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    /* Startup Spotlight Banner */
+    .brand-spotlight { max-width: 1300px; margin: 1rem auto 4rem; padding: 0 2rem; }
+
+    .spotlight-card {
+      padding: 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .spotlight-card::after {
+      content: "AIMANIX";
+      position: absolute;
+      right: -20px;
+      bottom: -35px;
+      font-size: 8rem;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.03);
+      pointer-events: none;
+    }
+
+    .spotlight-text h2 { font-size: 2rem; font-weight: 800; margin-bottom: 0.6rem; }
+    .spotlight-text p { color: var(--text-muted); max-width: 750px; font-size: 1rem; line-height: 1.6; }
+
+    /* Speed Section */
+    .speed-banner { max-width: 1300px; margin: 0 auto 5rem; padding: 0 2rem; }
+
+    .speed-card {
+      padding: 2.2rem;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .speed-badge-10x {
+      font-size: 3.2rem;
+      font-weight: 900;
+      font-family: 'Fira Code', monospace;
+      color: var(--cyan);
+      text-shadow: 0 0 15px var(--neon-glow);
+    }
+
+    /* Services Section */
+    .services { max-width: 1300px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+    .section-head { text-align: center; margin-bottom: 3.5rem; }
+    .section-title { font-size: 2.4rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .section-subtitle { color: var(--text-muted); max-width: 650px; margin: 0 auto; font-size: 1rem; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .skill-box {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .skill-icon { font-size: 2.2rem; margin-bottom: 1.2rem; display: inline-block; }
+    .skill-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.8rem; }
+    .skill-desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.65; }
+
+    /* Contact Section */
+    .contact-section { max-width: 1300px; margin: 0 auto 5rem; padding: 0 2rem; }
+
+    .contact-container {
+      padding: 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .contact-info h3 { font-size: 2rem; font-weight: 800; margin-bottom: 1.2rem; }
+    .contact-info p { color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6; }
+
+    .contact-list { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; }
+    .contact-item { display: flex; align-items: flex-start; gap: 1rem; font-size: 0.95rem; }
+
+    .contact-item-icon {
+      font-size: 1.3rem;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 0.5rem;
+      border-radius: 8px;
+      color: var(--cyan);
+    }
+
+    .contact-link { color: var(--cyan); text-decoration: none; font-weight: 600; }
+    .contact-link:hover { text-decoration: underline; }
+
+    .map-frame {
+      width: 100%;
+      height: 380px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--surface-border);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Admin Modal */
+    .admin-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .admin-modal {
+      background: var(--admin-bg);
+      border: 1px solid var(--surface-border);
+      box-shadow: 0 0 50px rgba(0, 242, 254, 0.25);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 780px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .admin-header {
+      padding: 1.2rem 1.8rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--surface-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-body {
+      padding: 1.8rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-size: 0.85rem; font-weight: 600; color: var(--cyan); }
+    .form-group input, .form-group textarea {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      padding: 0.7rem 0.9rem;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
+    .admin-footer {
+      padding: 1.2rem 1.8rem;
+      border-top: 1px solid var(--surface-border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    .btn-save {
+      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-reset {
+      background: transparent;
+      border: 1px solid #ef4444;
+      color: #ef4444;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    @media (max-width: 950px) {
+      .hero { grid-template-columns: 1fr; text-align: center; }
+      .startup-pill { margin: 0 auto 1.5rem; }
+      .hero-buttons { justify-content: center; }
+      .hero-stats { grid-template-columns: repeat(3, 1fr); }
+      .spotlight-card { flex-direction: column; text-align: center; gap: 1.5rem; }
+      .contact-container { grid-template-columns: 1fr; padding: 2rem; }
+    }
+  </style>
+</head>
+<body lang="bn">
+
+  <div class="cyber-grid"></div>
+  <canvas id="neural-canvas"></canvas>
+
+  <header>
+    <nav class="navbar">
+      <a href="#" class="brand">
+        <span class="brand-icon">Aimanix.AI</span>
+        <span class="brand-name" id="view-brand-name">Anowar Hossain</span>
+      </a>
+
+      <div class="nav-controls">
+        <button class="btn-ctrl" id="lang-toggle" onclick="toggleLanguage()">English</button>
+        <button class="btn-ctrl" id="theme-toggle" onclick="toggleTheme()">☀️</button>
+        <button class="btn-ctrl btn-admin" onclick="openAdminModal()">⚙️ Admin Panel</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero Section with Animated Heading -->
+    <section class="hero">
+      <div class="hero-left">
+        <div class="startup-pill">
+          <span class="pulse-dot"></span>
+          <span class="startup-tag">AIMANIX AI</span>
+          <span style="color: var(--text-muted); font-size: 0.85rem;" id="view-hero-tag">• Next-Gen Intelligent Systems</span>
+        </div>
+        
+        <h1 class="hero-title">
+          <span id="view-hero-greeting">নমস্কার, আমি</span> <br>
+          <span class="gradient-text" id="typewriter-hero"></span><span class="typewriter-cursor"></span>
+        </h1>
+        
+        <p class="hero-desc" id="view-hero-desc">
+          প্রতিষ্ঠাতা, <strong>Aimanix AI</strong> | AI-Powered Full-Stack Web Developer এবং এআই অটোমেশন স্পেশালিস্ট। ট্র্যাডিশনাল কোডিংয়ের শক্তিশালী ভিত্তি এবং আধুনিক এআই প্রযুক্তির (Vibe Coding) নিখুঁত কম্বিনেশন ব্যবহার করে আমি যেকোনো স্কেলের স্মার্ট, সিকিউর এবং হাই-পারফরম্যান্স ওয়েব অ্যাপ্লিকেশন তৈরি করতে পারি।
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#" id="view-wa-link" class="btn-glow" target="_blank" rel="noopener">
+            <span id="view-btn-wa">💬 সরাসরি WhatsApp-এ বার্তা দিন</span>
+          </a>
+          <a href="#aimanix" class="btn-outline">
+            <span id="view-btn-vision">🚀 Aimanix AI এর ভিশন</span>
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-box">
+            <span class="stat-number">10X</span>
+            <span class="stat-label" id="stat-speed-label">Faster Execution</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number">Dual</span>
+            <span class="stat-label" id="stat-db-label">MySQL & MongoDB</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number">100%</span>
+            <span class="stat-label" id="stat-sec-label">Secure Architecture</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Visual Area with Profile & Rapid Type-Fill Terminal -->
+      <div class="hero-right">
+        <div class="neon-border-box profile-card">
+          <div class="photo-container">
+            <img id="view-profile-img" class="profile-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80" alt="Anowar Hossain">
+            <div class="photo-badge" title="Active System"></div>
+          </div>
+          <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.3rem;" id="view-card-name">Anowar Hossain</h3>
+          <p style="color: var(--cyan); font-size: 0.88rem; font-weight: 600;" id="view-card-title">Founder, Aimanix AI</p>
+          <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.4rem;">AI Full-Stack Developer & Automation Lead</p>
+        </div>
+
+        <!-- Fast Type-Fill Live Coding Terminal -->
+        <div class="hud-window">
+          <div class="hud-bar">
+            <span class="hud-circle c-red"></span>
+            <span class="hud-circle c-yellow"></span>
+            <span class="hud-circle c-green"></span>
+            <span style="color: #64748b; font-size: 0.75rem; margin-left: 0.5rem;">neural_core_init.py</span>
+          </div>
+          <div class="hud-body" id="code-terminal"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Startup Spotlight Banner with Neon Border -->
+    <section class="brand-spotlight" id="aimanix">
+      <div class="neon-border-box spotlight-card">
+        <div class="spotlight-text">
+          <h2 class="gradient-text" id="view-spotlight-title">Aimanix AI: ইনটেলিজেন্ট অটোমেশন ও সফটওয়্যার সলিউশন</h2>
+          <p id="view-spotlight-desc">
+            Aimanix AI হলো আমাদের বিশেষায়িত উদ্যোগ, যার লক্ষ্য জটিল বিজনেস প্রসেসকে কৃত্রিম বুদ্ধিমত্তা ও আধুনিক কোডিং আর্কিটেকচারের মাধ্যমে স্বয়ংক্রিয় এবং গতিশীল করা। এআই মডেল ইন্টিগ্রেশন থেকে শুরু করে হাই-স্পিড ওয়েব অ্যাপ্লিকেশন—সবকিছুতেই নির্ভরযোগ্য ও স্কেলেবল প্রযুক্তি সরবরাহ করে Aimanix AI।
+          </p>
+        </div>
+        <a href="#contact" class="btn-glow" style="white-space: nowrap;" id="view-btn-partner">পার্টনারশিপ করুন</a>
+      </div>
+    </section>
+
+    <!-- 10x Speed Section with Neon Border -->
+    <section class="speed-banner">
+      <div class="neon-border-box speed-card">
+        <div class="speed-badge-10x" id="view-speed-badge">10X</div>
+        <div>
+          <h3 style="font-size: 1.4rem; margin-bottom: 0.5rem; font-weight: 700;" id="view-speed-title">
+            আমার বিশেষত্ব ও কাজের গতি
+          </h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65;" id="view-speed-desc">
+            আধুনিক 'Vibe Coding' এবং 'Ultimate AI Systems' প্রযুক্তিতে দক্ষ হওয়ায় আমি প্রম্পট ইঞ্জিনিয়ারিংয়ের মাধ্যমে সাধারণ সময়ের চেয়ে ১০ গুণ দ্রুত প্রজেক্ট ডিজাইন ও প্রোটোটাইপ তৈরি করতে পারি। তবে আমি শুধু এআই-এর ওপর নির্ভরশীল নই; আমার ব্যাকএন্ড (Node.js, Flask) এবং ডুয়াল-ডেটাবেজ (MySQL, MongoDB) নলেজ থাকার কারণে আমি এআই জেনারেটেড কোডকে নিখুঁতভাবে কাস্টমাইজ, আর্কিটেক্ট, ডিবাগ এবং হাই-সিকিউর করতে সক্ষম। সহজ কথায়—আপনি পাচ্ছেন এআই-এর আল্ট্রা-ফাস্ট স্পিড এবং একজন প্রো-ডেভেলপারের সলিড টেকনিক্যাল ফিনিশিং।
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Services with Individual Neon Borders -->
+    <section class="services" id="services">
+      <div class="section-head">
+        <h2 class="section-title gradient-text" id="view-services-title">টেকনিক্যাল স্কিলসেট ও সার্ভিস</h2>
+        <p class="section-subtitle" id="view-services-subtitle">Aimanix AI ও আধুনিক ওয়েব ডেভেলপমেন্টের সম্পূর্ণ প্রযুক্তিগত সমাহার</p>
+      </div>
+
+      <div class="skills-grid" id="skills-container"></div>
+    </section>
+
+    <!-- Contact & Map Section with Neon Border -->
+    <section class="contact-section" id="contact">
+      <div class="neon-border-box contact-container">
+        <div class="contact-info">
+          <h3 class="gradient-text" id="view-contact-heading">যোগাযোগের ঠিকানা</h3>
+          <p id="view-contact-sub">আপনার যেকোনো নতুন প্রজেক্ট, এআই অটোমেশন আলোচনা বা কনসালটেশনের জন্য সরাসরি যুক্ত হোন।</p>
+
+          <ul class="contact-list">
+            <li class="contact-item">
+              <span class="contact-item-icon">👤</span>
+              <div>
+                <strong id="lbl-name">নাম:</strong><br>
+                <span id="view-contact-name">আনোয়ার হোসেন</span>
+              </div>
+            </li>
+            <li class="contact-item">
+              <span class="contact-item-icon">📍</span>
+              <div>
+                <strong id="lbl-addr">ঠিকানা:</strong><br>
+                <span id="view-contact-address">খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩</span>
+              </div>
+            </li>
+            <li class="contact-item">
+              <span class="contact-item-icon">📞</span>
+              <div>
+                <strong id="lbl-phone">মোবাইল নম্বর:</strong><br>
+                <a href="tel:9143181401" class="contact-link" id="view-contact-phone">৯১৪৩১৮১৪০১</a>
+              </div>
+            </li>
+            <li class="contact-item">
+              <span class="contact-item-icon">✉️</span>
+              <div>
+                <strong id="lbl-email">ইমেইল অ্যাড্রেস:</strong><br>
+                <a href="mailto:rohanadisha@gmail.com" class="contact-link" id="view-contact-email">rohanadisha@gmail.com</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="map-frame">
+          <iframe 
+            src="https://maps.google.com/maps?q=Deganga,%20North%2024%20Parganas,%20West%20Bengal%20743423&t=&z=13&ie=UTF8&iwloc=&output=embed" 
+            width="100%" 
+            height="100%" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Admin Modal -->
+  <div class="admin-overlay" id="admin-modal">
+    <div class="admin-modal">
+      <div class="admin-header">
+        <h3 style="color: var(--cyan); font-weight: 700;">⚙️ Aimanix AI Live Admin & Photo Controller</h3>
+        <button class="btn-ctrl" onclick="closeAdminModal()">✕</button>
+      </div>
+
+      <div class="admin-body">
+        <div class="form-group" style="background: rgba(0,242,254,0.06); padding: 1rem; border-radius: 10px; border: 1px dashed var(--cyan);">
+          <label>📸 নিজের ছবি আপলোড করুন (Upload Direct Photo):</label>
+          <input type="file" id="edit-photo-file" accept="image/*" onchange="handleImageUpload(event)" style="margin-top: 0.4rem;">
+          <small style="color: var(--text-muted); margin-top: 0.3rem;">অথবা সরাসরি ইমেজ URL দিন:</small>
+          <input type="text" id="edit-photo-url" placeholder="https://example.com/my-photo.jpg" style="margin-top: 0.2rem;">
+        </div>
+
+        <div class="form-group">
+          <label>Founder Name (বাংলা):</label>
+          <input type="text" id="edit-hero-name-bn">
+        </div>
+
+        <div class="form-group">
+          <label>Founder Name (English):</label>
+          <input type="text" id="edit-hero-name-en">
+        </div>
+
+        <div class="form-group">
+          <label>Hero Description (বাংলা):</label>
+          <textarea id="edit-hero-desc-bn"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Hero Description (English):</label>
+          <textarea id="edit-hero-desc-en"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>WhatsApp Number (Only Numbers):</label>
+          <input type="text" id="edit-whatsapp">
+        </div>
+
+        <div class="form-group">
+          <label>Mobile Number (Display):</label>
+          <input type="text" id="edit-phone">
+        </div>
+
+        <div class="form-group">
+          <label>Email Address:</label>
+          <input type="email" id="edit-email">
+        </div>
+
+        <div class="form-group">
+          <label>Location / Address (বাংলা):</label>
+          <input type="text" id="edit-address-bn">
+        </div>
+
+        <div class="form-group">
+          <label>Location / Address (English):</label>
+          <input type="text" id="edit-address-en">
+        </div>
+
+        <div class="form-group">
+          <label>Services JSON (Bilingual Config):</label>
+          <textarea id="edit-services-json" style="font-family: 'Fira Code', monospace; min-height: 120px; font-size: 0.8rem;"></textarea>
+        </div>
+      </div>
+
+      <div class="admin-footer">
+        <button class="btn-reset" onclick="resetToDefault()">Reset Defaults</button>
+        <button class="btn-save" onclick="saveAdminChanges()">Save & Update Live</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* -----------------------------------------------------------
+       State & Localization Configuration
+       ----------------------------------------------------------- */
+    let currentLang = 'bn';
+
+    const defaultData = {
+      photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
+      whatsapp: "919143181401",
+      phone: "৯১৪৩১৮১৪০১",
+      phoneEn: "+91 9143181401",
+      email: "rohanadisha@gmail.com",
+      
+      bn: {
+        brandName: "Anowar Hossain",
+        heroGreeting: "নমস্কার, আমি",
+        heroName: "আনোয়ার হোসেন",
+        heroTag: "• নেক্সট-জেন ইন্টেলিজেন্ট সিস্টেমস",
+        heroDesc: "প্রতিষ্ঠাতা, Aimanix AI | AI-Powered Full-Stack Web Developer এবং এআই অটোমেশন স্পেশালিস্ট। ট্র্যাডিশনাল কোডিংয়ের শক্তিশালী ভিত্তি এবং আধুনিক এআই প্রযুক্তির (Vibe Coding) নিখুঁত কম্বিনেশন ব্যবহার করে আমি যেকোনো স্কেলের স্মার্ট, সিকিউর এবং হাই-পারফরম্যান্স ওয়েব অ্যাপ্লিকেশন তৈরি করতে পারি।",
+        btnWa: "💬 সরাসরি WhatsApp-এ বার্তা দিন",
+        btnVision: "🚀 Aimanix AI এর ভিশন",
+        statSpeed: "দ্রুত এক্সিকিউশন",
+        statDb: "ডুয়াল ডেটাবেজ সাপোর্ট",
+        statSec: "নিরাপদ আর্কিটেকচার",
+        cardTitle: "প্রতিষ্ঠাতা, Aimanix AI",
+        spotlightTitle: "Aimanix AI: ইনটেলিজেন্ট অটোমেশন ও সফটওয়্যার সলিউশন",
+        spotlightDesc: "Aimanix AI হলো আমাদের বিশেষায়িত উদ্যোগ, যার লক্ষ্য জটিল বিজনেস প্রসেসকে কৃত্রিম বুদ্ধিমত্তা ও আধুনিক কোডিং আর্কিটেকচারের মাধ্যমে স্বয়ংক্রিয় এবং গতিশীল করা। এআই মডেল ইন্টিগ্রেশন থেকে শুরু করে হাই-স্পিড ওয়েব অ্যাপ্লিকেশন—সবকিছুতেই নির্ভরযোগ্য ও স্কেলেবল প্রযুক্তি সরবরাহ করে Aimanix AI।",
+        btnPartner: "পার্টনারশিপ করুন",
+        speedTitle: "আমার বিশেষত্ব ও কাজের গতি",
+        speedDesc: "আধুনিক 'Vibe Coding' এবং 'Ultimate AI Systems' প্রযুক্তিতে দক্ষ হওয়ায় আমি প্রম্পট ইঞ্জিনিয়ারিংয়ের মাধ্যমে সাধারণ সময়ের চেয়ে ১০ গুণ দ্রুত প্রজেক্ট ডিজাইন ও প্রোটোটাইপ তৈরি করতে পারি। তবে আমি শুধু এআই-এর ওপর নির্ভরশীল নই; আমার ব্যাকএন্ড (Node.js, Flask) এবং ডুয়াল-ডেটাবেজ (MySQL, MongoDB) নলেজ থাকার কারণে আমি এআই জেনারেটেড কোডকে নিখুঁতভাবে কাস্টমাইজ, আর্কিটেক্ট, ডিবাগ এবং হাই-সিকিউর করতে সক্ষম। সহজ কথায়—আপনি পাচ্ছেন এআই-এর আল্ট্রা-ফাস্ট স্পিড এবং একজন প্রো-ডেভেলপারের সলিড টেকনিক্যাল ফিনিশিং।",
+        servicesTitle: "টেকনিক্যাল স্কিলসেট ও সার্ভিস",
+        servicesSubtitle: "Aimanix AI ও আধুনিক ওয়েব ডেভেলপমেন্টের সম্পূর্ণ প্রযুক্তিগত সমাহার",
+        contactHeading: "যোগাযোগের ঠিকানা",
+        contactSub: "আপনার যেকোনো নতুন প্রজেক্ট, এআই অটোমেশন আলোচনা বা কনসালটেশনের জন্য সরাসরি যুক্ত হোন।",
+        lblName: "নাম:",
+        lblAddr: "ঠিকানা:",
+        lblPhone: "মোবাইল নম্বর:",
+        lblEmail: "ইমেইল অ্যাড্রেস:",
+        address: "খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩"
+      },
+
+      en: {
+        brandName: "Anowar Hossain",
+        heroGreeting: "Hello, I am",
+        heroName: "Anowar Hossain",
+        heroTag: "• Next-Gen Intelligent Systems",
+        heroDesc: "Founder of Aimanix AI | AI-Powered Full-Stack Web Developer & Automation Specialist. Combining solid classical engineering with cutting-edge Vibe Coding, I build secure, ultra-fast, and scalable modern web applications.",
+        btnWa: "💬 Direct WhatsApp Message",
+        btnVision: "🚀 Aimanix AI Vision",
+        statSpeed: "Faster Execution",
+        statDb: "Dual Database Support",
+        statSec: "Secure Architecture",
+        cardTitle: "Founder, Aimanix AI",
+        spotlightTitle: "Aimanix AI: Intelligent Automation & Software Solutions",
+        spotlightDesc: "Aimanix AI is our specialized venture designed to streamline complex business workflows through artificial intelligence and modern code architecture. From bespoke AI integrations to high-speed web apps, Aimanix AI delivers scalable, high-performance systems.",
+        btnPartner: "Partner With Us",
+        speedTitle: "My Edge & Delivery Speed",
+        speedDesc: "By leveraging Vibe Coding and advanced Prompt Engineering, I build prototypes and architectures 10x faster than traditional timelines. Backed by solid Node.js, Flask, MySQL, and MongoDB engineering, I debug, secure, and deliver enterprise-grade performance.",
+        servicesTitle: "Core Technical Services",
+        servicesSubtitle: "Full-cycle digital delivery powered by modern AI and full-stack engineering",
+        contactHeading: "Get In Touch",
+        contactSub: "Reach out directly for digital projects, automation consulting, or enterprise web builds.",
+        lblName: "Name:",
+        lblAddr: "Address:",
+        lblPhone: "Mobile Number:",
+        lblEmail: "Email Address:",
+        address: "Khejurdanga, Deganga, Barasat, North 24 Parganas, 743423"
+      },
+
+      services: [
+        {
+          icon: "🎨",
+          titleBn: "Front-End & UI Design",
+          titleEn: "Front-End & UI Design",
+          descBn: "HTML, CSS, JavaScript এবং এআই-অ্যাসিস্টেড টুলস ব্যবহার করে আকর্ষণীয়, আধুনিক ও ১০০% রেসপন্সিভ ল্যান্ডিং পেজ বা ইউজার ইন্টারফেস তৈরি।",
+          descEn: "Building responsive, modern, and high-conversion user interfaces using HTML, CSS, JavaScript, and AI-accelerated frameworks."
+        },
+        {
+          icon: "⚡",
+          titleBn: "Back-End Development",
+          titleEn: "Back-End Development",
+          descBn: "Python (Flask) এবং Node.js ব্যবহার করে শক্তিশালী RESTful API, কাস্টম লজিক এবং সিকিউর সার্ভার ম্যানেজমেন্ট।",
+          descEn: "Scalable REST APIs, custom application logic, and resilient backend systems powered by Python (Flask) and Node.js."
+        },
+        {
+          icon: "🗄️",
+          titleBn: "Dual-Database Management",
+          titleEn: "Dual-Database Management",
+          descBn: "প্রজেক্টের চাহিদা অনুযায়ী MySQL (Relational) অথবা MongoDB (NoSQL) ডেটাবেজ ডিজাইন, কোয়েরি অপটিমাইজেশন এবং নিরাপদ ডেটা হ্যান্ডলিং।",
+          descEn: "Architecting relational structures with MySQL and high-throughput document datastores with MongoDB."
+        },
+        {
+          icon: "🔮",
+          titleBn: "Vibe Coding & AI Systems",
+          titleEn: "Vibe Coding & AI Systems",
+          descBn: "প্রম্পট ইঞ্জিনিয়ারিংয়ের মাধ্যমে যেকোনো জটিল বিজনেস আইডিয়াকে দ্রুততম সময়ে প্রফেশনাল লাইভ প্রজেক্টে রূপান্তর করা।",
+          descEn: "Translating raw ideas into functional, production-ready software rapidly using state-of-the-art AI systems."
+        },
+        {
+          icon: "⚙️",
+          titleBn: "Python Scripting",
+          titleEn: "Python Scripting & Automation",
+          descBn: "ডাটা প্রসেসিং, ওয়েব স্ক্র্যাপিং বা ব্যবসার প্রতিদিনের ম্যানুয়াল কাজের জন্য কাস্টম অটোমেশন স্ক্রিপ্ট তৈরি।",
+          descEn: "Custom automation scripts for repetitive tasks, web scraping pipelines, and background data processing."
+        }
+      ]
+    };
+
+    function getSiteData() {
+      const stored = localStorage.getItem("aimanix_v3_data");
+      return stored ? JSON.parse(stored) : defaultData;
+    }
+
+    /* -----------------------------------------------------------
+       Typewriter Engine for Hero Heading
+       ----------------------------------------------------------- */
+    let typeIndex = 0;
+    let typeTimer = null;
+
+    function startTypewriter(text) {
+      if (typeTimer) clearInterval(typeTimer);
+      const el = document.getElementById("typewriter-hero");
+      el.textContent = "";
+      typeIndex = 0;
+      
+      typeTimer = setInterval(() => {
+        if (typeIndex < text.length) {
+          el.textContent += text.charAt(typeIndex);
+          typeIndex++;
+        } else {
+          clearInterval(typeTimer);
+        }
+      }, 70);
+    }
+
+    /* -----------------------------------------------------------
+       High-Speed Code Type-Fill Engine (AI HUD Terminal)
+       ----------------------------------------------------------- */
+    const pythonCodeSnippet = `# Initializing Aimanix AI Engine
+from aimanix import NeuralCore, VibeCoder
+
+class ProductionApp:
+    def __init__(self):
+        self.lead = "Anowar Hossain"
+        self.speed = "10x Ultra Rapid"
+        self.stack = ["Python", "Node.js", "Flask"]
+        self.db = ["MySQL", "MongoDB"]
+
+    def build_system(self):
+        return VibeCoder.generate_production_ready()
+
+>> SYSTEM READY: 100% SECURE & ACTIVE`;
+
+    let codeIdx = 0;
+    let codeTimer = null;
+
+    function runCodeTypeFill() {
+      if (codeTimer) clearInterval(codeTimer);
+      const term = document.getElementById("code-terminal");
+      term.textContent = "";
+      codeIdx = 0;
+
+      codeTimer = setInterval(() => {
+        if (codeIdx < pythonCodeSnippet.length) {
+          term.textContent += pythonCodeSnippet.charAt(codeIdx);
+          codeIdx++;
+          term.scrollTop = term.scrollHeight;
+        } else {
+          clearInterval(codeTimer);
+          setTimeout(runCodeTypeFill, 5000); // Loop back after 5 seconds
+        }
+      }, 20); // Fast type fill speed
+    }
+
+    /* -----------------------------------------------------------
+       Render Engine
+       ----------------------------------------------------------- */
+    function renderUI() {
+      const data = getSiteData();
+      const loc = data[currentLang];
+
+      document.body.lang = currentLang;
+      document.getElementById("lang-toggle").textContent = currentLang === 'bn' ? 'English' : 'বাংলা';
+
+      // Profile Photo
+      document.getElementById("view-profile-img").src = data.photo;
+
+      // Brand & Hero
+      document.getElementById("view-brand-name").textContent = loc.brandName;
+      document.getElementById("view-hero-greeting").textContent = loc.heroGreeting;
+      document.getElementById("view-hero-tag").textContent = loc.heroTag;
+      document.getElementById("view-hero-desc").innerHTML = loc.heroDesc;
+      document.getElementById("view-btn-wa").textContent = loc.btnWa;
+      document.getElementById("view-btn-vision").textContent = loc.btnVision;
+      document.getElementById("stat-speed-label").textContent = loc.statSpeed;
+      document.getElementById("stat-db-label").textContent = loc.statDb;
+      document.getElementById("stat-sec-label").textContent = loc.statSec;
+
+      // Start Typewriter for Hero Name
+      startTypewriter(loc.heroName);
+
+      // Card & Spotlight
+      document.getElementById("view-card-name").textContent = loc.brandName;
+      document.getElementById("view-card-title").textContent = loc.cardTitle;
+      document.getElementById("view-spotlight-title").textContent = loc.spotlightTitle;
+      document.getElementById("view-spotlight-desc").textContent = loc.spotlightDesc;
+      document.getElementById("view-btn-partner").textContent = loc.btnPartner;
+
+      // Speed Banner
+      document.getElementById("view-speed-title").textContent = loc.speedTitle;
+      document.getElementById("view-speed-desc").textContent = loc.speedDesc;
+
+      // Services Head
+      document.getElementById("view-services-title").textContent = loc.servicesTitle;
+      document.getElementById("view-services-subtitle").textContent = loc.servicesSubtitle;
+
+      // Contact Head & Fields
+      document.getElementById("view-contact-heading").textContent = loc.contactHeading;
+      document.getElementById("view-contact-sub").textContent = loc.contactSub;
+      document.getElementById("lbl-name").textContent = loc.lblName;
+      document.getElementById("lbl-addr").textContent = loc.lblAddr;
+      document.getElementById("lbl-phone").textContent = loc.lblPhone;
+      document.getElementById("lbl-email").textContent = loc.lblEmail;
+      
+      document.getElementById("view-contact-name").textContent = loc.heroName;
+      document.getElementById("view-contact-address").textContent = loc.address;
+      document.getElementById("view-contact-phone").textContent = currentLang === 'bn' ? data.phone : data.phoneEn;
+      document.getElementById("view-contact-phone").href = `tel:${data.whatsapp}`;
+      document.getElementById("view-contact-email").textContent = data.email;
+      document.getElementById("view-contact-email").href = `mailto:${data.email}`;
+
+      // WhatsApp link
+      document.getElementById("view-wa-link").href = `https://wa.me/${data.whatsapp.replace(/\+/g, '')}`;
+
+      // Render Dynamic Service Cards with Neon Border Wrapping
+      const container = document.getElementById("skills-container");
+      container.innerHTML = "";
+      data.services.forEach(s => {
+        const div = document.createElement("div");
+        div.className = "neon-border-box skill-box";
+        div.innerHTML = `
+          <span class="skill-icon">${s.icon}</span>
+          <h3 class="skill-title">${currentLang === 'bn' ? s.titleBn : s.titleEn}</h3>
+          <p class="skill-desc">${currentLang === 'bn' ? s.descBn : s.descEn}</p>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'bn' ? 'en' : 'bn';
+      renderUI();
+    }
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      const isDark = root.getAttribute('data-theme') === 'dark';
+      root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('theme-toggle').textContent = isDark ? '🌙' : '☀️';
+    }
+
+    /* -----------------------------------------------------------
+       Image Upload & Admin Persistence Engine
+       ----------------------------------------------------------- */
+    let uploadedImageBase64 = null;
+
+    function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          uploadedImageBase64 = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function openAdminModal() {
+      const data = getSiteData();
+      document.getElementById("edit-photo-url").value = data.photo.startsWith("data:") ? "" : data.photo;
+      document.getElementById("edit-hero-name-bn").value = data.bn.heroName;
+      document.getElementById("edit-hero-name-en").value = data.en.heroName;
+      document.getElementById("edit-hero-desc-bn").value = data.bn.heroDesc;
+      document.getElementById("edit-hero-desc-en").value = data.en.heroDesc;
+      document.getElementById("edit-whatsapp").value = data.whatsapp;
+      document.getElementById("edit-phone").value = data.phone;
+      document.getElementById("edit-email").value = data.email;
+      document.getElementById("edit-address-bn").value = data.bn.address;
+      document.getElementById("edit-address-en").value = data.en.address;
+      document.getElementById("edit-services-json").value = JSON.stringify(data.services, null, 2);
+
+      document.getElementById("admin-modal").style.display = "flex";
+    }
+
+    function closeAdminModal() {
+      document.getElementById("admin-modal").style.display = "none";
+    }
+
+    function saveAdminChanges() {
+      try {
+        const data = getSiteData();
+        const customUrl = document.getElementById("edit-photo-url").value.trim();
+
+        if (uploadedImageBase64) {
+          data.photo = uploadedImageBase64;
+        } else if (customUrl) {
+          data.photo = customUrl;
+        }
+
+        data.bn.heroName = document.getElementById("edit-hero-name-bn").value;
+        data.bn.brandName = document.getElementById("edit-hero-name-bn").value;
+        data.en.heroName = document.getElementById("edit-hero-name-en").value;
+        data.en.brandName = document.getElementById("edit-hero-name-en").value;
+
+        data.bn.heroDesc = document.getElementById("edit-hero-desc-bn").value;
+        data.en.heroDesc = document.getElementById("edit-hero-desc-en").value;
+
+        data.whatsapp = document.getElementById("edit-whatsapp").value;
+        data.phone = document.getElementById("edit-phone").value;
+        data.email = document.getElementById("edit-email").value;
+
+        data.bn.address = document.getElementById("edit-address-bn").value;
+        data.en.address = document.getElementById("edit-address-en").value;
+
+        data.services = JSON.parse(document.getElementById("edit-services-json").value);
+
+        localStorage.setItem("aimanix_v3_data", JSON.stringify(data));
+        renderUI();
+        closeAdminModal();
+      } catch (err) {
+        alert("JSON ফরম্যাটে সমস্যা রয়েছে! সার্ভিস ডেটা চেক করুন।");
+      }
+    }
+
+    function resetToDefault() {
+      if (confirm("আপনি কি সব সেটিংস ও ফটো রিসেট করে ডিফল্ট অবস্থায় নিতে চান?")) {
+        localStorage.removeItem("aimanix_v3_data");
+        uploadedImageBase64 = null;
+        renderUI();
+        closeAdminModal();
+      }
+    }
+
+    /* -----------------------------------------------------------
+       Next-Gen Synapse Particle Trail (Canvas Engine)
+       ----------------------------------------------------------- */
+    const canvas = document.getElementById('neural-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const mouse = { x: null, y: null, radius: 170 };
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      if (Math.random() > 0.45) ripples.push(new NeuralRipple(mouse.x, mouse.y));
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        mouse.x = e.touches[0].clientX;
+        mouse.y = e.touches[0].clientY;
+        ripples.push(new NeuralRipple(mouse.x, mouse.y));
+      }
+    }, { passive: true });
+
+    class NeuralNode {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.9;
+        this.vy = (Math.random() - 0.5) * 0.9;
+        this.radius = Math.random() * 2 + 1;
+        this.color = Math.random() > 0.5 ? '0, 242, 254' : '99, 102, 241';
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouse.radius) {
+            const force = (mouse.radius - dist) / mouse.radius;
+            this.x -= (dx / dist) * force * 3;
+            this.y -= (dy / dist) * force * 3;
+          }
+        }
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgb(${this.color})`;
+        ctx.fill();
+      }
+    }
+
+    class NeuralRipple {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.radius = 2;
+        this.alpha = 0.8;
+      }
+      update() {
+        this.radius += 2.5;
+        this.alpha -= 0.02;
+      }
+      draw() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(0, 242, 254, ${this.alpha})`;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    const nodes = Array.from({ length: 65 }, () => new NeuralNode());
+    let ripples = [];
+
+    function renderEngine() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        ripples[i].update();
+        ripples[i].draw();
+        if (ripples[i].alpha <= 0) ripples.splice(i, 1);
+      }
+
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 130) {
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.strokeStyle = `rgba(56, 189, 248, ${(1 - dist / 130) * 0.3})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+
+      nodes.forEach(node => {
+        node.update();
+        node.draw();
+      });
+
+      requestAnimationFrame(renderEngine);
+    }
+
+    // Initialize UI, fast typefill, and Canvas Animation
+    renderUI();
+    runCodeTypeFill();
+    renderEngine();
+  </script>
+</body>
+</html>

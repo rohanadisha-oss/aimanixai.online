@@ -510,7 +510,7 @@
 
     .video-bubble-orb:hover { transform: scale(1.08); }
 
-    .video-bubble-orb video {
+    .video-bubble-orb img {
       width: 100%;
       height: 100%;
       border-radius: 50%;
@@ -576,13 +576,13 @@
       overflow: hidden;
       border: 1px solid rgba(56, 189, 248, 0.3);
       background: #000;
+      position: relative;
     }
 
-    .modal-video-frame video {
+    .modal-video-frame iframe {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      border-radius: 14px;
+      border: 0;
     }
 
     .video-action-bar {
@@ -780,13 +780,13 @@
       <span>🎙️ ইন্ট্রো শুনতে ট্যাপ করুন!</span>
     </div>
 
+    <!-- Floating Bubble with your Profile Avatar -->
     <div class="video-bubble-orb" id="video-bubble-orb" onclick="openVideoModal()">
-      <video id="ai-bubble-video" loop muted autoplay playsinline webkit-playsinline preload="auto">
-        <source src="https://go.screenpal.com/watch/cOQfhVnwtsd">
-      </video>
+      <img src="https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg" alt="Aimanix AI Intro">
       <div class="pulse-ring"></div>
     </div>
 
+    <!-- Kapwing Embedded Video Modal -->
     <div class="video-modal-card" id="video-modal-card">
       <div class="video-modal-header">
         <div style="font-weight: 700; color: #00f2fe; font-size: 0.95rem;">
@@ -796,9 +796,14 @@
       </div>
 
       <div class="modal-video-frame">
-        <video id="ai-modal-video" loop playsinline webkit-playsinline preload="auto">
-          <source src="https://www.kapwing.com/videos/6a9a56c4df4ff0a505350320">
-        </video>
+        <iframe 
+          id="kapwing-video-frame" 
+          src="https://www.kapwing.com/e/6a9a56c4df4ff0a505350320" 
+          title="Embedded content made on Kapwing" 
+          allow="autoplay; gyroscope;" 
+          allowfullscreen 
+          referrerpolicy="strict-origin">
+        </iframe>
       </div>
 
       <div class="video-action-bar">
@@ -1041,45 +1046,21 @@ class ProductionApp:
       document.getElementById('theme-toggle').textContent = isDark ? '🌙' : '☀️';
     }
 
-    /* Video Controller Engine */
-    const bubbleVid = document.getElementById('ai-bubble-video');
-    const modalVid = document.getElementById('ai-modal-video');
+    /* Video Controller Engine for Kapwing Embed */
+    const kapwingIframe = document.getElementById('kapwing-video-frame');
     const modalCard = document.getElementById('video-modal-card');
     const bubbleOrb = document.getElementById('video-bubble-orb');
     const hintPill = document.getElementById('video-hint');
-
-    function playMutedBubble() {
-      if (bubbleVid) {
-        bubbleVid.muted = true;
-        const playPromise = bubbleVid.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            // মোবাইল টাচ ইভেন্ট ফলব্যাক
-            document.addEventListener('touchstart', () => {
-              bubbleVid.play();
-            }, { once: true });
-          });
-        }
-      }
-    }
-
-    window.addEventListener('DOMContentLoaded', playMutedBubble);
-    window.addEventListener('load', playMutedBubble);
+    const kapwingBaseUrl = "https://www.kapwing.com/e/6a9a56c4df4ff0a505350320";
 
     function openVideoModal() {
       modalCard.style.display = 'block';
       bubbleOrb.style.display = 'none';
       hintPill.style.display = 'none';
 
-      bubbleVid.pause();
-      modalVid.currentTime = 0;
-      modalVid.muted = false;
-      const playPromise = modalVid.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          modalVid.muted = true;
-          modalVid.play();
-        });
+      // Reload iframe to trigger autoplay fresh
+      if (kapwingIframe) {
+        kapwingIframe.src = kapwingBaseUrl + "?autoplay=1";
       }
     }
 
@@ -1088,14 +1069,16 @@ class ProductionApp:
       bubbleOrb.style.display = 'block';
       hintPill.style.display = 'block';
 
-      modalVid.pause();
-      playMutedBubble();
+      // Reset iframe source so playback stops completely
+      if (kapwingIframe) {
+        kapwingIframe.src = kapwingBaseUrl;
+      }
     }
 
     function restartVideo() {
-      modalVid.currentTime = 0;
-      modalVid.muted = false;
-      modalVid.play();
+      if (kapwingIframe) {
+        kapwingIframe.src = kapwingBaseUrl + "?autoplay=1";
+      }
     }
 
     /* Neural Synapse Canvas Engine */

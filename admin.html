@@ -21,6 +21,7 @@
     #msg { text-align: center; color: #38bdf8; font-size: 14px; margin-top: 10px; }
   </style>
 
+  <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -43,18 +44,21 @@
   <div id="editor-sec" class="hidden">
     <h2>Aimanix Content Manager</h2>
 
-    <h3>মিডিয়া ও ফাইল আপলোড</h3>
+    <h3>মিডিয়া ও ছবি</h3>
+    <label>প্রোফাইল ছবির লিঙ্ক (Image URL)</label>
+    <input type="text" id="inp-photo-url" placeholder="https://i.postimg.cc/...">
+
     <label>নতুন প্রোফাইল ছবি আপলোড (ডিভাইস থেকে ফাইল বাছুন)</label>
     <input type="file" id="inp-photo-file" accept="image/*">
 
+    <label>ভিডিও লিঙ্ক (Kapwing / YouTube / MP4 লিঙ্ক)</label>
+    <input type="text" id="inp-video-url" placeholder="https://www.kapwing.com/videos/...">
+    
     <label>নেটিভ ভিডিও আপলোড (ডিভাইস থেকে সরাসরি MP4/WebM ফাইল)</label>
     <input type="file" id="inp-vid-file" accept="video/mp4,video/webm">
 
-    <label>অথবা Kapwing/YouTube এমবেড লিঙ্ক</label>
-    <input type="text" id="inp-video-url" placeholder="https://www.kapwing.com/videos/...">
-
     <h3>কন্টাক্ট ও হোয়াটসঅ্যাপ</h3>
-    <label>WhatsApp নম্বর</label>
+    <label>WhatsApp নম্বর (যেমন: 919143181401)</label>
     <input type="text" id="inp-wa">
 
     <label>মোবাইল নম্বর (বাংলা ফন্ট)</label>
@@ -87,6 +91,7 @@
 </div>
 
 <script>
+  // আপনার আসল Firebase কনফিগ
   const firebaseConfig = {
     apiKey: "AIzaSyDPEd6BMIujKPYXrZcfjgH32p7LNF09crc",
     authDomain: "aimanix-web.firebaseapp.com",
@@ -114,7 +119,8 @@
   });
 
   async function handleLogin() {
-    const e = document.getElementById('email').value;
+    // .trim() যোগ করা হয়েছে যাতে ইমেইলের আগে-পরে স্পেস থাকলে এরর না আসে
+    const e = document.getElementById('email').value.trim();
     const p = document.getElementById('pass').value;
     try {
       await auth.signInWithEmailAndPassword(e, p);
@@ -128,32 +134,40 @@
   }
 
   async function fetchInitialData() {
-    const doc = await db.collection('site_settings').doc('main_data').get();
-    if (doc.exists) {
-      const d = doc.data();
-      document.getElementById('inp-wa').value = d.whatsapp || '919143181401';
-      document.getElementById('inp-phone-bn').value = d.phoneBn || '৯১৪৩১৮১৪০১';
-      document.getElementById('inp-video-url').value = d.videoUrl || '';
+    try {
+      const doc = await db.collection('site_settings').doc('main_data').get();
+      if (doc.exists) {
+        const d = doc.data();
+        document.getElementById('inp-wa').value = d.whatsapp || '919143181401';
+        document.getElementById('inp-phone-bn').value = d.phoneBn || '৯১৪৩১৮১৪০১';
+        document.getElementById('inp-photo-url').value = d.photo || '';
+        document.getElementById('inp-video-url').value = d.videoUrl || '';
 
-      if (d.bn) {
-        document.getElementById('inp-bn-name').value = d.bn.heroName || 'আনোয়ার হোসেন';
-        document.getElementById('inp-bn-desc').value = d.bn.heroDesc || '';
-        document.getElementById('inp-bn-addr').value = d.bn.address || 'খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩';
+        if (d.bn) {
+          document.getElementById('inp-bn-name').value = d.bn.heroName || 'আনোয়ার হোসেন';
+          document.getElementById('inp-bn-desc').value = d.bn.heroDesc || '';
+          document.getElementById('inp-bn-addr').value = d.bn.address || 'খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩';
+        }
+        if (d.en) {
+          document.getElementById('inp-en-name').value = d.en.heroName || 'Anowar Hossain';
+          document.getElementById('inp-en-desc').value = d.en.heroDesc || '';
+          document.getElementById('inp-en-addr').value = d.en.address || 'Khejurdanga, Deganga, Barasat, North 24 Parganas, 743423';
+        }
+      } else {
+        // ডেটাবেজ খালি থাকলে ডিফল্ট ভ্যালু লোড হবে
+        document.getElementById('inp-wa').value = '919143181401';
+        document.getElementById('inp-phone-bn').value = '৯১৪৩১৮১৪০১';
+        document.getElementById('inp-photo-url').value = 'https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg';
+        document.getElementById('inp-bn-name').value = 'আনোয়ার হোসেন';
+        document.getElementById('inp-en-name').value = 'Anowar Hossain';
+        document.getElementById('inp-bn-addr').value = 'খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩';
       }
-      if (d.en) {
-        document.getElementById('inp-en-name').value = d.en.heroName || 'Anowar Hossain';
-        document.getElementById('inp-en-desc').value = d.en.heroDesc || '';
-        document.getElementById('inp-en-addr').value = d.en.address || 'Khejurdanga, Deganga, Barasat, North 24 Parganas, 743423';
-      }
-    } else {
-      document.getElementById('inp-wa').value = '919143181401';
-      document.getElementById('inp-phone-bn').value = '৯১৪৩১৮১৪০১';
-      document.getElementById('inp-bn-name').value = 'আনোয়ার হোসেন';
-      document.getElementById('inp-en-name').value = 'Anowar Hossain';
-      document.getElementById('inp-bn-addr').value = 'খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩';
+    } catch (e) {
+      console.error("Fetch Error:", e);
     }
   }
 
+  // সরাসরি ডিভাইসের ফাইল স্টোরেজে আপলোড
   async function uploadFileToBucket(fileInput, folder) {
     const file = fileInput.files[0];
     if (!file) return null;
@@ -166,12 +180,14 @@
     const btn = document.getElementById('save-btn');
     const msg = document.getElementById('msg');
     btn.disabled = true;
-    msg.innerText = "ফাইল ও টেক্সট সেভ হচ্ছে, একটু অপেক্ষা করুন...";
+    msg.innerText = "ফাইল ও টেক্সট সেভ হচ্ছে, দয়া করে একটু অপেক্ষা করুন...";
 
     try {
       let payload = {
         whatsapp: document.getElementById('inp-wa').value,
         phoneBn: document.getElementById('inp-phone-bn').value,
+        photo: document.getElementById('inp-photo-url').value,
+        videoUrl: document.getElementById('inp-video-url').value,
         bn: {
           heroName: document.getElementById('inp-bn-name').value,
           heroDesc: document.getElementById('inp-bn-desc').value,
@@ -184,19 +200,19 @@
         }
       };
 
-      const manualVid = document.getElementById('inp-video-url').value;
-      if (manualVid) payload.videoUrl = manualVid;
-
+      // ছবি ফাইল আপলোড চেক
       const photoUrl = await uploadFileToBucket(document.getElementById('inp-photo-file'), 'images');
       if (photoUrl) payload.photo = photoUrl;
 
+      // ভিডিও ফাইল আপলোড চেক
       const vidUrl = await uploadFileToBucket(document.getElementById('inp-vid-file'), 'videos');
       if (vidUrl) payload.videoUrl = vidUrl;
 
+      // Firestore এ মার্জ করে সেভ
       await db.collection('site_settings').doc('main_data').set(payload, { merge: true });
-      msg.innerText = "✓ সফলভাবে আপডেট হয়েছে!";
+      msg.innerText = "✓ সফলভাবে আপডেট হয়েছে! মূল সাইট স্বয়ংক্রিয়ভাবে পরিবর্তিত হয়েছে।";
     } catch (err) {
-      alert("ত্রুটি: " + err.message);
+      alert("ত্রুটি হয়েছে: " + err.message);
       msg.innerText = "";
     } finally {
       btn.disabled = false;

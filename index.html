@@ -1,1260 +1,198 @@
 <!DOCTYPE html>
-<html lang="bn" data-theme="dark">
+<html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anowar Hossain | Founder of Aimanix AI</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+  <title>Aimanix AI - Secret Admin Control</title>
   <style>
-    :root {
-      --bg: #030712;
-      --surface: rgba(15, 23, 42, 0.75);
-      --surface-card: rgba(15, 23, 42, 0.85);
-      --surface-border: rgba(56, 189, 248, 0.25);
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --cyan: #00f2fe;
-      --blue: #38bdf8;
-      --indigo: #6366f1;
-      --neon-glow: rgba(0, 242, 254, 0.4);
-      --code-bg: rgba(2, 6, 23, 0.95);
-    }
-
-    [data-theme="light"] {
-      --bg: #f8fafc;
-      --surface: rgba(255, 255, 255, 0.85);
-      --surface-card: rgba(255, 255, 255, 0.92);
-      --surface-border: rgba(37, 99, 235, 0.2);
-      --text: #0b1329;
-      --text-muted: #475569;
-      --cyan: #0284c7;
-      --blue: #2563eb;
-      --indigo: #4f46e5;
-      --neon-glow: rgba(37, 99, 235, 0.25);
-      --code-bg: rgba(241, 245, 249, 0.95);
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', 'Hind Siliguri', sans-serif;
-      overflow-x: hidden;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    body:lang(bn) { font-family: 'Hind Siliguri', sans-serif; }
-
-    .cyber-grid {
-      position: fixed;
-      inset: 0;
-      background-image: 
-        linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
-      background-size: 40px 40px;
-      mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
-      -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    #neural-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    header, main, footer { position: relative; z-index: 2; }
-
-    .gradient-text {
-      background: linear-gradient(135deg, var(--cyan), var(--blue), var(--indigo), var(--cyan));
-      background-size: 300% 300%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: gradientShimmer 6s ease infinite;
-    }
-
-    @keyframes gradientShimmer {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .neon-border-box {
-      position: relative;
-      border-radius: 20px;
-      background: var(--surface-card);
-      z-index: 1;
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .neon-border-box::before {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: 22px;
-      background: linear-gradient(90deg, #00f2fe, #38bdf8, #6366f1, #00f2fe);
-      background-size: 300% 300%;
-      z-index: -1;
-      animation: rotateNeon 4s linear infinite;
-      opacity: 0.7;
-      transition: opacity 0.3s ease, filter 0.3s ease;
-      filter: blur(4px);
-    }
-
-    .neon-border-box:hover::before { opacity: 1; filter: blur(8px); }
-    .neon-border-box:hover { transform: translateY(-5px); }
-
-    @keyframes rotateNeon {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .typewriter-cursor {
-      display: inline-block;
-      width: 2px;
-      background-color: var(--cyan);
-      margin-left: 4px;
-      animation: blink 0.75s infinite;
-      vertical-align: text-bottom;
-      height: 1.15em;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    .navbar {
-      position: sticky;
-      top: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2.5rem;
-      background: var(--surface);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--surface-border);
-      z-index: 100;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      text-decoration: none;
-      color: var(--text);
-    }
-
-    .brand-icon {
-      font-family: 'Fira Code', monospace;
-      background: linear-gradient(135deg, var(--cyan), var(--indigo));
-      color: #fff;
-      font-weight: 800;
-      padding: 0.4rem 0.75rem;
-      border-radius: 8px;
-      box-shadow: 0 0 15px var(--neon-glow);
-    }
-
-    .brand-name { font-weight: 800; font-size: 1.25rem; }
-    .nav-controls { display: flex; align-items: center; gap: 0.7rem; }
-
-    .btn-ctrl {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--surface-border);
-      color: var(--text);
-      padding: 0.5rem 0.9rem;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: all 0.2s;
-    }
-
-    .btn-ctrl:hover { border-color: var(--cyan); box-shadow: 0 0 10px var(--neon-glow); }
-
-    .hero {
-      max-width: 1300px;
-      margin: 0 auto;
-      min-height: 85vh;
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 3.5rem;
-      align-items: center;
-      padding: 4rem 2rem 3rem;
-    }
-
-    .startup-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.45rem 1.2rem;
-      border-radius: 50px;
-      background: rgba(0, 242, 254, 0.1);
-      border: 1px solid var(--cyan);
-      box-shadow: 0 0 15px var(--neon-glow);
-      margin-bottom: 1.5rem;
-    }
-
-    .startup-tag {
-      font-family: 'Fira Code', monospace;
-      font-weight: 800;
-      color: var(--cyan);
-    }
-
-    .pulse-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--cyan);
-      border-radius: 50%;
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(0.9); opacity: 0.7; }
-      50% { transform: scale(1.3); opacity: 1; }
-      100% { transform: scale(0.9); opacity: 0.7; }
-    }
-
-    .hero-title {
-      font-size: 3.4rem;
-      font-weight: 900;
-      line-height: 1.15;
-      margin-bottom: 1.4rem;
-    }
-
-    .hero-desc {
-      font-size: 1.05rem;
-      line-height: 1.75;
-      color: var(--text-muted);
-      margin-bottom: 2rem;
-    }
-
-    .hero-buttons { display: flex; gap: 1.2rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
-
-    .btn-glow {
-      background: linear-gradient(135deg, var(--cyan), var(--indigo));
-      color: #fff;
-      padding: 0.85rem 1.8rem;
-      border-radius: 10px;
-      font-weight: 700;
-      text-decoration: none;
-      box-shadow: 0 0 25px var(--neon-glow);
-      transition: transform 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      cursor: pointer;
-      border: none;
-    }
-
-    .btn-glow:hover { transform: translateY(-2px); }
-
-    .btn-outline {
-      border: 1px solid var(--surface-border);
-      background: var(--surface);
-      color: var(--text);
-      padding: 0.85rem 1.8rem;
-      border-radius: 10px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-
-    .btn-outline:hover { border-color: var(--cyan); box-shadow: 0 0 15px var(--neon-glow); }
-
-    .hero-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.2rem;
-      border-top: 1px solid var(--surface-border);
-      padding-top: 1.8rem;
-    }
-
-    .stat-box { display: flex; flex-direction: column; }
-    .stat-number { font-size: 1.8rem; font-weight: 800; color: var(--cyan); font-family: 'Fira Code', monospace; }
-    .stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
-
-    .hero-right {
-      display: flex;
-      flex-direction: column;
-      gap: 1.8rem;
-      align-items: center;
-    }
-
-    .profile-card {
-      padding: 2.2rem;
-      text-align: center;
-      width: 100%;
-      max-width: 400px;
-      position: relative;
-    }
-
-    .photo-container {
-      width: 160px;
-      height: 160px;
-      margin: 0 auto 1.4rem;
-      border-radius: 50%;
-      padding: 4px;
-      background: linear-gradient(135deg, var(--cyan), var(--indigo));
-      box-shadow: 0 0 25px var(--neon-glow);
-      position: relative;
-    }
-
-    .profile-img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      background: #0f172a;
-    }
-
-    .photo-badge {
-      position: absolute;
-      bottom: 6px;
-      right: 6px;
-      background: #10b981;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 3px solid var(--bg);
-    }
-
-    .hud-window {
-      background: var(--code-bg);
-      border-radius: 16px;
-      width: 100%;
-      max-width: 400px;
-      font-family: 'Fira Code', monospace;
-      text-align: left;
-      overflow: hidden;
-      border: 1px solid var(--surface-border);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    }
-
-    .hud-bar {
-      background: rgba(255, 255, 255, 0.04);
-      padding: 0.65rem 1.2rem;
-      border-bottom: 1px solid var(--surface-border);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .hud-circle { width: 10px; height: 10px; border-radius: 50%; }
-    .c-red { background: #ef4444; }
-    .c-yellow { background: #f59e0b; }
-    .c-green { background: #10b981; }
-
-    .hud-body { 
-      padding: 1.2rem; 
-      font-size: 0.8rem; 
-      line-height: 1.6; 
-      color: #38bdf8; 
-      min-height: 165px;
-      white-space: pre-wrap;
-      word-break: break-all;
-    }
-
-    .brand-spotlight { max-width: 1300px; margin: 1rem auto 4rem; padding: 0 2rem; }
-
-    .spotlight-card {
-      padding: 2.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .spotlight-card::after {
-      content: "AIMANIX";
-      position: absolute;
-      right: -20px;
-      bottom: -35px;
-      font-size: 8rem;
-      font-weight: 900;
-      color: rgba(255, 255, 255, 0.03);
-      pointer-events: none;
-    }
-
-    .spotlight-text h2 { font-size: 2rem; font-weight: 800; margin-bottom: 0.6rem; }
-    .spotlight-text p { color: var(--text-muted); max-width: 750px; font-size: 1rem; line-height: 1.6; }
-
-    .speed-banner { max-width: 1300px; margin: 0 auto 5rem; padding: 0 2rem; }
-
-    .speed-card {
-      padding: 2.2rem;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 2rem;
-      align-items: center;
-    }
-
-    .speed-badge-10x {
-      font-size: 3.2rem;
-      font-weight: 900;
-      font-family: 'Fira Code', monospace;
-      color: var(--cyan);
-      text-shadow: 0 0 15px var(--neon-glow);
-    }
-
-    .services { max-width: 1300px; margin: 0 auto; padding: 3rem 2rem 5rem; }
-    .section-head { text-align: center; margin-bottom: 3.5rem; }
-    .section-title { font-size: 2.4rem; font-weight: 800; margin-bottom: 0.8rem; }
-    .section-subtitle { color: var(--text-muted); max-width: 650px; margin: 0 auto; font-size: 1rem; }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-    }
-
-    .skill-box {
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .skill-icon { font-size: 2.2rem; margin-bottom: 1.2rem; display: inline-block; }
-    .skill-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.8rem; }
-    .skill-desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.65; }
-
-    .contact-section { max-width: 1300px; margin: 0 auto 5rem; padding: 0 2rem; }
-
-    .contact-container {
-      padding: 3rem;
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 3rem;
-      align-items: center;
-    }
-
-    .contact-info h3 { font-size: 2rem; font-weight: 800; margin-bottom: 1.2rem; }
-    .contact-info p { color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6; }
-
-    .contact-list { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; }
-    .contact-item { display: flex; align-items: flex-start; gap: 1rem; font-size: 0.95rem; }
-
-    .contact-item-icon {
-      font-size: 1.3rem;
-      background: rgba(56, 189, 248, 0.1);
-      padding: 0.5rem;
-      border-radius: 8px;
-      color: var(--cyan);
-    }
-
-    .contact-link { color: var(--cyan); text-decoration: none; font-weight: 600; }
-    .contact-link:hover { text-decoration: underline; }
-
-    .map-frame {
-      width: 100%;
-      height: 380px;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid var(--surface-border);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    }
-
-    /* Video Bubble Style */
-    .video-bubble-container {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-    }
-
-    .video-hint-pill {
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid #00f2fe;
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
-      color: #f8fafc;
-      padding: 0.45rem 0.9rem;
-      border-radius: 30px;
-      font-size: 0.8rem;
-      margin-bottom: 8px;
-      cursor: pointer;
-      animation: floatPill 3s ease-in-out infinite;
-      white-space: nowrap;
-    }
-
-    @keyframes floatPill {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-
-    .video-bubble-orb {
-      width: 85px;
-      height: 85px;
-      border-radius: 50%;
-      padding: 3px;
-      background: linear-gradient(135deg, #00f2fe, #6366f1);
-      box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .video-bubble-orb:hover { transform: scale(1.08); }
-
-    .video-bubble-orb img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      pointer-events: none;
-    }
-
-    .pulse-ring {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      width: 14px;
-      height: 14px;
-      background: #10b981;
-      border: 2px solid #030712;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #10b981;
-      pointer-events: none;
-    }
-
-    .video-modal-card {
-      display: none;
-      position: fixed;
-      bottom: 120px;
-      right: 25px;
-      width: 320px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid #00f2fe;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 35px rgba(0, 242, 254, 0.35);
-      border-radius: 20px;
-      padding: 1rem;
-      backdrop-filter: blur(18px);
-      z-index: 10000;
-      animation: modalFadeIn 0.3s ease-out;
-    }
-
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.9) translateY(20px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .video-modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.8rem;
-    }
-
-    .video-close-btn {
-      background: transparent;
-      border: none;
-      color: #94a3b8;
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-
-    .video-close-btn:hover { color: #ef4444; }
-
-    .modal-video-frame {
-      width: 100%;
-      height: 290px;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      background: #000;
-      position: relative;
-    }
-
-    .modal-video-frame iframe,
-    .modal-video-frame video {
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .video-action-bar {
-      display: flex;
-      gap: 0.8rem;
-      margin-top: 0.9rem;
-    }
-
-    @media (max-width: 950px) {
-      .hero { grid-template-columns: 1fr; text-align: center; }
-      .startup-pill { margin: 0 auto 1.5rem; }
-      .hero-buttons { justify-content: center; }
-      .hero-stats { grid-template-columns: repeat(3, 1fr); }
-      .spotlight-card { flex-direction: column; text-align: center; gap: 1.5rem; }
-      .contact-container { grid-template-columns: 1fr; padding: 2rem; }
-      .video-modal-card { right: 15px; width: calc(100vw - 30px); bottom: 115px; }
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
+    body { background: #030712; color: #f8fafc; padding: 20px; display: flex; justify-content: center; min-height: 100vh; align-items: center; }
+    .card { width: 100%; max-width: 650px; background: #0f172a; padding: 28px; border-radius: 16px; border: 1px solid #1e293b; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+    h2 { color: #00f2fe; margin-bottom: 16px; text-align: center; font-size: 1.5rem; }
+    h3 { color: #38bdf8; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 0 8px; border-bottom: 1px solid #334155; padding-bottom: 4px; }
+    label { display: block; font-size: 13px; color: #94a3b8; margin: 10px 0 4px; font-weight: 500; }
+    input, textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: #fff; font-size: 14px; outline: none; transition: border 0.2s; }
+    input:focus, textarea:focus { border-color: #00f2fe; }
+    textarea { height: 80px; resize: vertical; }
+    button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 16px; font-size: 15px; }
+    .btn-save { background: #00f2fe; color: #030712; transition: filter 0.2s; }
+    .btn-save:hover { filter: brightness(1.1); }
+    .btn-logout { background: #ef4444; color: #fff; margin-top: 10px; }
+    .hidden { display: none; }
+    #msg { text-align: center; color: #38bdf8; font-size: 14px; margin-top: 12px; font-weight: 600; }
   </style>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
-<body lang="bn">
+<body>
 
-  <div class="cyber-grid"></div>
-  <canvas id="neural-canvas"></canvas>
-
-  <header>
-    <nav class="navbar">
-      <a href="#" class="brand">
-        <span class="brand-icon">Aimanix.AI</span>
-        <span class="brand-name" id="view-brand-name">Anowar Hossain</span>
-      </a>
-
-      <div class="nav-controls">
-        <button class="btn-ctrl" id="lang-toggle" onclick="toggleLanguage()">English</button>
-        <button class="btn-ctrl" id="theme-toggle" onclick="toggleTheme()">☀️</button>
-      </div>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero">
-      <div class="hero-left">
-        <div class="startup-pill">
-          <span class="pulse-dot"></span>
-          <span class="startup-tag">AIMANIX AI</span>
-          <span style="color: var(--text-muted); font-size: 0.85rem;" id="view-hero-tag">• Next-Gen Intelligent Systems</span>
-        </div>
-        
-        <h1 class="hero-title">
-          <span id="view-hero-greeting">নমস্কার, আমি</span> <br>
-          <span class="gradient-text" id="typewriter-hero"></span><span class="typewriter-cursor"></span>
-        </h1>
-        
-        <p class="hero-desc" id="view-hero-desc">
-          প্রতিষ্ঠাতা, <strong>Aimanix AI</strong> | AI-Powered Full-Stack Web Developer এবং এআই অটোমেশন স্পেশালিস্ট। ট্র্যাডিশনাল কোডিংয়ের শক্তিশালী ভিত্তি এবং আধুনিক এআই প্রযুক্তির (Vibe Coding) নিখুঁত কম্বিনেশন ব্যবহার করে আমি যেকোনো স্কেলের স্মার্ট, সিকিউর এবং হাই-পারফরম্যান্স ওয়েব অ্যাপ্লিকেশন তৈরি করতে পারি।
-        </p>
-
-        <div class="hero-buttons">
-          <a href="#" id="view-wa-link" class="btn-glow" target="_blank" rel="noopener">
-            <span id="view-btn-wa">💬 সরাসরি WhatsApp-এ বার্তা দিন</span>
-          </a>
-          <a href="#aimanix" class="btn-outline">
-            <span id="view-btn-vision">🚀 Aimanix AI এর ভিশন</span>
-          </a>
-        </div>
-
-        <div class="hero-stats">
-          <div class="stat-box">
-            <span class="stat-number">10X</span>
-            <span class="stat-label" id="stat-speed-label">Faster Execution</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-number">Dual</span>
-            <span class="stat-label" id="stat-db-label">MySQL & MongoDB</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-number">100%</span>
-            <span class="stat-label" id="stat-sec-label">Secure Architecture</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-right">
-        <div class="neon-border-box profile-card">
-          <div class="photo-container">
-            <img id="view-profile-img" class="profile-img" src="https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg" alt="Anowar Hossain">
-            <div class="photo-badge" title="Active System"></div>
-          </div>
-          <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.3rem;" id="view-card-name">Anowar Hossain</h3>
-          <p style="color: var(--cyan); font-size: 0.88rem; font-weight: 600;" id="view-card-title">Founder, Aimanix AI</p>
-          <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.4rem;">AI Full-Stack Developer & Automation Lead</p>
-        </div>
-
-        <div class="hud-window">
-          <div class="hud-bar">
-            <span class="hud-circle c-red"></span>
-            <span class="hud-circle c-yellow"></span>
-            <span class="hud-circle c-green"></span>
-            <span style="color: #64748b; font-size: 0.75rem; margin-left: 0.5rem;">neural_core_init.py</span>
-          </div>
-          <div class="hud-body" id="code-terminal"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="brand-spotlight" id="aimanix">
-      <div class="neon-border-box spotlight-card">
-        <div class="spotlight-text">
-          <h2 class="gradient-text" id="view-spotlight-title">Aimanix AI: ইনটেলিজেন্ট অটোমেশন ও সফটওয়্যার সলিউশন</h2>
-          <p id="view-spotlight-desc">
-            Aimanix AI হলো আমাদের বিশেষায়িত উদ্যোগ, যার লক্ষ্য জটিল বিজনেস প্রসেসকে কৃত্রিম বুদ্ধিমত্তা ও আধুনিক কোডিং আর্কিটেকচারের মাধ্যমে স্বয়ংক্রিয় এবং গতিশীল করা। এআই মডেল ইন্টিগ্রেশন থেকে শুরু করে হাই-স্পিড ওয়েব অ্যাপ্লিকেশন—সবকিছুতেই নির্ভরযোগ্য ও স্কেলেবল প্রযুক্তি সরবরাহ করে Aimanix AI।
-          </p>
-        </div>
-        <a href="#contact" class="btn-glow" style="white-space: nowrap;" id="view-btn-partner">পার্টনারশিপ করুন</a>
-      </div>
-    </section>
-
-    <section class="speed-banner">
-      <div class="neon-border-box speed-card">
-        <div class="speed-badge-10x">10X</div>
-        <div>
-          <h3 style="font-size: 1.4rem; margin-bottom: 0.5rem; font-weight: 700;" id="view-speed-title">
-            আমার বিশেষত্ব ও কাজের গতি
-          </h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65;" id="view-speed-desc">
-            আধুনিক 'Vibe Coding' এবং 'Ultimate AI Systems' প্রযুক্তিতে দক্ষ হওয়ায় আমি প্রম্পট ইঞ্জিনিয়ারিংয়ের মাধ্যমে সাধারণ সময়ের চেয়ে ১০ গুণ দ্রুত প্রজেক্ট ডিজাইন ও প্রোটোটাইপ তৈরি করতে পারি। তবে আমি শুধু এআই-এর ওপর নির্ভরশীল নই; আমার ব্যাকএন্ড (Node.js, Flask) এবং ডুয়াল-ডেটাবেজ (MySQL, MongoDB) নলেজ থাকার কারণে আমি এআই জেনারেটেড কোডকে নিখুঁতভাবে কাস্টমাইজ, আর্কিটেক্ট, ডিবাগ এবং হাই-সিকিউর করতে সক্ষম। সহজ কথায়—আপনি পাচ্ছেন এআই-এর আল্ট্রা-ফাস্ট স্পিড এবং একজন প্রো-ডেভেলপারের সলিড টেকনিক্যাল ফিনিশিং।
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="services" id="services">
-      <div class="section-head">
-        <h2 class="section-title gradient-text" id="view-services-title">টেকনিক্যাল স্কিলসেট ও সার্ভিস</h2>
-        <p class="section-subtitle" id="view-services-subtitle">Aimanix AI ও আধুনিক ওয়েব ডেভেলপমেন্টের সম্পূর্ণ প্রযুক্তিগত সমাহার</p>
-      </div>
-
-      <div class="skills-grid" id="skills-container"></div>
-    </section>
-
-    <section class="contact-section" id="contact">
-      <div class="neon-border-box contact-container">
-        <div class="contact-info">
-          <h3 class="gradient-text" id="view-contact-heading">যোগাযোগের ঠিকানা</h3>
-          <p id="view-contact-sub">আপনার যেকোনো নতুন প্রজেক্ট, এআই অটোমেশন আলোচনা বা কনসালটেশনের জন্য সরাসরি যুক্ত হোন।</p>
-
-          <ul class="contact-list">
-            <li class="contact-item">
-              <span class="contact-item-icon">👤</span>
-              <div>
-                <strong id="lbl-name">নাম:</strong><br>
-                <span>আনোয়ার হোসেন</span>
-              </div>
-            </li>
-            <li class="contact-item">
-              <span class="contact-item-icon">📍</span>
-              <div>
-                <strong id="lbl-addr">ঠিকানা:</strong><br>
-                <span id="view-contact-address">খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩</span>
-              </div>
-            </li>
-            <li class="contact-item">
-              <span class="contact-item-icon">📞</span>
-              <div>
-                <strong id="lbl-phone">মোবাইল নম্বর:</strong><br>
-                <a href="tel:9143181401" class="contact-link" id="view-contact-phone">৯১৪৩১৮১৪০১</a>
-              </div>
-            </li>
-            <li class="contact-item">
-              <span class="contact-item-icon">✉️</span>
-              <div>
-                <strong id="lbl-email">ইমেইল অ্যাড্রেস:</strong><br>
-                <a href="mailto:rohanadisha@gmail.com" class="contact-link">rohanadisha@gmail.com</a>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <div class="map-frame">
-          <iframe 
-            src="https://maps.google.com/maps?q=Deganga%2C%20North%2024%20Parganas%2C%20West%20Bengal%20743423&t=&z=13&ie=UTF8&iwloc=&output=embed" 
-            width="100%" 
-            height="100%" 
-            style="border:0;" 
-            allowfullscreen="" 
-            loading="lazy" 
-            referrerpolicy="no-referrer-when-downgrade">
-          </iframe>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <div class="video-bubble-container" id="video-bubble-wrap">
-    <div class="video-hint-pill" id="video-hint" onclick="openVideoModal()">
-      <span>🎙️ ইন্ট্রো শুনতে ট্যাপ করুন!</span>
-    </div>
-
-    <div class="video-bubble-orb" id="video-bubble-orb" onclick="openVideoModal()">
-      <img id="bubble-img" src="https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg" alt="Aimanix AI Intro">
-      <div class="pulse-ring"></div>
-    </div>
-
-    <div class="video-modal-card" id="video-modal-card">
-      <div class="video-modal-header">
-        <div style="font-weight: 700; color: #00f2fe; font-size: 0.95rem;">
-          🤖 Aimanix AI Assistant
-        </div>
-        <button class="video-close-btn" onclick="closeVideoModal()">✕</button>
-      </div>
-
-      <div class="modal-video-frame" id="media-player-container">
-        <iframe 
-          id="kapwing-video-frame" 
-          src="https://www.kapwing.com/videos/6aa86a85413040be8d218f2b" 
-          title="Embedded content made on Kapwing" 
-          allow="autoplay; gyroscope;" 
-          allowfullscreen 
-          referrerpolicy="strict-origin">
-        </iframe>
-      </div>
-
-      <div class="video-action-bar">
-        <button class="btn-glow" style="padding: 0.5rem 1rem; font-size: 0.85rem; width: 100%; justify-content: center;" onclick="restartVideo()">
-          ▶️ আবার শুনুন
-        </button>
-        <a id="modal-wa-btn" href="https://wa.me/919143181401" target="_blank" class="btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; justify-content: center;">
-          WhatsApp
-        </a>
-      </div>
-    </div>
+<div class="card">
+  <!-- লগইন সেকশন -->
+  <div id="login-sec">
+    <h2>Admin Dashboard Login</h2>
+    <p style="color: #64748b; font-size: 13px; text-align: center; margin-bottom: 15px;">শুধুমাত্র পরিচালকের ব্যবহারের জন্য সুরক্ষিত</p>
+    <label>Email Address</label>
+    <input type="email" id="email" placeholder="admin@example.com">
+    <label>Password</label>
+    <input type="password" id="pass">
+    <button class="btn-save" onclick="handleLogin()">প্রবেশ করুন</button>
   </div>
 
-  <script>
-    let currentLang = 'bn';
+  <!-- এডিটর সেকশন -->
+  <div id="editor-sec" class="hidden">
+    <h2>Aimanix Content Manager</h2>
 
-    const siteData = {
-      photo: "https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg",
-      whatsapp: "919143181401",
-      phoneBn: "৯১৪৩১৮১৪০১",
-      phoneEn: "+91 9143181401",
-      videoUrl: "",
-      
-      bn: {
-        brandName: "Anowar Hossain",
-        heroGreeting: "নমস্কার, আমি",
-        heroName: "আনোয়ার হোসেন",
-        heroTag: "• নেক্সট-জেন ইন্টেলিজেন্ট সিস্টেমস",
-        heroDesc: "প্রতিষ্ঠাতা, <strong>Aimanix AI</strong> | AI-Powered Full-Stack Web Developer এবং এআই অটোমেশন স্পেশালিস্ট। ট্র্যাডিশনাল কোডিংয়ের শক্তিশালী ভিত্তি এবং আধুনিক এআই প্রযুক্তির (Vibe Coding) নিখুঁত কম্বিনেশন ব্যবহার করে আমি যেকোনো স্কেলের স্মার্ট, সিকিউর এবং হাই-পারফরম্যান্স ওয়েব অ্যাপ্লিকেশন তৈরি করতে পারি।",
-        btnWa: "💬 সরাসরি WhatsApp-এ বার্তা দিন",
-        btnVision: "🚀 Aimanix AI এর ভিশন",
-        statSpeed: "Faster Execution",
-        statDb: "MySQL & MongoDB",
-        statSec: "Secure Architecture",
-        cardTitle: "Founder, Aimanix AI",
-        spotlightTitle: "Aimanix AI: ইনটেলিজেন্ট অটোমেশন ও সফটওয়্যার সলিউশন",
-        spotlightDesc: "Aimanix AI হলো আমাদের বিশেষায়িত উদ্যোগ, যার লক্ষ্য জটিল বিজনেস প্রসেসকে কৃত্রিম বুদ্ধিমত্তা ও আধুনিক কোডিং আর্কিটেকচারের মাধ্যমে স্বয়ংক্রিয় এবং গতিশীল করা। এআই মডেল ইন্টিগ্রেশন থেকে শুরু করে হাই-স্পিড ওয়েব অ্যাপ্লিকেশন—সবকিছুতেই নির্ভরযোগ্য ও স্কেলেবল প্রযুক্তি সরবরাহ করে Aimanix AI।",
-        btnPartner: "পার্টনারশিপ করুন",
-        speedTitle: "আমার বিশেষত্ব ও কাজের গতি",
-        speedDesc: "আধুনিক 'Vibe Coding' এবং 'Ultimate AI Systems' প্রযুক্তিতে দক্ষ হওয়ায় আমি প্রম্পট ইঞ্জিনিয়ারিংয়ের মাধ্যমে সাধারণ সময়ের চেয়ে ১০ গুণ দ্রুত প্রজেক্ট ডিজাইন ও প্রোটোটাইপ তৈরি করতে পারি। তবে আমি শুধু এআই-এর ওপর নির্ভরশীল নই; আমার ব্যাকএন্ড (Node.js, Flask) এবং ডুয়াল-ডেটাবেজ (MySQL, MongoDB) নলেজ থাকার কারণে আমি এআই জেনারেটেড কোডকে নিখুঁতভাবে কাস্টমাইজ, আর্কিটেক্ট, ডিবাগ এবং হাই-সিকিউর করতে সক্ষম। সহজ কথায়—আপনি পাচ্ছেন এআই-এর আল্ট্রা-ফাস্ট স্পিড এবং একজন প্রো-ডেভেলপারের সলিড টেকনিক্যাল ফিনিশিং।",
-        servicesTitle: "টেকনিক্যাল স্কিলসেট ও সার্ভিস",
-        servicesSubtitle: "Aimanix AI ও আধুনিক ওয়েব ডেভেলপমেন্টের সম্পূর্ণ প্রযুক্তিগত সমাহার",
-        contactHeading: "যোগাযোগের ঠিকানা",
-        contactSub: "আপনার যেকোনো নতুন প্রজেক্ট, এআই অটোমেশন আলোচনা বা কনসালটেশনের জন্য সরাসরি যুক্ত হোন।",
-        lblName: "নাম:",
-        lblAddr: "ঠিকানা:",
-        lblPhone: "মোবাইল নম্বর:",
-        lblEmail: "ইমেইল অ্যাড্রেস:",
-        address: "খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩"
-      },
+    <h3>ভিডিও ও ছবি লিংক</h3>
+    <label>ভিডিও লিংক (Kapwing / YouTube / Shorts লিঙ্ক)</label>
+    <input type="text" id="inp-video-url" placeholder="https://www.youtube.com/watch?v=... বা kapwing লিঙ্ক">
 
-      en: {
-        brandName: "Anowar Hossain",
-        heroGreeting: "Hello, I am",
-        heroName: "Anowar Hossain",
-        heroTag: "• Next-Gen Intelligent Systems",
-        heroDesc: "Founder of <strong>Aimanix AI</strong> | AI-Powered Full-Stack Web Developer & Automation Specialist. Combining solid classical engineering with cutting-edge Vibe Coding, I build secure, ultra-fast, and scalable modern web applications.",
-        btnWa: "💬 Direct WhatsApp Message",
-        btnVision: "🚀 Aimanix AI Vision",
-        statSpeed: "Faster Execution",
-        statDb: "Dual Database Support",
-        statSec: "Secure Architecture",
-        cardTitle: "Founder, Aimanix AI",
-        spotlightTitle: "Aimanix AI: Intelligent Automation & Software Solutions",
-        spotlightDesc: "Aimanix AI is our specialized venture designed to streamline complex business workflows through artificial intelligence and modern code architecture. From bespoke AI integrations to high-speed web apps, Aimanix AI delivers scalable, high-performance systems.",
-        btnPartner: "Partner With Us",
-        speedTitle: "My Edge & Delivery Speed",
-        speedDesc: "By leveraging Vibe Coding and advanced Prompt Engineering, I build prototypes and architectures 10x faster than traditional timelines. Backed by solid Node.js, Flask, MySQL, and MongoDB engineering, I debug, secure, and deliver enterprise-grade performance.",
-        servicesTitle: "Core Technical Services",
-        servicesSubtitle: "Full-cycle digital delivery powered by modern AI and full-stack engineering",
-        contactHeading: "Get In Touch",
-        contactSub: "Reach out directly for digital projects, automation consulting, or enterprise web builds.",
-        lblName: "Name:",
-        lblAddr: "Address:",
-        lblPhone: "Mobile Number:",
-        lblEmail: "Email Address:",
-        address: "Khejurdanga, Deganga, Barasat, North 24 Parganas, 743423"
-      },
+    <label>প্রোফাইল ছবির লিংক (Image URL)</label>
+    <input type="text" id="inp-photo-url" placeholder="https://i.postimg.cc/...">
 
-      services: [
-        {
-          icon: "🎨",
-          titleBn: "Front-End & UI Design",
-          titleEn: "Front-End & UI Design",
-          descBn: "HTML, CSS, JavaScript এবং এআই-অ্যাসিস্টেড টুলস ব্যবহার করে আকর্ষণীয়, আধুনিক ও ১০০% রেসপন্সিভ ল্যান্ডিং পেজ বা ইউজার ইন্টারফেস তৈরি।",
-          descEn: "Building responsive, modern, and high-conversion user interfaces using HTML, CSS, JavaScript, and AI-accelerated frameworks."
-        },
-        {
-          icon: "⚡",
-          titleBn: "Back-End Development",
-          titleEn: "Back-End Development",
-          descBn: "Python (Flask) এবং Node.js ব্যবহার করে শক্তিশালী RESTful API, কাস্টম লজিক এবং সিকিউর সার্ভার ম্যানেজমেন্ট।",
-          descEn: "Scalable REST APIs, custom application logic, and resilient backend systems powered by Python (Flask) and Node.js."
-        },
-        {
-          icon: "🗄️",
-          titleBn: "Dual-Database Management",
-          titleEn: "Dual-Database Management",
-          descBn: "প্রজেক্টের চাহিদা অনুযায়ী MySQL (Relational) অথবা MongoDB (NoSQL) ডেটাবেজ ডিজাইন, কোয়েরি অপটিমাইজেশন এবং নিরাপদ ডেটা হ্যান্ডলিং।",
-          descEn: "Architecting relational structures with MySQL and high-throughput document datastores with MongoDB."
-        },
-        {
-          icon: "🔮",
-          titleBn: "Vibe Coding & AI Systems",
-          titleEn: "Vibe Coding & AI Systems",
-          descBn: "প্রম্পট ইঞ্জিনিয়ারিংয়ের মাধ্যমে যেকোনো জটিল বিজনেস আইডিয়াকে দ্রুততম সময়ে প্রফেশনাল লাইভ প্রজেক্টে রূপান্তর করা।",
-          descEn: "Translating raw ideas into functional, production-ready software rapidly using state-of-the-art AI systems."
-        },
-        {
-          icon: "⚙️",
-          titleBn: "Python Scripting",
-          titleEn: "Python Scripting & Automation",
-          descBn: "ডাটা প্রসেসিং, ওয়েব স্ক্র্যাপিং বা ব্যবসার প্রতিদিনের ম্যানুয়াল কাজের জন্য কাস্টম অটোমেশন স্ক্রিপ্ট তৈরি।",
-          descEn: "Custom automation scripts for repetitive tasks, web scraping pipelines, and background data processing."
+    <h3>কন্টাক্ট ও হোয়াটসঅ্যাপ</h3>
+    <label>WhatsApp নম্বর (যেমন: 919143181401)</label>
+    <input type="text" id="inp-wa">
+
+    <label>মোবাইল নম্বর (বাংলা ফন্ট)</label>
+    <input type="text" id="inp-phone-bn">
+
+    <h3>বাংলা কনটেন্ট এডিট</h3>
+    <label>হিরো নাম (বাংলা)</label>
+    <input type="text" id="inp-bn-name">
+
+    <label>প্রধান বিবরণ (Hero Description - বাংলা)</label>
+    <textarea id="inp-bn-desc"></textarea>
+
+    <label>ঠিকানা (বাংলা)</label>
+    <input type="text" id="inp-bn-addr">
+
+    <h3>English Content Edit</h3>
+    <label>Hero Name (English)</label>
+    <input type="text" id="inp-en-name">
+
+    <label>Hero Description (English)</label>
+    <textarea id="inp-en-desc"></textarea>
+
+    <label>Address (English)</label>
+    <input type="text" id="inp-en-addr">
+
+    <button class="btn-save" id="save-btn" onclick="saveAllContent()">সবকিছু সেভ করুন (Save Changes)</button>
+    <p id="msg"></p>
+    <button class="btn-logout" onclick="handleLogout()">লগআউট</button>
+  </div>
+</div>
+
+<script>
+  // কনসোল থেকে নেওয়া আসল এবং সংশোধিত কনফিগ
+  const firebaseConfig = {
+    apiKey: "AIzaSyDPEd6BMIujKPYXrZcfjgH32p7LNfO9crc",
+    authDomain: "aimanix-web.firebaseapp.com",
+    projectId: "aimanix-web",
+    storageBucket: "aimanix-web.firebasestorage.app",
+    messagingSenderId: "301700378138",
+    appId: "1:301700378138:web:dcbdec942d50986363eba3",
+    measurementId: "G-J3VL3GBQGQ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      document.getElementById('login-sec').classList.add('hidden');
+      document.getElementById('editor-sec').classList.remove('hidden');
+      fetchInitialData();
+    } else {
+      document.getElementById('login-sec').classList.remove('hidden');
+      document.getElementById('editor-sec').classList.add('hidden');
+    }
+  });
+
+  async function handleLogin() {
+    const e = document.getElementById('email').value.trim();
+    const p = document.getElementById('pass').value;
+    try {
+      await auth.signInWithEmailAndPassword(e, p);
+    } catch (err) {
+      alert("লগইন ত্রুটি: " + err.message);
+    }
+  }
+
+  function handleLogout() {
+    auth.signOut();
+  }
+
+  async function fetchInitialData() {
+    try {
+      const doc = await db.collection('site_settings').doc('main_data').get();
+      if (doc.exists) {
+        const d = doc.data();
+        document.getElementById('inp-wa').value = d.whatsapp || '919143181401';
+        document.getElementById('inp-phone-bn').value = d.phoneBn || '৯১৪৩১৮১৪০১';
+        document.getElementById('inp-photo-url').value = d.photo || '';
+        document.getElementById('inp-video-url').value = d.videoUrl || '';
+
+        if (d.bn) {
+          document.getElementById('inp-bn-name').value = d.bn.heroName || 'আনোয়ার হোসেন';
+          document.getElementById('inp-bn-desc').value = d.bn.heroDesc || '';
+          document.getElementById('inp-bn-addr').value = d.bn.address || 'খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩';
         }
-      ]
-    };
-
-    let typeIndex = 0;
-    let typeTimer = null;
-
-    function startTypewriter(text) {
-      if (typeTimer) clearInterval(typeTimer);
-      const el = document.getElementById("typewriter-hero");
-      el.textContent = "";
-      typeIndex = 0;
-      
-      typeTimer = setInterval(() => {
-        if (typeIndex < text.length) {
-          el.textContent += text.charAt(typeIndex);
-          typeIndex++;
-        } else {
-          clearInterval(typeTimer);
+        if (d.en) {
+          document.getElementById('inp-en-name').value = d.en.heroName || 'Anowar Hossain';
+          document.getElementById('inp-en-desc').value = d.en.heroDesc || '';
+          document.getElementById('inp-en-addr').value = d.en.address || 'Khejurdanga, Deganga, Barasat, North 24 Parganas, 743423';
         }
-      }, 70);
-    }
-
-    let pythonCodeSnippet = `# Initializing Aimanix AI Engine
-from aimanix import NeuralCore, VibeCoder
-
-class ProductionApp:
-    def __init__(self):
-        self.lead = "Anowar Hossain"
-        self.speed = "10x Ultra Rapid"
-        self.stack = ["Python", "Node.js", "Flask"]
-        self.db = ["MySQL", "MongoDB"]
-
-    def build_system(self):
-        return VibeCoder.generate_production_ready()
-
->> SYSTEM READY: 100% SECURE & ACTIVE`;
-
-    let codeIdx = 0;
-    let codeTimer = null;
-
-    function runCodeTypeFill() {
-      if (codeTimer) clearInterval(codeTimer);
-      const term = document.getElementById("code-terminal");
-      term.textContent = "";
-      codeIdx = 0;
-
-      codeTimer = setInterval(() => {
-        if (codeIdx < pythonCodeSnippet.length) {
-          term.textContent += pythonCodeSnippet.charAt(codeIdx);
-          codeIdx++;
-          term.scrollTop = term.scrollHeight;
-        } else {
-          clearInterval(codeTimer);
-          setTimeout(runCodeTypeFill, 5000);
-        }
-      }, 20);
-    }
-
-    function renderUI() {
-      const loc = siteData[currentLang];
-
-      document.body.lang = currentLang;
-      document.getElementById("lang-toggle").textContent = currentLang === 'bn' ? 'English' : 'বাংলা';
-
-      document.getElementById("view-profile-img").src = siteData.photo;
-      const bImg = document.getElementById("bubble-img");
-      if (bImg) bImg.src = siteData.photo;
-
-      document.getElementById("view-brand-name").textContent = loc.brandName;
-      document.getElementById("view-hero-greeting").textContent = loc.heroGreeting;
-      document.getElementById("view-hero-tag").textContent = loc.heroTag;
-      document.getElementById("view-hero-desc").innerHTML = loc.heroDesc;
-      document.getElementById("view-btn-wa").textContent = loc.btnWa;
-      document.getElementById("view-btn-vision").textContent = loc.btnVision;
-      document.getElementById("stat-speed-label").textContent = loc.statSpeed;
-      document.getElementById("stat-db-label").textContent = loc.statDb;
-      document.getElementById("stat-sec-label").textContent = loc.statSec;
-
-      startTypewriter(loc.heroName);
-
-      document.getElementById("view-card-name").textContent = loc.brandName;
-      document.getElementById("view-card-title").textContent = loc.cardTitle;
-      document.getElementById("view-spotlight-title").textContent = loc.spotlightTitle;
-      document.getElementById("view-spotlight-desc").textContent = loc.spotlightDesc;
-      document.getElementById("view-btn-partner").textContent = loc.btnPartner;
-
-      document.getElementById("view-speed-title").textContent = loc.speedTitle;
-      document.getElementById("view-speed-desc").textContent = loc.speedDesc;
-
-      document.getElementById("view-services-title").textContent = loc.servicesTitle;
-      document.getElementById("view-services-subtitle").textContent = loc.servicesSubtitle;
-
-      document.getElementById("view-contact-heading").textContent = loc.contactHeading;
-      document.getElementById("view-contact-sub").textContent = loc.contactSub;
-      document.getElementById("lbl-name").textContent = loc.lblName;
-      document.getElementById("lbl-addr").textContent = loc.lblAddr;
-      document.getElementById("lbl-phone").textContent = loc.lblPhone;
-      document.getElementById("lbl-email").textContent = loc.lblEmail;
-      
-      document.getElementById("view-contact-address").textContent = loc.address;
-      document.getElementById("view-contact-phone").textContent = currentLang === 'bn' ? siteData.phoneBn : siteData.phoneEn;
-      document.getElementById("view-contact-phone").href = `tel:${siteData.whatsapp}`;
-
-      const waClean = siteData.whatsapp.replace(/\+/g, '').replace(/\s/g, '');
-      document.getElementById("view-wa-link").href = `https://wa.me/${waClean}`;
-      const modWa = document.getElementById("modal-wa-btn");
-      if (modWa) modWa.href = `https://wa.me/${waClean}`;
-
-      const container = document.getElementById("skills-container");
-      container.innerHTML = "";
-      siteData.services.forEach(s => {
-        const div = document.createElement("div");
-        div.className = "neon-border-box skill-box";
-        div.innerHTML = `
-          <span class="skill-icon">${s.icon}</span>
-          <h3 class="skill-title">${currentLang === 'bn' ? s.titleBn : s.titleEn}</h3>
-          <p class="skill-desc">${currentLang === 'bn' ? s.descBn : s.descEn}</p>
-        `;
-        container.appendChild(div);
-      });
-
-      if (siteData.videoUrl) {
-        const pCont = document.getElementById('media-player-container');
-        if (siteData.videoUrl.endsWith('.mp4') || siteData.videoUrl.endsWith('.webm') || siteData.videoUrl.includes('firebasestorage')) {
-          pCont.innerHTML = `<video id="native-video-elem" controls autoplay playsinline style="width:100%; height:100%; object-fit:cover; border-radius:14px;" src="${siteData.videoUrl}"></video>`;
-        } else {
-          pCont.innerHTML = `<iframe id="kapwing-video-frame" src="${siteData.videoUrl}" allow="autoplay; gyroscope;" allowfullscreen style="width:100%; height:100%; border:0;"></iframe>`;
-        }
-      }
-    }
-
-    function toggleLanguage() {
-      currentLang = currentLang === 'bn' ? 'en' : 'bn';
-      renderUI();
-    }
-
-    function toggleTheme() {
-      const root = document.documentElement;
-      const isDark = root.getAttribute('data-theme') === 'dark';
-      root.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      document.getElementById('theme-toggle').textContent = isDark ? '🌙' : '☀️';
-    }
-
-    const modalCard = document.getElementById('video-modal-card');
-    const bubbleOrb = document.getElementById('video-bubble-orb');
-    const hintPill = document.getElementById('video-hint');
-
-    function openVideoModal() {
-      modalCard.style.display = 'block';
-      bubbleOrb.style.display = 'none';
-      hintPill.style.display = 'none';
-
-      const vid = document.getElementById('native-video-elem');
-      if (vid) vid.play();
-    }
-
-    function closeVideoModal() {
-      modalCard.style.display = 'none';
-      bubbleOrb.style.display = 'block';
-      hintPill.style.display = 'block';
-
-      const vid = document.getElementById('native-video-elem');
-      if (vid) vid.pause();
-    }
-
-    function restartVideo() {
-      const vid = document.getElementById('native-video-elem');
-      if (vid) {
-        vid.currentTime = 0;
-        vid.play();
       } else {
-        const frame = document.getElementById('kapwing-video-frame');
-        if (frame) frame.src = frame.src;
+        document.getElementById('inp-wa').value = '919143181401';
+        document.getElementById('inp-phone-bn').value = '৯১৪৩১৮১৪০১';
+        document.getElementById('inp-photo-url').value = 'https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg';
+        document.getElementById('inp-video-url').value = 'https://www.kapwing.com/videos/6aa86a85413040be8d218f2b';
+        document.getElementById('inp-bn-name').value = 'আনোয়ার হোসেন';
+        document.getElementById('inp-en-name').value = 'Anowar Hossain';
+        document.getElementById('inp-bn-addr').value = 'খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩';
       }
+    } catch (e) {
+      console.error("Fetch Error:", e);
     }
+  }
 
-    const canvas = document.getElementById('neural-canvas');
-    const ctx = canvas.getContext('2d');
-    let width, height;
+  async function saveAllContent() {
+    const btn = document.getElementById('save-btn');
+    const msg = document.getElementById('msg');
+    btn.disabled = true;
+    msg.innerText = "সংরক্ষণ করা হচ্ছে...";
 
-    function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-    const mouse = { x: null, y: null, radius: 170 };
-
-    window.addEventListener('mousemove', (e) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-      if (Math.random() > 0.45) ripples.push(new NeuralRipple(mouse.x, mouse.y));
-    });
-
-    window.addEventListener('touchmove', (e) => {
-      if (e.touches.length > 0) {
-        mouse.x = e.touches[0].clientX;
-        mouse.y = e.touches[0].clientY;
-        ripples.push(new NeuralRipple(mouse.x, mouse.y));
-      }
-    }, { passive: true });
-
-    class NeuralNode {
-      constructor() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.9;
-        this.vy = (Math.random() - 0.5) * 0.9;
-        this.radius = Math.random() * 2 + 1;
-        this.color = Math.random() > 0.5 ? '0, 242, 254' : '99, 102, 241';
-      }
-
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-
-        if (this.x < 0 || this.x > width) this.vx *= -1;
-        if (this.y < 0 || this.y > height) this.vy *= -1;
-
-        if (mouse.x !== null && mouse.y !== null) {
-          const dx = mouse.x - this.x;
-          const dy = mouse.y - this.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < mouse.radius) {
-            const force = (mouse.radius - dist) / mouse.radius;
-            this.x -= (dx / dist) * force * 3;
-            this.y -= (dy / dist) * force * 3;
-          }
+    try {
+      let payload = {
+        whatsapp: document.getElementById('inp-wa').value,
+        phoneBn: document.getElementById('inp-phone-bn').value,
+        photo: document.getElementById('inp-photo-url').value,
+        videoUrl: document.getElementById('inp-video-url').value,
+        bn: {
+          heroName: document.getElementById('inp-bn-name').value,
+          heroDesc: document.getElementById('inp-bn-desc').value,
+          address: document.getElementById('inp-bn-addr').value
+        },
+        en: {
+          heroName: document.getElementById('inp-en-name').value,
+          heroDesc: document.getElementById('inp-en-desc').value,
+          address: document.getElementById('inp-en-addr').value
         }
-      }
+      };
 
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgb(${this.color})`;
-        ctx.fill();
-      }
+      await db.collection('site_settings').doc('main_data').set(payload, { merge: true });
+      msg.innerText = "✓ সফলভাবে আপডেট হয়েছে! মূল সাইট স্বয়ংক্রিয়ভাবে পরিবর্তিত হয়েছে।";
+    } catch (err) {
+      alert("ত্রুটি হয়েছে: " + err.message);
+      msg.innerText = "";
+    } finally {
+      btn.disabled = false;
     }
-
-    class NeuralRipple {
-      constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.radius = 2;
-        this.alpha = 0.8;
-      }
-      update() {
-        this.radius += 2.5;
-        this.alpha -= 0.02;
-      }
-      draw() {
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(0, 242, 254, ${this.alpha})`;
-        ctx.lineWidth = 1.2;
-        ctx.stroke();
-        ctx.restore();
-      }
-    }
-
-    const nodes = Array.from({ length: 65 }, () => new NeuralNode());
-    let ripples = [];
-
-    function renderEngine() {
-      ctx.clearRect(0, 0, width, height);
-
-      for (let i = ripples.length - 1; i >= 0; i--) {
-        ripples[i].update();
-        ripples[i].draw();
-        if (ripples[i].alpha <= 0) ripples.splice(i, 1);
-      }
-
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 130) {
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(56, 189, 248, ${(1 - dist / 130) * 0.3})`;
-            ctx.lineWidth = 0.8;
-            ctx.stroke();
-          }
-        }
-      }
-
-      nodes.forEach(node => {
-        node.update();
-        node.draw();
-      });
-
-      requestAnimationFrame(renderEngine);
-    }
-
-    renderUI();
-    runCodeTypeFill();
-    renderEngine();
-  </script>
-
-  <!-- FIREBASE ENGINE -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDPEd6BMIujKPYXrZcfjgH32p7LNfO9crc",
-      authDomain: "aimanix-web.firebaseapp.com",
-      projectId: "aimanix-web",
-      storageBucket: "aimanix-web.firebasestorage.app",
-      messagingSenderId: "301700378138",
-      appId: "1:301700378138:web:dcbdec942d50986363eba3",
-      measurementId: "G-J3VL3GBQGQ"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    db.collection('site_settings').doc('main_data').onSnapshot(snapshot => {
-      if (snapshot.exists) {
-        const data = snapshot.data();
-        if (data.photo) siteData.photo = data.photo;
-        if (data.whatsapp) siteData.whatsapp = data.whatsapp;
-        if (data.phoneBn) siteData.phoneBn = data.phoneBn;
-        if (data.phoneEn) siteData.phoneEn = data.phoneEn;
-        if (data.videoUrl) siteData.videoUrl = data.videoUrl;
-
-        if (data.bn) Object.assign(siteData.bn, data.bn);
-        if (data.en) Object.assign(siteData.en, data.en);
-
-        renderUI();
-      }
-    });
-  </script>
+  }
+</script>
 </body>
 </html>

@@ -579,7 +579,8 @@
       position: relative;
     }
 
-    .modal-video-frame iframe {
+    .modal-video-frame iframe,
+    .modal-video-frame video {
       width: 100%;
       height: 100%;
       border: 0;
@@ -782,11 +783,11 @@
 
     <!-- Floating Bubble with your Profile Avatar -->
     <div class="video-bubble-orb" id="video-bubble-orb" onclick="openVideoModal()">
-      <img src="https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg" alt="Aimanix AI Intro">
+      <img id="bubble-img" src="https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg" alt="Aimanix AI Intro">
       <div class="pulse-ring"></div>
     </div>
 
-    <!-- Kapwing Embedded Video Modal -->
+    <!-- Video Modal Container -->
     <div class="video-modal-card" id="video-modal-card">
       <div class="video-modal-header">
         <div style="font-weight: 700; color: #00f2fe; font-size: 0.95rem;">
@@ -795,7 +796,7 @@
         <button class="video-close-btn" onclick="closeVideoModal()">✕</button>
       </div>
 
-      <div class="modal-video-frame">
+      <div class="modal-video-frame" id="media-player-container">
         <iframe 
           id="kapwing-video-frame" 
           src="https://www.kapwing.com/videos/6aa86a85413040be8d218f2b" 
@@ -810,7 +811,7 @@
         <button class="btn-glow" style="padding: 0.5rem 1rem; font-size: 0.85rem; width: 100%; justify-content: center;" onclick="restartVideo()">
           ▶️ আবার শুনুন
         </button>
-        <a href="https://wa.me/919143181401" target="_blank" class="btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+        <a id="modal-wa-btn" href="https://wa.me/919143181401" target="_blank" class="btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; justify-content: center;">
           WhatsApp
         </a>
       </div>
@@ -825,6 +826,7 @@
       whatsapp: "919143181401",
       phoneBn: "৯১৪৩১৮১৪০১",
       phoneEn: "+91 9143181401",
+      videoUrl: "",
       
       bn: {
         brandName: "Anowar Hossain",
@@ -834,10 +836,10 @@
         heroDesc: "প্রতিষ্ঠাতা, <strong>Aimanix AI</strong> | AI-Powered Full-Stack Web Developer এবং এআই অটোমেশন স্পেশালিস্ট। ট্র্যাডিশনাল কোডিংয়ের শক্তিশালী ভিত্তি এবং আধুনিক এআই প্রযুক্তির (Vibe Coding) নিখুঁত কম্বিনেশন ব্যবহার করে আমি যেকোনো স্কেলের স্মার্ট, সিকিউর এবং হাই-পারফরম্যান্স ওয়েব অ্যাপ্লিকেশন তৈরি করতে পারি।",
         btnWa: "💬 সরাসরি WhatsApp-এ বার্তা দিন",
         btnVision: "🚀 Aimanix AI এর ভিশন",
-        statSpeed: "দ্রুত এক্সিকিউশন",
-        statDb: "ডুয়াল ডেটাবেজ সাপোর্ট",
-        statSec: "নিরাপদ আর্কিটেকচার",
-        cardTitle: "প্রতিষ্ঠাতা, Aimanix AI",
+        statSpeed: "Faster Execution",
+        statDb: "MySQL & MongoDB",
+        statSec: "Secure Architecture",
+        cardTitle: "Founder, Aimanix AI",
         spotlightTitle: "Aimanix AI: ইনটেলিজেন্ট অটোমেশন ও সফটওয়্যার সলিউশন",
         spotlightDesc: "Aimanix AI হলো আমাদের বিশেষায়িত উদ্যোগ, যার লক্ষ্য জটিল বিজনেস প্রসেসকে কৃত্রিম বুদ্ধিমত্তা ও আধুনিক কোডিং আর্কিটেকচারের মাধ্যমে স্বয়ংক্রিয় এবং গতিশীল করা। এআই মডেল ইন্টিগ্রেশন থেকে শুরু করে হাই-স্পিড ওয়েব অ্যাপ্লিকেশন—সবকিছুতেই নির্ভরযোগ্য ও স্কেলেবল প্রযুক্তি সরবরাহ করে Aimanix AI।",
         btnPartner: "পার্টনারশিপ করুন",
@@ -940,7 +942,7 @@
       }, 70);
     }
 
-    const pythonCodeSnippet = `# Initializing Aimanix AI Engine
+    let pythonCodeSnippet = `# Initializing Aimanix AI Engine
 from aimanix import NeuralCore, VibeCoder
 
 class ProductionApp:
@@ -983,6 +985,9 @@ class ProductionApp:
       document.getElementById("lang-toggle").textContent = currentLang === 'bn' ? 'English' : 'বাংলা';
 
       document.getElementById("view-profile-img").src = siteData.photo;
+      const bImg = document.getElementById("bubble-img");
+      if (bImg) bImg.src = siteData.photo;
+
       document.getElementById("view-brand-name").textContent = loc.brandName;
       document.getElementById("view-hero-greeting").textContent = loc.heroGreeting;
       document.getElementById("view-hero-tag").textContent = loc.heroTag;
@@ -1018,7 +1023,10 @@ class ProductionApp:
       document.getElementById("view-contact-phone").textContent = currentLang === 'bn' ? siteData.phoneBn : siteData.phoneEn;
       document.getElementById("view-contact-phone").href = `tel:${siteData.whatsapp}`;
 
-      document.getElementById("view-wa-link").href = `https://wa.me/${siteData.whatsapp.replace(/\+/g, '')}`;
+      const waClean = siteData.whatsapp.replace(/\+/g, '').replace(/\s/g, '');
+      document.getElementById("view-wa-link").href = `https://wa.me/${waClean}`;
+      const modWa = document.getElementById("modal-wa-btn");
+      if (modWa) modWa.href = `https://wa.me/${waClean}`;
 
       const container = document.getElementById("skills-container");
       container.innerHTML = "";
@@ -1032,6 +1040,15 @@ class ProductionApp:
         `;
         container.appendChild(div);
       });
+
+      if (siteData.videoUrl) {
+        const pCont = document.getElementById('media-player-container');
+        if (siteData.videoUrl.endsWith('.mp4') || siteData.videoUrl.endsWith('.webm') || siteData.videoUrl.includes('firebasestorage')) {
+          pCont.innerHTML = `<video id="native-video-elem" controls autoplay playsinline style="width:100%; height:100%; object-fit:cover; border-radius:14px;" src="${siteData.videoUrl}"></video>`;
+        } else {
+          pCont.innerHTML = `<iframe id="kapwing-video-frame" src="${siteData.videoUrl}" allow="autoplay; gyroscope;" allowfullscreen style="width:100%; height:100%; border:0;"></iframe>`;
+        }
+      }
     }
 
     function toggleLanguage() {
@@ -1046,22 +1063,17 @@ class ProductionApp:
       document.getElementById('theme-toggle').textContent = isDark ? '🌙' : '☀️';
     }
 
-    /* Video Controller Engine for Kapwing Embed */
-    const kapwingIframe = document.getElementById('kapwing-video-frame');
     const modalCard = document.getElementById('video-modal-card');
     const bubbleOrb = document.getElementById('video-bubble-orb');
     const hintPill = document.getElementById('video-hint');
-    const kapwingBaseUrl = "https://www.kapwing.com/e/6a9a56c4df4ff0a505350320";
 
     function openVideoModal() {
       modalCard.style.display = 'block';
       bubbleOrb.style.display = 'none';
       hintPill.style.display = 'none';
 
-      // Reload iframe to trigger autoplay fresh
-      if (kapwingIframe) {
-        kapwingIframe.src = kapwingBaseUrl + "?autoplay=1";
-      }
+      const vid = document.getElementById('native-video-elem');
+      if (vid) vid.play();
     }
 
     function closeVideoModal() {
@@ -1069,19 +1081,21 @@ class ProductionApp:
       bubbleOrb.style.display = 'block';
       hintPill.style.display = 'block';
 
-      // Reset iframe source so playback stops completely
-      if (kapwingIframe) {
-        kapwingIframe.src = kapwingBaseUrl;
-      }
+      const vid = document.getElementById('native-video-elem');
+      if (vid) vid.pause();
     }
 
     function restartVideo() {
-      if (kapwingIframe) {
-        kapwingIframe.src = kapwingBaseUrl + "?autoplay=1";
+      const vid = document.getElementById('native-video-elem');
+      if (vid) {
+        vid.currentTime = 0;
+        vid.play();
+      } else {
+        const frame = document.getElementById('kapwing-video-frame');
+        if (frame) frame.src = frame.src;
       }
     }
 
-    /* Neural Synapse Canvas Engine */
     const canvas = document.getElementById('neural-canvas');
     const ctx = canvas.getContext('2d');
     let width, height;
@@ -1208,6 +1222,41 @@ class ProductionApp:
     renderUI();
     runCodeTypeFill();
     renderEngine();
+  </script>
+
+  <!-- FIREBASE ENGINE (আপনার কনফিগ দিয়ে প্রস্তুত) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPEd6BMIujKPYXrZcfjgH32p7LNF09crc",
+      authDomain: "aimanix-web.firebaseapp.com",
+      projectId: "aimanix-web",
+      storageBucket: "aimanix-web.firebasestorage.app",
+      messagingSenderId: "301700378138",
+      appId: "1:301700378138:web:dcbdec942d50986363eba3",
+      measurementId: "G-J3VL3GBQGQ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    db.collection('site_settings').doc('main_data').onSnapshot(snapshot => {
+      if (snapshot.exists) {
+        const data = snapshot.data();
+        if (data.photo) siteData.photo = data.photo;
+        if (data.whatsapp) siteData.whatsapp = data.whatsapp;
+        if (data.phoneBn) siteData.phoneBn = data.phoneBn;
+        if (data.phoneEn) siteData.phoneEn = data.phoneEn;
+        if (data.videoUrl) siteData.videoUrl = data.videoUrl;
+
+        if (data.bn) Object.assign(siteData.bn, data.bn);
+        if (data.en) Object.assign(siteData.en, data.en);
+
+        renderUI();
+      }
+    });
   </script>
 </body>
 </html>

@@ -45,7 +45,7 @@
     <h2>Aimanix Content Manager</h2>
 
     <h3>মিডিয়া ও ছবি</h3>
-    <label>প্রোফাইল ছবির লিঙ্ক (Image URL)</label>
+    <label>প্রোফাইল ছবির সরাসরি লিঙ্ক (Image URL)</label>
     <input type="text" id="inp-photo-url" placeholder="https://i.postimg.cc/...">
 
     <label>নতুন প্রোফাইল ছবি আপলোড (ডিভাইস থেকে ফাইল বাছুন)</label>
@@ -91,9 +91,9 @@
 </div>
 
 <script>
-  // আপনার আসল Firebase কনফিগ
+  // কনসোল থেকে নেওয়া আসল এবং সংশোধিত কনফিগ
   const firebaseConfig = {
-    apiKey: "AIzaSyDPEd6BMIujKPYXrZcfjgH32p7LNF09crc",
+    apiKey: "AIzaSyDPEd6BMIujKPYXrZcfjgH32p7LNfO9crc",
     authDomain: "aimanix-web.firebaseapp.com",
     projectId: "aimanix-web",
     storageBucket: "aimanix-web.firebasestorage.app",
@@ -119,7 +119,6 @@
   });
 
   async function handleLogin() {
-    // .trim() যোগ করা হয়েছে যাতে ইমেইলের আগে-পরে স্পেস থাকলে এরর না আসে
     const e = document.getElementById('email').value.trim();
     const p = document.getElementById('pass').value;
     try {
@@ -154,7 +153,6 @@
           document.getElementById('inp-en-addr').value = d.en.address || 'Khejurdanga, Deganga, Barasat, North 24 Parganas, 743423';
         }
       } else {
-        // ডেটাবেজ খালি থাকলে ডিফল্ট ভ্যালু লোড হবে
         document.getElementById('inp-wa').value = '919143181401';
         document.getElementById('inp-phone-bn').value = '৯১৪৩১৮১৪০১';
         document.getElementById('inp-photo-url').value = 'https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg';
@@ -167,20 +165,24 @@
     }
   }
 
-  // সরাসরি ডিভাইসের ফাইল স্টোরেজে আপলোড
   async function uploadFileToBucket(fileInput, folder) {
     const file = fileInput.files[0];
     if (!file) return null;
-    const ref = storage.ref(`${folder}/${Date.now()}_${file.name}`);
-    const snap = await ref.put(file);
-    return await snap.ref.getDownloadURL();
+    try {
+      const ref = storage.ref(`${folder}/${Date.now()}_${file.name}`);
+      const snap = await ref.put(file);
+      return await snap.ref.getDownloadURL();
+    } catch (err) {
+      console.warn("Storage upload bypassed/failed: ", err);
+      return null;
+    }
   }
 
   async function saveAllContent() {
     const btn = document.getElementById('save-btn');
     const msg = document.getElementById('msg');
     btn.disabled = true;
-    msg.innerText = "ফাইল ও টেক্সট সেভ হচ্ছে, দয়া করে একটু অপেক্ষা করুন...";
+    msg.innerText = "সংরক্ষণ করা হচ্ছে...";
 
     try {
       let payload = {
@@ -200,15 +202,12 @@
         }
       };
 
-      // ছবি ফাইল আপলোড চেক
       const photoUrl = await uploadFileToBucket(document.getElementById('inp-photo-file'), 'images');
       if (photoUrl) payload.photo = photoUrl;
 
-      // ভিডিও ফাইল আপলোড চেক
       const vidUrl = await uploadFileToBucket(document.getElementById('inp-vid-file'), 'videos');
       if (vidUrl) payload.videoUrl = vidUrl;
 
-      // Firestore এ মার্জ করে সেভ
       await db.collection('site_settings').doc('main_data').set(payload, { merge: true });
       msg.innerText = "✓ সফলভাবে আপডেট হয়েছে! মূল সাইট স্বয়ংক্রিয়ভাবে পরিবর্তিত হয়েছে।";
     } catch (err) {

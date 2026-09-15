@@ -3,29 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aimanix AI - Admin Control</title>
+  <title>Aimanix AI - Secret Admin Control</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
-    body { background: #030712; color: #f8fafc; padding: 20px; display: flex; justify-content: center; }
-    .card { width: 100%; max-width: 650px; background: #0f172a; padding: 24px; border-radius: 14px; border: 1px solid #1e293b; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-    h2 { color: #00f2fe; margin-bottom: 12px; text-align: center; }
-    h3 { color: #38bdf8; font-size: 15px; margin: 18px 0 6px; border-bottom: 1px solid #334155; padding-bottom: 4px; }
-    label { display: block; font-size: 13px; color: #94a3b8; margin: 8px 0 4px; }
-    input, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: #fff; font-size: 14px; }
-    textarea { height: 75px; resize: vertical; }
-    button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 14px; }
-    .btn-save { background: #00f2fe; color: #030712; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
+    body { background: #030712; color: #f8fafc; padding: 20px; display: flex; justify-content: center; min-height: 100vh; align-items: center; }
+    .card { width: 100%; max-width: 650px; background: #0f172a; padding: 28px; border-radius: 16px; border: 1px solid #1e293b; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+    h2 { color: #00f2fe; margin-bottom: 16px; text-align: center; font-size: 1.5rem; }
+    h3 { color: #38bdf8; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 0 8px; border-bottom: 1px solid #334155; padding-bottom: 4px; }
+    label { display: block; font-size: 13px; color: #94a3b8; margin: 10px 0 4px; font-weight: 500; }
+    input, textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: #fff; font-size: 14px; outline: none; transition: border 0.2s; }
+    input:focus, textarea:focus { border-color: #00f2fe; }
+    textarea { height: 80px; resize: vertical; }
+    button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 16px; font-size: 15px; }
+    .btn-save { background: #00f2fe; color: #030712; transition: filter 0.2s; }
     .btn-save:hover { filter: brightness(1.1); }
-    .btn-logout { background: #ef4444; color: #fff; }
+    .btn-logout { background: #ef4444; color: #fff; margin-top: 10px; }
     .hidden { display: none; }
-    #msg { text-align: center; color: #38bdf8; font-size: 14px; margin-top: 10px; }
+    #msg { text-align: center; color: #38bdf8; font-size: 14px; margin-top: 12px; font-weight: 600; }
   </style>
 
   <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 </head>
 <body>
 
@@ -33,6 +33,7 @@
   <!-- লগইন সেকশন -->
   <div id="login-sec">
     <h2>Admin Dashboard Login</h2>
+    <p style="color: #64748b; font-size: 13px; text-align: center; margin-bottom: 15px;">শুধুমাত্র পরিচালকের ব্যবহারের জন্য সুরক্ষিত</p>
     <label>Email Address</label>
     <input type="email" id="email" placeholder="admin@example.com">
     <label>Password</label>
@@ -44,18 +45,12 @@
   <div id="editor-sec" class="hidden">
     <h2>Aimanix Content Manager</h2>
 
-    <h3>মিডিয়া ও ছবি</h3>
-    <label>প্রোফাইল ছবির সরাসরি লিঙ্ক (Image URL)</label>
+    <h3>ভিডিও ও ছবি লিংক</h3>
+    <label>ভিডিও লিংক (Kapwing / YouTube / Shorts লিঙ্ক)</label>
+    <input type="text" id="inp-video-url" placeholder="https://www.youtube.com/watch?v=... বা kapwing লিঙ্ক">
+
+    <label>প্রোফাইল ছবির লিংক (Image URL)</label>
     <input type="text" id="inp-photo-url" placeholder="https://i.postimg.cc/...">
-
-    <label>নতুন প্রোফাইল ছবি আপলোড (ডিভাইস থেকে ফাইল বাছুন)</label>
-    <input type="file" id="inp-photo-file" accept="image/*">
-
-    <label>ভিডিও লিঙ্ক (Kapwing / YouTube / MP4 লিঙ্ক)</label>
-    <input type="text" id="inp-video-url" placeholder="https://www.kapwing.com/videos/...">
-    
-    <label>নেটিভ ভিডিও আপলোড (ডিভাইস থেকে সরাসরি MP4/WebM ফাইল)</label>
-    <input type="file" id="inp-vid-file" accept="video/mp4,video/webm">
 
     <h3>কন্টাক্ট ও হোয়াটসঅ্যাপ</h3>
     <label>WhatsApp নম্বর (যেমন: 919143181401)</label>
@@ -105,7 +100,6 @@
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.firestore();
-  const storage = firebase.storage();
 
   auth.onAuthStateChanged(user => {
     if (user) {
@@ -156,25 +150,13 @@
         document.getElementById('inp-wa').value = '919143181401';
         document.getElementById('inp-phone-bn').value = '৯১৪৩১৮১৪০১';
         document.getElementById('inp-photo-url').value = 'https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg';
+        document.getElementById('inp-video-url').value = 'https://www.kapwing.com/videos/6aa86a85413040be8d218f2b';
         document.getElementById('inp-bn-name').value = 'আনোয়ার হোসেন';
         document.getElementById('inp-en-name').value = 'Anowar Hossain';
         document.getElementById('inp-bn-addr').value = 'খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩';
       }
     } catch (e) {
       console.error("Fetch Error:", e);
-    }
-  }
-
-  async function uploadFileToBucket(fileInput, folder) {
-    const file = fileInput.files[0];
-    if (!file) return null;
-    try {
-      const ref = storage.ref(`${folder}/${Date.now()}_${file.name}`);
-      const snap = await ref.put(file);
-      return await snap.ref.getDownloadURL();
-    } catch (err) {
-      console.warn("Storage upload bypassed/failed: ", err);
-      return null;
     }
   }
 
@@ -201,12 +183,6 @@
           address: document.getElementById('inp-en-addr').value
         }
       };
-
-      const photoUrl = await uploadFileToBucket(document.getElementById('inp-photo-file'), 'images');
-      if (photoUrl) payload.photo = photoUrl;
-
-      const vidUrl = await uploadFileToBucket(document.getElementById('inp-vid-file'), 'videos');
-      if (vidUrl) payload.videoUrl = vidUrl;
 
       await db.collection('site_settings').doc('main_data').set(payload, { merge: true });
       msg.innerText = "✓ সফলভাবে আপডেট হয়েছে! মূল সাইট স্বয়ংক্রিয়ভাবে পরিবর্তিত হয়েছে।";

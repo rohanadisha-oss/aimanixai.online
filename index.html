@@ -702,7 +702,9 @@
       transition: transform 0.25s ease;
     }
 
-    .video-bubble-orb video { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; pointer-events: none; }
+    .video-bubble-orb video, .video-bubble-orb iframe { 
+      width: 100%; height: 100%; border-radius: 50%; object-fit: cover; pointer-events: none; border: none;
+    }
 
     .video-modal-card {
       display: none;
@@ -721,8 +723,8 @@
 
     .video-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
     .video-close-btn { background: transparent; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
-    .modal-video-frame { width: 100%; height: 280px; border-radius: 14px; overflow: hidden; background: #000; }
-    .modal-video-frame video { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
+    .modal-video-frame { width: 100%; height: 280px; border-radius: 14px; overflow: hidden; background: #000; position: relative; }
+    .modal-video-frame video, .modal-video-frame iframe { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; border: none; }
     .video-action-bar { display: flex; gap: 0.7rem; margin-top: 0.8rem; }
 
     @media (max-width: 950px) {
@@ -1059,9 +1061,8 @@
     </div>
 
     <div class="video-bubble-orb" id="video-bubble-orb" onclick="openVideoModal()">
-      <video id="ai-bubble-video" loop muted autoplay playsinline webkit-playsinline preload="auto">
-        <source src="https://files.catbox.moe/fmhga1.mp4" type="video/mp4">
-      </video>
+      <!-- DYNAMIC VIDEO/IFRAME IS INJECTED HERE VIA JAVASCRIPT -->
+      <div id="bubble-video-placeholder" style="width: 100%; height: 100%;"></div>
       <div class="pulse-ring"></div>
     </div>
 
@@ -1073,17 +1074,15 @@
         <button class="video-close-btn" onclick="closeVideoModal()">✕</button>
       </div>
 
-      <div class="modal-video-frame">
-        <video id="ai-modal-video" loop playsinline webkit-playsinline preload="auto">
-          <source src="https://files.catbox.moe/fmhga1.mp4" type="video/mp4">
-        </video>
+      <div class="modal-video-frame" id="modal-video-frame">
+        <!-- DYNAMIC MODAL VIDEO/IFRAME IS INJECTED HERE VIA JAVASCRIPT -->
       </div>
 
       <div class="video-action-bar">
         <button class="btn-glow" style="padding: 0.5rem 1rem; font-size: 0.85rem; width: 100%; justify-content: center;" onclick="restartVideo()">
           ▶️ আবার শুনুন
         </button>
-        <a href="https://wa.me/919143181401" target="_blank" class="btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+        <a href="https://wa.me/919143181401" id="modal-wa-btn" target="_blank" class="btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; justify-content: center;">
           WhatsApp
         </a>
       </div>
@@ -1094,6 +1093,7 @@
     let currentLang = 'bn';
 
     const defaultData = {
+      videoUrl: "https://files.catbox.moe/fmhga1.mp4",
       photo: "https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg",
       whatsapp: "919143181401",
       phone: "৯১৪৩১৮১৪০১",
@@ -1257,9 +1257,27 @@
       ]
     };
 
+    // Deep merge function to ensure no field is ever lost or undefined
     function getSiteData() {
-      const stored = localStorage.getItem("aimanix_v3_data");
-      return stored ? JSON.parse(stored) : defaultData;
+      const storedStr = localStorage.getItem("aimanix_v3_data");
+      if (!storedStr) return defaultData;
+
+      try {
+        const stored = JSON.parse(storedStr);
+        return {
+          ...defaultData,
+          ...stored,
+          videoUrl: stored.videoUrl || defaultData.videoUrl,
+          photo: stored.photo || defaultData.photo,
+          whatsapp: stored.whatsapp || defaultData.whatsapp,
+          phone: stored.phone || defaultData.phone,
+          bn: { ...defaultData.bn, ...(stored.bn || {}) },
+          en: { ...defaultData.en, ...(stored.en || {}) },
+          services: defaultData.services
+        };
+      } catch (e) {
+        return defaultData;
+      }
     }
 
     let typeIndex = 0;
@@ -1315,6 +1333,41 @@ class ProductionApp:
           setTimeout(runCodeTypeFill, 5000);
         }
       }, 20);
+    }
+
+    /* Smart Dynamic Video Player Setup (Handles both YouTube Embeds & Direct MP4s) */
+    let isYouTube = false;
+
+    function setupVideoPlayers(videoUrl) {
+      const bubbleHolder = document.getElementById("bubble-video-placeholder");
+      const modalHolder = document.getElementById("modal-video-frame");
+
+      isYouTube = videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be");
+
+      if (isYouTube) {
+        let embedUrl = videoUrl;
+        if (!embedUrl.includes("embed/")) {
+          const idMatch = videoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
+          const vidId = idMatch ? idMatch[1] : "";
+          embedUrl = `https://www.youtube.com/embed/${vidId}?autoplay=1&mute=1&loop=1&playlist=${vidId}&enablejsapi=1`;
+        }
+
+        bubbleHolder.innerHTML = `<iframe id="ai-bubble-video" src="${embedUrl}" allow="autoplay; encrypted-media"></iframe>`;
+        modalHolder.innerHTML = `<iframe id="ai-modal-video" src="${embedUrl.replace('mute=1', 'mute=0')}" allow="autoplay; encrypted-media"></iframe>`;
+      } else {
+        bubbleHolder.innerHTML = `
+          <video id="ai-bubble-video" loop muted autoplay playsinline webkit-playsinline preload="auto">
+            <source src="${videoUrl}" type="video/mp4">
+          </video>
+        `;
+        modalHolder.innerHTML = `
+          <video id="ai-modal-video" loop playsinline webkit-playsinline preload="auto">
+            <source src="${videoUrl}" type="video/mp4">
+          </video>
+        `;
+      }
+
+      setTimeout(playMutedBubble, 300);
     }
 
     function renderUI() {
@@ -1388,7 +1441,10 @@ class ProductionApp:
       document.getElementById("view-contact-phone").textContent = currentLang === 'bn' ? data.phone : data.phoneEn;
       document.getElementById("view-contact-phone").href = `tel:${data.whatsapp}`;
 
-      document.getElementById("view-wa-link").href = `https://wa.me/${data.whatsapp.replace(/\+/g, '')}`;
+      const waClean = data.whatsapp.replace(/\+/g, '').replace(/\s/g, '');
+      document.getElementById("view-wa-link").href = `https://wa.me/${waClean}`;
+      const modalWa = document.getElementById("modal-wa-btn");
+      if (modalWa) modalWa.href = `https://wa.me/${waClean}`;
 
       const container = document.getElementById("skills-container");
       container.innerHTML = "";
@@ -1402,6 +1458,9 @@ class ProductionApp:
         `;
         container.appendChild(div);
       });
+
+      // সেটআপ ডাইনামিক ভিডিও
+      setupVideoPlayers(data.videoUrl);
     }
 
     function toggleLanguage() {
@@ -1430,13 +1489,11 @@ class ProductionApp:
       }
     }
 
-    // ১. CPU পাওয়ার-অন সিন্থেসাইজড সাউন্ড (Reactor Boot)
     function playSciFiPowerOnSound() {
       try {
         initAudio();
         const now = audioCtx.currentTime;
 
-        // প্রাইমারি অসিলেটর (Frequency Sweep)
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
 
@@ -1449,7 +1506,6 @@ class ProductionApp:
         gain.gain.linearRampToValueAtTime(0.2, now + 0.08);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
 
-        // সাইবার রেজোন্যান্স ফিল্টার
         const filter = audioCtx.createBiquadFilter();
         filter.type = 'bandpass';
         filter.frequency.setValueAtTime(600, now);
@@ -1463,7 +1519,6 @@ class ProductionApp:
         osc.start(now);
         osc.stop(now + 0.35);
 
-        // সেকেন্ডারি কনফার্মেশন বিপ
         setTimeout(() => {
           if (!audioCtx) return;
           const osc2 = audioCtx.createOscillator();
@@ -1484,7 +1539,6 @@ class ProductionApp:
       } catch (e) {}
     }
 
-    // ২. মেনু আইটেম ক্লিক বিপ
     function playBeepClick() {
       try {
         initAudio();
@@ -1506,7 +1560,6 @@ class ProductionApp:
       } catch (e) {}
     }
 
-    /* Sci-Fi CPU Switch & Drawer Controller */
     function openSciFiMenu() {
       playSciFiPowerOnSound();
 
@@ -1539,26 +1592,25 @@ class ProductionApp:
       }
     }
 
-    /* Video Controller */
-    const bubbleVid = document.getElementById('ai-bubble-video');
-    const modalVid = document.getElementById('ai-modal-video');
+    /* Robust Video Controller */
     const modalCard = document.getElementById('video-modal-card');
     const bubbleOrb = document.getElementById('video-bubble-orb');
     const hintPill = document.getElementById('video-hint');
 
     function playMutedBubble() {
-      if (bubbleVid) {
-        bubbleVid.muted = true;
-        const p = bubbleVid.play();
-        if (p !== undefined) {
-          p.catch(() => {
-            document.addEventListener('touchstart', () => { bubbleVid.play(); }, { once: true });
-          });
+      if (!isYouTube) {
+        const bubbleVid = document.getElementById('ai-bubble-video');
+        if (bubbleVid) {
+          bubbleVid.muted = true;
+          const p = bubbleVid.play();
+          if (p !== undefined) {
+            p.catch(() => {
+              document.addEventListener('touchstart', () => { bubbleVid.play(); }, { once: true });
+            });
+          }
         }
       }
     }
-    window.addEventListener('DOMContentLoaded', playMutedBubble);
-    window.addEventListener('load', playMutedBubble);
 
     function openVideoModal() {
       playBeepClick();
@@ -1566,12 +1618,18 @@ class ProductionApp:
       bubbleOrb.style.display = 'none';
       hintPill.style.display = 'none';
 
-      bubbleVid.pause();
-      modalVid.currentTime = 0;
-      modalVid.muted = false;
-      const p = modalVid.play();
-      if (p !== undefined) {
-        p.catch(() => { modalVid.muted = true; modalVid.play(); });
+      if (!isYouTube) {
+        const bubbleVid = document.getElementById('ai-bubble-video');
+        const modalVid = document.getElementById('ai-modal-video');
+        if (bubbleVid) bubbleVid.pause();
+        if (modalVid) {
+          modalVid.currentTime = 0;
+          modalVid.muted = false;
+          const p = modalVid.play();
+          if (p !== undefined) {
+            p.catch(() => { modalVid.muted = true; modalVid.play(); });
+          }
+        }
       }
     }
 
@@ -1581,15 +1639,29 @@ class ProductionApp:
       bubbleOrb.style.display = 'block';
       hintPill.style.display = 'block';
 
-      modalVid.pause();
-      playMutedBubble();
+      if (!isYouTube) {
+        const modalVid = document.getElementById('ai-modal-video');
+        if (modalVid) modalVid.pause();
+        playMutedBubble();
+      }
     }
 
     function restartVideo() {
       playBeepClick();
-      modalVid.currentTime = 0;
-      modalVid.muted = false;
-      modalVid.play();
+      if (isYouTube) {
+        const modalFrame = document.getElementById('ai-modal-video');
+        if (modalFrame) {
+          const src = modalFrame.src;
+          modalFrame.src = src; // reload iframe
+        }
+      } else {
+        const modalVid = document.getElementById('ai-modal-video');
+        if (modalVid) {
+          modalVid.currentTime = 0;
+          modalVid.muted = false;
+          modalVid.play();
+        }
+      }
     }
 
     /* Neural Synapse Canvas Engine */

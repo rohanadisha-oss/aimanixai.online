@@ -2,18 +2,18 @@
 <html lang="bn" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Anowar Hossain | Founder of Aimanix AI</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --bg: #030712;
-      --surface: rgba(15, 23, 42, 0.75);
-      --surface-card: rgba(15, 23, 42, 0.85);
+      --surface: rgba(15, 23, 42, 0.8);
+      --surface-card: rgba(15, 23, 42, 0.9);
       --surface-border: rgba(56, 189, 248, 0.25);
       --text: #f8fafc;
       --text-muted: #94a3b8;
@@ -26,8 +26,8 @@
 
     [data-theme="light"] {
       --bg: #f8fafc;
-      --surface: rgba(255, 255, 255, 0.85);
-      --surface-card: rgba(255, 255, 255, 0.92);
+      --surface: rgba(255, 255, 255, 0.88);
+      --surface-card: rgba(255, 255, 255, 0.95);
       --surface-border: rgba(37, 99, 235, 0.2);
       --text: #0b1329;
       --text-muted: #475569;
@@ -56,7 +56,7 @@
       background-image: 
         linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
-      background-size: 40px 40px;
+      background-size: 35px 35px;
       mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
       -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
       pointer-events: none;
@@ -134,13 +134,14 @@
       50% { opacity: 0; }
     }
 
+    /* Navbar */
     .navbar {
       position: sticky;
       top: 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2.5rem;
+      padding: 0.85rem 1.4rem;
       background: var(--surface);
       backdrop-filter: blur(18px);
       border-bottom: 1px solid var(--surface-border);
@@ -150,7 +151,7 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.8rem;
+      gap: 0.6rem;
       text-decoration: none;
       color: var(--text);
     }
@@ -160,37 +161,212 @@
       background: linear-gradient(135deg, var(--cyan), var(--indigo));
       color: #fff;
       font-weight: 800;
-      padding: 0.4rem 0.75rem;
+      padding: 0.35rem 0.65rem;
       border-radius: 8px;
       box-shadow: 0 0 15px var(--neon-glow);
+      font-size: 0.95rem;
     }
 
-    .brand-name { font-weight: 800; font-size: 1.25rem; }
-    .nav-controls { display: flex; align-items: center; gap: 0.7rem; }
+    .brand-name { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.2px; }
 
-    .btn-ctrl {
-      background: rgba(255, 255, 255, 0.05);
+    /* Smart Sci-Fi CPU Power Switch */
+    .cpu-switch-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      cursor: pointer;
+      padding: 5px 12px;
+      border-radius: 30px;
+      background: rgba(3, 7, 18, 0.9);
+      border: 1px solid var(--cyan);
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.35), inset 0 0 8px rgba(0, 242, 254, 0.2);
+      transition: all 0.25s ease;
+      user-select: none;
+    }
+
+    .cpu-switch-wrap:active { transform: scale(0.95); }
+
+    .cpu-core-orb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #00f2fe 10%, #030712 80%);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px #00f2fe;
+      animation: cpuPulse 2.5s infinite ease-in-out;
+    }
+
+    @keyframes cpuPulse {
+      0%, 100% { box-shadow: 0 0 8px #00f2fe, inset 0 0 4px #00f2fe; }
+      50% { box-shadow: 0 0 18px #6366f1, inset 0 0 8px #6366f1; }
+    }
+
+    .cpu-power-icon {
+      width: 13px;
+      height: 13px;
+      stroke: #fff;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      fill: none;
+      filter: drop-shadow(0 0 3px #00f2fe);
+    }
+
+    .cpu-switch-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--cyan);
+      letter-spacing: 0.8px;
+    }
+
+    /* Sci-Fi HUD CPU Drawer Menu */
+    .sci-fi-menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.85);
+      backdrop-filter: blur(20px);
+      z-index: 10000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      align-items: flex-start;
+      justify-content: flex-end;
+    }
+
+    .sci-fi-menu-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .sci-fi-hud-drawer {
+      width: 88%;
+      max-width: 360px;
+      height: 100vh;
+      background: rgba(11, 19, 43, 0.95);
+      border-left: 2px solid var(--cyan);
+      box-shadow: -15px 0 40px rgba(0, 242, 254, 0.25);
+      display: flex;
+      flex-direction: column;
+      padding: 1.8rem 1.4rem;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .sci-fi-menu-overlay.active .sci-fi-hud-drawer {
+      transform: translateX(0);
+    }
+
+    .hud-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--surface-border);
+      margin-bottom: 1.8rem;
+    }
+
+    .hud-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hud-close-btn {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid #ef4444;
+      color: #ef4444;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hud-nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .hud-link-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.2rem;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--surface-border);
       color: var(--text);
-      padding: 0.5rem 0.9rem;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: all 0.2s;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.05rem;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    .btn-ctrl:hover { border-color: var(--cyan); box-shadow: 0 0 10px var(--neon-glow); }
+    .hud-link-card:hover, .hud-link-card:active {
+      border-color: var(--cyan);
+      background: rgba(0, 242, 254, 0.08);
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.25);
+      transform: translateX(-4px);
+    }
 
+    .hud-link-icon {
+      font-size: 1.4rem;
+      background: rgba(0, 242, 254, 0.1);
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      color: var(--cyan);
+    }
+
+    .hud-quick-controls {
+      margin-top: auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--surface-border);
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .hud-btn-ctrl {
+      flex: 1;
+      padding: 0.75rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    /* Hero Section */
     .hero {
       max-width: 1300px;
       margin: 0 auto;
-      min-height: 85vh;
+      min-height: 80vh;
       display: grid;
       grid-template-columns: 1.15fr 0.85fr;
       gap: 3.5rem;
       align-items: center;
-      padding: 4rem 2rem 3rem;
+      padding: 3rem 1.4rem;
     }
 
     .startup-pill {
@@ -205,11 +381,7 @@
       margin-bottom: 1.5rem;
     }
 
-    .startup-tag {
-      font-family: 'Fira Code', monospace;
-      font-weight: 800;
-      color: var(--cyan);
-    }
+    .startup-tag { font-family: 'Fira Code', monospace; font-weight: 800; color: var(--cyan); }
 
     .pulse-dot {
       width: 8px;
@@ -225,26 +397,14 @@
       100% { transform: scale(0.9); opacity: 0.7; }
     }
 
-    .hero-title {
-      font-size: 3.4rem;
-      font-weight: 900;
-      line-height: 1.15;
-      margin-bottom: 1.4rem;
-    }
-
-    .hero-desc {
-      font-size: 1.05rem;
-      line-height: 1.75;
-      color: var(--text-muted);
-      margin-bottom: 2rem;
-    }
-
-    .hero-buttons { display: flex; gap: 1.2rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .hero-title { font-size: 2.8rem; font-weight: 900; line-height: 1.15; margin-bottom: 1.2rem; }
+    .hero-desc { font-size: 1rem; line-height: 1.7; color: var(--text-muted); margin-bottom: 2rem; }
+    .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
 
     .btn-glow {
       background: linear-gradient(135deg, var(--cyan), var(--indigo));
       color: #fff;
-      padding: 0.85rem 1.8rem;
+      padding: 0.85rem 1.6rem;
       border-radius: 10px;
       font-weight: 700;
       text-decoration: none;
@@ -257,52 +417,38 @@
       border: none;
     }
 
-    .btn-glow:hover { transform: translateY(-2px); }
+    .btn-glow:active { transform: scale(0.98); }
 
     .btn-outline {
       border: 1px solid var(--surface-border);
       background: var(--surface);
       color: var(--text);
-      padding: 0.85rem 1.8rem;
+      padding: 0.85rem 1.6rem;
       border-radius: 10px;
       font-weight: 700;
       text-decoration: none;
       transition: all 0.2s;
     }
 
-    .btn-outline:hover { border-color: var(--cyan); box-shadow: 0 0 15px var(--neon-glow); }
-
     .hero-stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1.2rem;
+      gap: 1rem;
       border-top: 1px solid var(--surface-border);
-      padding-top: 1.8rem;
+      padding-top: 1.6rem;
     }
 
     .stat-box { display: flex; flex-direction: column; }
-    .stat-number { font-size: 1.8rem; font-weight: 800; color: var(--cyan); font-family: 'Fira Code', monospace; }
-    .stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+    .stat-number { font-size: 1.6rem; font-weight: 800; color: var(--cyan); font-family: 'Fira Code', monospace; }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
 
-    .hero-right {
-      display: flex;
-      flex-direction: column;
-      gap: 1.8rem;
-      align-items: center;
-    }
-
-    .profile-card {
-      padding: 2.2rem;
-      text-align: center;
-      width: 100%;
-      max-width: 400px;
-      position: relative;
-    }
+    .hero-right { display: flex; flex-direction: column; gap: 1.8rem; align-items: center; width: 100%; }
+    .profile-card { padding: 2rem; text-align: center; width: 100%; max-width: 380px; position: relative; }
 
     .photo-container {
-      width: 160px;
-      height: 160px;
-      margin: 0 auto 1.4rem;
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 1.2rem;
       border-radius: 50%;
       padding: 4px;
       background: linear-gradient(135deg, var(--cyan), var(--indigo));
@@ -310,21 +456,15 @@
       position: relative;
     }
 
-    .profile-img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      background: #0f172a;
-    }
+    .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #0f172a; }
 
     .photo-badge {
       position: absolute;
       bottom: 6px;
       right: 6px;
       background: #10b981;
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       border: 3px solid var(--bg);
     }
@@ -333,7 +473,7 @@
       background: var(--code-bg);
       border-radius: 16px;
       width: 100%;
-      max-width: 400px;
+      max-width: 380px;
       font-family: 'Fira Code', monospace;
       text-align: left;
       overflow: hidden;
@@ -343,32 +483,32 @@
 
     .hud-bar {
       background: rgba(255, 255, 255, 0.04);
-      padding: 0.65rem 1.2rem;
+      padding: 0.6rem 1.1rem;
       border-bottom: 1px solid var(--surface-border);
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .hud-circle { width: 10px; height: 10px; border-radius: 50%; }
+    .hud-circle { width: 9px; height: 9px; border-radius: 50%; }
     .c-red { background: #ef4444; }
     .c-yellow { background: #f59e0b; }
     .c-green { background: #10b981; }
 
     .hud-body { 
-      padding: 1.2rem; 
-      font-size: 0.8rem; 
+      padding: 1.1rem; 
+      font-size: 0.78rem; 
       line-height: 1.6; 
       color: #38bdf8; 
-      min-height: 165px;
+      min-height: 155px;
       white-space: pre-wrap;
       word-break: break-all;
     }
 
-    .brand-spotlight { max-width: 1300px; margin: 1rem auto 4rem; padding: 0 2rem; }
+    .brand-spotlight { max-width: 1300px; margin: 1rem auto 4rem; padding: 0 1.4rem; }
 
     .spotlight-card {
-      padding: 2.5rem;
+      padding: 2.2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -381,94 +521,155 @@
       position: absolute;
       right: -20px;
       bottom: -35px;
-      font-size: 8rem;
+      font-size: 7rem;
       font-weight: 900;
-      color: rgba(255, 255, 255, 0.03);
+      color: rgba(255, 255, 255, 0.025);
       pointer-events: none;
     }
 
-    .spotlight-text h2 { font-size: 2rem; font-weight: 800; margin-bottom: 0.6rem; }
-    .spotlight-text p { color: var(--text-muted); max-width: 750px; font-size: 1rem; line-height: 1.6; }
+    .spotlight-text h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.6rem; }
+    .spotlight-text p { color: var(--text-muted); max-width: 750px; font-size: 0.95rem; line-height: 1.6; }
 
-    .speed-banner { max-width: 1300px; margin: 0 auto 5rem; padding: 0 2rem; }
+    .speed-banner { max-width: 1300px; margin: 0 auto 4rem; padding: 0 1.4rem; }
 
     .speed-card {
-      padding: 2.2rem;
+      padding: 2rem;
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: 2rem;
+      gap: 1.8rem;
       align-items: center;
     }
 
     .speed-badge-10x {
-      font-size: 3.2rem;
+      font-size: 2.8rem;
       font-weight: 900;
       font-family: 'Fira Code', monospace;
       color: var(--cyan);
       text-shadow: 0 0 15px var(--neon-glow);
     }
 
-    .services { max-width: 1300px; margin: 0 auto; padding: 3rem 2rem 5rem; }
-    .section-head { text-align: center; margin-bottom: 3.5rem; }
-    .section-title { font-size: 2.4rem; font-weight: 800; margin-bottom: 0.8rem; }
-    .section-subtitle { color: var(--text-muted); max-width: 650px; margin: 0 auto; font-size: 1rem; }
-
-    .skills-grid {
+    /* Pricing Section */
+    .pricing-section { max-width: 1300px; margin: 0 auto 5rem; padding: 0 1.4rem; }
+    
+    .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.8rem;
+      margin-top: 2rem;
     }
 
-    .skill-box {
+    .pricing-card {
       padding: 2rem;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      position: relative;
     }
 
-    .skill-icon { font-size: 2.2rem; margin-bottom: 1.2rem; display: inline-block; }
-    .skill-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.8rem; }
-    .skill-desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.65; }
+    .pricing-badge {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      box-shadow: 0 0 12px var(--neon-glow);
+      text-transform: uppercase;
+    }
 
-    .contact-section { max-width: 1300px; margin: 0 auto 5rem; padding: 0 2rem; }
+    .pricing-head { margin-bottom: 1.5rem; }
+    .pricing-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .pricing-amount {
+      font-size: 2.2rem;
+      font-weight: 900;
+      font-family: 'Fira Code', monospace;
+      color: var(--cyan);
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+    }
+    .pricing-amount span { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; font-family: inherit; }
+    .pricing-desc { color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; margin-top: 0.8rem; }
+
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin: 1.4rem 0 1.8rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--surface-border);
+    }
+    .pricing-feature-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.88rem; }
+    .pricing-feature-item svg { width: 16px; height: 16px; fill: var(--cyan); flex-shrink: 0; }
+
+    .pricing-disclaimer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .services { max-width: 1300px; margin: 0 auto; padding: 2rem 1.4rem 4rem; }
+    .section-head { text-align: center; margin-bottom: 3rem; }
+    .section-title { font-size: 2.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .section-subtitle { color: var(--text-muted); max-width: 650px; margin: 0 auto; font-size: 0.95rem; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .skill-box { padding: 1.8rem; display: flex; flex-direction: column; }
+    .skill-icon { font-size: 2rem; margin-bottom: 1rem; display: inline-block; }
+    .skill-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.7rem; }
+    .skill-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+
+    .contact-section { max-width: 1300px; margin: 0 auto 5rem; padding: 0 1.4rem; }
 
     .contact-container {
-      padding: 3rem;
+      padding: 2.4rem 1.8rem;
       display: grid;
       grid-template-columns: 1fr 1.2fr;
-      gap: 3rem;
+      gap: 2.5rem;
       align-items: center;
     }
 
-    .contact-info h3 { font-size: 2rem; font-weight: 800; margin-bottom: 1.2rem; }
-    .contact-info p { color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6; }
+    .contact-info h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; }
+    .contact-info p { color: var(--text-muted); margin-bottom: 1.8rem; line-height: 1.6; font-size: 0.92rem; }
 
-    .contact-list { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; }
-    .contact-item { display: flex; align-items: flex-start; gap: 1rem; font-size: 0.95rem; }
+    .contact-list { list-style: none; display: flex; flex-direction: column; gap: 1.1rem; }
+    .contact-item { display: flex; align-items: flex-start; gap: 0.9rem; font-size: 0.92rem; }
 
     .contact-item-icon {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       background: rgba(56, 189, 248, 0.1);
-      padding: 0.5rem;
+      padding: 0.45rem;
       border-radius: 8px;
       color: var(--cyan);
     }
 
     .contact-link { color: var(--cyan); text-decoration: none; font-weight: 600; }
-    .contact-link:hover { text-decoration: underline; }
 
     .map-frame {
       width: 100%;
-      height: 380px;
+      height: 340px;
       border-radius: 18px;
       overflow: hidden;
       border: 1px solid var(--surface-border);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     }
 
+    /* Video Bubble Style */
     .video-bubble-container {
       position: fixed;
-      bottom: 25px;
-      right: 25px;
+      bottom: 20px;
+      right: 20px;
       z-index: 9999;
       display: flex;
       flex-direction: column;
@@ -480,23 +681,17 @@
       border: 1px solid #00f2fe;
       box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
       color: #f8fafc;
-      padding: 0.45rem 0.9rem;
+      padding: 0.4rem 0.85rem;
       border-radius: 30px;
-      font-size: 0.8rem;
-      margin-bottom: 8px;
+      font-size: 0.76rem;
+      margin-bottom: 6px;
       cursor: pointer;
-      animation: floatPill 3s ease-in-out infinite;
       white-space: nowrap;
     }
 
-    @keyframes floatPill {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-
     .video-bubble-orb {
-      width: 85px;
-      height: 85px;
+      width: 76px;
+      height: 76px;
       border-radius: 50%;
       padding: 3px;
       background: linear-gradient(135deg, #00f2fe, #6366f1);
@@ -504,101 +699,43 @@
       cursor: pointer;
       position: relative;
       overflow: hidden;
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.25s ease;
     }
 
-    .video-bubble-orb:hover { transform: scale(1.08); }
-
-    .video-bubble-orb img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      pointer-events: none;
-    }
-
-    .pulse-ring {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      width: 14px;
-      height: 14px;
-      background: #10b981;
-      border: 2px solid #030712;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #10b981;
-      pointer-events: none;
-    }
+    .video-bubble-orb video { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; pointer-events: none; }
 
     .video-modal-card {
       display: none;
       position: fixed;
-      bottom: 120px;
-      right: 25px;
-      width: 320px;
+      bottom: 105px;
+      right: 20px;
+      width: 310px;
       background: rgba(15, 23, 42, 0.95);
       border: 1px solid #00f2fe;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 35px rgba(0, 242, 254, 0.35);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 242, 254, 0.35);
       border-radius: 20px;
       padding: 1rem;
       backdrop-filter: blur(18px);
       z-index: 10000;
-      animation: modalFadeIn 0.3s ease-out;
     }
 
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.9) translateY(20px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .video-modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.8rem;
-    }
-
-    .video-close-btn {
-      background: transparent;
-      border: none;
-      color: #94a3b8;
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-
-    .video-close-btn:hover { color: #ef4444; }
-
-    .modal-video-frame {
-      width: 100%;
-      height: 290px;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      background: #000;
-      position: relative;
-    }
-
-    .modal-video-frame iframe,
-    .modal-video-frame video {
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .video-action-bar {
-      display: flex;
-      gap: 0.8rem;
-      margin-top: 0.9rem;
-    }
+    .video-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+    .video-close-btn { background: transparent; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+    .modal-video-frame { width: 100%; height: 280px; border-radius: 14px; overflow: hidden; background: #000; }
+    .modal-video-frame video { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
+    .video-action-bar { display: flex; gap: 0.7rem; margin-top: 0.8rem; }
 
     @media (max-width: 950px) {
-      .hero { grid-template-columns: 1fr; text-align: center; }
-      .startup-pill { margin: 0 auto 1.5rem; }
+      .hero { grid-template-columns: 1fr; text-align: center; gap: 2.5rem; padding-top: 2rem; }
+      .startup-pill { margin: 0 auto 1.2rem; }
+      .hero-title { font-size: 2.4rem; }
       .hero-buttons { justify-content: center; }
       .hero-stats { grid-template-columns: repeat(3, 1fr); }
-      .spotlight-card { flex-direction: column; text-align: center; gap: 1.5rem; }
-      .contact-container { grid-template-columns: 1fr; padding: 2rem; }
-      .video-modal-card { right: 15px; width: calc(100vw - 30px); bottom: 115px; }
+      .spotlight-card { flex-direction: column; text-align: center; gap: 1.4rem; }
+      .speed-card { grid-template-columns: 1fr; text-align: center; }
+      .speed-badge-10x { margin: 0 auto; }
+      .contact-container { grid-template-columns: 1fr; }
+      .video-modal-card { right: 15px; width: calc(100vw - 30px); bottom: 105px; }
     }
   </style>
 </head>
@@ -614,12 +751,68 @@
         <span class="brand-name" id="view-brand-name">Anowar Hossain</span>
       </a>
 
-      <div class="nav-controls">
-        <button class="btn-ctrl" id="lang-toggle" onclick="toggleLanguage()">English</button>
-        <button class="btn-ctrl" id="theme-toggle" onclick="toggleTheme()">☀️</button>
+      <!-- SMART SCI-FI CPU ON SWITCH WITH REAL-TIME AUDIO SYNTHESIS -->
+      <div class="cpu-switch-wrap" onclick="openSciFiMenu()" title="Power On Neural Menu">
+        <div class="cpu-core-orb">
+          <svg class="cpu-power-icon" viewBox="0 0 24 24">
+            <path d="M12 2v10M18.4 6.6a9 9 0 1 1-12.8 0"/>
+          </svg>
+        </div>
+        <span class="cpu-switch-label">CPU CORE</span>
       </div>
     </nav>
   </header>
+
+  <!-- ANIMATED SCI-FI HUD CPU DRAWER MENU -->
+  <div class="sci-fi-menu-overlay" id="sci-fi-menu-overlay" onclick="closeSciFiMenu(event)">
+    <div class="sci-fi-hud-drawer" id="sci-fi-hud-drawer">
+      <div class="hud-header">
+        <div class="hud-title">
+          <span style="color: #10b981;">●</span> SYSTEM READY // MENU
+        </div>
+        <button class="hud-close-btn" onclick="toggleSciFiMenuState(false)">✕</button>
+      </div>
+
+      <div class="hud-nav-links">
+        <a href="school.html" class="hud-link-card" onclick="playBeepClick()">
+          <div class="hud-link-icon">📚</div>
+          <div>
+            <div>আমার স্কুল</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem;">Class VIII & IX স্মার্ট স্টাডি নোটস</small>
+          </div>
+        </a>
+
+        <a href="kobita.html" class="hud-link-card" onclick="playBeepClick()">
+          <div class="hud-link-icon">✍️</div>
+          <div>
+            <div>কবিতার আকাশ</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem;">এআই সাহিত্য ও সৃজনশীল আসর</small>
+          </div>
+        </a>
+
+        <a href="#pricing" class="hud-link-card" onclick="playBeepClick(); toggleSciFiMenuState(false);">
+          <div class="hud-link-icon">💎</div>
+          <div>
+            <div>প্যাকেজ ও রেট</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem;">ল্যান্ডিং পেজ, ব্যাকএন্ড ও অ্যাপ</small>
+          </div>
+        </a>
+
+        <a href="#contact" class="hud-link-card" onclick="playBeepClick(); toggleSciFiMenuState(false);">
+          <div class="hud-link-icon">📍</div>
+          <div>
+            <div>যোগাযোগ</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem;">ঠিকানা, হোয়াটসঅ্যাপ ও ম্যাপ</small>
+          </div>
+        </a>
+      </div>
+
+      <div class="hud-quick-controls">
+        <button class="hud-btn-ctrl" id="lang-toggle" onclick="playBeepClick(); toggleLanguage();">English</button>
+        <button class="hud-btn-ctrl" id="theme-toggle" onclick="playBeepClick(); toggleTheme();">☀️ থিম</button>
+      </div>
+    </div>
+  </div>
 
   <main>
     <section class="hero">
@@ -643,8 +836,8 @@
           <a href="#" id="view-wa-link" class="btn-glow" target="_blank" rel="noopener">
             <span id="view-btn-wa">💬 সরাসরি WhatsApp-এ বার্তা দিন</span>
           </a>
-          <a href="#aimanix" class="btn-outline">
-            <span id="view-btn-vision">🚀 Aimanix AI এর ভিশন</span>
+          <a href="#pricing" class="btn-outline">
+            <span id="view-btn-pricing">💎 প্যাকেজ ও প্রাইসিং দেখুন</span>
           </a>
         </div>
 
@@ -703,13 +896,98 @@
       <div class="neon-border-box speed-card">
         <div class="speed-badge-10x">10X</div>
         <div>
-          <h3 style="font-size: 1.4rem; margin-bottom: 0.5rem; font-weight: 700;" id="view-speed-title">
+          <h3 style="font-size: 1.35rem; margin-bottom: 0.5rem; font-weight: 700;" id="view-speed-title">
             আমার বিশেষত্ব ও কাজের গতি
           </h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.65;" id="view-speed-desc">
+          <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.65;" id="view-speed-desc">
             আধুনিক 'Vibe Coding' এবং 'Ultimate AI Systems' প্রযুক্তিতে দক্ষ হওয়ায় আমি প্রম্পট ইঞ্জিনিয়ারিংয়ের মাধ্যমে সাধারণ সময়ের চেয়ে ১০ গুণ দ্রুত প্রজেক্ট ডিজাইন ও প্রোটোটাইপ তৈরি করতে পারি। তবে আমি শুধু এআই-এর ওপর নির্ভরশীল নই; আমার ব্যাকএন্ড (Node.js, Flask) এবং ডুয়াল-ডেটাবেজ (MySQL, MongoDB) নলেজ থাকার কারণে আমি এআই জেনারেটেড কোডকে নিখুঁতভাবে কাস্টমাইজ, আর্কিটেক্ট, ডিবাগ এবং হাই-সিকিউর করতে সক্ষম। সহজ কথায়—আপনি পাচ্ছেন এআই-এর আল্ট্রা-ফাস্ট স্পিড এবং একজন প্রো-ডেভেলপারের সলিড টেকনিক্যাল ফিনিশিং।
           </p>
         </div>
+      </div>
+    </section>
+
+    <section class="pricing-section" id="pricing">
+      <div class="section-head">
+        <h2 class="section-title gradient-text" id="view-pricing-title">আমরা সবচেয়ে কম মূল্যে সেরা পরিষেবা দিই</h2>
+        <p class="section-subtitle" id="view-pricing-subtitle">কোয়ালিটি ও সিকিউরিটিতে কোনো আপোষ ছাড়া সবচেয়ে সাশ্রয়ী প্যাকেজ</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="neon-border-box pricing-card">
+          <div class="pricing-badge">Starter</div>
+          <div class="pricing-head">
+            <h3 class="pricing-title" id="p1-title">ল্যান্ডিং পেজ ডেভেলপমেন্ট</h3>
+            <div class="pricing-amount">₹৭,৯৯৯ <span id="p1-unit">/ এককালীন</span></div>
+            <p class="pricing-desc" id="p1-desc">ব্যবসা বা ব্যক্তিগত পোর্টফোলিওর জন্য আল্ট্রা-ফাস্ট, আধুনিক ও ১০০% মোবাইল রেসপন্সিভ হাই-কনভার্টিং ল্যান্ডিং পেজ।</p>
+          </div>
+          <ul class="pricing-features">
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p1-f1">আধুনিক ও প্রিমিয়াম রেসপনসিভ UI/UX</span>
+            </li>
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p1-f2">সুপারফাস্ট লোডিং স্পিড ও এসইও ফ্রেন্ডলি</span>
+            </li>
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p1-f3">WhatsApp ও কল ইন্টিগ্রেশন</span>
+            </li>
+          </ul>
+          <a href="https://wa.me/919143181401" target="_blank" class="btn-glow" style="width: 100%; justify-content: center;" id="p1-btn">অর্ডার করুন</a>
+        </div>
+
+        <div class="neon-border-box pricing-card">
+          <div class="pricing-badge" style="background: linear-gradient(135deg, #10b981, #00f2fe);">Popular</div>
+          <div class="pricing-head">
+            <h3 class="pricing-title" id="p2-title">ব্যাকএন্ড যুক্ত ওয়েবসাইট</h3>
+            <div class="pricing-amount">₹১৫,৯৯৯ <span id="p2-unit">/ শুরু মাত্র</span></div>
+            <p class="pricing-desc" id="p2-desc">ডাইনামিক ফিচার, সুরক্ষিত ডেটাবেজ ও এপিআই সমৃদ্ধ শক্তিশালী কমপ্লিট ওয়েব অ্যাপ্লিকেশন।</p>
+          </div>
+          <ul class="pricing-features">
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p2-f1">Node.js / Python Flask ব্যাকএন্ড সিস্টেম</span>
+            </li>
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p2-f2">MySQL অথবা MongoDB ডেটাবেজ ম্যানেজমেন্ট</span>
+            </li>
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p2-f3">কাস্টম অ্যাডমিন প্যানেল / এপিআই ইন্টিগ্রেশন</span>
+            </li>
+          </ul>
+          <a href="https://wa.me/919143181401" target="_blank" class="btn-glow" style="width: 100%; justify-content: center;" id="p2-btn">অর্ডার করুন</a>
+        </div>
+
+        <div class="neon-border-box pricing-card">
+          <div class="pricing-badge">App</div>
+          <div class="pricing-head">
+            <h3 class="pricing-title" id="p3-title">মোবাইল অ্যাপ বিল্ডিং</h3>
+            <div class="pricing-amount">₹৭,৯৯৯ <span id="p3-unit">/ প্লেস্টোর ছাড়া</span></div>
+            <p class="pricing-desc" id="p3-desc">আপনার বিজনেস বা সার্ভিসের জন্য রেডিমেড ক্রস-প্ল্যাটফর্ম মোবাইল অ্যাপ্লিকেশন (সরাসরি ইনস্টলযোগ্য APK বিল্ড)।</p>
+          </div>
+          <ul class="pricing-features">
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p3-f1">স্মুথ এবং দ্রুতগতির অ্যান্ড্রয়েড APK ফাইল</span>
+            </li>
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p3-f2">ওয়েব টু অ্যাপ অথবা কাস্টম ফাংশনালিটি</span>
+            </li>
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p3-f3">প্লেস্টোর ছাড়াই সরাসরি শেয়ার ও ইনস্টলযোগ্য</span>
+            </li>
+          </ul>
+          <a href="https://wa.me/919143181401" target="_blank" class="btn-glow" style="width: 100%; justify-content: center;" id="p3-btn">অর্ডার করুন</a>
+        </div>
+      </div>
+
+      <div class="pricing-disclaimer" id="view-pricing-disclaimer">
+        * সব ক্ষেত্রে শর্ত প্রযোজ্য (Terms & Conditions Apply based on project scope).
       </div>
     </section>
 
@@ -781,7 +1059,9 @@
     </div>
 
     <div class="video-bubble-orb" id="video-bubble-orb" onclick="openVideoModal()">
-      <img id="bubble-img" src="https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg" alt="Aimanix AI Intro">
+      <video id="ai-bubble-video" loop muted autoplay playsinline webkit-playsinline preload="auto">
+        <source src="https://files.catbox.moe/fmhga1.mp4" type="video/mp4">
+      </video>
       <div class="pulse-ring"></div>
     </div>
 
@@ -793,15 +1073,17 @@
         <button class="video-close-btn" onclick="closeVideoModal()">✕</button>
       </div>
 
-      <div class="modal-video-frame" id="media-player-container">
-        <!-- জাভাস্ক্রিপ্ট স্বয়ংক্রিয়ভাবে ভিডিও ফ্রেম এখানে রেন্ডার করবে -->
+      <div class="modal-video-frame">
+        <video id="ai-modal-video" loop playsinline webkit-playsinline preload="auto">
+          <source src="https://files.catbox.moe/fmhga1.mp4" type="video/mp4">
+        </video>
       </div>
 
       <div class="video-action-bar">
         <button class="btn-glow" style="padding: 0.5rem 1rem; font-size: 0.85rem; width: 100%; justify-content: center;" onclick="restartVideo()">
           ▶️ আবার শুনুন
         </button>
-        <a id="modal-wa-btn" href="https://wa.me/919143181401" target="_blank" class="btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+        <a href="https://wa.me/919143181401" target="_blank" class="btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; justify-content: center;">
           WhatsApp
         </a>
       </div>
@@ -811,12 +1093,12 @@
   <script>
     let currentLang = 'bn';
 
-    const siteData = {
+    const defaultData = {
       photo: "https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg",
       whatsapp: "919143181401",
-      phoneBn: "৯১৪৩১৮১৪০১",
+      phone: "৯১৪৩১৮১৪০১",
       phoneEn: "+91 9143181401",
-      videoUrl: "https://www.kapwing.com/videos/6aa86a85413040be8d218f2b",
+      email: "rohanadisha@gmail.com",
       
       bn: {
         brandName: "Anowar Hossain",
@@ -825,16 +1107,47 @@
         heroTag: "• নেক্সট-জেন ইন্টেলিজেন্ট সিস্টেমস",
         heroDesc: "প্রতিষ্ঠাতা, <strong>Aimanix AI</strong> | AI-Powered Full-Stack Web Developer এবং এআই অটোমেশন স্পেশালিস্ট। ট্র্যাডিশনাল কোডিংয়ের শক্তিশালী ভিত্তি এবং আধুনিক এআই প্রযুক্তির (Vibe Coding) নিখুঁত কম্বিনেশন ব্যবহার করে আমি যেকোনো স্কেলের স্মার্ট, সিকিউর এবং হাই-পারফরম্যান্স ওয়েব অ্যাপ্লিকেশন তৈরি করতে পারি।",
         btnWa: "💬 সরাসরি WhatsApp-এ বার্তা দিন",
-        btnVision: "🚀 Aimanix AI এর ভিশন",
-        statSpeed: "Faster Execution",
-        statDb: "MySQL & MongoDB",
-        statSec: "Secure Architecture",
-        cardTitle: "Founder, Aimanix AI",
+        btnPricing: "💎 প্যাকেজ ও প্রাইসিং দেখুন",
+        statSpeed: "দ্রুত এক্সিকিউশন",
+        statDb: "ডুয়াল ডেটাবেজ সাপোর্ট",
+        statSec: "নিরাপদ আর্কিটেকচার",
+        cardTitle: "প্রতিষ্ঠাতা, Aimanix AI",
         spotlightTitle: "Aimanix AI: ইনটেলিজেন্ট অটোমেশন ও সফটওয়্যার সলিউশন",
         spotlightDesc: "Aimanix AI হলো আমাদের বিশেষায়িত উদ্যোগ, যার লক্ষ্য জটিল বিজনেস প্রসেসকে কৃত্রিম বুদ্ধিমত্তা ও আধুনিক কোডিং আর্কিটেকচারের মাধ্যমে স্বয়ংক্রিয় এবং গতিশীল করা। এআই মডেল ইন্টিগ্রেশন থেকে শুরু করে হাই-স্পিড ওয়েব অ্যাপ্লিকেশন—সবকিছুতেই নির্ভরযোগ্য ও স্কেলেবল প্রযুক্তি সরবরাহ করে Aimanix AI।",
         btnPartner: "পার্টনারশিপ করুন",
         speedTitle: "আমার বিশেষত্ব ও কাজের গতি",
         speedDesc: "আধুনিক 'Vibe Coding' এবং 'Ultimate AI Systems' প্রযুক্তিতে দক্ষ হওয়ায় আমি প্রম্পট ইঞ্জিনিয়ারিংয়ের মাধ্যমে সাধারণ সময়ের চেয়ে ১০ গুণ দ্রুত প্রজেক্ট ডিজাইন ও প্রোটোটাইপ তৈরি করতে পারি। তবে আমি শুধু এআই-এর ওপর নির্ভরশীল নই; আমার ব্যাকএন্ড (Node.js, Flask) এবং ডুয়াল-ডেটাবেজ (MySQL, MongoDB) নলেজ থাকার কারণে আমি এআই জেনারেটেড কোডকে নিখুঁতভাবে কাস্টমাইজ, আর্কিটেক্ট, ডিবাগ এবং হাই-সিকিউর করতে সক্ষম। সহজ কথায়—আপনি পাচ্ছেন এআই-এর আল্ট্রা-ফাস্ট স্পিড এবং একজন প্রো-ডেভেলপারের সলিড টেকনিক্যাল ফিনিশিং।",
+        
+        pricingTitle: "আমরা সবচেয়ে কম মূল্যে সেরা পরিষেবা দিই",
+        pricingSubtitle: "কোয়ালিটি ও সিকিউরিটিতে কোনো আপোষ ছাড়া সবচেয়ে সাশ্রয়ী প্যাকেজ",
+        pricingDisclaimer: "* সব ক্ষেত্রে শর্ত প্রযোজ্য (Terms & Conditions Apply based on project scope).",
+        p1Title: "ল্যান্ডিং পেজ ডেভেলপমেন্ট",
+        p1Amount: "₹৭,৯৯৯",
+        p1Unit: "/ এককালীন",
+        p1Desc: "ব্যবসা বা ব্যক্তিগত পোর্টফোলিওর জন্য আল্ট্রা-ফাস্ট, আধুনিক ও ১০০% মোবাইল রেসপন্সিভ হাই-কনভার্টিং ল্যান্ডিং পেজ।",
+        p1F1: "আধুনিক ও প্রিমিয়াম রেসপনসিভ UI/UX",
+        p1F2: "সুপারফাস্ট লোডিং স্পিড ও এসইও ফ্রেন্ডলি",
+        p1F3: "WhatsApp ও সরাসরি কল ইন্টিগ্রেশন",
+        p1Btn: "অর্ডার করুন",
+
+        p2Title: "ব্যাকএন্ড যুক্ত ওয়েবসাইট",
+        p2Amount: "₹১৫,৯৯৯",
+        p2Unit: "/ শুরু মাত্র",
+        p2Desc: "ডাইনামিক ফিচার, সুরক্ষিত ডেটাবেজ ও এপিআই সমৃদ্ধ শক্তিশালী কমপ্লিট ওয়েব অ্যাপ্লিকেশন।",
+        p2F1: "Node.js / Python Flask ব্যাকএন্ড সিস্টেম",
+        p2F2: "MySQL অথবা MongoDB ডেটাবেজ ম্যানেজমেন্ট",
+        p2F3: "কাস্টম অ্যাডমিন প্যানেল / এপিআই ইন্টিগ্রেশন",
+        p2Btn: "অর্ডার করুন",
+
+        p3Title: "মোবাইল অ্যাপ বিল্ডিং",
+        p3Amount: "₹৭,৯৯৯",
+        p3Unit: "/ প্লেস্টোর ছাড়া",
+        p3Desc: "আপনার বিজনেস বা সার্ভিসের জন্য রেডিমেড ক্রস-প্ল্যাটফর্ম মোবাইল অ্যাপ্লিকেশন (সরাসরি ইনস্টলযোগ্য APK বিল্ড)।",
+        p3F1: "স্মুথ এবং দ্রুতগতির অ্যান্ড্রয়েড APK ফাইল",
+        p3F2: "ওয়েব টু অ্যাপ অথবা কাস্টম ফাংশনালিটি",
+        p3F3: "প্লেস্টোর ছাড়াই সরাসরি শেয়ার ও ইনস্টলযোগ্য",
+        p3Btn: "অর্ডার করুন",
+
         servicesTitle: "টেকনিক্যাল স্কিলসেট ও সার্ভিস",
         servicesSubtitle: "Aimanix AI ও আধুনিক ওয়েব ডেভেলপমেন্টের সম্পূর্ণ প্রযুক্তিগত সমাহার",
         contactHeading: "যোগাযোগের ঠিকানা",
@@ -853,7 +1166,7 @@
         heroTag: "• Next-Gen Intelligent Systems",
         heroDesc: "Founder of <strong>Aimanix AI</strong> | AI-Powered Full-Stack Web Developer & Automation Specialist. Combining solid classical engineering with cutting-edge Vibe Coding, I build secure, ultra-fast, and scalable modern web applications.",
         btnWa: "💬 Direct WhatsApp Message",
-        btnVision: "🚀 Aimanix AI Vision",
+        btnPricing: "💎 Explore Pricing Plans",
         statSpeed: "Faster Execution",
         statDb: "Dual Database Support",
         statSec: "Secure Architecture",
@@ -863,6 +1176,37 @@
         btnPartner: "Partner With Us",
         speedTitle: "My Edge & Delivery Speed",
         speedDesc: "By leveraging Vibe Coding and advanced Prompt Engineering, I build prototypes and architectures 10x faster than traditional timelines. Backed by solid Node.js, Flask, MySQL, and MongoDB engineering, I debug, secure, and deliver enterprise-grade performance.",
+        
+        pricingTitle: "Affordable High-Performance Digital Services",
+        pricingSubtitle: "Premium digital craftsmanship tailored to your budget without compromising security",
+        pricingDisclaimer: "* Terms and conditions apply based on project complexity and customization.",
+        p1Title: "Landing Page Development",
+        p1Amount: "₹7,999",
+        p1Unit: "/ one-time",
+        p1Desc: "Ultra-fast, high-converting, and responsive landing pages built specifically for your brand or enterprise.",
+        p1F1: "Modern & High-Tech responsive UI/UX",
+        p1F2: "SEO optimized & lightning fast loading",
+        p1F3: "WhatsApp & direct call action buttons",
+        p1Btn: "Order Now",
+
+        p2Title: "Backend Enabled Web App",
+        p2Amount: "₹15,999",
+        p2Unit: "/ starting from",
+        p2Desc: "Full-stack dynamic architecture with robust backend servers, databases, and secure APIs.",
+        p2F1: "Node.js / Python Flask robust backend",
+        p2F2: "MySQL or MongoDB database integration",
+        p2F3: "Custom control panel / API pipelines",
+        p2Btn: "Order Now",
+
+        p3Title: "Mobile App Building",
+        p3Amount: "₹7,999",
+        p3Unit: "/ without Play Store",
+        p3Desc: "Custom cross-platform standalone mobile application built and delivered directly as installable APK.",
+        p3F1: "Fluid & optimized Android APK output",
+        p3F2: "Web-to-app conversion & custom layout",
+        p3F3: "Direct install & share without Play Store fees",
+        p3Btn: "Order Now",
+
         servicesTitle: "Core Technical Services",
         servicesSubtitle: "Full-cycle digital delivery powered by modern AI and full-stack engineering",
         contactHeading: "Get In Touch",
@@ -913,6 +1257,11 @@
       ]
     };
 
+    function getSiteData() {
+      const stored = localStorage.getItem("aimanix_v3_data");
+      return stored ? JSON.parse(stored) : defaultData;
+    }
+
     let typeIndex = 0;
     let typeTimer = null;
 
@@ -932,7 +1281,7 @@
       }, 70);
     }
 
-    let pythonCodeSnippet = `# Initializing Aimanix AI Engine
+    const pythonCodeSnippet = `# Initializing Aimanix AI Engine
 from aimanix import NeuralCore, VibeCoder
 
 class ProductionApp:
@@ -968,46 +1317,20 @@ class ProductionApp:
       }, 20);
     }
 
-    function getCleanEmbedUrl(url) {
-      if (!url) return '';
-      url = url.trim();
-
-      if (url.includes('youtube.com/shorts/')) {
-        const videoId = url.split('shorts/')[1].split('?')[0].split('/')[0];
-        return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
-      }
-
-      if (url.includes('youtube.com/watch')) {
-        const match = url.match(/[?&]v=([^&#]+)/);
-        if (match && match[1]) {
-          return `https://www.youtube-nocookie.com/embed/${match[1]}?autoplay=1&rel=0`;
-        }
-      }
-
-      if (url.includes('youtu.be/')) {
-        const videoId = url.split('youtu.be/')[1].split('?')[0].split('/')[0];
-        return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
-      }
-
-      return url;
-    }
-
     function renderUI() {
-      const loc = siteData[currentLang];
+      const data = getSiteData();
+      const loc = data[currentLang];
 
       document.body.lang = currentLang;
       document.getElementById("lang-toggle").textContent = currentLang === 'bn' ? 'English' : 'বাংলা';
 
-      document.getElementById("view-profile-img").src = siteData.photo;
-      const bImg = document.getElementById("bubble-img");
-      if (bImg) bImg.src = siteData.photo;
-
+      document.getElementById("view-profile-img").src = data.photo;
       document.getElementById("view-brand-name").textContent = loc.brandName;
       document.getElementById("view-hero-greeting").textContent = loc.heroGreeting;
       document.getElementById("view-hero-tag").textContent = loc.heroTag;
       document.getElementById("view-hero-desc").innerHTML = loc.heroDesc;
       document.getElementById("view-btn-wa").textContent = loc.btnWa;
-      document.getElementById("view-btn-vision").textContent = loc.btnVision;
+      document.getElementById("view-btn-pricing").textContent = loc.btnPricing;
       document.getElementById("stat-speed-label").textContent = loc.statSpeed;
       document.getElementById("stat-db-label").textContent = loc.statDb;
       document.getElementById("stat-sec-label").textContent = loc.statSec;
@@ -1023,6 +1346,34 @@ class ProductionApp:
       document.getElementById("view-speed-title").textContent = loc.speedTitle;
       document.getElementById("view-speed-desc").textContent = loc.speedDesc;
 
+      document.getElementById("view-pricing-title").textContent = loc.pricingTitle;
+      document.getElementById("view-pricing-subtitle").textContent = loc.pricingSubtitle;
+      document.getElementById("view-pricing-disclaimer").textContent = loc.pricingDisclaimer;
+
+      document.getElementById("p1-title").textContent = loc.p1Title;
+      document.getElementById("p1-desc").textContent = loc.p1Desc;
+      document.getElementById("p1-unit").textContent = loc.p1Unit;
+      document.getElementById("p1-f1").textContent = loc.p1F1;
+      document.getElementById("p1-f2").textContent = loc.p1F2;
+      document.getElementById("p1-f3").textContent = loc.p1F3;
+      document.getElementById("p1-btn").textContent = loc.p1Btn;
+
+      document.getElementById("p2-title").textContent = loc.p2Title;
+      document.getElementById("p2-desc").textContent = loc.p2Desc;
+      document.getElementById("p2-unit").textContent = loc.p2Unit;
+      document.getElementById("p2-f1").textContent = loc.p2F1;
+      document.getElementById("p2-f2").textContent = loc.p2F2;
+      document.getElementById("p2-f3").textContent = loc.p2F3;
+      document.getElementById("p2-btn").textContent = loc.p2Btn;
+
+      document.getElementById("p3-title").textContent = loc.p3Title;
+      document.getElementById("p3-desc").textContent = loc.p3Desc;
+      document.getElementById("p3-unit").textContent = loc.p3Unit;
+      document.getElementById("p3-f1").textContent = loc.p3F1;
+      document.getElementById("p3-f2").textContent = loc.p3F2;
+      document.getElementById("p3-f3").textContent = loc.p3F3;
+      document.getElementById("p3-btn").textContent = loc.p3Btn;
+
       document.getElementById("view-services-title").textContent = loc.servicesTitle;
       document.getElementById("view-services-subtitle").textContent = loc.servicesSubtitle;
 
@@ -1034,17 +1385,14 @@ class ProductionApp:
       document.getElementById("lbl-email").textContent = loc.lblEmail;
       
       document.getElementById("view-contact-address").textContent = loc.address;
-      document.getElementById("view-contact-phone").textContent = currentLang === 'bn' ? siteData.phoneBn : siteData.phoneEn;
-      document.getElementById("view-contact-phone").href = `tel:${siteData.whatsapp}`;
+      document.getElementById("view-contact-phone").textContent = currentLang === 'bn' ? data.phone : data.phoneEn;
+      document.getElementById("view-contact-phone").href = `tel:${data.whatsapp}`;
 
-      const waClean = siteData.whatsapp.replace(/\+/g, '').replace(/\s/g, '');
-      document.getElementById("view-wa-link").href = `https://wa.me/${waClean}`;
-      const modWa = document.getElementById("modal-wa-btn");
-      if (modWa) modWa.href = `https://wa.me/${waClean}`;
+      document.getElementById("view-wa-link").href = `https://wa.me/${data.whatsapp.replace(/\+/g, '')}`;
 
       const container = document.getElementById("skills-container");
       container.innerHTML = "";
-      siteData.services.forEach(s => {
+      data.services.forEach(s => {
         const div = document.createElement("div");
         div.className = "neon-border-box skill-box";
         div.innerHTML = `
@@ -1054,17 +1402,6 @@ class ProductionApp:
         `;
         container.appendChild(div);
       });
-
-      if (siteData.videoUrl) {
-        const pCont = document.getElementById('media-player-container');
-        const embedUrl = getCleanEmbedUrl(siteData.videoUrl);
-
-        if (siteData.videoUrl.endsWith('.mp4') || siteData.videoUrl.endsWith('.webm') || siteData.videoUrl.includes('firebasestorage')) {
-          pCont.innerHTML = `<video id="native-video-elem" controls autoplay playsinline style="width:100%; height:100%; object-fit:cover; border-radius:14px;" src="${siteData.videoUrl}"></video>`;
-        } else {
-          pCont.innerHTML = `<iframe id="kapwing-video-frame" src="${embedUrl}" allow="autoplay; gyroscope; encrypted-media; picture-in-picture" allowfullscreen style="width:100%; height:100%; border:0; border-radius:14px;"></iframe>`;
-        }
-      }
     }
 
     function toggleLanguage() {
@@ -1076,42 +1413,186 @@ class ProductionApp:
       const root = document.documentElement;
       const isDark = root.getAttribute('data-theme') === 'dark';
       root.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      document.getElementById('theme-toggle').textContent = isDark ? '🌙' : '☀️';
+      document.getElementById('theme-toggle').textContent = isDark ? '🌙 নাইট' : '☀️ ডে';
     }
 
+    /* ==========================================================
+       SYNTHESIZED SCI-FI AUDIO ENGINE (WEB AUDIO API)
+       ========================================================== */
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // ১. CPU পাওয়ার-অন সিন্থেসাইজড সাউন্ড (Reactor Boot)
+    function playSciFiPowerOnSound() {
+      try {
+        initAudio();
+        const now = audioCtx.currentTime;
+
+        // প্রাইমারি অসিলেটর (Frequency Sweep)
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.18);
+        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.28);
+
+        gain.gain.setValueAtTime(0.01, now);
+        gain.gain.linearRampToValueAtTime(0.2, now + 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+        // সাইবার রেজোন্যান্স ফিল্টার
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(600, now);
+        filter.frequency.linearRampToValueAtTime(1800, now + 0.28);
+        filter.Q.value = 4.0;
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.35);
+
+        // সেকেন্ডারি কনফার্মেশন বিপ
+        setTimeout(() => {
+          if (!audioCtx) return;
+          const osc2 = audioCtx.createOscillator();
+          const gain2 = audioCtx.createGain();
+          const t2 = audioCtx.currentTime;
+
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(1760, t2);
+          gain2.gain.setValueAtTime(0.12, t2);
+          gain2.gain.exponentialRampToValueAtTime(0.001, t2 + 0.12);
+
+          osc2.connect(gain2);
+          gain2.connect(audioCtx.destination);
+          osc2.start(t2);
+          osc2.stop(t2 + 0.12);
+        }, 120);
+
+      } catch (e) {}
+    }
+
+    // ২. মেনু আইটেম ক্লিক বিপ
+    function playBeepClick() {
+      try {
+        initAudio();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(950, now);
+        osc.frequency.exponentialRampToValueAtTime(1400, now + 0.07);
+
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.07);
+      } catch (e) {}
+    }
+
+    /* Sci-Fi CPU Switch & Drawer Controller */
+    function openSciFiMenu() {
+      playSciFiPowerOnSound();
+
+      const core = document.querySelector('.cpu-core-orb');
+      core.style.boxShadow = '0 0 35px #00f2fe, 0 0 70px #6366f1';
+      core.style.transform = 'scale(1.25)';
+
+      setTimeout(() => {
+        core.style.boxShadow = '';
+        core.style.transform = '';
+        toggleSciFiMenuState(true);
+      }, 200);
+    }
+
+    function toggleSciFiMenuState(open) {
+      const overlay = document.getElementById('sci-fi-menu-overlay');
+      if (open) {
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      } else {
+        playBeepClick();
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function closeSciFiMenu(e) {
+      if (e.target.id === 'sci-fi-menu-overlay') {
+        toggleSciFiMenuState(false);
+      }
+    }
+
+    /* Video Controller */
+    const bubbleVid = document.getElementById('ai-bubble-video');
+    const modalVid = document.getElementById('ai-modal-video');
     const modalCard = document.getElementById('video-modal-card');
     const bubbleOrb = document.getElementById('video-bubble-orb');
     const hintPill = document.getElementById('video-hint');
 
+    function playMutedBubble() {
+      if (bubbleVid) {
+        bubbleVid.muted = true;
+        const p = bubbleVid.play();
+        if (p !== undefined) {
+          p.catch(() => {
+            document.addEventListener('touchstart', () => { bubbleVid.play(); }, { once: true });
+          });
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', playMutedBubble);
+    window.addEventListener('load', playMutedBubble);
+
     function openVideoModal() {
+      playBeepClick();
       modalCard.style.display = 'block';
       bubbleOrb.style.display = 'none';
       hintPill.style.display = 'none';
 
-      const vid = document.getElementById('native-video-elem');
-      if (vid) vid.play();
+      bubbleVid.pause();
+      modalVid.currentTime = 0;
+      modalVid.muted = false;
+      const p = modalVid.play();
+      if (p !== undefined) {
+        p.catch(() => { modalVid.muted = true; modalVid.play(); });
+      }
     }
 
     function closeVideoModal() {
+      playBeepClick();
       modalCard.style.display = 'none';
       bubbleOrb.style.display = 'block';
       hintPill.style.display = 'block';
 
-      const vid = document.getElementById('native-video-elem');
-      if (vid) vid.pause();
+      modalVid.pause();
+      playMutedBubble();
     }
 
     function restartVideo() {
-      const vid = document.getElementById('native-video-elem');
-      if (vid) {
-        vid.currentTime = 0;
-        vid.play();
-      } else {
-        const frame = document.getElementById('kapwing-video-frame');
-        if (frame) frame.src = frame.src;
-      }
+      playBeepClick();
+      modalVid.currentTime = 0;
+      modalVid.muted = false;
+      modalVid.play();
     }
 
+    /* Neural Synapse Canvas Engine */
     const canvas = document.getElementById('neural-canvas');
     const ctx = canvas.getContext('2d');
     let width, height;
@@ -1238,41 +1719,6 @@ class ProductionApp:
     renderUI();
     runCodeTypeFill();
     renderEngine();
-  </script>
-
-  <!-- FIREBASE ENGINE -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDPEd6BMIujKPYXrZcfjgH32p7LNfO9crc",
-      authDomain: "aimanix-web.firebaseapp.com",
-      projectId: "aimanix-web",
-      storageBucket: "aimanix-web.firebasestorage.app",
-      messagingSenderId: "301700378138",
-      appId: "1:301700378138:web:dcbdec942d50986363eba3",
-      measurementId: "G-J3VL3GBQGQ"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    db.collection('site_settings').doc('main_data').onSnapshot(snapshot => {
-      if (snapshot.exists) {
-        const data = snapshot.data();
-        if (data.photo) siteData.photo = data.photo;
-        if (data.whatsapp) siteData.whatsapp = data.whatsapp;
-        if (data.phoneBn) siteData.phoneBn = data.phoneBn;
-        if (data.phoneEn) siteData.phoneEn = data.phoneEn;
-        if (data.videoUrl) siteData.videoUrl = data.videoUrl;
-
-        if (data.bn) Object.assign(siteData.bn, data.bn);
-        if (data.en) Object.assign(siteData.en, data.en);
-
-        renderUI();
-      }
-    });
   </script>
 </body>
 </html>

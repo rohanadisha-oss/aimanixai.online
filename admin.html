@@ -339,6 +339,82 @@
       margin-bottom: 0.5rem;
     }
 
+    /* List & Delete Management System */
+    .manage-list-box {
+      margin-top: 2.5rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+
+    .manage-list-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--cyan);
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .data-cards-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .data-item-card {
+      background: rgba(3, 7, 18, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.9rem 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .data-item-card:hover {
+      border-color: var(--cyan);
+      background: rgba(3, 7, 18, 0.85);
+    }
+
+    .data-item-details {
+      max-width: 75%;
+    }
+
+    .data-item-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #fff;
+    }
+
+    .data-item-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .btn-delete-item {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid #ef4444;
+      color: #ef4444;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-delete-item:hover {
+      background: #ef4444;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+    }
+
     @media (max-width: 768px) {
       .form-grid { grid-template-columns: 1fr; }
       .admin-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
@@ -348,6 +424,7 @@
 </head>
 <body>
 
+  <!-- AUTH SCREEN -->
   <div id="auth-screen">
     <div class="auth-card">
       <div class="auth-icon-orb">🔒</div>
@@ -360,13 +437,14 @@
     </div>
   </div>
 
+  <!-- MAIN ADMIN WRAPPER -->
   <div class="admin-wrapper" id="admin-main">
     <header class="admin-header">
       <div class="admin-brand-info">
         <span class="admin-logo">Aimanix.AI</span>
         <div class="admin-title-text">
           <h1>Master Admin Console</h1>
-          <p>হোমপেজ, আমার স্কুল (AI) ও কবিতার আকাশ সেন্ট্রাল ড্যাশবোর্ড</p>
+          <p>হোমপেজ, ভিডিও, আমার স্কুল (AI) ও কবিতার আকাশ সেন্ট্রাল ড্যাশবোর্ড</p>
         </div>
       </div>
       <div class="header-actions">
@@ -377,22 +455,22 @@
 
     <div class="master-tabs">
       <button class="master-tab-btn active" onclick="switchTab('home')">
-        <span>🏠</span> হোমপেজ কন্ট্রোল
+        <span>🏠</span> হোমপেজ ও ভিডিও
       </button>
       <button class="master-tab-btn" onclick="switchTab('school')">
-        <span>📚</span> আমার স্কুল (AI নোটস)
+        <span>📚</span> আমার স্কুল (নোটস ও ডিলিট)
       </button>
       <button class="master-tab-btn" onclick="switchTab('kobita')">
-        <span>✍️</span> কবিতার আকাশ (AI আসর)
+        <span>✍️</span> কবিতার আকাশ (কবিতা ও ডিলিট)
       </button>
     </div>
 
-    <!-- TAB 1: HOMEPAGE SETTINGS -->
+    <!-- TAB 1: HOMEPAGE & VIDEO SETTINGS -->
     <div class="tab-content-panel active" id="panel-home">
       <div class="panel-section-title">
-        <span>🏠</span> হোমপেজের কনটেন্ট ও ডেটা এডিটর
+        <span>🏠</span> হোমপেজের কনটেন্ট ও এআই ভিডিও লিংক
       </div>
-      <p class="panel-section-desc">এখানে তথ্য পরিবর্তন করে সেভ করলেই হোমপেজ স্বয়ংক্রিয়ভাবে লাইভ আপডেট হয়ে যাবে।</p>
+      <p class="panel-section-desc">ছবি, নাম, ইন্ট্রো ভিডিওর লিঙ্ক (Direct MP4 / YouTube) পরিবর্তন করে সেভ করুন।</p>
 
       <div class="form-grid">
         <div class="form-group full-width" style="background: rgba(0, 242, 254, 0.05); padding: 1rem; border-radius: 12px; border: 1px dashed var(--cyan);">
@@ -400,6 +478,13 @@
           <input type="file" id="edit-photo-file" accept="image/*" onchange="handleImageUpload(event)">
           <label style="margin-top: 8px;">অথবা সরাসরি ইমেজ লিংক (URL):</label>
           <input type="text" id="edit-photo-url" placeholder="https://i.postimg.cc/...">
+        </div>
+
+        <!-- NEW: AI Video Link Input -->
+        <div class="form-group full-width" style="background: rgba(99, 102, 241, 0.08); padding: 1rem; border-radius: 12px; border: 1px solid var(--indigo);">
+          <label style="color: #a5b4fc;">🎬 এআই ইন্ট্রো ভিডিও লিঙ্ক (Direct MP4 বা CDN Link):</label>
+          <input type="text" id="edit-video-url" placeholder="https://files.catbox.moe/fmhga1.mp4">
+          <small style="color: var(--text-muted); font-size: 0.78rem; margin-top: 4px;">টিপ: সরাসরি ভিডিও প্লে করার জন্য ক্যাটবক্স বা ডিরেক্ট .mp4 লিঙ্ক দেওয়া সবচেয়ে ভালো।</small>
         </div>
 
         <div class="form-group">
@@ -445,7 +530,7 @@
 
       <div style="margin-top: 1.5rem;">
         <button class="btn-action-primary" onclick="saveHomeData()">
-          💾 হোমপেজ আপডেট করুন
+          💾 তথ্য ও ভিডিও লিঙ্ক সেভ করুন
         </button>
         <button class="btn-action-secondary" onclick="resetHomeDefaults()">
           ডিফল্ট রিসেট
@@ -453,12 +538,12 @@
       </div>
     </div>
 
-    <!-- TAB 2: SCHOOL NOTES -->
+    <!-- TAB 2: SCHOOL NOTES & DELETION -->
     <div class="tab-content-panel" id="panel-school">
       <div class="panel-section-title">
-        <span>📚</span> আমার স্কুল: AI স্টাডি শিট ও বুকলেট জেনারেটর
+        <span>📚</span> আমার স্কুল: AI স্টাডি শিট তৈরি ও নোটস ম্যানেজমেন্ট
       </div>
-      <p class="panel-section-desc">আপনার পাইথন জেমিনাই মডেলের রয়্যাল ভায়োলেট A4 প্রিন্ট ফরম্যাটে ক্লাস নোট তৈরি করতে Raw পাঠ্য পেস্ট করুন।</p>
+      <p class="panel-section-desc">কাঁচা টেক্সট পেস্ট করে নতুন নোট তৈরি করুন অথবা পূর্বে তৈরি করা নোট তালিকা থেকে মুছে ফেলুন।</p>
 
       <div class="form-grid">
         <div class="form-group">
@@ -476,7 +561,7 @@
 
         <div class="form-group full-width">
           <label>বইয়ের কাঁচা টেক্সট বা তথ্যাবলী (Raw Text) পেস্ট করুন:</label>
-          <textarea id="school-raw" style="min-height: 180px;" placeholder="বইয়ের যেকোনো প্যারাগ্রাফ বা তথ্য এখানে পেস্ট করুন... AI আপনার পাইথনের মাস্টার প্রম্পট অনুযায়ী A4 বুকলেটে সাজিয়ে দেবে।"></textarea>
+          <textarea id="school-raw" style="min-height: 160px;" placeholder="বইয়ের যেকোনো প্যারাগ্রাফ বা তথ্য এখানে পেস্ট করুন... AI A4 বুকলেট স্টাইলে স্টাডি শিট সাজিয়ে দেবে।"></textarea>
         </div>
       </div>
 
@@ -490,14 +575,25 @@
         <div class="feedback-title">✅ স্টাডি শিট সফলভাবে তৈরি হয়েছে!</div>
         <p style="color: #cbd5e1; font-size: 0.9rem;" id="school-feedback-msg"></p>
       </div>
+
+      <!-- NEW: School Notes Delete / Management Section -->
+      <div class="manage-list-box">
+        <div class="manage-list-title">
+          <span>📑 বর্তমান স্টাডি নোটসের তালিকা (লাইভ)</span>
+          <button class="btn-live-view" style="padding: 0.3rem 0.7rem; font-size: 0.75rem;" onclick="loadSchoolNotesList()">🔄 রিফ্রেশ লিস্ট</button>
+        </div>
+        <div class="data-cards-grid" id="school-notes-list">
+          <div style="color: var(--text-muted); font-size: 0.85rem;">লোড হচ্ছে...</div>
+        </div>
+      </div>
     </div>
 
-    <!-- TAB 3: KOBITAR AKASH -->
+    <!-- TAB 3: KOBITAR AKASH & DELETION -->
     <div class="tab-content-panel" id="panel-kobita">
       <div class="panel-section-title" style="color: var(--pink);">
-        <span>✍️</span> কবিতার আকাশ: AI স্বয়ংক্রিয় সাহিত্য সংকলন
+        <span>✍️</span> কবিতার আকাশ: নতুন কবিতা প্রকাশ ও ডিলিট ব্যবস্থা
       </div>
-      <p class="panel-section-desc">এখানে শুধু কবিতার কাঁচা লাইনগুলো পেস্ট করুন। AI নিজে থেকেই টাইটেল, কবির নাম ও ছবি নির্বাচন করে kobita.html-এ যুক্ত করবে।</p>
+      <p class="panel-section-desc">কাঁচা কবিতা পোস্ট করুন অথবা পূর্বে প্রকাশিত কবিতা তালিকা থেকে অপ্রয়োজনীয়টি মুছে দিন।</p>
 
       <div class="form-grid">
         <div class="form-group">
@@ -516,7 +612,7 @@
 
         <div class="form-group full-width">
           <label style="color: var(--pink);">Raw কবিতা পেস্ট করুন:</label>
-          <textarea id="kobita-raw" style="min-height: 180px;" placeholder="কবিতার কাঁচা চরণগুলো এখানে লিখুন বা পেস্ট করুন..."></textarea>
+          <textarea id="kobita-raw" style="min-height: 160px;" placeholder="কবিতার কাঁচা চরণগুলো এখানে লিখুন বা পেস্ট করুন..."></textarea>
         </div>
       </div>
 
@@ -529,6 +625,17 @@
       <div class="ai-live-feedback" id="kobita-feedback" style="border-color: var(--pink); box-shadow: 0 0 25px rgba(255, 42, 122, 0.2);">
         <div class="feedback-title" style="color: var(--pink);">✨ কবিতা সফলভাবে সংকলিত হয়েছে!</div>
         <p style="color: #cbd5e1; font-size: 0.9rem;" id="kobita-feedback-msg"></p>
+      </div>
+
+      <!-- NEW: Kobita Delete / Management Section -->
+      <div class="manage-list-box">
+        <div class="manage-list-title" style="color: var(--pink);">
+          <span>📜 প্রকাশিত কবিতার তালিকা (লাইভ)</span>
+          <button class="btn-live-view" style="padding: 0.3rem 0.7rem; font-size: 0.75rem;" onclick="loadPoemsList()">🔄 রিফ্রেশ লিস্ট</button>
+        </div>
+        <div class="data-cards-grid" id="poems-list">
+          <div style="color: var(--text-muted); font-size: 0.85rem;">লোড হচ্ছে...</div>
+        </div>
       </div>
     </div>
   </div>
@@ -579,6 +686,8 @@
       document.getElementById("auth-screen").style.display = "none";
       document.getElementById("admin-main").style.display = "block";
       loadCurrentHomeData();
+      loadSchoolNotesList();
+      loadPoemsList();
     }
 
     function logoutAdmin() {
@@ -592,6 +701,9 @@
 
       event.currentTarget.classList.add('active');
       document.getElementById(`panel-${tabId}`).classList.add('active');
+
+      if (tabId === 'school') loadSchoolNotesList();
+      if (tabId === 'kobita') loadPoemsList();
     }
 
     // ==========================================================
@@ -628,7 +740,7 @@
     }
 
     // ==========================================================
-    // 4. HOMEPAGE PERSISTENCE
+    // 4. HOMEPAGE & VIDEO PERSISTENCE
     // ==========================================================
     let uploadedImageBase64 = null;
 
@@ -646,6 +758,7 @@
       if (stored) {
         const data = JSON.parse(stored);
         document.getElementById("edit-photo-url").value = data.photo && data.photo.startsWith("data:") ? "" : (data.photo || "");
+        document.getElementById("edit-video-url").value = data.videoUrl || "https://files.catbox.moe/fmhga1.mp4";
         document.getElementById("edit-name-bn").value = data.bn?.heroName || "";
         document.getElementById("edit-name-en").value = data.en?.heroName || "";
         document.getElementById("edit-desc-bn").value = data.bn?.heroDesc || "";
@@ -654,6 +767,8 @@
         document.getElementById("edit-phone").value = data.phone || "";
         document.getElementById("edit-email").value = data.email || "";
         document.getElementById("edit-addr").value = data.bn?.address || "";
+      } else {
+        document.getElementById("edit-video-url").value = "https://files.catbox.moe/fmhga1.mp4";
       }
     }
 
@@ -671,6 +786,7 @@
         data.photo = urlInput;
       }
 
+      data.videoUrl = document.getElementById("edit-video-url").value.trim() || "https://files.catbox.moe/fmhga1.mp4";
       data.bn.heroName = document.getElementById("edit-name-bn").value;
       data.bn.brandName = document.getElementById("edit-name-bn").value;
       data.en.heroName = document.getElementById("edit-name-en").value;
@@ -685,7 +801,7 @@
       data.bn.address = document.getElementById("edit-addr").value;
 
       localStorage.setItem("aimanix_v3_data", JSON.stringify(data));
-      alert("✅ হোমপেজের তথ্য সফলভাবে আপডেট হয়েছে!");
+      alert("✅ হোমপেজের তথ্য এবং এআই ভিডিও লিঙ্ক সফলভাবে সংরক্ষিত হয়েছে!");
     }
 
     function resetHomeDefaults() {
@@ -698,17 +814,17 @@
     }
 
     // ==========================================================
-    // 5. SCHOOL NOTE MAKER
+    // 5. SCHOOL NOTES ENGINE & DELETE SYSTEM
     // ==========================================================
     const PYTHON_STUDY_PROMPT = `
 তুমি একজন বিশ্বমানের আধুনিক বাংলা ই-বুক ও স্টাডি নোট ডিজাইনার।
 ব্যবহারকারীর দেওয়া যেকোনো তথ্য বা পাঠ্য বিশ্লেষণ করে রেফারেন্স বুকের মতো প্রিমিয়াম, পরিচ্ছন্ন এবং প্রিন্ট-পারফেক্ট A4 স্টাডি শিট তৈরি করবে।
 আউটপুট অবশ্যই শুধুমাত্র ভেতরের রেডি HTML ব্লক দেবে (কোনো \`\`\`html বা ব্যাকটিক দেবে না)।
-কালার ও প্যালেট:
+কাঠামো:
 - হেডার কার্ড: linear-gradient(135deg, #2b1055 0%, #43167a 60%, #4c1d95 100%) সাথে সাদা টেক্সট।
 - সাব-কার্ড: সাদা ব্যাকগ্রাউন্ড (#ffffff), হালকা বর্ডার (#ede8f5), সফট শ্যাডো সহ।
 - পার্পল বর্ডার: border-left: 4px solid #4c1d95;
-- সূচিপত্র ও কাঠামো:
+- সূচিপত্র:
   ১. মূল সারসংক্ষেপ ও ভাবার্থ (৫-৭ বাক্য)।
   ২. গুরুত্বপূর্ণ বুলেট পয়েন্ট (গোল্ডেন/পার্পল ব্যাজ সহ)।
   ৩. সম্ভাব্য গুরুত্বপূর্ণ প্রশ্নোত্তর (MCQ ও সংক্ষিপ্ত)।
@@ -732,16 +848,12 @@
         let aiHtml = await executeGeminiAPI(PYTHON_STUDY_PROMPT, promptInput);
         aiHtml = aiHtml.replace(/```html|```/g, "").trim();
 
-        try {
-          await db.collection("school_notes").add({
-            grade: grade,
-            subject: subject,
-            htmlContent: aiHtml,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-        } catch (dbErr) {
-          console.warn("Firestore save fallback:", dbErr.message);
-        }
+        await db.collection("school_notes").add({
+          grade: grade,
+          subject: subject,
+          htmlContent: aiHtml,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
 
         localStorage.setItem(`last_note_${grade}`, aiHtml);
 
@@ -750,6 +862,7 @@
         feedback.style.display = "block";
         document.getElementById("school-feedback-msg").textContent = `Class ${grade}-এর '${subject}' অধ্যায়ের স্টাডি শিট সফলভাবে তৈরি হয়ে school.html-এ যুক্ত হয়েছে।`;
         document.getElementById("school-raw").value = "";
+        loadSchoolNotesList();
       } catch (err) {
         alert("ত্রুটি: " + err.message);
         btn.textContent = "🚀 AI স্টাডি শিট তৈরি ও পাবলিশ করুন";
@@ -757,8 +870,53 @@
       }
     }
 
+    // Load & Render School Notes for Deletion
+    async function loadSchoolNotesList() {
+      const container = document.getElementById("school-notes-list");
+      container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem;">লোড হচ্ছে...</div>';
+
+      try {
+        const snap = await db.collection("school_notes").orderBy("createdAt", "desc").get();
+        if (snap.empty) {
+          container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem;">কোনো স্টাডি নোট পাওয়া যায়নি।</div>';
+          return;
+        }
+
+        container.innerHTML = "";
+        snap.forEach(doc => {
+          const item = doc.data();
+          const card = document.createElement("div");
+          card.className = "data-item-card";
+          card.innerHTML = `
+            <div class="data-item-details">
+              <div class="data-item-name">Class ${item.grade} : ${item.subject}</div>
+              <div class="data-item-meta">পোস্ট আইডি: ${doc.id}</div>
+            </div>
+            <button class="btn-delete-item" onclick="deleteSchoolNote('${doc.id}')">
+              🗑️ ডিলিট
+            </button>
+          `;
+          container.appendChild(card);
+        });
+      } catch (e) {
+        container.innerHTML = `<div style="color: #ef4444; font-size: 0.85rem;">ডাটাবেজ লোড হয়নি: ${e.message}</div>`;
+      }
+    }
+
+    async function deleteSchoolNote(docId) {
+      if (confirm("আপনি কি নিশ্চিত যে এই স্টাডি নোটটি চিরতরে মুছে ফেলতে চান?")) {
+        try {
+          await db.collection("school_notes").doc(docId).delete();
+          alert("✅ স্টাডি নোটটি সফলভাবে ডিলিট করা হয়েছে!");
+          loadSchoolNotesList();
+        } catch (err) {
+          alert("ডিলিট করতে সমস্যা হয়েছে: " + err.message);
+        }
+      }
+    }
+
     // ==========================================================
-    // 6. KOBITAR AKASH ENGINE
+    // 6. KOBITAR AKASH ENGINE & DELETE SYSTEM
     // ==========================================================
     const KOBITA_SYSTEM_INSTRUCTION = `
 তুমি একজন আধুনিক বাংলা সাহিত্য সম্পাদক।
@@ -798,21 +956,63 @@ JSON ফরম্যাট:
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         };
 
-        try {
-          await db.collection("poems").add(poemData);
-        } catch (dbErr) {
-          console.warn("Firestore save fallback:", dbErr.message);
-        }
+        await db.collection("poems").add(poemData);
 
         btn.textContent = "✨ কবিতা প্রসেস ও প্রকাশ করুন";
         btn.disabled = false;
         feedback.style.display = "block";
         document.getElementById("kobita-feedback-msg").textContent = `'${parsed.title}' কবিতাটি সফলভাবে kobita.html-এ সংকলিত ও প্রকাশ করা হয়েছে।`;
         document.getElementById("kobita-raw").value = "";
+        loadPoemsList();
       } catch (err) {
         alert("ত্রুটি: " + err.message);
         btn.textContent = "✨ কবিতা প্রসেস ও প্রকাশ করুন";
         btn.disabled = false;
+      }
+    }
+
+    // Load & Render Poems for Deletion
+    async function loadPoemsList() {
+      const container = document.getElementById("poems-list");
+      container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem;">লোড হচ্ছে...</div>';
+
+      try {
+        const snap = await db.collection("poems").orderBy("createdAt", "desc").get();
+        if (snap.empty) {
+          container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem;">কোনো কবিতা পাওয়া যায়নি।</div>';
+          return;
+        }
+
+        container.innerHTML = "";
+        snap.forEach(doc => {
+          const item = doc.data();
+          const card = document.createElement("div");
+          card.className = "data-item-card";
+          card.innerHTML = `
+            <div class="data-item-details">
+              <div class="data-item-name" style="color: #ffa8d2;">${item.title}</div>
+              <div class="data-item-meta">কবি: ${item.author} | বিভাগ: ${item.category}</div>
+            </div>
+            <button class="btn-delete-item" onclick="deletePoem('${doc.id}')">
+              🗑️ ডিলিট
+            </button>
+          `;
+          container.appendChild(card);
+        });
+      } catch (e) {
+        container.innerHTML = `<div style="color: #ef4444; font-size: 0.85rem;">ডাটাবেজ লোড হয়নি: ${e.message}</div>`;
+      }
+    }
+
+    async function deletePoem(docId) {
+      if (confirm("আপনি কি নিশ্চিত যে এই কবিতাটি চিরতরে মুছে ফেলতে চান?")) {
+        try {
+          await db.collection("poems").doc(docId).delete();
+          alert("✅ কবিতাটি সফলভাবে ডিলিট করা হয়েছে!");
+          loadPoemsList();
+        } catch (err) {
+          alert("ডিলিট করতে সমস্যা হয়েছে: " + err.message);
+        }
       }
     }
   </script>

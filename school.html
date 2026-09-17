@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>আমার স্কুল | স্টাডি পোর্টাল - Aimanix AI</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@600;700&family=Hind+Siliguri:wght@400;500;600;700;800&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-purple: #4c1d95;
+      --deep-purple: #2e1065;
+      --royal-violet: #581c87;
+      --electric-violet: #7c3aed;
+      --accent-cyan: #00f2fe;
+      --accent-gold: #f59e0b;
+      --bg-cream: #f6f5fb;
+      --card-white: #ffffff;
+      --text-dark: #1e1b4b;
+      --text-muted: #64748b;
+      --border-soft: rgba(124, 58, 237, 0.15);
+      --shadow-3d: 0 15px 35px rgba(76, 29, 149, 0.12), 0 5px 15px rgba(0, 0, 0, 0.04);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      background: var(--bg-cream);
+      color: var(--text-dark);
+      font-family: 'Hind Siliguri', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* Ambient Touch Ripple Canvas */
+    #touch-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Header Navigation */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-soft);
+      padding: 0.85rem 1.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(76, 29, 149, 0.06);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      text-decoration: none;
+    }
+
+    .brand-logo-badge {
+      background: linear-gradient(135deg, var(--deep-purple), var(--electric-violet));
+      color: #fff;
+      font-weight: 800;
+      padding: 0.4rem 0.75rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+      font-family: 'Fira Code', monospace;
+    }
+
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--deep-purple);
+      letter-spacing: -0.3px;
+    }
+
+    .btn-back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      border: 1.5px solid var(--border-soft);
+      background: #fff;
+      color: var(--deep-purple);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-back-home:hover {
+      border-color: var(--electric-violet);
+      background: rgba(124, 58, 237, 0.05);
+      transform: translateX(-3px);
+    }
+
+    /* Main Container */
+    .portal-main {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      margin: 2rem auto 4rem;
+      padding: 0 1.2rem;
+    }
+
+    /* Hero Banner matching Reference Image */
+    .gurukul-hero-banner {
+      background: linear-gradient(135deg, #2e1065 0%, #4c1d95 55%, #6d28d9 100%);
+      color: #ffffff;
+      border-radius: 28px;
+      padding: 2.5rem 2.2rem;
+      box-shadow: 0 20px 50px rgba(76, 29, 149, 0.3);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .gurukul-hero-banner::before {
+      content: '';
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.3) 0%, transparent 70%);
+      top: -100px;
+      right: -80px;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 650px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-pill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 0.35rem 0.95rem;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fef08a;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title-bold {
+      font-size: 2.4rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-subtitle-clean {
+      font-size: 1.05rem;
+      color: #e9d5ff;
+      line-height: 1.6;
+    }
+
+    .hero-badges-row {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.4rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-mini-stat {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #f5f3ff;
+    }
+
+    .hero-mini-stat span {
+      background: rgba(255, 255, 255, 0.2);
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    /* Class Switcher Interactive Tabs */
+    .tabs-bar {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .class-tab-card {
+      background: var(--card-white);
+      border: 2px solid var(--border-soft);
+      padding: 0.85rem 2.2rem;
+      border-radius: 18px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+    }
+
+    .class-tab-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-3d);
+    }
+
+    .class-tab-card.active {
+      background: linear-gradient(135deg, var(--deep-purple), var(--electric-violet));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 10px 25px rgba(124, 58, 237, 0.35);
+    }
+
+    .class-tab-card.active .tab-indicator-dot {
+      background: var(--accent-cyan);
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    .tab-indicator-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      transition: all 0.3s ease;
+    }
+
+    /* Action Control Row */
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .sheet-status-info {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--royal-violet);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .btn-pdf-print {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.6rem;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-pdf-print:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(16, 185, 129, 0.45);
+    }
+
+    /* Print-Perfect A4 Sheet Display Container */
+    .a4-print-canvas {
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: var(--shadow-3d);
+      border: 1px solid var(--border-soft);
+      padding: 2.5rem 2.2rem;
+      overflow-x: auto;
+      transition: all 0.3s ease;
+    }
+
+    /* Inner Note Stylings matching Python Model */
+    .note-sheet-wrapper {
+      max-width: 186mm;
+      margin: 0 auto;
+      background: #fbfbfa;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: inset 0 0 0 1px #ede8f5;
+    }
+
+    .note-header-card {
+      background: linear-gradient(135deg, #2b1055 0%, #43167a 60%, #4c1d95 100%);
+      color: #ffffff;
+      padding: 24px 20px;
+      border-radius: 14px;
+      text-align: center;
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .note-header-card h1 {
+      font-family: 'Hind Siliguri', sans-serif;
+      font-size: 1.9rem;
+      font-weight: 800;
+      margin: 8px 0 4px;
+    }
+
+    .note-badge-gold {
+      background: var(--accent-gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 4px 14px;
+      border-radius: 30px;
+      display: inline-block;
+    }
+
+    .note-section-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 18px;
+      border: 1px solid #ede8f5;
+      box-shadow: 0 4px 14px rgba(43, 16, 85, 0.04);
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .border-accent-purple { border-left: 5px solid #4c1d95; }
+    .border-accent-cyan { border-left: 5px solid #0284c7; }
+    .border-accent-gold { border-left: 5px solid #d97706; }
+
+    .note-section-title {
+      font-family: 'Hind Siliguri', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary-purple);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .note-body-text {
+      font-family: 'Noto Serif Bengali', serif;
+      font-size: 0.98rem;
+      line-height: 1.8;
+      color: #2e1065;
+    }
+
+    .qa-block {
+      background: #faf5ff;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 10px;
+    }
+
+    .qa-q { font-weight: 700; color: #4c1d95; margin-bottom: 4px; font-size: 0.95rem; }
+    .qa-a { color: #047857; font-weight: 600; font-size: 0.92rem; }
+
+    /* Touch Floating Card Animation */
+    .floating-card-touch {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .floating-card-touch:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px rgba(124, 58, 237, 0.12);
+    }
+
+    /* Print Architecture */
+    @media print {
+      body { background: #fff !important; }
+      #touch-canvas, .top-bar, .gurukul-hero-banner, .tabs-bar, .controls-row { display: none !important; }
+      .portal-main { margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
+      .a4-print-canvas {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+      }
+      .note-sheet-wrapper {
+        box-shadow: none !important;
+        padding: 0 !important;
+        background: transparent !important;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 12mm 14mm;
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .top-bar { padding: 0.75rem 1.2rem; }
+      .gurukul-hero-banner { padding: 1.8rem 1.4rem; border-radius: 20px; }
+      .hero-title-bold { font-size: 1.8rem; }
+      .class-tab-card { padding: 0.7rem 1.4rem; font-size: 0.95rem; }
+      .a4-print-canvas { padding: 1.2rem 0.8rem; border-radius: 14px; }
+      .note-sheet-wrapper { padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Touch & Cursor Fluid Animation Canvas -->
+  <canvas id="touch-canvas"></canvas>
+
+  <!-- Top Navbar -->
+  <header class="top-bar">
+    <a href="index.html" class="brand-group">
+      <span class="brand-logo-badge">AIMANIX</span>
+      <span class="brand-name">আমার স্কুল</span>
+    </a>
+
+    <a href="index.html" class="btn-back-home">
+      ← মূল হোমপেজে যান
+    </a>
+  </header>
+
+  <main class="portal-main">
+
+    <!-- Unique Gurukul Inspired Hero Banner -->
+    <div class="gurukul-hero-banner">
+      <div class="hero-content">
+        <div class="hero-pill-tag">
+          <span>⚡</span> Next-Gen Smart Learning System
+        </div>
+        <h1 class="hero-title-bold">
+          ডিজিটাল পাঠশালা ও স্মার্ট নোটস
+        </h1>
+        <p class="hero-subtitle-clean">
+          ক্লাস অনুযায়ী আধুনিক ও প্রফেশনাল স্টাডি শিট। যেকোনো জটিল অধ্যায়কে পয়েন্ট আকারে নির্ভুল ও সাজানো ফরম্যাটে পড়ুন এবং এক ক্লিকে প্রিন্ট-পারফেক্ট A4 কালার PDF ডাউনলোড করুন।
+        </p>
+
+        <div class="hero-badges-row">
+          <div class="hero-mini-stat">
+            <span>📚</span>
+            <span>সিলেবাস অনুযায়ী তৈরি</span>
+          </div>
+          <div class="hero-mini-stat">
+            <span>🖨️</span>
+            <span>A4 প্রিন্ট অপ্টিমাইজড</span>
+          </div>
+          <div class="hero-mini-stat">
+            <span>💡</span>
+            <span>MCQ ও ব্যাখ্যাসহ উত্তর</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Class Selector Tabs -->
+    <div class="tabs-bar">
+      <div class="class-tab-card active" id="tab-viii" onclick="switchClassGrade('VIII')">
+        <span class="tab-indicator-dot"></span>
+        <span>Class VIII (অষ্টম শ্রেণী)</span>
+      </div>
+
+      <div class="class-tab-card" id="tab-ix" onclick="switchClassGrade('IX')">
+        <span class="tab-indicator-dot"></span>
+        <span>Class IX (নবম শ্রেণী)</span>
+      </div>
+    </div>
+
+    <!-- Controls Row -->
+    <div class="controls-row">
+      <div class="sheet-status-info" id="sheet-title-indicator">
+        <span>📖</span>
+        <span id="active-class-text">Class VIII: বাংলা সাহিত্য ও সম্পূর্ণ স্টাডি বুকলেট</span>
+      </div>
+
+      <button class="btn-pdf-print" onclick="window.print()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9"></polyline>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+          <rect x="6" y="14" width="12" height="8"></rect>
+        </svg>
+        <span>কালার PDF / প্রিন্ট নিন</span>
+      </button>
+    </div>
+
+    <!-- The A4 Sheet Canvas -->
+    <div class="a4-print-canvas">
+      <div class="note-sheet-wrapper" id="note-render-target">
+        <!-- Dynamically Loaded via JS below -->
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Master Class Data Store matching Python Template
+    const classDataRepository = {
+      "VIII": `
+        <div class="note-header-card">
+          <span class="note-badge-gold">শ্রেণী: অষ্টম | অধ্যায়: প্রথম সংকলন</span>
+          <h1>বাংলা সাহিত্য ও পাঠ বিশ্লেষণ</h1>
+          <p style="color: #f3e8ff; font-size: 0.95rem; margin-top: 4px;">Aimanix AI Smart Gurukul Education Framework</p>
+        </div>
+
+        <div class="note-section-card border-accent-purple floating-card-touch">
+          <div class="note-section-title">১. মূল সারসংক্ষেপ ও ভাবার্থ</div>
+          <p class="note-body-text">
+            পাঠ্যাংশের মূল প্রতিপাদ্য হলো বাস্তব অভিজ্ঞতা এবং সঠিক পর্যবেক্ষণের মাধ্যমে সত্যে উপনীত হওয়া। যেকোনো বিষয়কে শুধু বাইরে থেকে দেখে বিচার না করে তার গভীরে প্রবেশ করাই হলো প্রকৃত প্রজ্ঞার লক্ষণ। লেখক এখানে প্রাঞ্জল ভাষায় শিক্ষার্থীদের জীবনবোধ ও সমাজ সচেতনতার শিক্ষা দিয়েছেন।
+          </p>
+        </div>
+
+        <div class="note-section-card border-accent-cyan floating-card-touch">
+          <div class="note-section-title">২. গুরুত্বপূর্ণ বুলেট পয়েন্ট</div>
+          <ul class="note-body-text" style="padding-left: 20px; list-style-type: circle;">
+            <li>মূল চরিত্রের মনস্তাত্ত্বিক পরিবর্তন এবং আত্মোপলব্ধির বিকাশ।</li>
+            <li>সময়ের গুরুত্ব এবং অধ্যবসায়ের সাথে কর্মক্ষেত্রে এগিয়ে চলার প্রেরণা।</li>
+            <li>প্রাকৃতিক পরিবেশের সাথে মানুষের নিবিড় সম্পর্কের নিখুঁত চিত্রায়ন।</li>
+          </ul>
+        </div>
+
+        <div class="note-section-card border-accent-gold floating-card-touch">
+          <div class="note-section-title">৩. সম্ভাব্য প্রশ্নোত্তর (MCQ ও সংক্ষিপ্ত)</div>
+          <div class="qa-block">
+            <div class="qa-q">প্রশ্ন ১: পাঠ্যাংশের মূল বার্তা কী?</div>
+            <div class="qa-a">উত্তর: আত্মবিশ্বাস, গভীর সত্যের অনুসন্ধান এবং মানবিক মূল্যবোধ রক্ষা করা।</div>
+          </div>
+          <div class="qa-block">
+            <div class="qa-q">প্রশ্ন ২: লেখকের দৃষ্টিভঙ্গির মূল বিশেষত্ব কী?</div>
+            <div class="qa-a">উত্তর: অত্যন্ত সহজবোধ্য উপমার মাধ্যমে গভীর জীবনদর্শন সহজ ভাষায় বুঝিয়ে দেওয়া।</div>
+          </div>
+        </div>
+      `,
+
+      "IX": `
+        <div class="note-header-card" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4338ca 100%);">
+          <span class="note-badge-gold" style="background: #00f2fe; color: #000;">শ্রেণী: নবম | স্পেশাল বোর্ড শিট</span>
+          <h1>নবম শ্রেণী সাহিত্য ও ব্যাকরণ সংকলন</h1>
+          <p style="color: #c7d2fe; font-size: 0.95rem; margin-top: 4px;">Advanced Academic Prep | Aimanix AI Education</p>
+        </div>
+
+        <div class="note-section-card border-accent-purple floating-card-touch">
+          <div class="note-section-title">১. অধ্যায় বিশ্লেষণ ও মূল থিম</div>
+          <p class="note-body-text">
+            নবম শ্রেণীর সিলেবাসের জটিল বিষয়বস্তুকে সংক্ষেপে কিন্তু স্বয়ংসম্পূর্ণভাবে পয়েন্ট আকারে তুলে ধরা হয়েছে। চরিত্র রূপায়ণ ও সামাজিক পটভূমির বাস্তবসম্মত সংঘাত শিক্ষার্থীদের চিন্তাশক্তিকে প্রসারিত করে।
+          </p>
+        </div>
+
+        <div class="note-section-card border-accent-cyan floating-card-touch">
+          <div class="note-section-title">২. ব্যাকরণ ও শব্দার্থ প্রয়োগ</div>
+          <div class="qa-block">
+            <div class="qa-q">গুরুত্বপূর্ণ সন্ধি ও সমাস:</div>
+            <div class="qa-a">প্রত্যেকটি জটিল পদের ব্যাসবাক্য এবং নির্ভুল সন্ধিবিচ্ছেদ বিস্তারিত উল্লেখিত।</div>
+          </div>
+        </div>
+
+        <div class="note-section-card border-accent-gold floating-card-touch">
+          <div class="note-section-title">৩. ৫-৭ বাক্যের বিশ্লেষণধর্মী উত্তর</div>
+          <p class="note-body-text" style="background: #fffbeb; padding: 12px; border-radius: 8px;">
+            উদ্ধৃত অংশটির মাধ্যমে লেখক মানবজীবনের পরিবর্তনের স্বাভাবিক নিয়মকে ব্যাখ্যা করেছেন। প্রতিকূলতার মধ্যে ধৈর্য ধারণ করে এগিয়ে যাওয়াই যে প্রকৃত জয়, তা বাস্তব উদাহরণের সাহায্যে প্রতিষ্ঠিত হয়েছে।
+          </p>
+        </div>
+      `
+    };
+
+    function switchClassGrade(grade) {
+      document.querySelectorAll('.class-tab-card').forEach(tab => tab.classList.remove('active'));
+
+      if (grade === 'VIII') {
+        document.getElementById('tab-viii').classList.add('active');
+        document.getElementById('active-class-text').textContent = "Class VIII: বাংলা সাহিত্য ও সম্পূর্ণ স্টাডি বুকলেট";
+      } else {
+        document.getElementById('tab-ix').classList.add('active');
+        document.getElementById('active-class-text').textContent = "Class IX: নবম শ্রেণী সাহিত্য ও ব্যাকরণ সংকলন";
+      }
+
+      document.getElementById('note-render-target').innerHTML = classDataRepository[grade];
+    }
+
+    // Default Initialization
+    switchClassGrade('VIII');
+
+    /* ==========================================================
+       TOUCH & CURSOR FLUID RIPPLE ENGINE (CANVAS)
+       ========================================================== */
+    const canvas = document.getElementById('touch-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class TouchRippleParticle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.radius = 2;
+        this.maxRadius = Math.random() * 40 + 30;
+        this.alpha = 0.65;
+        this.color = Math.random() > 0.4 ? '124, 58, 237' : '0, 242, 254';
+      }
+
+      update() {
+        this.radius += 2.2;
+        this.alpha -= 0.025;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(${this.color}, ${this.alpha})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    let rippleList = [];
+
+    function addRipple(x, y) {
+      rippleList.push(new TouchRippleParticle(x, y));
+      if (rippleList.length > 25) rippleList.shift();
+    }
+
+    window.addEventListener('pointerdown', (e) => {
+      addRipple(e.clientX, e.clientY);
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0 && Math.random() > 0.6) {
+        addRipple(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    function renderAnimation() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = rippleList.length - 1; i >= 0; i--) {
+        rippleList[i].update();
+        rippleList[i].draw();
+        if (rippleList[i].alpha <= 0) {
+          rippleList.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(renderAnimation);
+    }
+    renderAnimation();
+  </script>
+</body>
+</html>

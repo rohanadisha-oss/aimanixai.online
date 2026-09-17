@@ -707,12 +707,12 @@
     }
 
     // ==========================================================
-    // 3. SECURE GEMINI AI FETCHER (Optimized Multi-Model Fallback)
+    // 3. SECURE GEMINI AI FETCHER (Robust Multi-Model Chain)
     // ==========================================================
     async function getSecureGeminiKey() {
       const snap = await db.collection("system_config").doc("ai_secrets").get();
       if (snap.exists && snap.data().gemini_key) {
-        return snap.data().gemini_key;
+        return snap.data().gemini_key.trim();
       }
       throw new Error("Firestore-এর system_config/ai_secrets-এ gemini_key পাওয়া যায়নি!");
     }
@@ -720,12 +720,11 @@
     async function executeGeminiAPI(systemInstruction, promptText) {
       const key = await getSecureGeminiKey();
 
-      // 404 রোধে স্বয়ংক্রিয় মডেল চেইন
+      // বিশ্বস্ত এবং স্ট্যাবল মডেল এন্ডপয়েন্ট লিস্ট
       const endpoints = [
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`,
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${key}`,
-        `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`,
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${key}`
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${key}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${key}`
       ];
 
       let lastError = null;
@@ -736,12 +735,18 @@
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              system_instruction: {
+                parts: [{ text: systemInstruction }]
+              },
               contents: [
                 {
                   role: "user",
-                  parts: [{ text: `${systemInstruction}\n\n${promptText}` }]
+                  parts: [{ text: promptText }]
                 }
-              ]
+              ],
+              generationConfig: {
+                temperature: 0.2
+              }
             })
           });
 
@@ -749,7 +754,8 @@
             const data = await response.json();
             return data.candidates[0].content.parts[0].text;
           } else {
-            lastError = `Gemini API Error: ${response.status}${response.statusText}`;
+            const errData = await response.json().catch(() => ({}));
+            lastError = `Gemini API Error: ${response.status}${errData.error?.message || response.statusText}`;
           }
         } catch (e) {
           lastError = e.message;

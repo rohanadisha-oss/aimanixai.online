@@ -9,6 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@600;700&family=Hind+Siliguri:wght@400;500;600;700;800&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
   <style>
     :root {
       --bg-dark: #090514;
@@ -142,7 +146,6 @@
       padding: 0 1.4rem;
     }
 
-    /* Hero Headline Matching Reference UI */
     .hero-box {
       text-align: center;
       max-width: 700px;
@@ -306,7 +309,6 @@
       margin-bottom: 1.6rem;
     }
 
-    /* Action Footer matching Roy Digital button style */
     .poem-action-btn {
       background: var(--coral-gradient);
       color: #fff;
@@ -327,6 +329,14 @@
 
     .poem-action-btn:active {
       transform: scale(0.96);
+    }
+
+    .loading-notice {
+      text-align: center;
+      grid-column: 1 / -1;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      font-size: 1.1rem;
     }
 
     @media (max-width: 768px) {
@@ -356,7 +366,6 @@
   </header>
 
   <main class="portal-main">
-    <!-- Hero Section with Reference Glow -->
     <div class="hero-box">
       <div class="hero-pill-badge">
         <span>✨</span> শব্দ ও কল্পনার ডিজিটাল সাহিত্য নীড়
@@ -372,103 +381,151 @@
 
     <!-- Filter Tabs -->
     <div class="category-tabs">
-      <button class="cat-btn active" onclick="filterCategory('all')">সব কবিতা</button>
-      <button class="cat-btn" onclick="filterCategory('VIII')">Class VIII সাহিত্য</button>
-      <button class="cat-btn" onclick="filterCategory('IX')">Class IX সাহিত্য</button>
-      <button class="cat-btn" onclick="filterCategory('special')">সৃজনশীল আসর</button>
+      <button class="cat-btn active" onclick="filterCategory('all', this)">সব কবিতা</button>
+      <button class="cat-btn" onclick="filterCategory('VIII', this)">Class VIII সাহিত্য</button>
+      <button class="cat-btn" onclick="filterCategory('IX', this)">Class IX সাহিত্য</button>
+      <button class="cat-btn" onclick="filterCategory('special', this)">সৃজনশীল আসর</button>
     </div>
 
-    <!-- Poem Grid -->
+    <!-- Poem Grid Container -->
     <div class="poem-grid" id="poem-container">
-      <!-- Poem Card 1 -->
-      <div class="poem-card" data-category="VIII">
-        <div class="poem-cover-wrap">
-          <span class="poem-category-badge">Class VIII সাহিত্য</span>
-          <img class="poem-cover-img" src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80" alt="মেঘের দেশে">
-        </div>
-        <div class="poem-content-body">
-          <h3 class="poem-title">মেঘের দেশে বৃষ্টিগান</h3>
-          <div class="poem-author">✍️ কলমে: অনুভবের ছায়া | Aimanix AI</div>
-          <div class="poem-verses">নীল আকাশের সীমানা ছাড়িয়ে,
-মেঘেরা পাঠালো চিঠি।
-ভিজে যাওয়া ঘাসে সবুজ আলপনা,
-জুড়িয়ে দিল এ দিঘি।
-
-বৃষ্টির কণা সুর তোলে মনে,
-বাতাসে বকুল ঘ্রাণ।
-অচেনা পথের বাঁকে দাঁড়িয়ে,
-গেয়ে উঠি নব গান।</div>
-          <a href="https://wa.me/919143181401?text=আমি%20কবিতার%20আকাশ%20থেকে%20একটি%20কবিতা%20পাঠাতে%20চাই" target="_blank" class="poem-action-btn">
-            <span>সরাসরি আবৃত্তি শুনুন</span> →
-          </a>
-        </div>
-      </div>
-
-      <!-- Poem Card 2 -->
-      <div class="poem-card" data-category="IX">
-        <div class="poem-cover-wrap">
-          <span class="poem-category-badge">Class IX সাহিত্য</span>
-          <img class="poem-cover-img" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" alt="সাগরের ঢেউ">
-        </div>
-        <div class="poem-content-body">
-          <h3 class="poem-title">তটিনীর বাঁকে</h3>
-          <div class="poem-author">✍️ কলমে: কবির স্বপ্ন | নবম সংকলন</div>
-          <div class="poem-verses">উত্তাল ঢেউয়ে জাগে প্রতিধ্বনি,
-বালুকাবেলায় স্মৃতি।
-অস্তমিত রবির সোনালী মায়ায়,
-লিখে রাখি এক গীতি।
-
-দূর দিগন্তে জ্বলে ওঠা তারা,
-নিদ্রাহীন এক রাত।
-অসীম সাহসে এগিয়ে চলেছি,
-ছুঁয়ে দিতে ভোর-প্রভাত।</div>
-          <a href="https://wa.me/919143181401?text=আমি%20কবিতার%20আকাশ%20থেকে%20একটি%20কবিতা%20পাঠাতে%20চাই" target="_blank" class="poem-action-btn">
-            <span>সরাসরি আবৃত্তি শুনুন</span> →
-          </a>
-        </div>
-      </div>
-
-      <!-- Poem Card 3 -->
-      <div class="poem-card" data-category="special">
-        <div class="poem-cover-wrap">
-          <span class="poem-category-badge">সৃজনশীল আসর</span>
-          <img class="poem-cover-img" src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=800&q=80" alt="ভোরের আলো">
-        </div>
-        <div class="poem-content-body">
-          <h3 class="poem-title">কুয়াশা ঢাকা ভোর</h3>
-          <div class="poem-author">✍️ কলমে: আনোয়ার হোসেন</div>
-          <div class="poem-verses">শীতল কুয়াশা ভেঙে আলো আসে,
-জাগে পৃথিবীর প্রাণ।
-শিশিরবিন্দু ঘাসের ডগায়,
-করে যে আলোকরশ্মি পান।
-
-চলার পথে থেমে থাকা নয়,
-সামনে যে স্বপ্ন অপার।
-এ জীবনে গড়ে তুলব আমি,
-নতুন এক অহংকার।</div>
-          <a href="https://wa.me/919143181401?text=আমি%20কবিতার%20আকাশ%20থেকে%20একটি%20কবিতা%20পাঠাতে%20চাই" target="_blank" class="poem-action-btn">
-            <span>সরাসরি আবৃত্তি শুনুন</span> →
-          </a>
-        </div>
+      <div class="loading-notice">
+        <p>কবিতার আসর লোড হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন...</p>
       </div>
     </div>
   </main>
 
   <script>
-    // Category Filtering Logic
-    function filterCategory(cat) {
-      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+    // ==========================================================
+    // 1. FIREBASE CONFIGURATION (aimanix-web)
+    // ==========================================================
+    const firebaseConfig = {
+      authDomain: "aimanix-web.firebaseapp.com",
+      projectId: "aimanix-web",
+      storageBucket: "aimanix-web.appspot.com"
+    };
 
-      const cards = document.querySelectorAll('.poem-card');
-      cards.forEach(card => {
-        if (cat === 'all' || card.getAttribute('data-category') === cat) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+
+    let allPoemsList = [];
+    let currentFilter = 'all';
+
+    // ডিফল্ট ডেমো কবিতা (যদি ডেটাবেজ খালি বা অফলাইন থাকে)
+    const fallbackPoems = [
+      {
+        title: "মেঘের দেশে বৃষ্টিগান",
+        author: "অনুভবের ছায়া | Aimanix AI",
+        category: "VIII",
+        imageUrl: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80",
+        body: `নীল আকাশের সীমানা ছাড়িয়ে,\nমেঘেরা পাঠালো চিঠি।\nভিজে যাওয়া ঘাসে সবুজ আলপনা,\nজুড়িয়ে দিল এ দিঘি।\n\nবৃষ্টির কণা সুর তোলে মনে,\nবাতাসে বকুল ঘ্রাণ।\nঅচেনা পথের বাঁকে দাঁড়িয়ে,\nগেয়ে উঠি নব গান।`
+      },
+      {
+        title: "তটিনীর বাঁকে",
+        author: "কবির স্বপ্ন | নবম সংকলন",
+        category: "IX",
+        imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+        body: `উত্তাল ঢেউয়ে জাগে প্রতিধ্বনি,\nবালুকাবেলায় স্মৃতি।\nঅস্তমিত রবির সোনালী মায়ায়,\nলিখে রাখি এক গীতি।\n\nদূর দিগন্তে জ্বলে ওঠা তারা,\nনিদ্রাহীন এক রাত।\nঅসীম সাহসে এগিয়ে চলেছি,\nছুঁয়ে দিতে ভোর-প্রভাত।`
+      },
+      {
+        title: "কুয়াশা ঢাকা ভোর",
+        author: "আনোয়ার হোসেন",
+        category: "special",
+        imageUrl: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=800&q=80",
+        body: `শীতল কুয়াশা ভেঙে আলো আসে,\nজাগে পৃথিবীর প্রাণ।\nশিশিরবিন্দু ঘাসের ডগায়,\nকরে যে আলোকরশ্মি পান।\n\nচলার পথে থেমে থাকা নয়,\nসামনে যে স্বপ্ন অপার।\nএ জীবনে গড়ে তুলব আমি,\nনতুন এক অহংকার।`
+      }
+    ];
+
+    // ==========================================================
+    // 2. DUAL-SYNC POEM FETCHER (Firestore + LocalStorage)
+    // ==========================================================
+    async function loadPublishedPoems() {
+      allPoemsList = [];
+
+      try {
+        const snap = await db.collection("poems").get();
+        if (!snap.empty) {
+          snap.forEach(doc => {
+            allPoemsList.push({ id: doc.id, ...doc.data() });
+          });
+          allPoemsList.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
         }
+      } catch (err) {
+        console.warn("Firestore fetch error, loading from local cache:", err);
+      }
+
+      // লোকাল ক্যাশ ব্যাকআপ লোড
+      if (allPoemsList.length === 0) {
+        const cached = JSON.parse(localStorage.getItem("aimanix_poems") || "[]");
+        if (cached.length > 0) {
+          allPoemsList = cached;
+        } else {
+          allPoemsList = fallbackPoems;
+        }
+      }
+
+      renderPoems();
+    }
+
+    // ==========================================================
+    // 3. RENDER POEMS GRID
+    // ==========================================================
+    function renderPoems() {
+      const container = document.getElementById("poem-container");
+      const filtered = currentFilter === 'all'
+        ? allPoemsList
+        : allPoemsList.filter(p => p.category === currentFilter);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="loading-notice">
+            <p>এই বিভাগে বর্তমানে কোনো কবিতা প্রকাশিত হয়নি।</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = "";
+      filtered.forEach(poem => {
+        const categoryLabel = poem.category === 'VIII' ? 'Class VIII সাহিত্য'
+                            : poem.category === 'IX' ? 'Class IX সাহিত্য'
+                            : 'সৃজনশীল আসর';
+
+        const coverImg = poem.imageUrl || "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80";
+
+        const card = document.createElement("div");
+        card.className = "poem-card";
+        card.setAttribute("data-category", poem.category);
+
+        card.innerHTML = `
+          <div class="poem-cover-wrap">
+            <span class="poem-category-badge">${categoryLabel}</span>
+            <img class="poem-cover-img" src="${coverImg}" alt="${poem.title}" loading="lazy">
+          </div>
+          <div class="poem-content-body">
+            <h3 class="poem-title">${poem.title}</h3>
+            <div class="poem-author">✍️ কলমে: ${poem.author}</div>
+            <div class="poem-verses">${poem.body}</div>
+            <a href="https://wa.me/919143181401?text=আমি%20কবিতার%20আকাশ%20থেকে%20'${encodeURIComponent(poem.title)}'%20কবিতাটি%20পড়েছি" target="_blank" class="poem-action-btn">
+              <span>সরাসরি আবৃত্তি শুনুন</span> →
+            </a>
+          </div>
+        `;
+        container.appendChild(card);
       });
     }
+
+    // Filter Logic
+    function filterCategory(cat, btnElement) {
+      currentFilter = cat;
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      if (btnElement) btnElement.classList.add('active');
+      renderPoems();
+    }
+
+    window.addEventListener('DOMContentLoaded', loadPublishedPoems);
 
     /* ==========================================================
        COLORFUL TOUCH & COSMIC NEON RIPPLE ENGINE
@@ -569,14 +626,12 @@
     function renderParticles() {
       ctx.clearRect(0, 0, width, height);
 
-      // Waves
       for (let i = waves.length - 1; i >= 0; i--) {
         waves[i].update();
         waves[i].draw();
         if (waves[i].alpha <= 0) waves.splice(i, 1);
       }
 
-      // Sparkles
       for (let i = sparkles.length - 1; i >= 0; i--) {
         sparkles[i].update();
         sparkles[i].draw();

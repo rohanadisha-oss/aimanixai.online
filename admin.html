@@ -480,7 +480,7 @@
           <input type="text" id="edit-photo-url" placeholder="https://i.postimg.cc/...">
         </div>
 
-        <!-- NEW: AI Video Link Input -->
+        <!-- AI Video Link Input -->
         <div class="form-group full-width" style="background: rgba(99, 102, 241, 0.08); padding: 1rem; border-radius: 12px; border: 1px solid var(--indigo);">
           <label style="color: #a5b4fc;">🎬 এআই ইন্ট্রো ভিডিও লিঙ্ক (Direct MP4 বা CDN Link):</label>
           <input type="text" id="edit-video-url" placeholder="https://files.catbox.moe/fmhga1.mp4">
@@ -576,7 +576,7 @@
         <p style="color: #cbd5e1; font-size: 0.9rem;" id="school-feedback-msg"></p>
       </div>
 
-      <!-- NEW: School Notes Delete / Management Section -->
+      <!-- School Notes Delete / Management Section -->
       <div class="manage-list-box">
         <div class="manage-list-title">
           <span>📑 বর্তমান স্টাডি নোটসের তালিকা (লাইভ)</span>
@@ -627,7 +627,7 @@
         <p style="color: #cbd5e1; font-size: 0.9rem;" id="kobita-feedback-msg"></p>
       </div>
 
-      <!-- NEW: Kobita Delete / Management Section -->
+      <!-- Kobita Delete / Management Section -->
       <div class="manage-list-box">
         <div class="manage-list-title" style="color: var(--pink);">
           <span>📜 প্রকাশিত কবিতার তালিকা (লাইভ)</span>
@@ -707,7 +707,7 @@
     }
 
     // ==========================================================
-    // 3. SECURE GEMINI AI FETCHER (Direct from Firestore)
+    // 3. SECURE GEMINI AI FETCHER (Optimized Multi-Model Fallback)
     // ==========================================================
     async function getSecureGeminiKey() {
       const snap = await db.collection("system_config").doc("ai_secrets").get();
@@ -719,24 +719,44 @@
 
     async function executeGeminiAPI(systemInstruction, promptText) {
       const key = await getSecureGeminiKey();
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
 
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: systemInstruction }] },
-          contents: [{ parts: [{ text: promptText }] }],
-          generationConfig: { temperature: 0.25 }
-        })
-      });
+      // 404 রোধে স্বয়ংক্রিয় মডেল চেইন
+      const endpoints = [
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${key}`,
+        `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${key}`
+      ];
 
-      if (!response.ok) {
-        throw new Error(`Gemini API Error: ${response.status}${response.statusText}`);
+      let lastError = null;
+
+      for (const url of endpoints) {
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [
+                {
+                  role: "user",
+                  parts: [{ text: `${systemInstruction}\n\n${promptText}` }]
+                }
+              ]
+            })
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
+          } else {
+            lastError = `Gemini API Error: ${response.status}${response.statusText}`;
+          }
+        } catch (e) {
+          lastError = e.message;
+        }
       }
 
-      const data = await response.json();
-      return data.candidates[0].content.parts[0].text;
+      throw new Error(lastError || "Gemini API সংযোগে সমস্যা হয়েছে।");
     }
 
     // ==========================================================
@@ -870,7 +890,6 @@
       }
     }
 
-    // Load & Render School Notes for Deletion
     async function loadSchoolNotesList() {
       const container = document.getElementById("school-notes-list");
       container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem;">লোড হচ্ছে...</div>';
@@ -971,7 +990,6 @@ JSON ফরম্যাট:
       }
     }
 
-    // Load & Render Poems for Deletion
     async function loadPoemsList() {
       const container = document.getElementById("poems-list");
       container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem;">লোড হচ্ছে...</div>';

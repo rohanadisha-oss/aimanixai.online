@@ -9,6 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@600;700&family=Hind+Siliguri:wght@400;500;600;700;800&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
   <style>
     :root {
       --primary-purple: #4c1d95;
@@ -117,7 +121,6 @@
       padding: 0 1.2rem;
     }
 
-    /* Hero Banner matching Reference Image */
     .gurukul-hero-banner {
       background: linear-gradient(135deg, #2e1065 0%, #4c1d95 55%, #6d28d9 100%);
       color: #ffffff;
@@ -294,18 +297,23 @@
       box-shadow: 0 12px 28px rgba(16, 185, 129, 0.45);
     }
 
-    /* Print-Perfect A4 Sheet Display Container */
+    /* A4 Container */
+    .notes-feed-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
     .a4-print-canvas {
       background: #ffffff;
       border-radius: 20px;
       box-shadow: var(--shadow-3d);
       border: 1px solid var(--border-soft);
       padding: 2.5rem 2.2rem;
-      overflow-x: auto;
+      position: relative;
       transition: all 0.3s ease;
     }
 
-    /* Inner Note Stylings matching Python Model */
     .note-sheet-wrapper {
       max-width: 186mm;
       margin: 0 auto;
@@ -385,13 +393,21 @@
     .qa-q { font-weight: 700; color: #4c1d95; margin-bottom: 4px; font-size: 0.95rem; }
     .qa-a { color: #047857; font-weight: 600; font-size: 0.92rem; }
 
-    /* Touch Floating Card Animation */
     .floating-card-touch {
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .floating-card-touch:hover {
       transform: translateY(-4px);
       box-shadow: 0 14px 30px rgba(124, 58, 237, 0.12);
+    }
+
+    .empty-notes-prompt {
+      text-align: center;
+      padding: 3.5rem 1.5rem;
+      color: var(--text-muted);
+      background: #ffffff;
+      border-radius: 20px;
+      border: 2px dashed var(--border-soft);
     }
 
     /* Print Architecture */
@@ -403,6 +419,7 @@
         border: none !important;
         box-shadow: none !important;
         padding: 0 !important;
+        page-break-after: always;
       }
       .note-sheet-wrapper {
         box-shadow: none !important;
@@ -415,7 +432,6 @@
       }
     }
 
-    /* Responsive Design */
     @media (max-width: 768px) {
       .top-bar { padding: 0.75rem 1.2rem; }
       .gurukul-hero-banner { padding: 1.8rem 1.4rem; border-radius: 20px; }
@@ -445,7 +461,7 @@
 
   <main class="portal-main">
 
-    <!-- Unique Gurukul Inspired Hero Banner -->
+    <!-- Hero Banner -->
     <div class="gurukul-hero-banner">
       <div class="hero-content">
         <div class="hero-pill-tag">
@@ -505,20 +521,37 @@
       </button>
     </div>
 
-    <!-- The A4 Sheet Canvas -->
-    <div class="a4-print-canvas">
-      <div class="note-sheet-wrapper" id="note-render-target">
-        <!-- Dynamically Loaded via JS below -->
+    <!-- The Feed Container where Notes will Render -->
+    <div class="notes-feed-container" id="notes-feed-wrapper">
+      <div class="empty-notes-prompt">
+        <p style="font-size: 1.1rem; font-weight: 700;">স্টাডি নোটস লোড হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন...</p>
       </div>
     </div>
   </main>
 
   <script>
-    // Master Class Data Store matching Python Template
-    const classDataRepository = {
+    // ==========================================================
+    // 1. FIREBASE INITIALIZATION (aimanix-web)
+    // ==========================================================
+    const firebaseConfig = {
+      authDomain: "aimanix-web.firebaseapp.com",
+      projectId: "aimanix-web",
+      storageBucket: "aimanix-web.appspot.com"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+
+    let allLoadedNotes = [];
+    let currentActiveGrade = 'VIII';
+
+    // ডিফল্ট ডেমো ব্যাকআপ (যদি ডেটাবেজ খালি থাকে)
+    const fallbackRepository = {
       "VIII": `
         <div class="note-header-card">
-          <span class="note-badge-gold">শ্রেণী: অষ্টম | অধ্যায়: প্রথম সংকলন</span>
+          <span class="note-badge-gold">শ্রেণী: অষ্টম | পাঠ্য অধ্যায়</span>
           <h1>বাংলা সাহিত্য ও পাঠ বিশ্লেষণ</h1>
           <p style="color: #f3e8ff; font-size: 0.95rem; margin-top: 4px;">Aimanix AI Smart Gurukul Education Framework</p>
         </div>
@@ -526,7 +559,7 @@
         <div class="note-section-card border-accent-purple floating-card-touch">
           <div class="note-section-title">১. মূল সারসংক্ষেপ ও ভাবার্থ</div>
           <p class="note-body-text">
-            পাঠ্যাংশের মূল প্রতিপাদ্য হলো বাস্তব অভিজ্ঞতা এবং সঠিক পর্যবেক্ষণের মাধ্যমে সত্যে উপনীত হওয়া। যেকোনো বিষয়কে শুধু বাইরে থেকে দেখে বিচার না করে তার গভীরে প্রবেশ করাই হলো প্রকৃত প্রজ্ঞার লক্ষণ। লেখক এখানে প্রাঞ্জল ভাষায় শিক্ষার্থীদের জীবনবোধ ও সমাজ সচেতনতার শিক্ষা দিয়েছেন।
+            পাঠ্যাংশের মূল প্রতিপাদ্য হলো বাস্তব অভিজ্ঞতা এবং সঠিক পর্যবেক্ষণের মাধ্যমে সত্যে উপনীত হওয়া। যেকোনো বিষয়কে শুধু বাইরে থেকে দেখে বিচার না করে তার গভীরে প্রবেশ করাই হলো প্রকৃত প্রজ্ঞার লক্ষণ।
           </p>
         </div>
 
@@ -535,7 +568,6 @@
           <ul class="note-body-text" style="padding-left: 20px; list-style-type: circle;">
             <li>মূল চরিত্রের মনস্তাত্ত্বিক পরিবর্তন এবং আত্মোপলব্ধির বিকাশ।</li>
             <li>সময়ের গুরুত্ব এবং অধ্যবসায়ের সাথে কর্মক্ষেত্রে এগিয়ে চলার প্রেরণা।</li>
-            <li>প্রাকৃতিক পরিবেশের সাথে মানুষের নিবিড় সম্পর্কের নিখুঁত চিত্রায়ন।</li>
           </ul>
         </div>
 
@@ -545,13 +577,8 @@
             <div class="qa-q">প্রশ্ন ১: পাঠ্যাংশের মূল বার্তা কী?</div>
             <div class="qa-a">উত্তর: আত্মবিশ্বাস, গভীর সত্যের অনুসন্ধান এবং মানবিক মূল্যবোধ রক্ষা করা।</div>
           </div>
-          <div class="qa-block">
-            <div class="qa-q">প্রশ্ন ২: লেখকের দৃষ্টিভঙ্গির মূল বিশেষত্ব কী?</div>
-            <div class="qa-a">উত্তর: অত্যন্ত সহজবোধ্য উপমার মাধ্যমে গভীর জীবনদর্শন সহজ ভাষায় বুঝিয়ে দেওয়া।</div>
-          </div>
         </div>
       `,
-
       "IX": `
         <div class="note-header-card" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4338ca 100%);">
           <span class="note-badge-gold" style="background: #00f2fe; color: #000;">শ্রেণী: নবম | স্পেশাল বোর্ড শিট</span>
@@ -562,47 +589,99 @@
         <div class="note-section-card border-accent-purple floating-card-touch">
           <div class="note-section-title">১. অধ্যায় বিশ্লেষণ ও মূল থিম</div>
           <p class="note-body-text">
-            নবম শ্রেণীর সিলেবাসের জটিল বিষয়বস্তুকে সংক্ষেপে কিন্তু স্বয়ংসম্পূর্ণভাবে পয়েন্ট আকারে তুলে ধরা হয়েছে। চরিত্র রূপায়ণ ও সামাজিক পটভূমির বাস্তবসম্মত সংঘাত শিক্ষার্থীদের চিন্তাশক্তিকে প্রসারিত করে।
+            নবম শ্রেণীর সিলেবাসের জটিল বিষয়বস্তুকে সংক্ষেপে কিন্তু স্বয়ংসম্পূর্ণভাবে পয়েন্ট আকারে তুলে ধরা হয়েছে।
           </p>
         </div>
 
-        <div class="note-section-card border-accent-cyan floating-card-touch">
-          <div class="note-section-title">২. ব্যাকরণ ও শব্দার্থ প্রয়োগ</div>
-          <div class="qa-block">
-            <div class="qa-q">গুরুত্বপূর্ণ সন্ধি ও সমাস:</div>
-            <div class="qa-a">প্রত্যেকটি জটিল পদের ব্যাসবাক্য এবং নির্ভুল সন্ধিবিচ্ছেদ বিস্তারিত উল্লেখিত।</div>
-          </div>
-        </div>
-
         <div class="note-section-card border-accent-gold floating-card-touch">
-          <div class="note-section-title">৩. ৫-৭ বাক্যের বিশ্লেষণধর্মী উত্তর</div>
+          <div class="note-section-title">২. গুরুত্বপূর্ণ বিশ্লেষণধর্মী উত্তর</div>
           <p class="note-body-text" style="background: #fffbeb; padding: 12px; border-radius: 8px;">
-            উদ্ধৃত অংশটির মাধ্যমে লেখক মানবজীবনের পরিবর্তনের স্বাভাবিক নিয়মকে ব্যাখ্যা করেছেন। প্রতিকূলতার মধ্যে ধৈর্য ধারণ করে এগিয়ে যাওয়াই যে প্রকৃত জয়, তা বাস্তব উদাহরণের সাহায্যে প্রতিষ্ঠিত হয়েছে।
+            উদ্ধৃত অংশটির মাধ্যমে লেখক মানবজীবনের পরিবর্তনের স্বাভাবিক নিয়মকে ব্যাখ্যা করেছেন।
           </p>
         </div>
       `
     };
 
+    // ==========================================================
+    // 2. DUAL SYNC LOADER (Firestore + LocalStorage)
+    // ==========================================================
+    async function fetchSchoolNotes() {
+      allLoadedNotes = [];
+
+      try {
+        const snap = await db.collection("school_notes").get();
+        if (!snap.empty) {
+          snap.forEach(doc => {
+            allLoadedNotes.push({ id: doc.id, ...doc.data() });
+          });
+          allLoadedNotes.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        }
+      } catch (err) {
+        console.warn("Firestore fetch error, switching to cache:", err);
+      }
+
+      // লোকাল স্টোরেজ থেকে ব্যাকআপ লোড
+      if (allLoadedNotes.length === 0) {
+        const cached = JSON.parse(localStorage.getItem("aimanix_school_notes") || "[]");
+        if (cached.length > 0) {
+          allLoadedNotes = cached;
+        }
+      }
+
+      renderNotesForGrade(currentActiveGrade);
+    }
+
+    // ==========================================================
+    // 3. RENDER SYSTEM
+    // ==========================================================
+    function renderNotesForGrade(grade) {
+      const wrapper = document.getElementById("notes-feed-wrapper");
+      const filtered = allLoadedNotes.filter(n => n.grade === grade);
+
+      if (filtered.length > 0) {
+        wrapper.innerHTML = "";
+        filtered.forEach(item => {
+          const card = document.createElement("div");
+          card.className = "a4-print-canvas";
+          card.innerHTML = `
+            <div class="note-sheet-wrapper">
+              ${item.htmlContent}
+            </div>
+          `;
+          wrapper.appendChild(card);
+        });
+      } else {
+        // যদি ডাটাবেজে এই ক্লাসের কোনো নোট এখনো না থাকে তবে ডিফল্ট ডেমো শিট রেন্ডার হবে
+        wrapper.innerHTML = `
+          <div class="a4-print-canvas">
+            <div class="note-sheet-wrapper">
+              ${fallbackRepository[grade]}
+            </div>
+          </div>
+        `;
+      }
+    }
+
     function switchClassGrade(grade) {
+      currentActiveGrade = grade;
       document.querySelectorAll('.class-tab-card').forEach(tab => tab.classList.remove('active'));
 
       if (grade === 'VIII') {
         document.getElementById('tab-viii').classList.add('active');
-        document.getElementById('active-class-text').textContent = "Class VIII: বাংলা সাহিত্য ও সম্পূর্ণ স্টাডি বুকলেট";
+        document.getElementById('active-class-text').textContent = "Class VIII: অষ্টম শ্রেণীর সম্পূর্ণ স্টাডি বুকলেট";
       } else {
         document.getElementById('tab-ix').classList.add('active');
-        document.getElementById('active-class-text').textContent = "Class IX: নবম শ্রেণী সাহিত্য ও ব্যাকরণ সংকলন";
+        document.getElementById('active-class-text').textContent = "Class IX: নবম শ্রেণীর সাহিত্য ও ব্যাকরণ সংকলন";
       }
 
-      document.getElementById('note-render-target').innerHTML = classDataRepository[grade];
+      renderNotesForGrade(grade);
     }
 
-    // Default Initialization
-    switchClassGrade('VIII');
+    window.addEventListener('DOMContentLoaded', fetchSchoolNotes);
 
-    /* ==========================================================
-       TOUCH & CURSOR FLUID RIPPLE ENGINE (CANVAS)
-       ========================================================== */
+    // ==========================================================
+    // 4. TOUCH & CURSOR FLUID RIPPLE ENGINE (CANVAS)
+    // ==========================================================
     const canvas = document.getElementById('touch-canvas');
     const ctx = canvas.getContext('2d');
     let width, height;

@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700;800&family=Hind+Siliguri:wght@400;500;600;700;800&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
@@ -40,7 +39,6 @@
         radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.04) 0%, transparent 40%);
     }
 
-    /* AUTH SCREEN */
     #auth-screen {
       position: fixed;
       inset: 0;
@@ -61,203 +59,86 @@
       width: 100%;
       max-width: 400px;
       text-align: center;
-      animation: modalFadeIn 0.3s ease-out;
-    }
-
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
     }
 
     .auth-icon-orb {
-      width: 55px;
-      height: 55px;
-      margin: 0 auto 1.2rem;
+      width: 55px; height: 55px; margin: 0 auto 1.2rem;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--cyan), var(--indigo));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
     }
 
-    .auth-card h2 {
-      font-size: 1.4rem;
-      color: #fff;
-      font-weight: 800;
-      margin-bottom: 0.4rem;
-    }
-
-    .auth-card p {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      margin-bottom: 1.5rem;
-    }
+    .auth-card h2 { font-size: 1.4rem; color: #fff; font-weight: 800; margin-bottom: 0.4rem; }
+    .auth-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
 
     .auth-input-field {
-      width: 100%;
-      background: rgba(3, 7, 18, 0.8);
-      border: 1px solid var(--border);
-      color: #fff;
-      padding: 0.85rem 1rem;
-      border-radius: 10px;
-      font-family: 'Fira Code', monospace;
-      font-size: 1rem;
-      text-align: center;
-      letter-spacing: 2px;
-      margin-bottom: 1.2rem;
-      transition: all 0.2s;
+      width: 100%; background: rgba(3, 7, 18, 0.8);
+      border: 1px solid var(--border); color: #fff;
+      padding: 0.85rem 1rem; border-radius: 10px;
+      font-family: 'Fira Code', monospace; font-size: 1rem;
+      text-align: center; letter-spacing: 2px; margin-bottom: 1.2rem;
     }
 
-    .auth-input-field:focus {
-      outline: none;
-      border-color: var(--cyan);
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
-    }
+    .auth-input-field:focus { outline: none; border-color: var(--cyan); }
 
     .auth-btn-login {
-      width: 100%;
-      background: linear-gradient(135deg, var(--cyan), var(--indigo));
-      border: none;
-      color: #fff;
-      padding: 0.85rem;
-      border-radius: 10px;
-      font-weight: 800;
-      font-size: 1rem;
-      cursor: pointer;
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.35);
-      transition: all 0.2s;
+      width: 100%; background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      border: none; color: #fff; padding: 0.85rem; border-radius: 10px;
+      font-weight: 800; font-size: 1rem; cursor: pointer;
     }
 
-    .auth-err-msg {
-      color: #ef4444;
-      font-size: 0.82rem;
-      margin-top: 0.8rem;
-      display: none;
-    }
+    .auth-err-msg { color: #ef4444; font-size: 0.82rem; margin-top: 0.8rem; display: none; }
 
-    /* MAIN CONSOLE */
-    .admin-wrapper {
-      display: none;
-      max-width: 950px;
-      margin: 0 auto 3rem;
-    }
+    .admin-wrapper { display: none; max-width: 950px; margin: 0 auto 3rem; }
 
     .admin-header {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 1.2rem 1.8rem;
-      border-radius: 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 1.2rem 1.8rem; border-radius: 18px;
+      display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 1.6rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
-    .admin-brand-info {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-    }
-
+    .admin-brand-info { display: flex; align-items: center; gap: 0.8rem; }
     .admin-logo {
       font-family: 'Fira Code', monospace;
       background: linear-gradient(135deg, var(--cyan), var(--indigo));
-      color: #fff;
-      font-weight: 800;
-      padding: 0.4rem 0.75rem;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+      color: #fff; font-weight: 800; padding: 0.4rem 0.75rem; border-radius: 10px;
     }
-
-    .admin-title-text h1 { font-size: 1.2rem; font-weight: 800; color: #fff; }
-    .admin-title-text p { font-size: 0.78rem; color: var(--text-muted); }
-
-    .header-actions { display: flex; gap: 0.6rem; }
 
     .btn-live-view, .btn-logout {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--border);
-      color: #fff;
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.85rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border);
+      color: #fff; padding: 0.5rem 1rem; border-radius: 10px;
+      text-decoration: none; font-weight: 700; font-size: 0.85rem; cursor: pointer;
     }
-
-    .btn-logout { border-color: #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.08); }
-    .btn-logout:hover { background: rgba(239, 68, 68, 0.2); }
+    .btn-logout { border-color: #ef4444; color: #ef4444; }
 
     .master-tabs {
-      display: flex;
-      gap: 0.6rem;
-      background: var(--surface);
-      padding: 0.5rem;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      margin-bottom: 1.8rem;
-      overflow-x: auto;
+      display: flex; gap: 0.6rem; background: var(--surface);
+      padding: 0.5rem; border-radius: 14px; border: 1px solid var(--border);
+      margin-bottom: 1.8rem; overflow-x: auto;
     }
 
     .master-tab-btn {
-      flex: 1;
-      min-width: 160px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 0.75rem 1rem;
-      border-radius: 10px;
-      font-family: inherit;
-      font-weight: 700;
-      font-size: 0.92rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: all 0.25s ease;
-      white-space: nowrap;
+      flex: 1; min-width: 160px; background: transparent; border: none;
+      color: var(--text-muted); padding: 0.75rem 1rem; border-radius: 10px;
+      font-family: inherit; font-weight: 700; font-size: 0.92rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
     }
 
     .master-tab-btn.active {
       background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(99, 102, 241, 0.2));
-      color: var(--cyan);
-      border: 1px solid var(--cyan);
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+      color: var(--cyan); border: 1px solid var(--cyan);
     }
 
     .tab-content-panel {
-      display: none;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
+      display: none; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 20px;
       padding: 2rem;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
     }
-    .tab-content-panel.active { display: block; animation: fadeIn 0.3s ease; }
+    .tab-content-panel.active { display: block; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .panel-section-title {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 0.4rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+    .panel-section-title { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 0.4rem; }
     .panel-section-desc { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.8rem; }
 
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
@@ -267,224 +148,84 @@
     label { font-size: 0.85rem; font-weight: 700; color: var(--cyan); }
 
     input, textarea, select {
-      background: rgba(3, 7, 18, 0.85);
-      border: 1px solid var(--border);
-      color: #fff;
-      padding: 0.75rem 1rem;
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 0.9rem;
-      transition: all 0.2s ease;
+      background: rgba(3, 7, 18, 0.85); border: 1px solid var(--border);
+      color: #fff; padding: 0.75rem 1rem; border-radius: 10px;
+      font-family: inherit; font-size: 0.9rem;
     }
-
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: var(--cyan);
-      box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
-    }
-
-    textarea { min-height: 130px; line-height: 1.6; }
+    textarea { min-height: 140px; line-height: 1.6; }
 
     .btn-action-primary {
       background: linear-gradient(135deg, var(--cyan), var(--indigo));
-      border: none;
-      color: #fff;
-      padding: 0.85rem 2rem;
-      border-radius: 10px;
-      font-weight: 800;
-      font-size: 0.95rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.35);
-      transition: all 0.2s ease;
+      border: none; color: #fff; padding: 0.85rem 2rem; border-radius: 10px;
+      font-weight: 800; font-size: 0.95rem; cursor: pointer;
     }
-    .btn-action-primary:active { transform: scale(0.97); }
+    .btn-action-pink { background: linear-gradient(135deg, #ff5e62, #ff2a7a); }
 
-    .btn-action-pink {
-      background: linear-gradient(135deg, #ff5e62, #ff2a7a);
-      box-shadow: 0 0 20px rgba(255, 42, 122, 0.35);
-    }
-
-    .btn-action-secondary {
-      background: transparent;
-      border: 1px solid #ef4444;
-      color: #ef4444;
-      padding: 0.85rem 1.4rem;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-      margin-left: 0.8rem;
-    }
-
-    .ai-live-feedback {
-      display: none;
-      margin-top: 1.8rem;
-      background: rgba(3, 7, 18, 0.95);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      border-radius: 14px;
-      padding: 1.4rem;
-      box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
-    }
-
-    .feedback-title {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #10b981;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    /* List & Delete Management System */
-    .manage-list-box {
-      margin-top: 2.5rem;
-      border-top: 1px solid var(--border);
-      padding-top: 1.5rem;
-    }
-
-    .manage-list-title {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--cyan);
-      margin-bottom: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .data-cards-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
-
+    .manage-list-box { margin-top: 2.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; }
     .data-item-card {
-      background: rgba(3, 7, 18, 0.6);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 0.9rem 1.2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: all 0.2s ease;
+      background: rgba(3, 7, 18, 0.6); border: 1px solid var(--border);
+      border-radius: 12px; padding: 0.9rem 1.2rem; display: flex;
+      justify-content: space-between; align-items: center; margin-bottom: 0.8rem;
     }
-
-    .data-item-card:hover {
-      border-color: var(--cyan);
-      background: rgba(3, 7, 18, 0.85);
-    }
-
-    .data-item-details {
-      max-width: 75%;
-    }
-
-    .data-item-name {
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: #fff;
-    }
-
-    .data-item-meta {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 3px;
-    }
-
     .btn-delete-item {
-      background: rgba(239, 68, 68, 0.12);
-      border: 1px solid #ef4444;
-      color: #ef4444;
-      padding: 0.4rem 0.8rem;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 0.8rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      transition: all 0.2s ease;
-    }
-
-    .btn-delete-item:hover {
-      background: #ef4444;
-      color: #fff;
-      box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+      background: rgba(239, 68, 68, 0.12); border: 1px solid #ef4444;
+      color: #ef4444; padding: 0.4rem 0.8rem; border-radius: 8px; cursor: pointer;
     }
 
     @media (max-width: 768px) {
       .form-grid { grid-template-columns: 1fr; }
       .admin-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-      .tab-content-panel { padding: 1.4rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- AUTH SCREEN -->
   <div id="auth-screen">
     <div class="auth-card">
       <div class="auth-icon-orb">🔒</div>
       <h2>Aimanix Admin Auth</h2>
       <p>সুরক্ষিত ড্যাশবোর্ডে প্রবেশ করতে মাস্টার পাসওয়ার্ড দিন</p>
-
       <input type="password" id="admin-pass-input" class="auth-input-field" placeholder="••••••••••••" onkeypress="handleAuthKey(event)">
       <button class="auth-btn-login" onclick="verifyPassword()">আনলক কনসোল</button>
       <div class="auth-err-msg" id="auth-err">❌ পাসওয়ার্ড ভুল হয়েছে! আবার চেষ্টা করুন।</div>
     </div>
   </div>
 
-  <!-- MAIN ADMIN WRAPPER -->
   <div class="admin-wrapper" id="admin-main">
     <header class="admin-header">
       <div class="admin-brand-info">
         <span class="admin-logo">Aimanix.AI</span>
-        <div class="admin-title-text">
-          <h1>Master Admin Console</h1>
-          <p>হোমপেজ, ভিডিও, আমার স্কুল (AI) ও কবিতার আকাশ সেন্ট্রাল ড্যাশবোর্ড</p>
+        <div>
+          <h1 style="font-size: 1.2rem; color: #fff;">Master Admin Console</h1>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">সেন্ট্রাল ডেটা ও পাবলিশার ড্যাশবোর্ড</p>
         </div>
       </div>
-      <div class="header-actions">
+      <div style="display: flex; gap: 0.6rem;">
         <a href="index.html" target="_blank" class="btn-live-view">🌐 মূল সাইট</a>
         <button class="btn-logout" onclick="logoutAdmin()">লক করুন 🔒</button>
       </div>
     </header>
 
     <div class="master-tabs">
-      <button class="master-tab-btn active" onclick="switchTab('home')">
-        <span>🏠</span> হোমপেজ ও ভিডিও
-      </button>
-      <button class="master-tab-btn" onclick="switchTab('school')">
-        <span>📚</span> আমার স্কুল (নোটস ও ডিলিট)
-      </button>
-      <button class="master-tab-btn" onclick="switchTab('kobita')">
-        <span>✍️</span> কবিতার আকাশ (কবিতা ও ডিলিট)
-      </button>
+      <button class="master-tab-btn active" onclick="switchTab('home')">🏠 হোমপেজ ও ভিডিও</button>
+      <button class="master-tab-btn" onclick="switchTab('school')">📚 আমার স্কুল</button>
+      <button class="master-tab-btn" onclick="switchTab('kobita')">✍️ কবিতার আকাশ</button>
     </div>
 
-    <!-- TAB 1: HOMEPAGE & VIDEO SETTINGS -->
+    <!-- TAB 1: HOMEPAGE SETTINGS -->
     <div class="tab-content-panel active" id="panel-home">
-      <div class="panel-section-title">
-        <span>🏠</span> হোমপেজের কনটেন্ট ও এআই ভিডিও লিংক
-      </div>
-      <p class="panel-section-desc">ছবি, নাম, ইন্ট্রো ভিডিওর লিঙ্ক (Direct MP4 / YouTube) পরিবর্তন করে সেভ করুন।</p>
+      <div class="panel-section-title">🏠 হোমপেজের কনটেন্ট ও এআই ভিডিও লিংক</div>
+      <p class="panel-section-desc">শুধুমাত্র যে ফিল্ডটি বদলাতে চান সেটি পূরণ করুন। খালি রাখলে আগের কোনো ডেটা মুছে যাবে না।</p>
 
       <div class="form-grid">
-        <div class="form-group full-width" style="background: rgba(0, 242, 254, 0.05); padding: 1rem; border-radius: 12px; border: 1px dashed var(--cyan);">
-          <label>📸 নিজের প্রোফাইল ছবি আপলোড করুন:</label>
-          <input type="file" id="edit-photo-file" accept="image/*" onchange="handleImageUpload(event)">
-          <label style="margin-top: 8px;">অথবা সরাসরি ইমেজ লিংক (URL):</label>
-          <input type="text" id="edit-photo-url" placeholder="https://i.postimg.cc/...">
+        <div class="form-group full-width" style="background: rgba(99, 102, 241, 0.08); padding: 1rem; border-radius: 12px; border: 1px solid var(--indigo);">
+          <label style="color: #a5b4fc;">🎬 এআই ইন্ট্রো ভিডিও লিঙ্ক (Direct MP4 বা CDN):</label>
+          <input type="text" id="edit-video-url" placeholder="https://files.catbox.moe/fmhga1.mp4">
         </div>
 
-        <!-- AI Video Link Input -->
-        <div class="form-group full-width" style="background: rgba(99, 102, 241, 0.08); padding: 1rem; border-radius: 12px; border: 1px solid var(--indigo);">
-          <label style="color: #a5b4fc;">🎬 এআই ইন্ট্রো ভিডিও লিঙ্ক (Direct MP4 বা CDN Link):</label>
-          <input type="text" id="edit-video-url" placeholder="https://files.catbox.moe/fmhga1.mp4">
-          <small style="color: var(--text-muted); font-size: 0.78rem; margin-top: 4px;">টিপ: সরাসরি ভিডিও প্লে করার জন্য ক্যাটবক্স বা ডিরেক্ট .mp4 লিঙ্ক দেওয়া সবচেয়ে ভালো।</small>
+        <div class="form-group full-width">
+          <label>📸 ইমেজ লিংক (URL):</label>
+          <input type="text" id="edit-photo-url" placeholder="https://...">
         </div>
 
         <div class="form-group">
@@ -508,7 +249,7 @@
         </div>
 
         <div class="form-group">
-          <label>হোয়াটসঅ্যাপ নম্বর (উদা: 919143181401):</label>
+          <label>হোয়াটসঅ্যাপ নম্বর (যেমন: 919143181401):</label>
           <input type="text" id="edit-wa">
         </div>
 
@@ -516,38 +257,21 @@
           <label>মোবাইল নম্বর (ডিসপ্লে):</label>
           <input type="text" id="edit-phone">
         </div>
-
-        <div class="form-group">
-          <label>ইমেইল অ্যাড্রেস:</label>
-          <input type="email" id="edit-email">
-        </div>
-
-        <div class="form-group">
-          <label>ঠিকানা (Location):</label>
-          <input type="text" id="edit-addr">
-        </div>
       </div>
 
       <div style="margin-top: 1.5rem;">
-        <button class="btn-action-primary" onclick="saveHomeData()">
-          💾 তথ্য ও ভিডিও লিঙ্ক সেভ করুন
-        </button>
-        <button class="btn-action-secondary" onclick="resetHomeDefaults()">
-          ডিফল্ট রিসেট
-        </button>
+        <button class="btn-action-primary" onclick="saveHomeData()">💾 তথ্য সেভ করুন</button>
       </div>
     </div>
 
-    <!-- TAB 2: SCHOOL NOTES & DELETION -->
+    <!-- TAB 2: SCHOOL NOTES -->
     <div class="tab-content-panel" id="panel-school">
-      <div class="panel-section-title">
-        <span>📚</span> আমার স্কুল: AI স্টাডি শিট তৈরি ও নোটস ম্যানেজমেন্ট
-      </div>
-      <p class="panel-section-desc">কাঁচা টেক্সট পেস্ট করে নতুন নোট তৈরি করুন অথবা পূর্বে তৈরি করা নোট তালিকা থেকে মুছে ফেলুন।</p>
+      <div class="panel-section-title">📚 আমার স্কুল: AI স্টাডি শিট ও প্রিন্ট A4 বুকলেট</div>
+      <p class="panel-section-desc">রয়্যাল ভায়োলেট ও গোল্ডেন প্রিমিয়াম থিমে স্টাডি শিট তৈরি হবে।</p>
 
       <div class="form-grid">
         <div class="form-group">
-          <label>শ্রেণী নির্বাচন করুন (Grade):</label>
+          <label>শ্রেণী নির্বাচন করুন:</label>
           <select id="school-grade">
             <option value="VIII">Class VIII (অষ্টম শ্রেণী)</option>
             <option value="IX">Class IX (নবম শ্রেণী)</option>
@@ -555,49 +279,34 @@
         </div>
 
         <div class="form-group">
-          <label>অধ্যায় বা পাঠ্য বিষয়ের নাম:</label>
+          <label>অধ্যায় বা বিষয়ের নাম:</label>
           <input type="text" id="school-subject" placeholder="যেমন: বাংলা - সাহিত্য মেলা (১ম অধ্যায়)">
         </div>
 
         <div class="form-group full-width">
-          <label>বইয়ের কাঁচা টেক্সট বা তথ্যাবলী (Raw Text) পেস্ট করুন:</label>
-          <textarea id="school-raw" style="min-height: 160px;" placeholder="বইয়ের যেকোনো প্যারাগ্রাফ বা তথ্য এখানে পেস্ট করুন... AI A4 বুকলেট স্টাইলে স্টাডি শিট সাজিয়ে দেবে।"></textarea>
+          <label>বইয়ের কাঁচা টেক্সট (Raw Text) পেস্ট করুন:</label>
+          <textarea id="school-raw" placeholder="বইয়ের টেক্সট এখানে পেস্ট করুন..."></textarea>
         </div>
       </div>
 
       <div style="margin-top: 1rem;">
-        <button class="btn-action-primary" id="btn-school-submit" onclick="generateSchoolNote()">
-          🚀 AI স্টাডি শিট তৈরি ও পাবলিশ করুন
-        </button>
+        <button class="btn-action-primary" id="btn-school-submit" onclick="generateSchoolNote()">🚀 AI স্টাডি শিট তৈরি ও পাবলিশ করুন</button>
       </div>
 
-      <div class="ai-live-feedback" id="school-feedback">
-        <div class="feedback-title">✅ স্টাডি শিট সফলভাবে তৈরি হয়েছে!</div>
-        <p style="color: #cbd5e1; font-size: 0.9rem;" id="school-feedback-msg"></p>
-      </div>
-
-      <!-- School Notes Delete / Management Section -->
       <div class="manage-list-box">
-        <div class="manage-list-title">
-          <span>📑 বর্তমান স্টাডি নোটসের তালিকা (লাইভ)</span>
-          <button class="btn-live-view" style="padding: 0.3rem 0.7rem; font-size: 0.75rem;" onclick="loadSchoolNotesList()">🔄 রিফ্রেশ লিস্ট</button>
-        </div>
-        <div class="data-cards-grid" id="school-notes-list">
-          <div style="color: var(--text-muted); font-size: 0.85rem;">লোড হচ্ছে...</div>
-        </div>
+        <div style="font-weight: 800; color: var(--cyan); margin-bottom: 1rem;">📑 বর্তমান স্টাডি নোটসের তালিকা</div>
+        <div id="school-notes-list"></div>
       </div>
     </div>
 
-    <!-- TAB 3: KOBITAR AKASH & DELETION -->
+    <!-- TAB 3: KOBITAR AKASH -->
     <div class="tab-content-panel" id="panel-kobita">
-      <div class="panel-section-title" style="color: var(--pink);">
-        <span>✍️</span> কবিতার আকাশ: নতুন কবিতা প্রকাশ ও ডিলিট ব্যবস্থা
-      </div>
-      <p class="panel-section-desc">কাঁচা কবিতা পোস্ট করুন অথবা পূর্বে প্রকাশিত কবিতা তালিকা থেকে অপ্রয়োজনীয়টি মুছে দিন।</p>
+      <div class="panel-section-title" style="color: var(--pink);">✍️ কবিতার আকাশ: AI স্বয়ংক্রিয় কবিতা সংকলন</div>
+      <p class="panel-section-desc">ডার্ক অরোরা নিওন পিঙ্ক থিমে স্বয়ংক্রিয়ভাবে পাবলিশ হবে।</p>
 
       <div class="form-grid">
         <div class="form-group">
-          <label style="color: var(--pink);">বিভাগ / শ্রেণী নির্বাচন:</label>
+          <label style="color: var(--pink);">বিভাগ:</label>
           <select id="kobita-category">
             <option value="VIII">Class VIII সাহিত্য আসর</option>
             <option value="IX">Class IX সাহিত্য আসর</option>
@@ -606,79 +315,51 @@
         </div>
 
         <div class="form-group">
-          <label style="color: var(--pink);">কবির নাম (যদি নির্দিষ্ট থাকে):</label>
-          <input type="text" id="kobita-author" placeholder="ঐচ্ছিক (AI নিজে বের করবে)">
+          <label style="color: var(--pink);">কবির নাম (ঐচ্ছিক):</label>
+          <input type="text" id="kobita-author">
         </div>
 
         <div class="form-group full-width">
           <label style="color: var(--pink);">Raw কবিতা পেস্ট করুন:</label>
-          <textarea id="kobita-raw" style="min-height: 160px;" placeholder="কবিতার কাঁচা চরণগুলো এখানে লিখুন বা পেস্ট করুন..."></textarea>
+          <textarea id="kobita-raw" placeholder="কবিতার চরণগুলো লিখুন..."></textarea>
         </div>
       </div>
 
       <div style="margin-top: 1rem;">
-        <button class="btn-action-primary btn-action-pink" id="btn-kobita-submit" onclick="processKobitaAI()">
-          ✨ কবিতা প্রসেস ও প্রকাশ করুন
-        </button>
+        <button class="btn-action-primary btn-action-pink" id="btn-kobita-submit" onclick="processKobitaAI()">✨ কবিতা প্রসেস ও প্রকাশ করুন</button>
       </div>
 
-      <div class="ai-live-feedback" id="kobita-feedback" style="border-color: var(--pink); box-shadow: 0 0 25px rgba(255, 42, 122, 0.2);">
-        <div class="feedback-title" style="color: var(--pink);">✨ কবিতা সফলভাবে সংকলিত হয়েছে!</div>
-        <p style="color: #cbd5e1; font-size: 0.9rem;" id="kobita-feedback-msg"></p>
-      </div>
-
-      <!-- Kobita Delete / Management Section -->
       <div class="manage-list-box">
-        <div class="manage-list-title" style="color: var(--pink);">
-          <span>📜 প্রকাশিত কবিতার তালিকা (লাইভ)</span>
-          <button class="btn-live-view" style="padding: 0.3rem 0.7rem; font-size: 0.75rem;" onclick="loadPoemsList()">🔄 রিফ্রেশ লিস্ট</button>
-        </div>
-        <div class="data-cards-grid" id="poems-list">
-          <div style="color: var(--text-muted); font-size: 0.85rem;">লোড হচ্ছে...</div>
-        </div>
+        <div style="font-weight: 800; color: var(--pink); margin-bottom: 1rem;">📜 প্রকাশিত কবিতার তালিকা</div>
+        <div id="poems-list"></div>
       </div>
     </div>
   </div>
 
   <script>
-    // ==========================================================
-    // 1. FIREBASE CONFIGURATION (aimanix-web)
-    // ==========================================================
     const firebaseConfig = {
       authDomain: "aimanix-web.firebaseapp.com",
       projectId: "aimanix-web",
       storageBucket: "aimanix-web.appspot.com"
     };
 
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ==========================================================
-    // 2. MASTER PASS & AUTH ENGINE
-    // ==========================================================
     const MASTER_PASS = "aimanix2088@";
 
     window.addEventListener('DOMContentLoaded', () => {
-      if (sessionStorage.getItem("aimanix_auth") === "unlocked") {
-        revealConsole();
-      }
+      if (sessionStorage.getItem("aimanix_auth") === "unlocked") revealConsole();
     });
 
-    function handleAuthKey(e) {
-      if (e.key === "Enter") verifyPassword();
-    }
+    function handleAuthKey(e) { if (e.key === "Enter") verifyPassword(); }
 
     function verifyPassword() {
-      const input = document.getElementById("admin-pass-input").value;
-      const err = document.getElementById("auth-err");
-
-      if (input === MASTER_PASS) {
+      if (document.getElementById("admin-pass-input").value === MASTER_PASS) {
         sessionStorage.setItem("aimanix_auth", "unlocked");
         revealConsole();
       } else {
-        err.style.display = "block";
+        document.getElementById("auth-err").style.display = "block";
       }
     }
 
@@ -698,345 +379,251 @@
     function switchTab(tabId) {
       document.querySelectorAll('.master-tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content-panel').forEach(panel => panel.classList.remove('active'));
-
       event.currentTarget.classList.add('active');
       document.getElementById(`panel-${tabId}`).classList.add('active');
-
-      if (tabId === 'school') loadSchoolNotesList();
-      if (tabId === 'kobita') loadPoemsList();
     }
 
-    // ==========================================================
-    // 3. SECURE GEMINI AI FETCHER (Robust Multi-Model Chain)
-    // ==========================================================
     async function getSecureGeminiKey() {
       const snap = await db.collection("system_config").doc("ai_secrets").get();
-      if (snap.exists && snap.data().gemini_key) {
-        return snap.data().gemini_key.trim();
-      }
-      throw new Error("Firestore-এর system_config/ai_secrets-এ gemini_key পাওয়া যায়নি!");
+      if (snap.exists && snap.data().gemini_key) return snap.data().gemini_key.trim();
+      throw new Error("API Key ফায়ারবেসে পাওয়া যায়নি!");
     }
 
     async function executeGeminiAPI(systemInstruction, promptText) {
       const key = await getSecureGeminiKey();
-
-      // বিশ্বস্ত এবং স্ট্যাবল মডেল এন্ডপয়েন্ট লিস্ট
       const endpoints = [
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${key}`,
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${key}`
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${key}`
       ];
-
-      let lastError = null;
 
       for (const url of endpoints) {
         try {
-          const response = await fetch(url, {
+          const res = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              system_instruction: {
-                parts: [{ text: systemInstruction }]
-              },
-              contents: [
-                {
-                  role: "user",
-                  parts: [{ text: promptText }]
-                }
-              ],
-              generationConfig: {
-                temperature: 0.2
-              }
+              system_instruction: { parts: [{ text: systemInstruction }] },
+              contents: [{ role: "user", parts: [{ text: promptText }] }],
+              generationConfig: { temperature: 0.2 }
             })
           });
-
-          if (response.ok) {
-            const data = await response.json();
+          if (res.ok) {
+            const data = await res.json();
             return data.candidates[0].content.parts[0].text;
-          } else {
-            const errData = await response.json().catch(() => ({}));
-            lastError = `Gemini API Error: ${response.status}${errData.error?.message || response.statusText}`;
           }
-        } catch (e) {
-          lastError = e.message;
-        }
+        } catch (e) {}
       }
-
-      throw new Error(lastError || "Gemini API সংযোগে সমস্যা হয়েছে।");
+      throw new Error("Gemini সার্ভার ব্যস্ত রয়েছে। অনুগ্রহ করে কয়েক সেকেন্ড পর আবার চেষ্টা করুন।");
     }
 
-    // ==========================================================
-    // 4. HOMEPAGE & VIDEO PERSISTENCE
-    // ==========================================================
-    let uploadedImageBase64 = null;
-
-    function handleImageUpload(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) { uploadedImageBase64 = evt.target.result; };
-        reader.readAsDataURL(file);
+    // ==========================================
+    // BUG FIX 1: স্মার্ট মার্জ সেভ (কোনো লেখা উড়বে না)
+    // ==========================================
+    const DEFAULT_SITE_DATA = {
+      videoUrl: "https://files.catbox.moe/fmhga1.mp4",
+      photo: "",
+      whatsapp: "919143181401",
+      phone: "+91 9143181401",
+      bn: {
+        heroName: "আনোয়ার হোসেন",
+        heroDesc: "Aimanix AI-এর প্রতিষ্ঠাতা। আধুনিক ওয়েব আর্কিটেকচার এবং এআই ইঞ্জিনিয়ারিংয়ে দক্ষ।"
+      },
+      en: {
+        heroName: "Anowar Hossain",
+        heroDesc: "Founder of Aimanix AI. Expert in full-stack web and artificial intelligence architectures."
       }
-    }
+    };
 
     function loadCurrentHomeData() {
-      const stored = localStorage.getItem("aimanix_v3_data");
-      if (stored) {
-        const data = JSON.parse(stored);
-        document.getElementById("edit-photo-url").value = data.photo && data.photo.startsWith("data:") ? "" : (data.photo || "");
-        document.getElementById("edit-video-url").value = data.videoUrl || "https://files.catbox.moe/fmhga1.mp4";
-        document.getElementById("edit-name-bn").value = data.bn?.heroName || "";
-        document.getElementById("edit-name-en").value = data.en?.heroName || "";
-        document.getElementById("edit-desc-bn").value = data.bn?.heroDesc || "";
-        document.getElementById("edit-desc-en").value = data.en?.heroDesc || "";
-        document.getElementById("edit-wa").value = data.whatsapp || "";
-        document.getElementById("edit-phone").value = data.phone || "";
-        document.getElementById("edit-email").value = data.email || "";
-        document.getElementById("edit-addr").value = data.bn?.address || "";
-      } else {
-        document.getElementById("edit-video-url").value = "https://files.catbox.moe/fmhga1.mp4";
-      }
+      const stored = JSON.parse(localStorage.getItem("aimanix_v3_data") || "null") || DEFAULT_SITE_DATA;
+      document.getElementById("edit-video-url").value = stored.videoUrl || "";
+      document.getElementById("edit-photo-url").value = stored.photo || "";
+      document.getElementById("edit-name-bn").value = stored.bn?.heroName || "";
+      document.getElementById("edit-name-en").value = stored.en?.heroName || "";
+      document.getElementById("edit-desc-bn").value = stored.bn?.heroDesc || "";
+      document.getElementById("edit-desc-en").value = stored.en?.heroDesc || "";
+      document.getElementById("edit-wa").value = stored.whatsapp || "";
+      document.getElementById("edit-phone").value = stored.phone || "";
     }
 
     function saveHomeData() {
-      const current = localStorage.getItem("aimanix_v3_data");
-      let data = current ? JSON.parse(current) : {};
+      const existing = JSON.parse(localStorage.getItem("aimanix_v3_data") || "null") || DEFAULT_SITE_DATA;
 
-      if (!data.bn) data.bn = {};
-      if (!data.en) data.en = {};
+      const videoVal = document.getElementById("edit-video-url").value.trim();
+      const photoVal = document.getElementById("edit-photo-url").value.trim();
+      const nameBn = document.getElementById("edit-name-bn").value.trim();
+      const nameEn = document.getElementById("edit-name-en").value.trim();
+      const descBn = document.getElementById("edit-desc-bn").value.trim();
+      const descEn = document.getElementById("edit-desc-en").value.trim();
+      const waVal = document.getElementById("edit-wa").value.trim();
+      const phoneVal = document.getElementById("edit-phone").value.trim();
 
-      const urlInput = document.getElementById("edit-photo-url").value.trim();
-      if (uploadedImageBase64) {
-        data.photo = uploadedImageBase64;
-      } else if (urlInput) {
-        data.photo = urlInput;
-      }
+      // স্মার্ট ফিল্টারিং: শুধু পরিবর্তিত ফিল্ড আপডেট হবে
+      if (videoVal) existing.videoUrl = videoVal;
+      if (photoVal) existing.photo = photoVal;
+      if (waVal) existing.whatsapp = waVal;
+      if (phoneVal) existing.phone = phoneVal;
 
-      data.videoUrl = document.getElementById("edit-video-url").value.trim() || "https://files.catbox.moe/fmhga1.mp4";
-      data.bn.heroName = document.getElementById("edit-name-bn").value;
-      data.bn.brandName = document.getElementById("edit-name-bn").value;
-      data.en.heroName = document.getElementById("edit-name-en").value;
-      data.en.brandName = document.getElementById("edit-name-en").value;
+      if (!existing.bn) existing.bn = {};
+      if (!existing.en) existing.en = {};
 
-      data.bn.heroDesc = document.getElementById("edit-desc-bn").value;
-      data.en.heroDesc = document.getElementById("edit-desc-en").value;
+      if (nameBn) existing.bn.heroName = nameBn;
+      if (nameEn) existing.en.heroName = nameEn;
+      if (descBn) existing.bn.heroDesc = descBn;
+      if (descEn) existing.en.heroDesc = descEn;
 
-      data.whatsapp = document.getElementById("edit-wa").value;
-      data.phone = document.getElementById("edit-phone").value;
-      data.email = document.getElementById("edit-email").value;
-      data.bn.address = document.getElementById("edit-addr").value;
-
-      localStorage.setItem("aimanix_v3_data", JSON.stringify(data));
-      alert("✅ হোমপেজের তথ্য এবং এআই ভিডিও লিঙ্ক সফলভাবে সংরক্ষিত হয়েছে!");
+      localStorage.setItem("aimanix_v3_data", JSON.stringify(existing));
+      alert("✅ তথ্য সুরক্ষিতভাবে সংরক্ষিত হয়েছে! কোনো ডিফল্ট টেক্সট মুছে যায়নি।");
     }
 
-    function resetHomeDefaults() {
-      if (confirm("আপনি কি হোমপেজের সব তথ্য রিসেট করে ডিফল্ট অবস্থায় নিতে চান?")) {
-        localStorage.removeItem("aimanix_v3_data");
-        uploadedImageBase64 = null;
-        loadCurrentHomeData();
-        alert("ডিফল্ট রিসেট সম্পন্ন হয়েছে।");
-      }
-    }
-
-    // ==========================================================
-    // 5. SCHOOL NOTES ENGINE & DELETE SYSTEM
-    // ==========================================================
-    const PYTHON_STUDY_PROMPT = `
-তুমি একজন বিশ্বমানের আধুনিক বাংলা ই-বুক ও স্টাডি নোট ডিজাইনার।
-ব্যবহারকারীর দেওয়া যেকোনো তথ্য বা পাঠ্য বিশ্লেষণ করে রেফারেন্স বুকের মতো প্রিমিয়াম, পরিচ্ছন্ন এবং প্রিন্ট-পারফেক্ট A4 স্টাডি শিট তৈরি করবে।
-আউটপুট অবশ্যই শুধুমাত্র ভেতরের রেডি HTML ব্লক দেবে (কোনো \`\`\`html বা ব্যাকটিক দেবে না)।
-কাঠামো:
-- হেডার কার্ড: linear-gradient(135deg, #2b1055 0%, #43167a 60%, #4c1d95 100%) সাথে সাদা টেক্সট।
-- সাব-কার্ড: সাদা ব্যাকগ্রাউন্ড (#ffffff), হালকা বর্ডার (#ede8f5), সফট শ্যাডো সহ।
-- পার্পল বর্ডার: border-left: 4px solid #4c1d95;
-- সূচিপত্র:
-  ১. মূল সারসংক্ষেপ ও ভাবার্থ (৫-৭ বাক্য)।
-  ২. গুরুত্বপূর্ণ বুলেট পয়েন্ট (গোল্ডেন/পার্পল ব্যাজ সহ)।
-  ৩. সম্ভাব্য গুরুত্বপূর্ণ প্রশ্নোত্তর (MCQ ও সংক্ষিপ্ত)।
-  ৪. ৫-৭ বাক্যের বিশ্লেষণধর্মী প্রশ্নোত্তর।
+    // ==========================================
+    // BUG FIX 2 & 3: থিম কালার ফিক্স ও দ্বিমুখী সিঙ্ক
+    // ==========================================
+    const ROYAL_VIOLET_STUDY_PROMPT = `
+তুমি একজন বিশ্বমানের বাংলা স্টাডি নোট ডিজাইনার।
+পাঠ্যটি বিশ্লেষণ করে একটি রেডি A4 প্রিন্ট উপযোগী নোট তৈরি করবে।
+কালার থিম বাধ্যতামূলক:
+- হেডার: background: linear-gradient(135deg, #1e1035, #3b1366); color: #ffd700 (Gold); border: 2px solid #5b21b6;
+- সাব-কার্ড: background: #ffffff; color: #1e1b4b; border-left: 5px solid #6d28d9; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+- বুলেট ব্যাজ: background: #f3e8ff; color: #581c87; font-weight: bold;
+শুধুমাত্র ভেতরের HTML কোড দেবে, কোনো মার্কডাউন (\`\`\`html) দেবে না।
 `;
 
     async function generateSchoolNote() {
       const grade = document.getElementById("school-grade").value;
-      const subject = document.getElementById("school-subject").value.trim() || "বাংলা সাহিত্য";
+      const subject = document.getElementById("school-subject").value.trim() || "বাংলা পাঠ্য";
       const rawText = document.getElementById("school-raw").value.trim();
       const btn = document.getElementById("btn-school-submit");
-      const feedback = document.getElementById("school-feedback");
 
-      if (!rawText) { alert("দয়া করে পাঠ্য তথ্য বা নোট লিখুন!"); return; }
-
-      btn.textContent = "AI স্টাডি শিট বানাচ্ছে... অপেক্ষা করুন...";
-      btn.disabled = true;
+      if (!rawText) return alert("পাঠ্য টেক্সট পেস্ট করুন!");
+      btn.textContent = "AI স্টাডি শিট তৈরি করছে..."; btn.disabled = true;
 
       try {
-        const promptInput = `শ্রেণী: ${grade}\nবিষয়/অধ্যায়: ${subject}\nপাঠ্য তথ্য:\n${rawText}`;
-        let aiHtml = await executeGeminiAPI(PYTHON_STUDY_PROMPT, promptInput);
+        let aiHtml = await executeGeminiAPI(ROYAL_VIOLET_STUDY_PROMPT, `শ্রেণী: ${grade}\nবিষয়: ${subject}\nপাঠ্য:\n${rawText}`);
         aiHtml = aiHtml.replace(/```html|```/g, "").trim();
 
-        await db.collection("school_notes").add({
+        const noteObj = {
           grade: grade,
           subject: subject,
           htmlContent: aiHtml,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
+          timestamp: Date.now()
+        };
 
-        localStorage.setItem(`last_note_${grade}`, aiHtml);
+        // লোকাল এবং ক্লাউড উভয় স্থানে সেভ
+        let localNotes = JSON.parse(localStorage.getItem("aimanix_school_notes") || "[]");
+        localNotes.unshift(noteObj);
+        localStorage.setItem("aimanix_school_notes", JSON.stringify(localNotes));
 
-        btn.textContent = "🚀 AI স্টাডি শিট তৈরি ও পাবলিশ করুন";
-        btn.disabled = false;
-        feedback.style.display = "block";
-        document.getElementById("school-feedback-msg").textContent = `Class ${grade}-এর '${subject}' অধ্যায়ের স্টাডি শিট সফলভাবে তৈরি হয়ে school.html-এ যুক্ত হয়েছে।`;
+        await db.collection("school_notes").add(noteObj);
+
+        alert("✅ সফলভাবে প্রকাশিত হয়েছে! school.html এ এখন দেখা যাবে।");
         document.getElementById("school-raw").value = "";
         loadSchoolNotesList();
       } catch (err) {
         alert("ত্রুটি: " + err.message);
-        btn.textContent = "🚀 AI স্টাডি শিট তৈরি ও পাবলিশ করুন";
-        btn.disabled = false;
+      } finally {
+        btn.textContent = "🚀 AI স্টাডি শিট তৈরি ও পাবলিশ করুন"; btn.disabled = false;
       }
     }
 
     async function loadSchoolNotesList() {
-      const container = document.getElementById("school-notes-list");
-      container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem;">লোড হচ্ছে...</div>';
-
+      const box = document.getElementById("school-notes-list");
+      box.innerHTML = "লোড হচ্ছে...";
       try {
-        const snap = await db.collection("school_notes").orderBy("createdAt", "desc").get();
-        if (snap.empty) {
-          container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem;">কোনো স্টাডি নোট পাওয়া যায়নি।</div>';
-          return;
-        }
-
-        container.innerHTML = "";
+        const snap = await db.collection("school_notes").get();
+        if (snap.empty) { box.innerHTML = "কোনো নোট নেই।"; return; }
+        box.innerHTML = "";
         snap.forEach(doc => {
-          const item = doc.data();
-          const card = document.createElement("div");
-          card.className = "data-item-card";
-          card.innerHTML = `
-            <div class="data-item-details">
-              <div class="data-item-name">Class ${item.grade} : ${item.subject}</div>
-              <div class="data-item-meta">পোস্ট আইডি: ${doc.id}</div>
-            </div>
-            <button class="btn-delete-item" onclick="deleteSchoolNote('${doc.id}')">
-              🗑️ ডিলিট
-            </button>
-          `;
-          container.appendChild(card);
+          const d = doc.data();
+          box.innerHTML += `
+            <div class="data-item-card">
+              <div><strong>Class ${d.grade}</strong>: ${d.subject}</div>
+              <button class="btn-delete-item" onclick="deleteSchoolNote('${doc.id}')">🗑️ ডিলিট</button>
+            </div>`;
         });
-      } catch (e) {
-        container.innerHTML = `<div style="color: #ef4444; font-size: 0.85rem;">ডাটাবেজ লোড হয়নি: ${e.message}</div>`;
+      } catch(e) { box.innerHTML = "লোড করতে সমস্যা হয়েছে।"; }
+    }
+
+    async function deleteSchoolNote(id) {
+      if (confirm("নোটটি মুছে ফেলতে চান?")) {
+        await db.collection("school_notes").doc(id).delete();
+        loadSchoolNotesList();
       }
     }
 
-    async function deleteSchoolNote(docId) {
-      if (confirm("আপনি কি নিশ্চিত যে এই স্টাডি নোটটি চিরতরে মুছে ফেলতে চান?")) {
-        try {
-          await db.collection("school_notes").doc(docId).delete();
-          alert("✅ স্টাডি নোটটি সফলভাবে ডিলিট করা হয়েছে!");
-          loadSchoolNotesList();
-        } catch (err) {
-          alert("ডিলিট করতে সমস্যা হয়েছে: " + err.message);
-        }
-      }
-    }
-
-    // ==========================================================
-    // 6. KOBITAR AKASH ENGINE & DELETE SYSTEM
-    // ==========================================================
-    const KOBITA_SYSTEM_INSTRUCTION = `
-তুমি একজন আধুনিক বাংলা সাহিত্য সম্পাদক।
-ব্যবহারকারীর দেওয়া Raw কবিতা পড়ে একটি উপযুক্ত সুন্দর 'title', 'author' (কবিতায় না থাকলে 'অজ্ঞাতনামা') তৈরি করে শুধুমাত্র একটি ভ্যালিড JSON অবজেক্ট দেবে।
+    // কবিতার আকাশ
+    const KOBITA_AURORA_PROMPT = `
+তুমি আধুনিক বাংলা কবিতার সংকলক। কাঁচা কবিতা থেকে উপযুক্ত JSON রিটার্ন করবে।
 JSON ফরম্যাট:
 {
-  "title": "কবিতার সুন্দর শিরোনাম",
+  "title": "কবিতার সুন্দর নাম",
   "author": "কবির নাম",
-  "body": "কবিতার লাইন ১\\nকবিতার লাইন ২..."
+  "body": "কবিতার লাইন..."
 }
-শুধুমাত্র পিওর JSON রিটার্ন করবে। কোনো ব্যাকটিক বা মার্কডাউন দেবে না।
+শুধুমাত্র পিওর JSON কোড দেবে।
 `;
 
     async function processKobitaAI() {
       const category = document.getElementById("kobita-category").value;
-      const authorInput = document.getElementById("kobita-author").value.trim();
-      const rawText = document.getElementById("kobita-raw").value.trim();
+      const author = document.getElementById("kobita-author").value.trim();
+      const raw = document.getElementById("kobita-raw").value.trim();
       const btn = document.getElementById("btn-kobita-submit");
-      const feedback = document.getElementById("kobita-feedback");
 
-      if (!rawText) { alert("দয়া করে কবিতার কাঁচা চরণ লিখুন!"); return; }
-
-      btn.textContent = "AI কবিতা বিশ্লেষণ ও সংকলন করছে...";
-      btn.disabled = true;
+      if (!raw) return alert("কবিতার কাঁচা লাইন পেস্ট করুন!");
+      btn.textContent = "AI কবিতা সংকলন করছে..."; btn.disabled = true;
 
       try {
-        let aiJson = await executeGeminiAPI(KOBITA_SYSTEM_INSTRUCTION, rawText);
-        aiJson = aiJson.replace(/```json|```/g, "").trim();
-        const parsed = JSON.parse(aiJson);
+        let jsonStr = await executeGeminiAPI(KOBITA_AURORA_PROMPT, raw);
+        jsonStr = jsonStr.replace(/```json|```/g, "").trim();
+        const parsed = JSON.parse(jsonStr);
 
-        const poemData = {
-          title: parsed.title || "অনন্ত আকাশ",
-          author: authorInput || parsed.author || "অজ্ঞাতনামা",
-          body: parsed.body || rawText,
+        const poemObj = {
+          title: parsed.title || "অনন্ত সুর",
+          author: author || parsed.author || "অজ্ঞাতনামা",
+          body: parsed.body || raw,
           category: category,
-          imageUrl: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80",
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          timestamp: Date.now()
         };
 
-        await db.collection("poems").add(poemData);
+        // লোকাল এবং ক্লাউড উভয় স্থানে সেভ
+        let localPoems = JSON.parse(localStorage.getItem("aimanix_poems") || "[]");
+        localPoems.unshift(poemObj);
+        localStorage.setItem("aimanix_poems", JSON.stringify(localPoems));
 
-        btn.textContent = "✨ কবিতা প্রসেস ও প্রকাশ করুন";
-        btn.disabled = false;
-        feedback.style.display = "block";
-        document.getElementById("kobita-feedback-msg").textContent = `'${parsed.title}' কবিতাটি সফলভাবে kobita.html-এ সংকলিত ও প্রকাশ করা হয়েছে।`;
+        await db.collection("poems").add(poemObj);
+
+        alert("✅ কবিতা সফলভাবে কবিতার আকাশে প্রকাশিত হয়েছে!");
         document.getElementById("kobita-raw").value = "";
         loadPoemsList();
       } catch (err) {
         alert("ত্রুটি: " + err.message);
-        btn.textContent = "✨ কবিতা প্রসেস ও প্রকাশ করুন";
-        btn.disabled = false;
+      } finally {
+        btn.textContent = "✨ কবিতা প্রসেস ও প্রকাশ করুন"; btn.disabled = false;
       }
     }
 
     async function loadPoemsList() {
-      const container = document.getElementById("poems-list");
-      container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem;">লোড হচ্ছে...</div>';
-
+      const box = document.getElementById("poems-list");
+      box.innerHTML = "লোড হচ্ছে...";
       try {
-        const snap = await db.collection("poems").orderBy("createdAt", "desc").get();
-        if (snap.empty) {
-          container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem;">কোনো কবিতা পাওয়া যায়নি।</div>';
-          return;
-        }
-
-        container.innerHTML = "";
+        const snap = await db.collection("poems").get();
+        if (snap.empty) { box.innerHTML = "কোনো কবিতা নেই।"; return; }
+        box.innerHTML = "";
         snap.forEach(doc => {
-          const item = doc.data();
-          const card = document.createElement("div");
-          card.className = "data-item-card";
-          card.innerHTML = `
-            <div class="data-item-details">
-              <div class="data-item-name" style="color: #ffa8d2;">${item.title}</div>
-              <div class="data-item-meta">কবি: ${item.author} | বিভাগ: ${item.category}</div>
-            </div>
-            <button class="btn-delete-item" onclick="deletePoem('${doc.id}')">
-              🗑️ ডিলিট
-            </button>
-          `;
-          container.appendChild(card);
+          const d = doc.data();
+          box.innerHTML += `
+            <div class="data-item-card">
+              <div style="color: #ffa8d2;"><strong>${d.title}</strong> (${d.author})</div>
+              <button class="btn-delete-item" onclick="deletePoem('${doc.id}')">🗑️ ডিলিট</button>
+            </div>`;
         });
-      } catch (e) {
-        container.innerHTML = `<div style="color: #ef4444; font-size: 0.85rem;">ডাটাবেজ লোড হয়নি: ${e.message}</div>`;
-      }
+      } catch(e) { box.innerHTML = "লোড করতে সমস্যা হয়েছে।"; }
     }
 
-    async function deletePoem(docId) {
-      if (confirm("আপনি কি নিশ্চিত যে এই কবিতাটি চিরতরে মুছে ফেলতে চান?")) {
-        try {
-          await db.collection("poems").doc(docId).delete();
-          alert("✅ কবিতাটি সফলভাবে ডিলিট করা হয়েছে!");
-          loadPoemsList();
-        } catch (err) {
-          alert("ডিলিট করতে সমস্যা হয়েছে: " + err.message);
-        }
+    async function deletePoem(id) {
+      if (confirm("কবিতাটি মুছে ফেলতে চান?")) {
+        await db.collection("poems").doc(id).delete();
+        loadPoemsList();
       }
     }
   </script>

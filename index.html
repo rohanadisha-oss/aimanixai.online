@@ -11,31 +11,45 @@
 
   <style>
     :root {
-      --bg: #030712;
-      --surface: rgba(15, 23, 42, 0.8);
-      --surface-card: rgba(15, 23, 42, 0.9);
-      --surface-border: rgba(56, 189, 248, 0.25);
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --cyan: #00f2fe;
-      --blue: #38bdf8;
-      --indigo: #6366f1;
-      --neon-glow: rgba(0, 242, 254, 0.4);
-      --code-bg: rgba(2, 6, 23, 0.95);
+      /* Stripe Signature Mesh Palette (Dark Core) */
+      --bg: #0a0b1e;
+      --surface: rgba(14, 16, 43, 0.78);
+      --surface-card: rgba(16, 19, 54, 0.88);
+      --surface-border: rgba(122, 115, 255, 0.28);
+      --text: #fdfdfe;
+      --text-muted: #a3b0cc;
+      --stripe-purple: #7a73ff;
+      --stripe-pink: #ff62c0;
+      --stripe-orange: #ff6f61;
+      --stripe-yellow: #ffc43d;
+      --stripe-blue: #00d4ff;
+      --stripe-green: #00e5a3;
+      --cyan: #00d4ff;
+      --blue: #7a73ff;
+      --indigo: #ff62c0;
+      --neon-glow: rgba(122, 115, 255, 0.45);
+      --code-bg: rgba(7, 8, 26, 0.95);
     }
 
     [data-theme="light"] {
-      --bg: #f8fafc;
+      /* Stripe Signature Mesh Palette (Light Canvas) */
+      --bg: #f8faff;
       --surface: rgba(255, 255, 255, 0.88);
-      --surface-card: rgba(255, 255, 255, 0.95);
-      --surface-border: rgba(37, 99, 235, 0.2);
-      --text: #0b1329;
-      --text-muted: #475569;
-      --cyan: #0284c7;
-      --blue: #2563eb;
-      --indigo: #4f46e5;
-      --neon-glow: rgba(37, 99, 235, 0.25);
-      --code-bg: rgba(241, 245, 249, 0.95);
+      --surface-card: rgba(255, 255, 255, 0.96);
+      --surface-border: rgba(122, 115, 255, 0.22);
+      --text: #0d122b;
+      --text-muted: #53627c;
+      --stripe-purple: #635bff;
+      --stripe-pink: #e040fb;
+      --stripe-orange: #ff5964;
+      --stripe-yellow: #ff9800;
+      --stripe-blue: #0088ff;
+      --stripe-green: #00b875;
+      --cyan: #0088ff;
+      --blue: #635bff;
+      --indigo: #e040fb;
+      --neon-glow: rgba(99, 91, 255, 0.25);
+      --code-bg: rgba(243, 246, 254, 0.95);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
@@ -54,9 +68,9 @@
       position: fixed;
       inset: 0;
       background-image: 
-        linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
-      background-size: 35px 35px;
+        linear-gradient(to right, rgba(122, 115, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 98, 192, 0.06) 1px, transparent 1px);
+      background-size: 38px 38px;
       mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
       -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
       pointer-events: none;
@@ -74,12 +88,13 @@
 
     header, main, footer { position: relative; z-index: 2; }
 
+    /* Stripe Dynamic Moving Gradient Banner */
     .gradient-text {
-      background: linear-gradient(135deg, var(--cyan), var(--blue), var(--indigo), var(--cyan));
-      background-size: 300% 300%;
+      background: linear-gradient(120deg, #ff62c0, #7a73ff, #00d4ff, #ffc43d, #ff6f61, #7a73ff);
+      background-size: 400% 400%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: gradientShimmer 6s ease infinite;
+      animation: gradientShimmer 8s ease infinite;
     }
 
     @keyframes gradientShimmer {
@@ -101,11 +116,11 @@
       position: absolute;
       inset: -2px;
       border-radius: 22px;
-      background: linear-gradient(90deg, #00f2fe, #38bdf8, #6366f1, #00f2fe);
-      background-size: 300% 300%;
+      background: linear-gradient(90deg, #ff62c0, #7a73ff, #00d4ff, #ffc43d, #ff6f61, #ff62c0);
+      background-size: 350% 350%;
       z-index: -1;
-      animation: rotateNeon 4s linear infinite;
-      opacity: 0.7;
+      animation: rotateNeon 5s linear infinite;
+      opacity: 0.75;
       transition: opacity 0.3s ease, filter 0.3s ease;
       filter: blur(4px);
     }
@@ -122,7 +137,7 @@
     .typewriter-cursor {
       display: inline-block;
       width: 2px;
-      background-color: var(--cyan);
+      background-color: var(--stripe-pink);
       margin-left: 4px;
       animation: blink 0.75s infinite;
       vertical-align: text-bottom;
@@ -158,18 +173,18 @@
 
     .brand-icon {
       font-family: 'Fira Code', monospace;
-      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      background: linear-gradient(135deg, #ff62c0, #7a73ff, #00d4ff);
       color: #fff;
       font-weight: 800;
       padding: 0.35rem 0.65rem;
       border-radius: 8px;
-      box-shadow: 0 0 15px var(--neon-glow);
+      box-shadow: 0 0 16px rgba(122, 115, 255, 0.5);
       font-size: 0.95rem;
     }
 
     .brand-name { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.2px; }
 
-    /* Smart Sci-Fi CPU Power Switch */
+    /* Smart Sci-Fi CPU Power Switch with Stripe Touch */
     .cpu-switch-wrap {
       display: flex;
       align-items: center;
@@ -177,9 +192,9 @@
       cursor: pointer;
       padding: 5px 12px;
       border-radius: 30px;
-      background: rgba(3, 7, 18, 0.9);
-      border: 1px solid var(--cyan);
-      box-shadow: 0 0 12px rgba(0, 242, 254, 0.35), inset 0 0 8px rgba(0, 242, 254, 0.2);
+      background: rgba(10, 11, 30, 0.9);
+      border: 1px solid var(--stripe-purple);
+      box-shadow: 0 0 14px rgba(122, 115, 255, 0.4), inset 0 0 8px rgba(255, 98, 192, 0.25);
       transition: all 0.25s ease;
       user-select: none;
     }
@@ -190,18 +205,18 @@
       width: 24px;
       height: 24px;
       border-radius: 50%;
-      background: radial-gradient(circle at center, #00f2fe 10%, #030712 80%);
+      background: radial-gradient(circle at center, #ff62c0 10%, #7a73ff 50%, #0a0b1e 90%);
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 10px #00f2fe;
+      box-shadow: 0 0 12px #ff62c0;
       animation: cpuPulse 2.5s infinite ease-in-out;
     }
 
     @keyframes cpuPulse {
-      0%, 100% { box-shadow: 0 0 8px #00f2fe, inset 0 0 4px #00f2fe; }
-      50% { box-shadow: 0 0 18px #6366f1, inset 0 0 8px #6366f1; }
+      0%, 100% { box-shadow: 0 0 8px #ff62c0, inset 0 0 4px #ff62c0; }
+      50% { box-shadow: 0 0 20px #00d4ff, inset 0 0 8px #00d4ff; }
     }
 
     .cpu-power-icon {
@@ -211,14 +226,14 @@
       stroke-width: 2.2;
       stroke-linecap: round;
       fill: none;
-      filter: drop-shadow(0 0 3px #00f2fe);
+      filter: drop-shadow(0 0 3px #ff62c0);
     }
 
     .cpu-switch-label {
       font-family: 'Fira Code', monospace;
       font-size: 0.72rem;
       font-weight: 800;
-      color: var(--cyan);
+      color: var(--stripe-blue);
       letter-spacing: 0.8px;
     }
 
@@ -226,7 +241,7 @@
     .sci-fi-menu-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(2, 6, 23, 0.85);
+      background: rgba(8, 10, 24, 0.85);
       backdrop-filter: blur(20px);
       z-index: 10000;
       display: none;
@@ -245,9 +260,9 @@
       width: 88%;
       max-width: 360px;
       height: 100vh;
-      background: rgba(11, 19, 43, 0.95);
-      border-left: 2px solid var(--cyan);
-      box-shadow: -15px 0 40px rgba(0, 242, 254, 0.25);
+      background: rgba(14, 16, 43, 0.96);
+      border-left: 2px solid var(--stripe-purple);
+      box-shadow: -15px 0 40px rgba(122, 115, 255, 0.3);
       display: flex;
       flex-direction: column;
       padding: 1.8rem 1.4rem;
@@ -274,7 +289,7 @@
       font-family: 'Fira Code', monospace;
       font-size: 0.95rem;
       font-weight: 800;
-      color: var(--cyan);
+      color: var(--stripe-blue);
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -318,22 +333,22 @@
     }
 
     .hud-link-card:hover, .hud-link-card:active {
-      border-color: var(--cyan);
-      background: rgba(0, 242, 254, 0.08);
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.25);
+      border-color: var(--stripe-pink);
+      background: rgba(255, 98, 192, 0.09);
+      box-shadow: 0 0 20px rgba(255, 98, 192, 0.25);
       transform: translateX(-4px);
     }
 
     .hud-link-icon {
       font-size: 1.4rem;
-      background: rgba(0, 242, 254, 0.1);
+      background: rgba(122, 115, 255, 0.15);
       width: 42px;
       height: 42px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 10px;
-      color: var(--cyan);
+      color: var(--stripe-blue);
     }
 
     .hud-quick-controls {
@@ -375,18 +390,18 @@
       gap: 0.6rem;
       padding: 0.45rem 1.2rem;
       border-radius: 50px;
-      background: rgba(0, 242, 254, 0.1);
-      border: 1px solid var(--cyan);
-      box-shadow: 0 0 15px var(--neon-glow);
+      background: rgba(255, 98, 192, 0.1);
+      border: 1px solid var(--stripe-pink);
+      box-shadow: 0 0 15px rgba(255, 98, 192, 0.35);
       margin-bottom: 1.5rem;
     }
 
-    .startup-tag { font-family: 'Fira Code', monospace; font-weight: 800; color: var(--cyan); }
+    .startup-tag { font-family: 'Fira Code', monospace; font-weight: 800; color: var(--stripe-yellow); }
 
     .pulse-dot {
       width: 8px;
       height: 8px;
-      background: var(--cyan);
+      background: var(--stripe-pink);
       border-radius: 50%;
       animation: pulse 1.5s infinite;
     }
@@ -402,14 +417,15 @@
     .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
 
     .btn-glow {
-      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      background: linear-gradient(135deg, #7a73ff, #ff62c0, #ff6f61);
+      background-size: 200% 200%;
       color: #fff;
       padding: 0.85rem 1.6rem;
       border-radius: 10px;
       font-weight: 700;
       text-decoration: none;
-      box-shadow: 0 0 25px var(--neon-glow);
-      transition: transform 0.2s;
+      box-shadow: 0 0 25px rgba(122, 115, 255, 0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
@@ -439,7 +455,12 @@
     }
 
     .stat-box { display: flex; flex-direction: column; }
-    .stat-number { font-size: 1.6rem; font-weight: 800; color: var(--cyan); font-family: 'Fira Code', monospace; }
+    .stat-number { 
+      font-size: 1.6rem; 
+      font-weight: 800; 
+      color: var(--stripe-orange); 
+      font-family: 'Fira Code', monospace; 
+    }
     .stat-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
 
     .hero-right { display: flex; flex-direction: column; gap: 1.8rem; align-items: center; width: 100%; }
@@ -451,8 +472,8 @@
       margin: 0 auto 1.2rem;
       border-radius: 50%;
       padding: 4px;
-      background: linear-gradient(135deg, var(--cyan), var(--indigo));
-      box-shadow: 0 0 25px var(--neon-glow);
+      background: linear-gradient(135deg, #7a73ff, #ff62c0, #ffc43d);
+      box-shadow: 0 0 28px rgba(122, 115, 255, 0.45);
       position: relative;
     }
 
@@ -462,7 +483,7 @@
       position: absolute;
       bottom: 6px;
       right: 6px;
-      background: #10b981;
+      background: #00e5a3;
       width: 18px;
       height: 18px;
       border-radius: 50%;
@@ -491,15 +512,15 @@
     }
 
     .hud-circle { width: 9px; height: 9px; border-radius: 50%; }
-    .c-red { background: #ef4444; }
-    .c-yellow { background: #f59e0b; }
-    .c-green { background: #10b981; }
+    .c-red { background: #ff5964; }
+    .c-yellow { background: #ffc43d; }
+    .c-green { background: #00e5a3; }
 
     .hud-body { 
       padding: 1.1rem; 
       font-size: 0.78rem; 
       line-height: 1.6; 
-      color: #38bdf8; 
+      color: #7a73ff; 
       min-height: 155px;
       white-space: pre-wrap;
       word-break: break-all;
@@ -544,8 +565,8 @@
       font-size: 2.8rem;
       font-weight: 900;
       font-family: 'Fira Code', monospace;
-      color: var(--cyan);
-      text-shadow: 0 0 15px var(--neon-glow);
+      color: var(--stripe-orange);
+      text-shadow: 0 0 18px rgba(255, 111, 97, 0.45);
     }
 
     /* Pricing Section */
@@ -570,13 +591,13 @@
       position: absolute;
       top: -12px;
       right: 20px;
-      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      background: linear-gradient(135deg, #ff62c0, #7a73ff);
       color: #fff;
       font-size: 0.7rem;
       font-weight: 800;
       padding: 0.3rem 0.8rem;
       border-radius: 50px;
-      box-shadow: 0 0 12px var(--neon-glow);
+      box-shadow: 0 0 14px rgba(255, 98, 192, 0.45);
       text-transform: uppercase;
     }
 
@@ -586,7 +607,7 @@
       font-size: 2.2rem;
       font-weight: 900;
       font-family: 'Fira Code', monospace;
-      color: var(--cyan);
+      color: var(--stripe-yellow);
       display: flex;
       align-items: baseline;
       gap: 0.4rem;
@@ -604,7 +625,7 @@
       border-top: 1px solid var(--surface-border);
     }
     .pricing-feature-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.88rem; }
-    .pricing-feature-item svg { width: 16px; height: 16px; fill: var(--cyan); flex-shrink: 0; }
+    .pricing-feature-item svg { width: 16px; height: 16px; fill: var(--stripe-blue); flex-shrink: 0; }
 
     .pricing-disclaimer {
       text-align: center;
@@ -648,13 +669,13 @@
 
     .contact-item-icon {
       font-size: 1.2rem;
-      background: rgba(56, 189, 248, 0.1);
+      background: rgba(122, 115, 255, 0.12);
       padding: 0.45rem;
       border-radius: 8px;
-      color: var(--cyan);
+      color: var(--stripe-pink);
     }
 
-    .contact-link { color: var(--cyan); text-decoration: none; font-weight: 600; }
+    .contact-link { color: var(--stripe-blue); text-decoration: none; font-weight: 600; }
 
     .map-frame {
       width: 100%;
@@ -677,10 +698,10 @@
     }
 
     .video-hint-pill {
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid #00f2fe;
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
-      color: #f8fafc;
+      background: rgba(14, 16, 43, 0.9);
+      border: 1px solid var(--stripe-pink);
+      box-shadow: 0 0 18px rgba(255, 98, 192, 0.45);
+      color: #fdfdfe;
       padding: 0.4rem 0.85rem;
       border-radius: 30px;
       font-size: 0.76rem;
@@ -694,8 +715,8 @@
       height: 76px;
       border-radius: 50%;
       padding: 3px;
-      background: linear-gradient(135deg, #00f2fe, #6366f1);
-      box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
+      background: linear-gradient(135deg, #ff62c0, #7a73ff, #00d4ff);
+      box-shadow: 0 0 25px rgba(122, 115, 255, 0.5);
       cursor: pointer;
       position: relative;
       overflow: hidden;
@@ -712,9 +733,9 @@
       bottom: 105px;
       right: 20px;
       width: 310px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid #00f2fe;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 242, 254, 0.35);
+      background: rgba(14, 16, 43, 0.95);
+      border: 1px solid var(--stripe-purple);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(122, 115, 255, 0.4);
       border-radius: 20px;
       padding: 1rem;
       backdrop-filter: blur(18px);
@@ -722,7 +743,7 @@
     }
 
     .video-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
-    .video-close-btn { background: transparent; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; }
+    .video-close-btn { background: transparent; border: none; color: #a3b0cc; font-size: 1.2rem; cursor: pointer; }
     .modal-video-frame { width: 100%; height: 280px; border-radius: 14px; overflow: hidden; background: #000; position: relative; }
     .modal-video-frame video, .modal-video-frame iframe { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; border: none; }
     .video-action-bar { display: flex; gap: 0.7rem; margin-top: 0.8rem; }
@@ -770,7 +791,7 @@
     <div class="sci-fi-hud-drawer" id="sci-fi-hud-drawer">
       <div class="hud-header">
         <div class="hud-title">
-          <span style="color: #10b981;">●</span> SYSTEM READY // MENU
+          <span style="color: #00e5a3;">●</span> SYSTEM READY // MENU
         </div>
         <button class="hud-close-btn" onclick="toggleSciFiMenuState(false)">✕</button>
       </div>
@@ -866,7 +887,7 @@
             <div class="photo-badge" title="Active System"></div>
           </div>
           <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.3rem;" id="view-card-name">Anowar Hossain</h3>
-          <p style="color: var(--cyan); font-size: 0.88rem; font-weight: 600;" id="view-card-title">Founder, Aimanix AI</p>
+          <p style="color: var(--stripe-pink); font-size: 0.88rem; font-weight: 600;" id="view-card-title">Founder, Aimanix AI</p>
           <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.4rem;">AI Full-Stack Developer & Automation Lead</p>
         </div>
 
@@ -875,7 +896,7 @@
             <span class="hud-circle c-red"></span>
             <span class="hud-circle c-yellow"></span>
             <span class="hud-circle c-green"></span>
-            <span style="color: #64748b; font-size: 0.75rem; margin-left: 0.5rem;">neural_core_init.py</span>
+            <span style="color: #8c9bb7; font-size: 0.75rem; margin-left: 0.5rem;">neural_core_init.py</span>
           </div>
           <div class="hud-body" id="code-terminal"></div>
         </div>
@@ -940,7 +961,7 @@
         </div>
 
         <div class="neon-border-box pricing-card">
-          <div class="pricing-badge" style="background: linear-gradient(135deg, #10b981, #00f2fe);">Popular</div>
+          <div class="pricing-badge" style="background: linear-gradient(135deg, #00e5a3, #00d4ff);">Popular</div>
           <div class="pricing-head">
             <h3 class="pricing-title" id="p2-title">ব্যাকএন্ড যুক্ত ওয়েবসাইট</h3>
             <div class="pricing-amount">₹১৫,৯৯৯ <span id="p2-unit">/ শুরু মাত্র</span></div>
@@ -1068,7 +1089,7 @@
 
     <div class="video-modal-card" id="video-modal-card">
       <div class="video-modal-header">
-        <div style="font-weight: 700; color: #00f2fe; font-size: 0.95rem;">
+        <div style="font-weight: 700; color: #ff62c0; font-size: 0.95rem;">
           🤖 Aimanix AI Assistant
         </div>
         <button class="video-close-btn" onclick="closeVideoModal()">✕</button>
@@ -1257,7 +1278,6 @@
       ]
     };
 
-    // Deep merge function to ensure no field is ever lost or undefined
     function getSiteData() {
       const storedStr = localStorage.getItem("aimanix_v3_data");
       if (!storedStr) return defaultData;
@@ -1335,7 +1355,6 @@ class ProductionApp:
       }, 20);
     }
 
-    /* Smart Dynamic Video Player Setup (Handles both YouTube Embeds & Direct MP4s) */
     let isYouTube = false;
 
     function setupVideoPlayers(videoUrl) {
@@ -1459,7 +1478,6 @@ class ProductionApp:
         container.appendChild(div);
       });
 
-      // সেটআপ ডাইনামিক ভিডিও
       setupVideoPlayers(data.videoUrl);
     }
 
@@ -1564,7 +1582,7 @@ class ProductionApp:
       playSciFiPowerOnSound();
 
       const core = document.querySelector('.cpu-core-orb');
-      core.style.boxShadow = '0 0 35px #00f2fe, 0 0 70px #6366f1';
+      core.style.boxShadow = '0 0 35px #ff62c0, 0 0 70px #7a73ff';
       core.style.transform = 'scale(1.25)';
 
       setTimeout(() => {
@@ -1652,7 +1670,7 @@ class ProductionApp:
         const modalFrame = document.getElementById('ai-modal-video');
         if (modalFrame) {
           const src = modalFrame.src;
-          modalFrame.src = src; // reload iframe
+          modalFrame.src = src;
         }
       } else {
         const modalVid = document.getElementById('ai-modal-video');
@@ -1664,7 +1682,7 @@ class ProductionApp:
       }
     }
 
-    /* Neural Synapse Canvas Engine */
+    /* Neural Synapse Canvas Engine - Updated with Stripe Palette */
     const canvas = document.getElementById('neural-canvas');
     const ctx = canvas.getContext('2d');
     let width, height;
@@ -1692,14 +1710,22 @@ class ProductionApp:
       }
     }, { passive: true });
 
+    // Stripe Palette Node Colors: Violet, Pink, Blue, Orange
+    const stripeColors = [
+      '122, 115, 255', // Stripe Violet
+      '255, 98, 192',  // Stripe Pink
+      '0, 212, 255',   // Stripe Cyan/Blue
+      '255, 111, 97'   // Stripe Coral
+    ];
+
     class NeuralNode {
       constructor() {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
         this.vx = (Math.random() - 0.5) * 0.9;
         this.vy = (Math.random() - 0.5) * 0.9;
-        this.radius = Math.random() * 2 + 1;
-        this.color = Math.random() > 0.5 ? '0, 242, 254' : '99, 102, 241';
+        this.radius = Math.random() * 2.2 + 1;
+        this.color = stripeColors[Math.floor(Math.random() * stripeColors.length)];
       }
 
       update() {
@@ -1744,8 +1770,8 @@ class ProductionApp:
         ctx.save();
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(0, 242, 254, ${this.alpha})`;
-        ctx.lineWidth = 1.2;
+        ctx.strokeStyle = `rgba(255, 98, 192, ${this.alpha})`;
+        ctx.lineWidth = 1.3;
         ctx.stroke();
         ctx.restore();
       }
@@ -1773,8 +1799,9 @@ class ProductionApp:
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(56, 189, 248, ${(1 - dist / 130) * 0.3})`;
-            ctx.lineWidth = 0.8;
+            // Stripe Blend Linear Gradient between Connected Points
+            ctx.strokeStyle = `rgba(122, 115, 255, ${(1 - dist / 130) * 0.35})`;
+            ctx.lineWidth = 0.9;
             ctx.stroke();
           }
         }

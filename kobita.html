@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>কবিতার আকাশ | সাহিত্যের রঙিন আসর - Aimanix AI</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@600;700&family=Hind+Siliguri:wght@400;500;600;700;800&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #090514;
+      --bg-gradient: radial-gradient(circle at 50% -10%, #3b1053 0%, #150826 50%, #090514 100%);
+      --surface-glass: rgba(26, 14, 46, 0.65);
+      --surface-card: rgba(30, 16, 53, 0.75);
+      --surface-border: rgba(255, 105, 180, 0.22);
+      --coral-gradient: linear-gradient(135deg, #ff5e62 0%, #ff2a7a 50%, #e024c3 100%);
+      --pink-glow: rgba(255, 42, 122, 0.35);
+      --text-main: #ffffff;
+      --text-muted: #b3a5c9;
+      --accent-pink: #ff2a7a;
+      --accent-cyan: #00f2fe;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      background: var(--bg-dark);
+      background-image: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Hind Siliguri', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Touch & Cosmic Particles Canvas */
+    #touch-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Ambient Aurora Glow Circles */
+    .aurora-blur-1 {
+      position: fixed;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 500px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(224, 36, 195, 0.3) 0%, rgba(76, 29, 149, 0) 70%);
+      filter: blur(60px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .aurora-blur-2 {
+      position: fixed;
+      bottom: -100px;
+      right: -80px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255, 94, 98, 0.22) 0%, rgba(15, 23, 42, 0) 70%);
+      filter: blur(70px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Top Navigation Bar */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      background: rgba(14, 8, 28, 0.85);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--surface-border);
+      padding: 0.85rem 1.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.5);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .brand-logo-badge {
+      background: var(--coral-gradient);
+      color: #fff;
+      font-weight: 900;
+      padding: 0.35rem 0.7rem;
+      border-radius: 9px;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 15px var(--pink-glow);
+      font-family: 'Fira Code', monospace;
+    }
+
+    .brand-name {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.2px;
+    }
+
+    .btn-back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 1rem;
+      border-radius: 25px;
+      border: 1px solid var(--surface-border);
+      background: rgba(255, 255, 255, 0.04);
+      color: #f1e9fd;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: all 0.25s ease;
+    }
+
+    .btn-back-home:hover {
+      background: rgba(255, 42, 122, 0.15);
+      border-color: var(--accent-pink);
+      transform: translateX(-3px);
+    }
+
+    /* Main Container */
+    .portal-main {
+      position: relative;
+      z-index: 2;
+      max-width: 1000px;
+      margin: 2.2rem auto 5rem;
+      padding: 0 1.4rem;
+    }
+
+    /* Hero Headline Matching Reference UI */
+    .hero-box {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+    }
+
+    .hero-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 42, 122, 0.12);
+      border: 1px solid rgba(255, 42, 122, 0.4);
+      padding: 0.38rem 1.1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #ff7ebb;
+      margin-bottom: 1.4rem;
+      box-shadow: 0 0 15px rgba(255, 42, 122, 0.2);
+    }
+
+    .hero-headline {
+      font-size: 2.8rem;
+      font-weight: 900;
+      line-height: 1.18;
+      letter-spacing: -0.5px;
+      margin-bottom: 1.1rem;
+    }
+
+    .gradient-accent-text {
+      background: linear-gradient(135deg, #ff5e62 0%, #ff2a7a 50%, #ffa07a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 25px rgba(255, 42, 122, 0.3);
+    }
+
+    .hero-subtext {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    /* Category Filter Tabs */
+    .category-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .cat-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--surface-border);
+      color: var(--text-muted);
+      padding: 0.6rem 1.5rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 700;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cat-btn.active {
+      background: var(--coral-gradient);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 6px 20px var(--pink-glow);
+    }
+
+    /* Poem Grid & Modern Glowing Cards */
+    .poem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 2rem;
+    }
+
+    .poem-card {
+      background: var(--surface-card);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--surface-border);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .poem-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-pink);
+      box-shadow: 0 20px 45px rgba(255, 42, 122, 0.25);
+    }
+
+    .poem-cover-wrap {
+      width: 100%;
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .poem-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .poem-card:hover .poem-cover-img {
+      transform: scale(1.05);
+    }
+
+    .poem-category-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(9, 5, 20, 0.75);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--surface-border);
+      color: #ffa8d2;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+    }
+
+    .poem-content-body {
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .poem-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .poem-author {
+      font-size: 0.88rem;
+      color: #ff7ebb;
+      font-weight: 600;
+      margin-bottom: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .poem-verses {
+      font-family: 'Noto Serif Bengali', serif;
+      font-size: 1.05rem;
+      line-height: 2.1;
+      color: #f1e9fd;
+      white-space: pre-line;
+      flex: 1;
+      border-left: 2.5px solid rgba(255, 42, 122, 0.4);
+      padding-left: 1.1rem;
+      margin-bottom: 1.6rem;
+    }
+
+    /* Action Footer matching Roy Digital button style */
+    .poem-action-btn {
+      background: var(--coral-gradient);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.4rem;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      box-shadow: 0 6px 18px var(--pink-glow);
+      transition: all 0.25s ease;
+    }
+
+    .poem-action-btn:active {
+      transform: scale(0.96);
+    }
+
+    @media (max-width: 768px) {
+      .hero-headline { font-size: 2.2rem; }
+      .portal-main { margin-top: 1.6rem; }
+      .poem-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Glow & Touch Fluid Particles -->
+  <div class="aurora-blur-1"></div>
+  <div class="aurora-blur-2"></div>
+  <canvas id="touch-canvas"></canvas>
+
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <a href="index.html" class="brand-group">
+      <span class="brand-logo-badge">AIMANIX</span>
+      <span class="brand-name">কবিতার আকাশ</span>
+    </a>
+
+    <a href="index.html" class="btn-back-home">
+      ← মূল হোমপেজে যান
+    </a>
+  </header>
+
+  <main class="portal-main">
+    <!-- Hero Section with Reference Glow -->
+    <div class="hero-box">
+      <div class="hero-pill-badge">
+        <span>✨</span> শব্দ ও কল্পনার ডিজিটাল সাহিত্য নীড়
+      </div>
+      <h1 class="hero-headline">
+        অনুভূতির স্ফুলিঙ্গ। <br>
+        <span class="gradient-accent-text">কবিতার আকাশে মুক্ত উড্ডয়ন।</span>
+      </h1>
+      <p class="hero-subtext">
+        আপনার এলোমেলো ভাবনার কাঁচা লেখাগুলো এখানে কৃত্রিম বুদ্ধিমত্তার নিখুঁত তুলিতে রূপ পায় মনোমুগ্ধকর শিরোনাম, ছন্দময় সজ্জা ও নান্দনিক ছবিতে।
+      </p>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="category-tabs">
+      <button class="cat-btn active" onclick="filterCategory('all')">সব কবিতা</button>
+      <button class="cat-btn" onclick="filterCategory('VIII')">Class VIII সাহিত্য</button>
+      <button class="cat-btn" onclick="filterCategory('IX')">Class IX সাহিত্য</button>
+      <button class="cat-btn" onclick="filterCategory('special')">সৃজনশীল আসর</button>
+    </div>
+
+    <!-- Poem Grid -->
+    <div class="poem-grid" id="poem-container">
+      <!-- Poem Card 1 -->
+      <div class="poem-card" data-category="VIII">
+        <div class="poem-cover-wrap">
+          <span class="poem-category-badge">Class VIII সাহিত্য</span>
+          <img class="poem-cover-img" src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80" alt="মেঘের দেশে">
+        </div>
+        <div class="poem-content-body">
+          <h3 class="poem-title">মেঘের দেশে বৃষ্টিগান</h3>
+          <div class="poem-author">✍️ কলমে: অনুভবের ছায়া | Aimanix AI</div>
+          <div class="poem-verses">নীল আকাশের সীমানা ছাড়িয়ে,
+মেঘেরা পাঠালো চিঠি।
+ভিজে যাওয়া ঘাসে সবুজ আলপনা,
+জুড়িয়ে দিল এ দিঘি।
+
+বৃষ্টির কণা সুর তোলে মনে,
+বাতাসে বকুল ঘ্রাণ।
+অচেনা পথের বাঁকে দাঁড়িয়ে,
+গেয়ে উঠি নব গান।</div>
+          <a href="https://wa.me/919143181401?text=আমি%20কবিতার%20আকাশ%20থেকে%20একটি%20কবিতা%20পাঠাতে%20চাই" target="_blank" class="poem-action-btn">
+            <span>সরাসরি আবৃত্তি শুনুন</span> →
+          </a>
+        </div>
+      </div>
+
+      <!-- Poem Card 2 -->
+      <div class="poem-card" data-category="IX">
+        <div class="poem-cover-wrap">
+          <span class="poem-category-badge">Class IX সাহিত্য</span>
+          <img class="poem-cover-img" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" alt="সাগরের ঢেউ">
+        </div>
+        <div class="poem-content-body">
+          <h3 class="poem-title">তটিনীর বাঁকে</h3>
+          <div class="poem-author">✍️ কলমে: কবির স্বপ্ন | নবম সংকলন</div>
+          <div class="poem-verses">উত্তাল ঢেউয়ে জাগে প্রতিধ্বনি,
+বালুকাবেলায় স্মৃতি।
+অস্তমিত রবির সোনালী মায়ায়,
+লিখে রাখি এক গীতি।
+
+দূর দিগন্তে জ্বলে ওঠা তারা,
+নিদ্রাহীন এক রাত।
+অসীম সাহসে এগিয়ে চলেছি,
+ছুঁয়ে দিতে ভোর-প্রভাত।</div>
+          <a href="https://wa.me/919143181401?text=আমি%20কবিতার%20আকাশ%20থেকে%20একটি%20কবিতা%20পাঠাতে%20চাই" target="_blank" class="poem-action-btn">
+            <span>সরাসরি আবৃত্তি শুনুন</span> →
+          </a>
+        </div>
+      </div>
+
+      <!-- Poem Card 3 -->
+      <div class="poem-card" data-category="special">
+        <div class="poem-cover-wrap">
+          <span class="poem-category-badge">সৃজনশীল আসর</span>
+          <img class="poem-cover-img" src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=800&q=80" alt="ভোরের আলো">
+        </div>
+        <div class="poem-content-body">
+          <h3 class="poem-title">কুয়াশা ঢাকা ভোর</h3>
+          <div class="poem-author">✍️ কলমে: আনোয়ার হোসেন</div>
+          <div class="poem-verses">শীতল কুয়াশা ভেঙে আলো আসে,
+জাগে পৃথিবীর প্রাণ।
+শিশিরবিন্দু ঘাসের ডগায়,
+করে যে আলোকরশ্মি পান।
+
+চলার পথে থেমে থাকা নয়,
+সামনে যে স্বপ্ন অপার।
+এ জীবনে গড়ে তুলব আমি,
+নতুন এক অহংকার।</div>
+          <a href="https://wa.me/919143181401?text=আমি%20কবিতার%20আকাশ%20থেকে%20একটি%20কবিতা%20পাঠাতে%20চাই" target="_blank" class="poem-action-btn">
+            <span>সরাসরি আবৃত্তি শুনুন</span> →
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Category Filtering Logic
+    function filterCategory(cat) {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const cards = document.querySelectorAll('.poem-card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-category') === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    /* ==========================================================
+       COLORFUL TOUCH & COSMIC NEON RIPPLE ENGINE
+       ========================================================== */
+    const canvas = document.getElementById('touch-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const colorPalette = [
+      '255, 42, 122',   // Neon Pink
+      '255, 94, 98',    // Coral
+      '224, 36, 195',   // Deep Magenta
+      '0, 242, 254',    // Cyan Spark
+      '255, 160, 122'   // Peach Glow
+    ];
+
+    class SparkleParticle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = (Math.random() - 0.5) * 4;
+        this.vy = (Math.random() - 0.5) * 4;
+        this.radius = Math.random() * 3 + 1.5;
+        this.alpha = 1;
+        this.color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.alpha -= 0.025;
+      }
+      draw() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = `rgb(${this.color})`;
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    class CosmicWave {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.radius = 2;
+        this.alpha = 0.85;
+        this.color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+      }
+      update() {
+        this.radius += 3.2;
+        this.alpha -= 0.028;
+      }
+      draw() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(${this.color}, ${this.alpha})`;
+        ctx.lineWidth = 2.2;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = `rgb(${this.color})`;
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    let sparkles = [];
+    let waves = [];
+
+    function triggerCosmicTouch(x, y) {
+      waves.push(new CosmicWave(x, y));
+      for (let i = 0; i < 8; i++) {
+        sparkles.push(new SparkleParticle(x, y));
+      }
+      if (sparkles.length > 50) sparkles.splice(0, 10);
+      if (waves.length > 15) waves.shift();
+    }
+
+    window.addEventListener('pointerdown', (e) => {
+      triggerCosmicTouch(e.clientX, e.clientY);
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0 && Math.random() > 0.4) {
+        triggerCosmicTouch(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    function renderParticles() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Waves
+      for (let i = waves.length - 1; i >= 0; i--) {
+        waves[i].update();
+        waves[i].draw();
+        if (waves[i].alpha <= 0) waves.splice(i, 1);
+      }
+
+      // Sparkles
+      for (let i = sparkles.length - 1; i >= 0; i--) {
+        sparkles[i].update();
+        sparkles[i].draw();
+        if (sparkles[i].alpha <= 0) sparkles.splice(i, 1);
+      }
+
+      requestAnimationFrame(renderParticles);
+    }
+    renderParticles();
+  </script>
+</body>
+</html>

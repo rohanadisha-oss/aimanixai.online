@@ -18,7 +18,7 @@
       --bg-dark: #090514;
       --bg-gradient: radial-gradient(circle at 50% -10%, #3b1053 0%, #150826 50%, #090514 100%);
       --surface-glass: rgba(26, 14, 46, 0.65);
-      --surface-card: rgba(30, 16, 53, 0.75);
+      --surface-card: rgba(30, 16, 53, 0.95);
       --surface-border: rgba(255, 105, 180, 0.22);
       --coral-gradient: linear-gradient(135deg, #ff5e62 0%, #ff2a7a 50%, #e024c3 100%);
       --pink-glow: rgba(255, 42, 122, 0.35);
@@ -216,29 +216,69 @@
       box-shadow: 0 6px 20px var(--pink-glow);
     }
 
-    /* Poem Grid & Modern Glowing Cards */
+    /* Poem Grid & Animated Glowing Cards */
     .poem-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
       gap: 2rem;
     }
 
+    /* বর্ডার অ্যানিমেশনের জন্য আউটার কন্টেইনার */
     .poem-card {
-      background: var(--surface-card);
-      backdrop-filter: blur(14px);
-      border: 1px solid var(--surface-border);
+      position: relative;
       border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
-      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      padding: 3px; /* ঘুরন্ত বর্ডারের পুরুত্ব */
       display: flex;
-      flex-direction: column;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .poem-card:hover {
       transform: translateY(-5px);
-      border-color: var(--accent-pink);
-      box-shadow: 0 20px 45px rgba(255, 42, 122, 0.25);
+      box-shadow: 0 20px 45px rgba(255, 42, 122, 0.3);
+    }
+
+    /* ঘুরন্ত নিয়ন গ্রেডিয়েন্ট রেখা */
+    .poem-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(
+        transparent 0deg,
+        transparent 270deg,
+        var(--accent-cyan) 310deg,
+        var(--accent-pink) 345deg,
+        #ff5e62 360deg
+      );
+      animation: rotateBorder 4s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes rotateBorder {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* কার্ডের ভেতরের মূল কন্টেন্ট ও ব্যাকগ্রাউন্ড */
+    .poem-card-inner {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      background: var(--surface-card);
+      backdrop-filter: blur(14px);
+      border-radius: 21px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .poem-cover-wrap {
@@ -271,6 +311,7 @@
       font-weight: 800;
       padding: 0.3rem 0.8rem;
       border-radius: 20px;
+      z-index: 2;
     }
 
     .poem-content-body {
@@ -499,18 +540,21 @@
         card.className = "poem-card";
         card.setAttribute("data-category", poem.category);
 
+        // ভেতরের লেয়ার হিসেবে poem-card-inner রাখা হয়েছে যেন ঘুরন্ত বর্ডারটি ব্যাকগ্রাউন্ডে দৃশ্যমান থাকে
         card.innerHTML = `
-          <div class="poem-cover-wrap">
-            <span class="poem-category-badge">${categoryLabel}</span>
-            <img class="poem-cover-img" src="${coverImg}" alt="${poem.title}" loading="lazy">
-          </div>
-          <div class="poem-content-body">
-            <h3 class="poem-title">${poem.title}</h3>
-            <div class="poem-author">✍️ কলমে: ${poem.author}</div>
-            <div class="poem-verses">${poem.body}</div>
-            <a href="https://wa.me/919143181401?text=আমি%20কবিতার%20আকাশ%20থেকে%20'${encodeURIComponent(poem.title)}'%20কবিতাটি%20পড়েছি" target="_blank" class="poem-action-btn">
-              <span>সরাসরি আবৃত্তি শুনুন</span> →
-            </a>
+          <div class="poem-card-inner">
+            <div class="poem-cover-wrap">
+              <span class="poem-category-badge">${categoryLabel}</span>
+              <img class="poem-cover-img" src="${coverImg}" alt="${poem.title}" loading="lazy">
+            </div>
+            <div class="poem-content-body">
+              <h3 class="poem-title">${poem.title}</h3>
+              <div class="poem-author">✍️ কলমে: ${poem.author}</div>
+              <div class="poem-verses">${poem.body}</div>
+              <a href="https://wa.me/919143181401?text=আমি%20কবিতার%20আকাশ%20থেকে%20'${encodeURIComponent(poem.title)}'%20কবিতাটি%20পড়েছি" target="_blank" class="poem-action-btn">
+                <span>সরাসরি আবৃত্তি শুনুন</span> →
+              </a>
+            </div>
           </div>
         `;
         container.appendChild(card);

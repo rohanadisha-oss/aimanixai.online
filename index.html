@@ -166,9 +166,18 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.75rem;
       text-decoration: none;
       color: var(--text);
+    }
+
+    .brand-logo-img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 0 16px rgba(122, 115, 255, 0.5);
+      display: block;
     }
 
     .brand-icon {
@@ -770,6 +779,7 @@
   <header>
     <nav class="navbar">
       <a href="#" class="brand">
+        <img src="https://i.postimg.cc/4xvFzpjt/ai-image-389f8f00ffb641d888cd0bce1d10e2fd.png" alt="Aimanix AI Logo" class="brand-logo-img">
         <span class="brand-icon">Aimanix.AI</span>
         <span class="brand-name" id="view-brand-name">Anowar Hossain</span>
       </a>

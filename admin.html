@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700;800&family=Hind+Siliguri:wght@400;500;600;700;800&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
 
+  <!-- Firebase Compat Libraries -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
@@ -205,7 +206,7 @@
           <p style="font-size: 0.78rem; color: var(--text-muted);">সেন্ট্রাল ডেটা ও পাবলিশার ড্যাশবোর্ড</p>
         </div>
       </div>
-      <div style="display: flex; gap: 0.6rem;">
+      <div style="display: flex; gap: 0.6rem; align-items: center;">
         <a href="index.html" target="_blank" class="btn-live-view">🌐 মূল সাইট</a>
         <button class="btn-logout" onclick="logoutAdmin()">লক করুন 🔒</button>
       </div>
@@ -271,17 +272,23 @@
       </div>
     </div>
 
-    <!-- TAB 2: SCHOOL NOTES -->
+    <!-- TAB 2: SCHOOL NOTES (V, VI, VII, VIII, IX, MADHYAMIK, XI, H.S) -->
     <div class="tab-content-panel" id="panel-school">
       <div class="panel-section-title">📚 আমার স্কুল: AI স্টাডি শিট ও প্রিন্ট A4 বুকলেট</div>
-      <p class="panel-section-desc">রয়্যাল ভায়োলেট ও গোল্ডেন প্রিমিয়াম থিমে স্টাডি শিট তৈরি হবে।</p>
+      <p class="panel-section-desc">রয়্যাল ভায়োলেট ও গোল্ডেন প্রিমিয়াম থিমে স্বয়ংক্রিয়ভাবে ক্লাসভিত্তিক স্টাডি শিট তৈরি হবে।</p>
 
       <div class="form-grid">
         <div class="form-group">
           <label>শ্রেণী নির্বাচন করুন:</label>
           <select id="school-grade">
-            <option value="VIII">Class VIII (অষ্টম শ্রেণী)</option>
+            <option value="V">Class V (পঞ্চম শ্রেণী)</option>
+            <option value="VI">Class VI (ষষ্ঠ শ্রেণী)</option>
+            <option value="VII">Class VII (সপ্তম শ্রেণী)</option>
+            <option value="VIII" selected>Class VIII (অষ্টম শ্রেণী)</option>
             <option value="IX">Class IX (নবম শ্রেণী)</option>
+            <option value="MADHYAMIK">Madhyamik (মাধ্যমিক শ্রেণী)</option>
+            <option value="XI">Class XI (একাদশ শ্রেণী)</option>
+            <option value="H.S">H.S (উচ্চ মাধ্যমিক শ্রেণী)</option>
           </select>
         </div>
 
@@ -292,7 +299,7 @@
 
         <div class="form-group full-width">
           <label>বইয়ের কাঁচা টেক্সট (Raw Text) পেস্ট করুন:</label>
-          <textarea id="school-raw" placeholder="বইয়ের টেক্সট এখানে পেস্ট করুন..."></textarea>
+          <textarea id="school-raw" placeholder="বইয়ের যেকোনো টেক্সট এখানে পেস্ট করুন... AI স্বয়ংক্রিয়ভাবে সিলেবাস ও ক্লাস অনুযায়ী স্টাডি নোট তৈরি করবে।"></textarea>
         </div>
       </div>
 
@@ -306,7 +313,7 @@
       </div>
     </div>
 
-    <!-- TAB 3: KOBITAR AKASH -->
+    <!-- TAB 3: KOBITAR AKASH (পূর্বের মতো VIII, IX ও special অপরিবর্তিত) -->
     <div class="tab-content-panel" id="panel-kobita">
       <div class="panel-section-title" style="color: var(--pink);">✍️ কবিতার আকাশ: AI স্বয়ংক্রিয় কবিতা সংকলন</div>
       <p class="panel-section-desc">ডার্ক অরোরা নিওন পিঙ্ক থিমে স্বয়ংক্রিয়ভাবে পাবলিশ হবে।</p>
@@ -396,6 +403,7 @@
       throw new Error("API Key ফায়ারবেসে পাওয়া যায়নি!");
     }
 
+    // আপনার আসল এন্ডপয়েন্ট তালিকা (3.5-flash, flash-latest, 2.5-flash) অক্ষুণ্ণ রাখা হলো
     async function executeGeminiAPI(systemInstruction, promptText) {
       const key = await getSecureGeminiKey();
       const endpoints = [
@@ -447,11 +455,9 @@
       }
     };
 
-    // স্মার্ট ভিডিও লিঙ্ক কনভার্টার
     function sanitizeVideoUrl(rawUrl) {
       if (!rawUrl) return "";
       let url = rawUrl.trim();
-      // YouTube ওয়াচ বা শর্টস লিঙ্ক কনভার্ট
       if (url.includes("youtube.com/watch?v=")) {
         const id = url.split("v=")[1]?.split("&")[0];
         if (id) return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}`;
@@ -490,7 +496,6 @@
       const waVal = document.getElementById("edit-wa").value.trim();
       const phoneVal = document.getElementById("edit-phone").value.trim();
 
-      // শুধু ইনপুট থাকলে আপডেট হবে, নাহলে আগের সুরক্ষিত ডাটা থাকবে
       if (videoVal) existing.videoUrl = sanitizeVideoUrl(videoVal);
       if (photoVal) existing.photo = photoVal;
       if (waVal) existing.whatsapp = waVal;
@@ -522,17 +527,47 @@
       }
     }
 
-    // ==========================================
-    // SCHOOL NOTES ENGINE (100% UNCHANGED)
-    // ==========================================
+    // ==========================================================
+    // SCHOOL NOTES ENGINE (V, VI, VII, VIII, IX, MADHYAMIK, XI, H.S)
+    // ==========================================================
     const ROYAL_VIOLET_STUDY_PROMPT = `
-তুমি একজন বিশ্বমানের বাংলা স্টাডি নোট ডিজাইনার।
-পাঠ্যটি বিশ্লেষণ করে একটি রেডি A4 প্রিন্ট উপযোগী নোট তৈরি করবে।
-কালার থিম বাধ্যতামূলক:
-- হেডার: background: linear-gradient(135deg, #1e1035, #3b1366); color: #ffd700 (Gold); border: 2px solid #5b21b6;
-- সাব-কার্ড: background: #ffffff; color: #1e1b4b; border-left: 5px solid #6d28d9; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-- বুলেট ব্যাজ: background: #f3e8ff; color: #581c87; font-weight: bold;
-শুধুমাত্র ভেতরের HTML কোড দেবে, কোনো মার্কডাউন (\`\`\`html) দেবে না।
+তুমি একজন বিশ্বমানের বাংলা স্টাডি নোট ডিজাইনার এবং অভিজ্ঞ শিক্ষাবিদ।
+ইনপুটে প্রদত্ত শ্রেণী (Grade/Class), বিষয় এবং কাঁচা পাঠ্য (Raw Text) বিশ্লেষণ করে স্বয়ংক্রিয়ভাবে একটি রেডি-টু-প্রিন্ট A4 কালার স্টাডি শিট তৈরি করবে।
+
+ক্লাসভিত্তিক প্রয়োজনীয় কাঠামো:
+1. Class V, VI, VII: সহজ-সরল ভাষা, মূল ভাবার্থ, শব্দার্থ এবং সংক্ষিপ্ত প্রশ্নোত্তর।
+2. Class VIII, IX: বিশদ ভাবার্থ, গুরুত্বপূর্ণ বুলেট পয়েন্ট, চরিত্র/বিষয় বিশ্লেষণ এবং MCQ ও সংক্ষিপ্ত প্রশ্ন।
+3. Madhyamik (দশম শ্রেণী): মাধ্যমিক বোর্ডের প্রশ্নরীতির অনুরূপ ৩ ও ৫ নম্বরের মানসম্মত সাজেস্টিভ উত্তর, উৎস-প্রসঙ্গ এবং পয়েন্টভিত্তিক উত্তর।
+4. Class XI, H.S (উচ্চ মাধ্যমিক): উচ্চমাধ্যমিক স্তরের গভীর সাহিত্য পর্যালোচনা, দর্শন, ব্যাকরণ ও শিল্প-সংস্কৃতির সমন্বিত আলোচনা।
+
+স্টাইল ও ডিজাইন গাইডলাইন (বাধ্যতামূলক):
+- হেডার কার্ড:
+  <div class="note-header-card">
+    <span class="note-badge-gold">শ্রেণী: [শ্রেণী নাম] | পাঠ্য অধ্যায়</span>
+    <h1>[বিষয়ের নাম / অধ্যায় শিরোনাম]</h1>
+    <p style="color: #f3e8ff; font-size: 0.95rem; margin-top: 4px;">Aimanix AI Smart Gurukul Education Framework</p>
+  </div>
+- সেকশন কার্ড:
+  <div class="note-section-card border-accent-purple floating-card-touch">
+    <div class="note-section-title">১. মূল সারসংক্ষেপ ও ভাবার্থ</div>
+    <p class="note-body-text">...</p>
+  </div>
+- পয়েন্ট কার্ড:
+  <div class="note-section-card border-accent-cyan floating-card-touch">
+    <div class="note-section-title">২. গুরুত্বপূর্ণ মূল পয়েন্ট ও তথ্যসূত্র</div>
+    <ul class="note-body-text" style="padding-left: 20px;">...</ul>
+  </div>
+- প্রশ্নোত্তর কার্ড:
+  <div class="note-section-card border-accent-gold floating-card-touch">
+    <div class="note-section-title">৩. সম্ভাব্য গুরুত্বপূর্ণ প্রশ্নোত্তর (বোর্ড ও পরীক্ষা মান)</div>
+    <div class="qa-block">
+      <div class="qa-q">প্রশ্ন ১: ...</div>
+      <div class="qa-a">উত্তর: ...</div>
+    </div>
+  </div>
+
+গুরুত্বপূর্ণ নির্দেশ:
+কোনো রকম ব্যাকটিক বা মার্কডাউন (\`\`\`html) দেবে না। শুধুমাত্র সরাসরি পরিচ্ছন্ন HTML কোড দেবে।
 `;
 
     async function generateSchoolNote() {
@@ -545,7 +580,7 @@
       btn.textContent = "AI স্টাডি শিট তৈরি করছে..."; btn.disabled = true;
 
       try {
-        let aiHtml = await executeGeminiAPI(ROYAL_VIOLET_STUDY_PROMPT, `শ্রেণী: ${grade}\nবিষয়: ${subject}\nপাঠ্য:\n${rawText}`);
+        let aiHtml = await executeGeminiAPI(ROYAL_VIOLET_STUDY_PROMPT, `নির্বাচিত শ্রেণী: ${grade}\nবিষয়/অধ্যায়: ${subject}\nকাঁচা পাঠ্য (Raw Text):\n${rawText}`);
         aiHtml = aiHtml.replace(/```html|```/g, "").trim();
 
         const noteObj = {
@@ -561,7 +596,7 @@
 
         await db.collection("school_notes").add(noteObj);
 
-        alert("✅ সফলভাবে প্রকাশিত হয়েছে! school.html এ এখন দেখা যাবে।");
+        alert(`✅ ক্লাস ${grade}-এর নোট সফলভাবে প্রকাশিত হয়েছে! school.html এ এখন দেখা যাবে।`);
         document.getElementById("school-raw").value = "";
         loadSchoolNotesList();
       } catch (err) {
@@ -575,7 +610,7 @@
       const box = document.getElementById("school-notes-list");
       box.innerHTML = "লোড হচ্ছে...";
       try {
-        const snap = await db.collection("school_notes").get();
+        const snap = await db.collection("school_notes").orderBy("timestamp", "desc").get();
         if (snap.empty) { box.innerHTML = "কোনো নোট নেই।"; return; }
         box.innerHTML = "";
         snap.forEach(doc => {
@@ -653,7 +688,7 @@ JSON ফরম্যাট:
       const box = document.getElementById("poems-list");
       box.innerHTML = "লোড হচ্ছে...";
       try {
-        const snap = await db.collection("poems").get();
+        const snap = await db.collection("poems").orderBy("timestamp", "desc").get();
         if (snap.empty) { box.innerHTML = "কোনো কবিতা নেই।"; return; }
         box.innerHTML = "";
         snap.forEach(doc => {

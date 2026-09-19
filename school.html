@@ -211,25 +211,27 @@
     .tabs-bar {
       display: flex;
       justify-content: center;
-      gap: 1rem;
+      gap: 0.75rem;
       margin-bottom: 2rem;
+      flex-wrap: wrap;
     }
 
     .class-tab-card {
       background: var(--card-white);
       border: 2px solid var(--border-soft);
-      padding: 0.85rem 2.2rem;
-      border-radius: 18px;
-      font-size: 1.1rem;
+      padding: 0.75rem 1.4rem;
+      border-radius: 16px;
+      font-size: 1rem;
       font-weight: 800;
       color: var(--text-dark);
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 0.7rem;
+      gap: 0.6rem;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       user-select: none;
+      white-space: nowrap;
     }
 
     .class-tab-card:hover {
@@ -255,6 +257,7 @@
       border-radius: 50%;
       background: #cbd5e1;
       transition: all 0.3s ease;
+      flex-shrink: 0;
     }
 
     /* Action Control Row */
@@ -436,7 +439,7 @@
       .top-bar { padding: 0.75rem 1.2rem; }
       .gurukul-hero-banner { padding: 1.8rem 1.4rem; border-radius: 20px; }
       .hero-title-bold { font-size: 1.8rem; }
-      .class-tab-card { padding: 0.7rem 1.4rem; font-size: 0.95rem; }
+      .class-tab-card { padding: 0.65rem 1.1rem; font-size: 0.9rem; }
       .a4-print-canvas { padding: 1.2rem 0.8rem; border-radius: 14px; }
       .note-sheet-wrapper { padding: 12px; }
     }
@@ -493,14 +496,44 @@
 
     <!-- Class Selector Tabs -->
     <div class="tabs-bar">
+      <div class="class-tab-card" id="tab-v" onclick="switchClassGrade('V')">
+        <span class="tab-indicator-dot"></span>
+        <span>Class V (পঞ্চম)</span>
+      </div>
+
+      <div class="class-tab-card" id="tab-vi" onclick="switchClassGrade('VI')">
+        <span class="tab-indicator-dot"></span>
+        <span>Class VI (ষষ্ঠ)</span>
+      </div>
+
+      <div class="class-tab-card" id="tab-vii" onclick="switchClassGrade('VII')">
+        <span class="tab-indicator-dot"></span>
+        <span>Class VII (সপ্তম)</span>
+      </div>
+
       <div class="class-tab-card active" id="tab-viii" onclick="switchClassGrade('VIII')">
         <span class="tab-indicator-dot"></span>
-        <span>Class VIII (অষ্টম শ্রেণী)</span>
+        <span>Class VIII (অষ্টম)</span>
       </div>
 
       <div class="class-tab-card" id="tab-ix" onclick="switchClassGrade('IX')">
         <span class="tab-indicator-dot"></span>
-        <span>Class IX (নবম শ্রেণী)</span>
+        <span>Class IX (নবম)</span>
+      </div>
+
+      <div class="class-tab-card" id="tab-madhyamik" onclick="switchClassGrade('MADHYAMIK')">
+        <span class="tab-indicator-dot"></span>
+        <span>Madhyamik (মাধ্যমিক)</span>
+      </div>
+
+      <div class="class-tab-card" id="tab-xi" onclick="switchClassGrade('XI')">
+        <span class="tab-indicator-dot"></span>
+        <span>Class XI (একাদশ)</span>
+      </div>
+
+      <div class="class-tab-card" id="tab-hs" onclick="switchClassGrade('H.S')">
+        <span class="tab-indicator-dot"></span>
+        <span>H.S (উচ্চ মাধ্যমিক)</span>
       </div>
     </div>
 
@@ -508,7 +541,7 @@
     <div class="controls-row">
       <div class="sheet-status-info" id="sheet-title-indicator">
         <span>📖</span>
-        <span id="active-class-text">Class VIII: বাংলা সাহিত্য ও সম্পূর্ণ স্টাডি বুকলেট</span>
+        <span id="active-class-text">Class VIII: অষ্টম শ্রেণীর সম্পূর্ণ স্টাডি বুকলেট</span>
       </div>
 
       <button class="btn-pdf-print" onclick="window.print()">
@@ -547,8 +580,80 @@
     let allLoadedNotes = [];
     let currentActiveGrade = 'VIII';
 
-    // ডিফল্ট ডেমো ব্যাকআপ (যদি ডেটাবেজ খালি থাকে)
+    // ক্লাস সংক্রান্ত শিরোনাম ম্যাপিং
+    const gradeTitleMap = {
+      "V": "Class V: পঞ্চম শ্রেণীর সমন্বিত পাঠ ও স্টাডি শিট",
+      "VI": "Class VI: ষষ্ঠ শ্রেণীর বাংলা সাহিত্য ও মূল্যায়ন শিট",
+      "VII": "Class VII: সপ্তম শ্রেণীর ভাষা ও সাহিত্য স্টাডি বুকলেট",
+      "VIII": "Class VIII: অষ্টম শ্রেণীর সম্পূর্ণ স্টাডি বুকলেট",
+      "IX": "Class IX: নবম শ্রেণীর সাহিত্য ও ব্যাকরণ সংকলন",
+      "MADHYAMIK": "Madhyamik: মাধ্যমিক পরীক্ষার স্পেশাল ফাইনাল প্রিপারেশন নোট",
+      "XI": "Class XI: একাদশ শ্রেণী সাহিত্য কথা ও শিল্প-সংস্কৃতির ইতিহাস",
+      "H.S": "Higher Secondary (H.S): দ্বাদশ শ্রেণী উচ্চ মাধ্যমিক পূর্ণাঙ্গ সহায়িকা"
+    };
+
+    // ফলব্যাক রিপোজিটরি (সব ক্লাসের জন্য রেডি টেমপ্লেট)
     const fallbackRepository = {
+      "V": `
+        <div class="note-header-card" style="background: linear-gradient(135deg, #065f46 0%, #047857 60%, #059669 100%);">
+          <span class="note-badge-gold" style="background: #fef08a; color: #064e3b;">শ্রেণী: পঞ্চম | পাঠ মূল্যায়ন</span>
+          <h1>পঞ্চম শ্রেণী: বাংলা ও পরিবেশ সংকলন</h1>
+          <p style="color: #d1fae5; font-size: 0.95rem; margin-top: 4px;">প্রাথমিক শিক্ষা সহায়ক শিট | Aimanix AI Education</p>
+        </div>
+        <div class="note-section-card border-accent-purple floating-card-touch">
+          <div class="note-section-title">১. মূল বক্তব্য ও সংক্ষিপ্ত পাঠ</div>
+          <p class="note-body-text">
+            গল্পের মূল নীতিশিক্ষা ও ভাবার্থ সহজ-সরল ভাষায় প্রতিটি শিক্ষার্থীর উপযোগী করে তুলে ধরা হয়েছে।
+          </p>
+        </div>
+        <div class="note-section-card border-accent-gold floating-card-touch">
+          <div class="note-section-title">২. গুরুত্বপূর্ণ প্রশ্নোত্তর</div>
+          <div class="qa-block">
+            <div class="qa-q">প্রশ্ন: পাঠটির মূল নৈতিক শিক্ষা কী?</div>
+            <div class="qa-a">উত্তর: সহানুভূতি, প্রকৃতির প্রতি ভালোবাসা এবং শৃঙ্খলা বজায় রাখা।</div>
+          </div>
+        </div>
+      `,
+      "VI": `
+        <div class="note-header-card" style="background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 60%, #2563eb 100%);">
+          <span class="note-badge-gold" style="background: #93c5fd; color: #1e3a8a;">শ্রেণী: ষষ্ঠ | অধ্যায়ভিত্তিক নোটস</span>
+          <h1>ষষ্ঠ শ্রেণী: সাহিত্য মেলা ও ব্যাকরণ সহায়িকা</h1>
+          <p style="color: #dbeafe; font-size: 0.95rem; margin-top: 4px;">সহজ শিখন ও সার্বিক অনুশীলন | Aimanix AI Education</p>
+        </div>
+        <div class="note-section-card border-accent-cyan floating-card-touch">
+          <div class="note-section-title">১. বিষয়বস্তুর সারাংশ</div>
+          <p class="note-body-text">
+            ষষ্ঠ শ্রেণীর পাঠ্য বিষয়টিকে চরিত্র বিশ্লেষণ ও রূপক অর্থের মাধ্যমে সহজভাবে বিন্যস্ত করা হয়েছে।
+          </p>
+        </div>
+        <div class="note-section-card border-accent-gold floating-card-touch">
+          <div class="note-section-title">২. ব্যাকরণ ও সম্ভাব্য প্রশ্নোত্তর</div>
+          <div class="qa-block">
+            <div class="qa-q">প্রশ্ন: উদ্ধৃত অংশটির উৎস ও প্রাসঙ্গিকতা কী?</div>
+            <div class="qa-a">উত্তর: কবি মানুষের স্বাভাবিক অনুভূতির জয়গান গেয়েছেন।</div>
+          </div>
+        </div>
+      `,
+      "VII": `
+        <div class="note-header-card" style="background: linear-gradient(135deg, #831843 0%, #9d174d 60%, #be185d 100%);">
+          <span class="note-badge-gold" style="background: #fbcfe8; color: #831843;">শ্রেণী: সপ্তম | পাঠ সহায়িকা</span>
+          <h1>সপ্তম শ্রেণী: বাংলা সাহিত্য ও ভাষা চর্চা</h1>
+          <p style="color: #fce7f3; font-size: 0.95rem; margin-top: 4px;">স্মার্ট নোটস ও পাঠ বিশ্লেষণ | Aimanix AI Education</p>
+        </div>
+        <div class="note-section-card border-accent-purple floating-card-touch">
+          <div class="note-section-title">১. অধ্যায়ভিত্তিক মূল ভাবনা</div>
+          <p class="note-body-text">
+            সপ্তম শ্রেণীর পাঠে ভাষা সৌন্দর্য এবং সাহিত্য ভাবনার গভীরতাকে তুলে ধরা হয়েছে।
+          </p>
+        </div>
+        <div class="note-section-card border-accent-cyan floating-card-touch">
+          <div class="note-section-title">২. গুরুত্বপূর্ণ সংক্ষিপ্ত প্রশ্নোত্তর</div>
+          <div class="qa-block">
+            <div class="qa-q">প্রশ্ন: পাঠ্যাংশের মূল শিক্ষা কী?</div>
+            <div class="qa-a">উত্তর: কর্তব্যনিষ্ঠা ও পরোপকারিতার চেতনা জাগ্রত করা।</div>
+          </div>
+        </div>
+      `,
       "VIII": `
         <div class="note-header-card">
           <span class="note-badge-gold">শ্রেণী: অষ্টম | পাঠ্য অধ্যায়</span>
@@ -598,6 +703,71 @@
           <p class="note-body-text" style="background: #fffbeb; padding: 12px; border-radius: 8px;">
             উদ্ধৃত অংশটির মাধ্যমে লেখক মানবজীবনের পরিবর্তনের স্বাভাবিক নিয়মকে ব্যাখ্যা করেছেন।
           </p>
+        </div>
+      `,
+      "MADHYAMIK": `
+        <div class="note-header-card" style="background: linear-gradient(135deg, #701a75 0%, #86198f 60%, #a21caf 100%);">
+          <span class="note-badge-gold" style="background: #fdf08a; color: #000;">মাধ্যমিক স্পেশাল | ১০০% কমন প্রিপারেশন</span>
+          <h1>মাধ্যমিক বাংলা ও সাহিত্য চূড়ান্ত প্রস্তুতি</h1>
+          <p style="color: #fae8ff; font-size: 0.95rem; margin-top: 4px;">Madhyamik Exam Success Blueprint | Aimanix AI</p>
+        </div>
+
+        <div class="note-section-card border-accent-purple floating-card-touch">
+          <div class="note-section-title">১. মাধ্যমিক প্রশ্নপদ্ধতি ও অধ্যায় বিশ্লেষণ</div>
+          <p class="note-body-text">
+            মাধ্যমিক বোর্ডের বিগত বছরের প্রশ্ন এবং ব্লু-প্রিন্ট অনুসারে ৩ ও ৫ নম্বরের ব্যাখ্যাভিত্তিক উত্তরের সুনির্দিষ্ট কাঠামো।
+          </p>
+        </div>
+
+        <div class="note-section-card border-accent-gold floating-card-touch">
+          <div class="note-section-title">২. ৩ ও ৫ নম্বরের মানসম্মত সাজেস্টিভ উত্তর</div>
+          <div class="qa-block">
+            <div class="qa-q">প্রশ্ন: "বাবুটির স্বাস্থ্য গেছে, কিন্তু শখ ষোলআনাই বজায় আছে"—উদ্ধৃতিটির প্রাসঙ্গিকতা ব্যাখ্যা করো।</div>
+            <div class="qa-a">উত্তর: চরিত্রটির সামাজিক অবস্থান, পোশাক-পরিচ্ছদের বৈপরীত্য এবং চারিত্রিক বৈশিষ্ট্যের নিখুঁত প্রতিফলন এখানে স্পষ্টভাবে রূপায়িত।</div>
+          </div>
+        </div>
+      `,
+      "XI": `
+        <div class="note-header-card" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #334155 100%);">
+          <span class="note-badge-gold" style="background: #38bdf8; color: #0f172a;">একাদশ শ্রেণী | সেমিস্টার ও বার্ষিক পরীক্ষা</span>
+          <h1>একাদশ শ্রেণী সাহিত্য ও শিল্প-সংস্কৃতির ইতিহাস</h1>
+          <p style="color: #cbd5e1; font-size: 0.95rem; margin-top: 4px;">Higher Secondary Foundation | Aimanix AI</p>
+        </div>
+
+        <div class="note-section-card border-accent-cyan floating-card-touch">
+          <div class="note-section-title">১. বিষয়বস্তুর অন্তর্নিহিত দর্শন</div>
+          <p class="note-body-text">
+            একাদশ শ্রেণীর পাঠ্য রচনার ভাবার্থ, ঐতিহাসিক প্রেক্ষিত এবং সাহিত্যিক মূল্যায়নের সম্পূর্ণ রূপরেখা।
+          </p>
+        </div>
+
+        <div class="note-section-card border-accent-gold floating-card-touch">
+          <div class="note-section-title">২. সম্ভাব্য বর্ণনামূলক প্রশ্নোত্তর</div>
+          <p class="note-body-text" style="background: #f8fafc; padding: 12px; border-radius: 8px;">
+            লেখক এখানে সমাজচেতনা এবং ব্যক্তিসত্তার দ্বন্দ্বকে অত্যন্ত সাবলীল ভাষায় ফুটিয়ে তুলেছেন।
+          </p>
+        </div>
+      `,
+      "H.S": `
+        <div class="note-header-card" style="background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 60%, #b91c1c 100%);">
+          <span class="note-badge-gold" style="background: #fde047; color: #7f1d1d;">উচ্চ মাধ্যমিক | স্পেশাল বোর্ড নোটস</span>
+          <h1>উচ্চ মাধ্যমিক (H.S) পূর্ণাঙ্গ স্টাডি শিট</h1>
+          <p style="color: #fee2e2; font-size: 0.95rem; margin-top: 4px;">WBCHSE Board Examination Prep | Aimanix AI Education</p>
+        </div>
+
+        <div class="note-section-card border-accent-purple floating-card-touch">
+          <div class="note-section-title">১. উচ্চ মাধ্যমিক স্তরের গভীর সাহিত্য পর্যালোচনা</div>
+          <p class="note-body-text">
+            উচ্চ মাধ্যমিক পাঠ্যসূচির প্রতিটি পাঠের পুঙ্খানুপুঙ্খ তথ্যসমৃদ্ধ আলোচনা এবং টু-দ্য-পয়েন্ট উত্তর কাঠামো।
+          </p>
+        </div>
+
+        <div class="note-section-card border-accent-gold floating-card-touch">
+          <div class="note-section-title">২. উচ্চমানের পরীক্ষাকেন্দ্রিক প্রশ্নোত্তর</div>
+          <div class="qa-block">
+            <div class="qa-q">প্রশ্ন: "মৃত্যুঞ্জয়ের বাড়ি থেকে ফিরে নিখিলের মন খারাপ হয়ে গেল"—আলোচনা করো।</div>
+            <div class="qa-a">উত্তর: মনস্তাত্ত্বিক দ্বন্দ্ব এবং সমকালীন দুর্ভিক্ষের ভয়াবহ বাস্তবতার মুখোমুখি দাঁড়িয়ে বিবেকবোধের সংঘাত এখানে ফুটে উঠেছে।</div>
+          </div>
         </div>
       `
     };
@@ -655,7 +825,7 @@
         wrapper.innerHTML = `
           <div class="a4-print-canvas">
             <div class="note-sheet-wrapper">
-              ${fallbackRepository[grade]}
+              ${fallbackRepository[grade] || fallbackRepository["VIII"]}
             </div>
           </div>
         `;
@@ -666,12 +836,25 @@
       currentActiveGrade = grade;
       document.querySelectorAll('.class-tab-card').forEach(tab => tab.classList.remove('active'));
 
-      if (grade === 'VIII') {
-        document.getElementById('tab-viii').classList.add('active');
-        document.getElementById('active-class-text').textContent = "Class VIII: অষ্টম শ্রেণীর সম্পূর্ণ স্টাডি বুকলেট";
-      } else {
-        document.getElementById('tab-ix').classList.add('active');
-        document.getElementById('active-class-text').textContent = "Class IX: নবম শ্রেণীর সাহিত্য ও ব্যাকরণ সংকলন";
+      const tabIdMap = {
+        'V': 'tab-v',
+        'VI': 'tab-vi',
+        'VII': 'tab-vii',
+        'VIII': 'tab-viii',
+        'IX': 'tab-ix',
+        'MADHYAMIK': 'tab-madhyamik',
+        'XI': 'tab-xi',
+        'H.S': 'tab-hs'
+      };
+
+      const activeTabElement = document.getElementById(tabIdMap[grade]);
+      if (activeTabElement) {
+        activeTabElement.classList.add('active');
+      }
+
+      const activeTextElement = document.getElementById('active-class-text');
+      if (activeTextElement && gradeTitleMap[grade]) {
+        activeTextElement.textContent = gradeTitleMap[grade];
       }
 
       renderNotesForGrade(grade);

@@ -1,713 +1,1833 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="bn" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Aimanix Master Admin Console</title>
-
+  <title>Anowar Hossain | Founder of Aimanix AI</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700;800&family=Hind+Siliguri:wght@400;500;600;700;800&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- Firebase Compat Libraries -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #070a13;
-      --surface: #0f172a;
-      --surface-card: #141f36;
-      --border: rgba(56, 189, 248, 0.22);
-      --cyan: #00f2fe;
-      --indigo: #6366f1;
-      --pink: #ff2a7a;
-      --green: #10b981;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
+      /* Stripe Signature Mesh Palette (Dark Core) */
+      --bg: #0a0b1e;
+      --surface: rgba(14, 16, 43, 0.78);
+      --surface-card: rgba(16, 19, 54, 0.88);
+      --surface-border: rgba(122, 115, 255, 0.28);
+      --text: #fdfdfe;
+      --text-muted: #a3b0cc;
+      --stripe-purple: #7a73ff;
+      --stripe-pink: #ff62c0;
+      --stripe-orange: #ff6f61;
+      --stripe-yellow: #ffc43d;
+      --stripe-blue: #00d4ff;
+      --stripe-green: #00e5a3;
+      --cyan: #00d4ff;
+      --blue: #7a73ff;
+      --indigo: #ff62c0;
+      --neon-glow: rgba(122, 115, 255, 0.45);
+      --code-bg: rgba(7, 8, 26, 0.95);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    [data-theme="light"] {
+      /* Stripe Signature Mesh Palette (Light Canvas) */
+      --bg: #f8faff;
+      --surface: rgba(255, 255, 255, 0.88);
+      --surface-card: rgba(255, 255, 255, 0.96);
+      --surface-border: rgba(122, 115, 255, 0.22);
+      --text: #0d122b;
+      --text-muted: #53627c;
+      --stripe-purple: #635bff;
+      --stripe-pink: #e040fb;
+      --stripe-orange: #ff5964;
+      --stripe-yellow: #ff9800;
+      --stripe-blue: #0088ff;
+      --stripe-green: #00b875;
+      --cyan: #0088ff;
+      --blue: #635bff;
+      --indigo: #e040fb;
+      --neon-glow: rgba(99, 91, 255, 0.25);
+      --code-bg: rgba(243, 246, 254, 0.95);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Hind Siliguri', sans-serif;
-      min-height: 100vh;
-      padding: 1.2rem;
-      background-image: 
-        radial-gradient(circle at 10% 10%, rgba(0, 242, 254, 0.04) 0%, transparent 40%),
-        radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.04) 0%, transparent 40%);
+      font-family: 'Inter', 'Hind Siliguri', sans-serif;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    #auth-screen {
+    body:lang(bn) { font-family: 'Hind Siliguri', sans-serif; }
+
+    .cyber-grid {
       position: fixed;
       inset: 0;
-      background: #030712;
+      background-image: 
+        linear-gradient(to right, rgba(122, 115, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 98, 192, 0.06) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
+      -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #neural-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    header, main, footer { position: relative; z-index: 2; }
+
+    /* Stripe Dynamic Moving Gradient Banner */
+    .gradient-text {
+      background: linear-gradient(120deg, #ff62c0, #7a73ff, #00d4ff, #ffc43d, #ff6f61, #7a73ff);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShimmer 8s ease infinite;
+    }
+
+    @keyframes gradientShimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .neon-border-box {
+      position: relative;
+      border-radius: 20px;
+      background: var(--surface-card);
+      z-index: 1;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .neon-border-box::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 22px;
+      background: linear-gradient(90deg, #ff62c0, #7a73ff, #00d4ff, #ffc43d, #ff6f61, #ff62c0);
+      background-size: 350% 350%;
+      z-index: -1;
+      animation: rotateNeon 5s linear infinite;
+      opacity: 0.75;
+      transition: opacity 0.3s ease, filter 0.3s ease;
+      filter: blur(4px);
+    }
+
+    .neon-border-box:hover::before { opacity: 1; filter: blur(8px); }
+    .neon-border-box:hover { transform: translateY(-5px); }
+
+    @keyframes rotateNeon {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .typewriter-cursor {
+      display: inline-block;
+      width: 2px;
+      background-color: var(--stripe-pink);
+      margin-left: 4px;
+      animation: blink 0.75s infinite;
+      vertical-align: text-bottom;
+      height: 1.15em;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.85rem 1.4rem;
+      background: var(--surface);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--surface-border);
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-logo-img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 0 16px rgba(122, 115, 255, 0.5);
+      display: block;
+    }
+
+    .brand-icon {
+      font-family: 'Fira Code', monospace;
+      background: linear-gradient(135deg, #ff62c0, #7a73ff, #00d4ff);
+      color: #fff;
+      font-weight: 800;
+      padding: 0.35rem 0.65rem;
+      border-radius: 8px;
+      box-shadow: 0 0 16px rgba(122, 115, 255, 0.5);
+      font-size: 0.95rem;
+    }
+
+    .brand-name { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.2px; }
+
+    /* Smart Sci-Fi CPU Power Switch with Stripe Touch */
+    .cpu-switch-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      cursor: pointer;
+      padding: 5px 12px;
+      border-radius: 30px;
+      background: rgba(10, 11, 30, 0.9);
+      border: 1px solid var(--stripe-purple);
+      box-shadow: 0 0 14px rgba(122, 115, 255, 0.4), inset 0 0 8px rgba(255, 98, 192, 0.25);
+      transition: all 0.25s ease;
+      user-select: none;
+    }
+
+    .cpu-switch-wrap:active { transform: scale(0.95); }
+
+    .cpu-core-orb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #ff62c0 10%, #7a73ff 50%, #0a0b1e 90%);
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 99999;
-      padding: 1.5rem;
+      box-shadow: 0 0 12px #ff62c0;
+      animation: cpuPulse 2.5s infinite ease-in-out;
     }
 
-    .auth-card {
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid var(--cyan);
-      box-shadow: 0 0 45px rgba(0, 242, 254, 0.25);
-      border-radius: 20px;
-      padding: 2.5rem 2rem;
-      width: 100%;
-      max-width: 400px;
+    @keyframes cpuPulse {
+      0%, 100% { box-shadow: 0 0 8px #ff62c0, inset 0 0 4px #ff62c0; }
+      50% { box-shadow: 0 0 20px #00d4ff, inset 0 0 8px #00d4ff; }
+    }
+
+    .cpu-power-icon {
+      width: 13px;
+      height: 13px;
+      stroke: #fff;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      fill: none;
+      filter: drop-shadow(0 0 3px #ff62c0);
+    }
+
+    .cpu-switch-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--stripe-blue);
+      letter-spacing: 0.8px;
+    }
+
+    /* Sci-Fi HUD CPU Drawer Menu */
+    .sci-fi-menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 10, 24, 0.85);
+      backdrop-filter: blur(20px);
+      z-index: 10000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      align-items: flex-start;
+      justify-content: flex-end;
+    }
+
+    .sci-fi-menu-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .sci-fi-hud-drawer {
+      width: 88%;
+      max-width: 360px;
+      height: 100vh;
+      background: rgba(14, 16, 43, 0.96);
+      border-left: 2px solid var(--stripe-purple);
+      box-shadow: -15px 0 40px rgba(122, 115, 255, 0.3);
+      display: flex;
+      flex-direction: column;
+      padding: 1.8rem 1.4rem;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .sci-fi-menu-overlay.active .sci-fi-hud-drawer {
+      transform: translateX(0);
+    }
+
+    .hud-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--surface-border);
+      margin-bottom: 1.8rem;
+    }
+
+    .hud-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--stripe-blue);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hud-close-btn {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid #ef4444;
+      color: #ef4444;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hud-nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .hud-link-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.2rem;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.05rem;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hud-link-card:hover, .hud-link-card:active {
+      border-color: var(--stripe-pink);
+      background: rgba(255, 98, 192, 0.09);
+      box-shadow: 0 0 20px rgba(255, 98, 192, 0.25);
+      transform: translateX(-4px);
+    }
+
+    .hud-link-icon {
+      font-size: 1.4rem;
+      background: rgba(122, 115, 255, 0.15);
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      color: var(--stripe-blue);
+    }
+
+    .hud-quick-controls {
+      margin-top: auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--surface-border);
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .hud-btn-ctrl {
+      flex: 1;
+      padding: 0.75rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.9rem;
       text-align: center;
     }
 
-    .auth-icon-orb {
-      width: 55px; height: 55px; margin: 0 auto 1.2rem;
+    /* Hero Section */
+    .hero {
+      max-width: 1300px;
+      margin: 0 auto;
+      min-height: 80vh;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3.5rem;
+      align-items: center;
+      padding: 3rem 1.4rem;
+    }
+
+    .startup-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.45rem 1.2rem;
+      border-radius: 50px;
+      background: rgba(255, 98, 192, 0.1);
+      border: 1px solid var(--stripe-pink);
+      box-shadow: 0 0 15px rgba(255, 98, 192, 0.35);
+      margin-bottom: 1.5rem;
+    }
+
+    .startup-tag { font-family: 'Fira Code', monospace; font-weight: 800; color: var(--stripe-yellow); }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--stripe-pink);
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--cyan), var(--indigo));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem; box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+      animation: pulse 1.5s infinite;
     }
 
-    .auth-card h2 { font-size: 1.4rem; color: #fff; font-weight: 800; margin-bottom: 0.4rem; }
-    .auth-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
-
-    .auth-input-field {
-      width: 100%; background: rgba(3, 7, 18, 0.8);
-      border: 1px solid var(--border); color: #fff;
-      padding: 0.85rem 1rem; border-radius: 10px;
-      font-family: 'Fira Code', monospace; font-size: 1rem;
-      text-align: center; letter-spacing: 2px; margin-bottom: 1.2rem;
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.7; }
     }
 
-    .auth-input-field:focus { outline: none; border-color: var(--cyan); }
+    .hero-title { font-size: 2.8rem; font-weight: 900; line-height: 1.15; margin-bottom: 1.2rem; }
+    .hero-desc { font-size: 1rem; line-height: 1.7; color: var(--text-muted); margin-bottom: 2rem; }
+    .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
 
-    .auth-btn-login {
-      width: 100%; background: linear-gradient(135deg, var(--cyan), var(--indigo));
-      border: none; color: #fff; padding: 0.85rem; border-radius: 10px;
-      font-weight: 800; font-size: 1rem; cursor: pointer;
+    .btn-glow {
+      background: linear-gradient(135deg, #7a73ff, #ff62c0, #ff6f61);
+      background-size: 200% 200%;
+      color: #fff;
+      padding: 0.85rem 1.6rem;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 0 25px rgba(122, 115, 255, 0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      border: none;
     }
 
-    .auth-err-msg { color: #ef4444; font-size: 0.82rem; margin-top: 0.8rem; display: none; }
+    .btn-glow:active { transform: scale(0.98); }
 
-    .admin-wrapper { display: none; max-width: 950px; margin: 0 auto 3rem; }
-
-    .admin-header {
-      background: var(--surface); border: 1px solid var(--border);
-      padding: 1.2rem 1.8rem; border-radius: 18px;
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 1.6rem;
+    .btn-outline {
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text);
+      padding: 0.85rem 1.6rem;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
     }
 
-    .admin-brand-info { display: flex; align-items: center; gap: 0.8rem; }
-    .admin-logo {
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      border-top: 1px solid var(--surface-border);
+      padding-top: 1.6rem;
+    }
+
+    .stat-box { display: flex; flex-direction: column; }
+    .stat-number { 
+      font-size: 1.6rem; 
+      font-weight: 800; 
+      color: var(--stripe-orange); 
+      font-family: 'Fira Code', monospace; 
+    }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+
+    .hero-right { display: flex; flex-direction: column; gap: 1.8rem; align-items: center; width: 100%; }
+    .profile-card { padding: 2rem; text-align: center; width: 100%; max-width: 380px; position: relative; }
+
+    .photo-container {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 1.2rem;
+      border-radius: 50%;
+      padding: 4px;
+      background: linear-gradient(135deg, #7a73ff, #ff62c0, #ffc43d);
+      box-shadow: 0 0 28px rgba(122, 115, 255, 0.45);
+      position: relative;
+    }
+
+    .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #0f172a; }
+
+    .photo-badge {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background: #00e5a3;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 3px solid var(--bg);
+    }
+
+    .hud-window {
+      background: var(--code-bg);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 380px;
       font-family: 'Fira Code', monospace;
-      background: linear-gradient(135deg, var(--cyan), var(--indigo));
-      color: #fff; font-weight: 800; padding: 0.4rem 0.75rem; border-radius: 10px;
+      text-align: left;
+      overflow: hidden;
+      border: 1px solid var(--surface-border);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     }
 
-    .btn-live-view, .btn-logout {
-      background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border);
-      color: #fff; padding: 0.5rem 1rem; border-radius: 10px;
-      text-decoration: none; font-weight: 700; font-size: 0.85rem; cursor: pointer;
-    }
-    .btn-logout { border-color: #ef4444; color: #ef4444; }
-
-    .master-tabs {
-      display: flex; gap: 0.6rem; background: var(--surface);
-      padding: 0.5rem; border-radius: 14px; border: 1px solid var(--border);
-      margin-bottom: 1.8rem; overflow-x: auto;
+    .hud-bar {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.6rem 1.1rem;
+      border-bottom: 1px solid var(--surface-border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .master-tab-btn {
-      flex: 1; min-width: 160px; background: transparent; border: none;
-      color: var(--text-muted); padding: 0.75rem 1rem; border-radius: 10px;
-      font-family: inherit; font-weight: 700; font-size: 0.92rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    .hud-circle { width: 9px; height: 9px; border-radius: 50%; }
+    .c-red { background: #ff5964; }
+    .c-yellow { background: #ffc43d; }
+    .c-green { background: #00e5a3; }
+
+    .hud-body { 
+      padding: 1.1rem; 
+      font-size: 0.78rem; 
+      line-height: 1.6; 
+      color: #7a73ff; 
+      min-height: 155px;
+      white-space: pre-wrap;
+      word-break: break-all;
     }
 
-    .master-tab-btn.active {
-      background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(99, 102, 241, 0.2));
-      color: var(--cyan); border: 1px solid var(--cyan);
+    .brand-spotlight { max-width: 1300px; margin: 1rem auto 4rem; padding: 0 1.4rem; }
+
+    .spotlight-card {
+      padding: 2.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
     }
 
-    .tab-content-panel {
-      display: none; background: var(--surface);
-      border: 1px solid var(--border); border-radius: 20px;
+    .spotlight-card::after {
+      content: "AIMANIX";
+      position: absolute;
+      right: -20px;
+      bottom: -35px;
+      font-size: 7rem;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.025);
+      pointer-events: none;
+    }
+
+    .spotlight-text h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.6rem; }
+    .spotlight-text p { color: var(--text-muted); max-width: 750px; font-size: 0.95rem; line-height: 1.6; }
+
+    .speed-banner { max-width: 1300px; margin: 0 auto 4rem; padding: 0 1.4rem; }
+
+    .speed-card {
       padding: 2rem;
-    }
-    .tab-content-panel.active { display: block; }
-
-    .panel-section-title { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 0.4rem; }
-    .panel-section-desc { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.8rem; }
-
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.1rem; }
-    .form-group.full-width { grid-column: 1 / -1; }
-
-    label { font-size: 0.85rem; font-weight: 700; color: var(--cyan); }
-
-    input, textarea, select {
-      background: rgba(3, 7, 18, 0.85); border: 1px solid var(--border);
-      color: #fff; padding: 0.75rem 1rem; border-radius: 10px;
-      font-family: inherit; font-size: 0.9rem;
-    }
-    textarea { min-height: 140px; line-height: 1.6; }
-
-    .btn-action-primary {
-      background: linear-gradient(135deg, var(--cyan), var(--indigo));
-      border: none; color: #fff; padding: 0.85rem 2rem; border-radius: 10px;
-      font-weight: 800; font-size: 0.95rem; cursor: pointer;
-    }
-    .btn-action-secondary {
-      background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444;
-      color: #ef4444; padding: 0.85rem 1.6rem; border-radius: 10px;
-      font-weight: 800; font-size: 0.95rem; cursor: pointer; margin-left: 0.6rem;
-    }
-    .btn-action-pink { background: linear-gradient(135deg, #ff5e62, #ff2a7a); }
-
-    .manage-list-box { margin-top: 2.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; }
-    .data-item-card {
-      background: rgba(3, 7, 18, 0.6); border: 1px solid var(--border);
-      border-radius: 12px; padding: 0.9rem 1.2rem; display: flex;
-      justify-content: space-between; align-items: center; margin-bottom: 0.8rem;
-    }
-    .btn-delete-item {
-      background: rgba(239, 68, 68, 0.12); border: 1px solid #ef4444;
-      color: #ef4444; padding: 0.4rem 0.8rem; border-radius: 8px; cursor: pointer;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.8rem;
+      align-items: center;
     }
 
-    @media (max-width: 768px) {
-      .form-grid { grid-template-columns: 1fr; }
-      .admin-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .speed-badge-10x {
+      font-size: 2.8rem;
+      font-weight: 900;
+      font-family: 'Fira Code', monospace;
+      color: var(--stripe-orange);
+      text-shadow: 0 0 18px rgba(255, 111, 97, 0.45);
+    }
+
+    /* Pricing Section */
+    .pricing-section { max-width: 1300px; margin: 0 auto 5rem; padding: 0 1.4rem; }
+    
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.8rem;
+      margin-top: 2rem;
+    }
+
+    .pricing-card {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .pricing-badge {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: linear-gradient(135deg, #ff62c0, #7a73ff);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      box-shadow: 0 0 14px rgba(255, 98, 192, 0.45);
+      text-transform: uppercase;
+    }
+
+    .pricing-head { margin-bottom: 1.5rem; }
+    .pricing-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .pricing-amount {
+      font-size: 2.2rem;
+      font-weight: 900;
+      font-family: 'Fira Code', monospace;
+      color: var(--stripe-yellow);
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+    }
+    .pricing-amount span { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; font-family: inherit; }
+    .pricing-desc { color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; margin-top: 0.8rem; }
+
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin: 1.4rem 0 1.8rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--surface-border);
+    }
+    .pricing-feature-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.88rem; }
+    .pricing-feature-item svg { width: 16px; height: 16px; fill: var(--stripe-blue); flex-shrink: 0; }
+
+    .pricing-disclaimer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .services { max-width: 1300px; margin: 0 auto; padding: 2rem 1.4rem 4rem; }
+    .section-head { text-align: center; margin-bottom: 3rem; }
+    .section-title { font-size: 2.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .section-subtitle { color: var(--text-muted); max-width: 650px; margin: 0 auto; font-size: 0.95rem; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .skill-box { padding: 1.8rem; display: flex; flex-direction: column; }
+    .skill-icon { font-size: 2rem; margin-bottom: 1rem; display: inline-block; }
+    .skill-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.7rem; }
+    .skill-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+
+    .contact-section { max-width: 1300px; margin: 0 auto 5rem; padding: 0 1.4rem; }
+
+    .contact-container {
+      padding: 2.4rem 1.8rem;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .contact-info h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; }
+    .contact-info p { color: var(--text-muted); margin-bottom: 1.8rem; line-height: 1.6; font-size: 0.92rem; }
+
+    .contact-list { list-style: none; display: flex; flex-direction: column; gap: 1.1rem; }
+    .contact-item { display: flex; align-items: flex-start; gap: 0.9rem; font-size: 0.92rem; }
+
+    .contact-item-icon {
+      font-size: 1.2rem;
+      background: rgba(122, 115, 255, 0.12);
+      padding: 0.45rem;
+      border-radius: 8px;
+      color: var(--stripe-pink);
+    }
+
+    .contact-link { color: var(--stripe-blue); text-decoration: none; font-weight: 600; }
+
+    .map-frame {
+      width: 100%;
+      height: 340px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--surface-border);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Video Bubble Style */
+    .video-bubble-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .video-hint-pill {
+      background: rgba(14, 16, 43, 0.9);
+      border: 1px solid var(--stripe-pink);
+      box-shadow: 0 0 18px rgba(255, 98, 192, 0.45);
+      color: #fdfdfe;
+      padding: 0.4rem 0.85rem;
+      border-radius: 30px;
+      font-size: 0.76rem;
+      margin-bottom: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .video-bubble-orb {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(135deg, #ff62c0, #7a73ff, #00d4ff);
+      box-shadow: 0 0 25px rgba(122, 115, 255, 0.5);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease;
+    }
+
+    .video-bubble-orb video, .video-bubble-orb iframe { 
+      width: 100%; height: 100%; border-radius: 50%; object-fit: cover; pointer-events: none; border: none;
+    }
+
+    .video-modal-card {
+      display: none;
+      position: fixed;
+      bottom: 105px;
+      right: 20px;
+      width: 310px;
+      background: rgba(14, 16, 43, 0.95);
+      border: 1px solid var(--stripe-purple);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(122, 115, 255, 0.4);
+      border-radius: 20px;
+      padding: 1rem;
+      backdrop-filter: blur(18px);
+      z-index: 10000;
+    }
+
+    .video-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+    .video-close-btn { background: transparent; border: none; color: #a3b0cc; font-size: 1.2rem; cursor: pointer; }
+    .modal-video-frame { width: 100%; height: 280px; border-radius: 14px; overflow: hidden; background: #000; position: relative; }
+    .modal-video-frame video, .modal-video-frame iframe { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; border: none; }
+    .video-action-bar { display: flex; gap: 0.7rem; margin-top: 0.8rem; }
+
+    @media (max-width: 950px) {
+      .hero { grid-template-columns: 1fr; text-align: center; gap: 2.5rem; padding-top: 2rem; }
+      .startup-pill { margin: 0 auto 1.2rem; }
+      .hero-title { font-size: 2.4rem; }
+      .hero-buttons { justify-content: center; }
+      .hero-stats { grid-template-columns: repeat(3, 1fr); }
+      .spotlight-card { flex-direction: column; text-align: center; gap: 1.4rem; }
+      .speed-card { grid-template-columns: 1fr; text-align: center; }
+      .speed-badge-10x { margin: 0 auto; }
+      .contact-container { grid-template-columns: 1fr; }
+      .video-modal-card { right: 15px; width: calc(100vw - 30px); bottom: 105px; }
     }
   </style>
 </head>
-<body>
+<body lang="bn">
 
-  <div id="auth-screen">
-    <div class="auth-card">
-      <div class="auth-icon-orb">🔒</div>
-      <h2>Aimanix Admin Auth</h2>
-      <p>সুরক্ষিত ড্যাশবোর্ডে প্রবেশ করতে মাস্টার পাসওয়ার্ড দিন</p>
-      <input type="password" id="admin-pass-input" class="auth-input-field" placeholder="••••••••••••" onkeypress="handleAuthKey(event)">
-      <button class="auth-btn-login" onclick="verifyPassword()">আনলক কনসোল</button>
-      <div class="auth-err-msg" id="auth-err">❌ পাসওয়ার্ড ভুল হয়েছে! আবার চেষ্টা করুন।</div>
+  <div class="cyber-grid"></div>
+  <canvas id="neural-canvas"></canvas>
+
+  <header>
+    <nav class="navbar">
+      <a href="#" class="brand">
+        <img src="https://i.postimg.cc/4xvFzpjt/ai-image-389f8f00ffb641d888cd0bce1d10e2fd.png" alt="Aimanix AI Logo" class="brand-logo-img">
+        <span class="brand-icon">Aimanix.AI</span>
+        <span class="brand-name" id="view-brand-name">Anowar Hossain</span>
+      </a>
+
+      <!-- SMART SCI-FI CPU ON SWITCH WITH REAL-TIME AUDIO SYNTHESIS -->
+      <div class="cpu-switch-wrap" onclick="openSciFiMenu()" title="Power On Neural Menu">
+        <div class="cpu-core-orb">
+          <svg class="cpu-power-icon" viewBox="0 0 24 24">
+            <path d="M12 2v10M18.4 6.6a9 9 0 1 1-12.8 0"/>
+          </svg>
+        </div>
+        <span class="cpu-switch-label">CPU CORE</span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ANIMATED SCI-FI HUD CPU DRAWER MENU -->
+  <div class="sci-fi-menu-overlay" id="sci-fi-menu-overlay" onclick="closeSciFiMenu(event)">
+    <div class="sci-fi-hud-drawer" id="sci-fi-hud-drawer">
+      <div class="hud-header">
+        <div class="hud-title">
+          <span style="color: #00e5a3;">●</span> SYSTEM READY // MENU
+        </div>
+        <button class="hud-close-btn" onclick="toggleSciFiMenuState(false)">✕</button>
+      </div>
+
+      <div class="hud-nav-links">
+        <a href="school.html" class="hud-link-card" onclick="playBeepClick()">
+          <div class="hud-link-icon">📚</div>
+          <div>
+            <div>আমার স্কুল</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem;">Class VIII & IX স্মার্ট স্টাডি নোটস</small>
+          </div>
+        </a>
+
+        <a href="kobita.html" class="hud-link-card" onclick="playBeepClick()">
+          <div class="hud-link-icon">✍️</div>
+          <div>
+            <div>কবিতার আকাশ</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem;">এআই সাহিত্য ও সৃজনশীল আসর</small>
+          </div>
+        </a>
+
+        <a href="#pricing" class="hud-link-card" onclick="playBeepClick(); toggleSciFiMenuState(false);">
+          <div class="hud-link-icon">💎</div>
+          <div>
+            <div>প্যাকেজ ও রেট</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem;">ল্যান্ডিং পেজ, ব্যাকএন্ড ও অ্যাপ</small>
+          </div>
+        </a>
+
+        <a href="#contact" class="hud-link-card" onclick="playBeepClick(); toggleSciFiMenuState(false);">
+          <div class="hud-link-icon">📍</div>
+          <div>
+            <div>যোগাযোগ</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem;">ঠিকানা, হোয়াটসঅ্যাপ ও ম্যাপ</small>
+          </div>
+        </a>
+      </div>
+
+      <div class="hud-quick-controls">
+        <button class="hud-btn-ctrl" id="lang-toggle" onclick="playBeepClick(); toggleLanguage();">English</button>
+        <button class="hud-btn-ctrl" id="theme-toggle" onclick="playBeepClick(); toggleTheme();">☀️ থিম</button>
+      </div>
     </div>
   </div>
 
-  <div class="admin-wrapper" id="admin-main">
-    <header class="admin-header">
-      <div class="admin-brand-info">
-        <span class="admin-logo">Aimanix.AI</span>
+  <main>
+    <section class="hero">
+      <div class="hero-left">
+        <div class="startup-pill">
+          <span class="pulse-dot"></span>
+          <span class="startup-tag">AIMANIX AI</span>
+          <span style="color: var(--text-muted); font-size: 0.85rem;" id="view-hero-tag">• Next-Gen Intelligent Systems</span>
+        </div>
+        
+        <h1 class="hero-title">
+          <span id="view-hero-greeting">হ্যালো, আমি</span> <br>
+          <span class="gradient-text" id="typewriter-hero"></span><span class="typewriter-cursor"></span>
+        </h1>
+        
+        <p class="hero-desc" id="view-hero-desc">
+          প্রতিষ্ঠাতা, <strong>Aimanix AI</strong> | AI-Powered Full-Stack Web Developer এবং এআই অটোমেশন স্পেশালিস্ট। ট্র্যাডিশনাল কোডিংয়ের শক্তিশালী ভিত্তি এবং আধুনিক এআই প্রযুক্তির (Vibe Coding) নিখুঁত কম্বিনেশন ব্যবহার করে আমি যেকোনো স্কেলের স্মার্ট, সিকিউর এবং হাই-পারফরম্যান্স ওয়েব অ্যাপ্লিকেশন তৈরি করতে পারি।
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#" id="view-wa-link" class="btn-glow" target="_blank" rel="noopener">
+            <span id="view-btn-wa">💬 সরাসরি WhatsApp-এ বার্তা দিন</span>
+          </a>
+          <a href="#pricing" class="btn-outline">
+            <span id="view-btn-pricing">💎 প্যাকেজ ও প্রাইসিং দেখুন</span>
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-box">
+            <span class="stat-number">10X</span>
+            <span class="stat-label" id="stat-speed-label">Faster Execution</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number">Dual</span>
+            <span class="stat-label" id="stat-db-label">MySQL & MongoDB</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number">100%</span>
+            <span class="stat-label" id="stat-sec-label">Secure Architecture</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="neon-border-box profile-card">
+          <div class="photo-container">
+            <img id="view-profile-img" class="profile-img" src="https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg" alt="Anowar Hossain">
+            <div class="photo-badge" title="Active System"></div>
+          </div>
+          <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.3rem;" id="view-card-name">Anowar Hossain</h3>
+          <p style="color: var(--stripe-pink); font-size: 0.88rem; font-weight: 600;" id="view-card-title">Founder, Aimanix AI</p>
+          <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.4rem;">AI Full-Stack Developer & Automation Lead</p>
+        </div>
+
+        <div class="hud-window">
+          <div class="hud-bar">
+            <span class="hud-circle c-red"></span>
+            <span class="hud-circle c-yellow"></span>
+            <span class="hud-circle c-green"></span>
+            <span style="color: #8c9bb7; font-size: 0.75rem; margin-left: 0.5rem;">neural_core_init.py</span>
+          </div>
+          <div class="hud-body" id="code-terminal"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="brand-spotlight" id="aimanix">
+      <div class="neon-border-box spotlight-card">
+        <div class="spotlight-text">
+          <h2 class="gradient-text" id="view-spotlight-title">Aimanix AI: ইনটেলিজেন্ট অটোমেশন ও সফটওয়্যার সলিউশন</h2>
+          <p id="view-spotlight-desc">
+            Aimanix AI হলো আমাদের বিশেষায়িত উদ্যোগ, যার লক্ষ্য জটিল বিজনেস প্রসেসকে কৃত্রিম বুদ্ধিমত্তা ও আধুনিক কোডিং আর্কিটেকচারের মাধ্যমে স্বয়ংক্রিয় এবং গতিশীল করা। এআই মডেল ইন্টিগ্রেশন থেকে শুরু করে হাই-স্পিড ওয়েব অ্যাপ্লিকেশন—সবকিছুতেই নির্ভরযোগ্য ও স্কেলেবল প্রযুক্তি সরবরাহ করে Aimanix AI।
+          </p>
+        </div>
+        <a href="#contact" class="btn-glow" style="white-space: nowrap;" id="view-btn-partner">পার্টনারশিপ করুন</a>
+      </div>
+    </section>
+
+    <section class="speed-banner">
+      <div class="neon-border-box speed-card">
+        <div class="speed-badge-10x">10X</div>
         <div>
-          <h1 style="font-size: 1.2rem; color: #fff;">Master Admin Console</h1>
-          <p style="font-size: 0.78rem; color: var(--text-muted);">সেন্ট্রাল ডেটা ও পাবলিশার ড্যাশবোর্ড</p>
+          <h3 style="font-size: 1.35rem; margin-bottom: 0.5rem; font-weight: 700;" id="view-speed-title">
+            আমার বিশেষত্ব ও কাজের গতি
+          </h3>
+          <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.65;" id="view-speed-desc">
+            আধুনিক 'Vibe Coding' এবং 'Ultimate AI Systems' প্রযুক্তিতে দক্ষ হওয়ায় আমি প্রম্পট ইঞ্জিনিয়ারিংয়ের মাধ্যমে সাধারণ সময়ের চেয়ে ১০ গুণ দ্রুত প্রজেক্ট ডিজাইন ও প্রোটোটাইপ তৈরি করতে পারি। তবে আমি শুধু এআই-এর ওপর নির্ভরশীল নই; আমার ব্যাকএন্ড (Node.js, Flask) এবং ডুয়াল-ডেটাবেজ (MySQL, MongoDB) নলেজ থাকার কারণে আমি এআই জেনারেটেড কোডকে নিখুঁতভাবে কাস্টমাইজ, আর্কিটেক্ট, ডিবাগ এবং হাই-সিকিউর করতে সক্ষম। সহজ কথায়—আপনি পাচ্ছেন এআই-এর আল্ট্রা-ফাস্ট স্পিড এবং একজন প্রো-ডেভেলপারের সলিড টেকনিক্যাল ফিনিশিং।
+          </p>
         </div>
       </div>
-      <div style="display: flex; gap: 0.6rem; align-items: center;">
-        <a href="index.html" target="_blank" class="btn-live-view">🌐 মূল সাইট</a>
-        <button class="btn-logout" onclick="logoutAdmin()">লক করুন 🔒</button>
-      </div>
-    </header>
+    </section>
 
-    <div class="master-tabs">
-      <button class="master-tab-btn active" onclick="switchTab('home')">🏠 হোমপেজ ও ভিডিও</button>
-      <button class="master-tab-btn" onclick="switchTab('school')">📚 আমার স্কুল</button>
-      <button class="master-tab-btn" onclick="switchTab('kobita')">✍️ কবিতার আকাশ</button>
+    <section class="pricing-section" id="pricing">
+      <div class="section-head">
+        <h2 class="section-title gradient-text" id="view-pricing-title">আমরা সবচেয়ে কম মূল্যে সেরা পরিষেবা দিই</h2>
+        <p class="section-subtitle" id="view-pricing-subtitle">কোয়ালিটি ও সিকিউরিটিতে কোনো আপোষ ছাড়া সবচেয়ে সাশ্রয়ী প্যাকেজ</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="neon-border-box pricing-card">
+          <div class="pricing-badge">Starter</div>
+          <div class="pricing-head">
+            <h3 class="pricing-title" id="p1-title">ল্যান্ডিং পেজ ডেভেলপমেন্ট</h3>
+            <div class="pricing-amount">₹৭,৯৯৯ <span id="p1-unit">/ এককালীন</span></div>
+            <p class="pricing-desc" id="p1-desc">ব্যবসা বা ব্যক্তিগত পোর্টফোলিওর জন্য আল্ট্রা-ফাস্ট, আধুনিক ও ১০০% মোবাইল রেসপন্সিভ হাই-কনভার্টিং ল্যান্ডিং পেজ।</p>
+          </div>
+          <ul class="pricing-features">
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p1-f1">আধুনিক ও প্রিমিয়াম রেসপনসিভ UI/UX</span>
+            </li>
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p1-f2">সুপারফাস্ট লোডিং স্পিড ও এসইও ফ্রেন্ডলি</span>
+            </li>
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p1-f3">WhatsApp ও কল ইন্টিগ্রেশন</span>
+            </li>
+          </ul>
+          <a href="https://wa.me/919143181401" target="_blank" class="btn-glow" style="width: 100%; justify-content: center;" id="p1-btn">অর্ডার করুন</a>
+        </div>
+
+        <div class="neon-border-box pricing-card">
+          <div class="pricing-badge" style="background: linear-gradient(135deg, #00e5a3, #00d4ff);">Popular</div>
+          <div class="pricing-head">
+            <h3 class="pricing-title" id="p2-title">ব্যাকএন্ড যুক্ত ওয়েবসাইট</h3>
+            <div class="pricing-amount">₹১৫,৯৯৯ <span id="p2-unit">/ শুরু মাত্র</span></div>
+            <p class="pricing-desc" id="p2-desc">ডাইনামিক ফিচার, সুরক্ষিত ডেটাবেজ ও এপিআই সমৃদ্ধ শক্তিশালী কমপ্লিট ওয়েব অ্যাপ্লিকেশন।</p>
+          </div>
+          <ul class="pricing-features">
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p2-f1">Node.js / Python Flask ব্যাকএন্ড সিস্টেম</span>
+            </li>
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p2-f2">MySQL অথবা MongoDB ডেটাবেজ ম্যানেজমেন্ট</span>
+            </li>
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p2-f3">কাস্টম অ্যাডমিন প্যানেল / এপিআই ইন্টিগ্রেশন</span>
+            </li>
+          </ul>
+          <a href="https://wa.me/919143181401" target="_blank" class="btn-glow" style="width: 100%; justify-content: center;" id="p2-btn">অর্ডার করুন</a>
+        </div>
+
+        <div class="neon-border-box pricing-card">
+          <div class="pricing-badge">App</div>
+          <div class="pricing-head">
+            <h3 class="pricing-title" id="p3-title">মোবাইল অ্যাপ বিল্ডিং</h3>
+            <div class="pricing-amount">₹৭,৯৯৯ <span id="p3-unit">/ প্লেস্টোর ছাড়া</span></div>
+            <p class="pricing-desc" id="p3-desc">আপনার বিজনেস বা সার্ভিসের জন্য রেডিমেড ক্রস-প্ল্যাটফর্ম মোবাইল অ্যাপ্লিকেশন (সরাসরি ইনস্টলযোগ্য APK বিল্ড)।</p>
+          </div>
+          <ul class="pricing-features">
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p3-f1">স্মুথ এবং দ্রুতগতির অ্যান্ড্রয়েড APK ফাইল</span>
+            </li>
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p3-f2">ওয়েব টু অ্যাপ অথবা কাস্টম ফাংশনালিটি</span>
+            </li>
+            <li class="pricing-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span id="p3-f3">প্লেস্টোর ছাড়াই সরাসরি শেয়ার ও ইনস্টলযোগ্য</span>
+            </li>
+          </ul>
+          <a href="https://wa.me/919143181401" target="_blank" class="btn-glow" style="width: 100%; justify-content: center;" id="p3-btn">অর্ডার করুন</a>
+        </div>
+      </div>
+
+      <div class="pricing-disclaimer" id="view-pricing-disclaimer">
+        * সব ক্ষেত্রে শর্ত প্রযোজ্য (Terms & Conditions Apply based on project scope).
+      </div>
+    </section>
+
+    <section class="services" id="services">
+      <div class="section-head">
+        <h2 class="section-title gradient-text" id="view-services-title">টেকনিক্যাল স্কিলসেট ও সার্ভিস</h2>
+        <p class="section-subtitle" id="view-services-subtitle">Aimanix AI ও আধুনিক ওয়েব ডেভেলপমেন্টের সম্পূর্ণ প্রযুক্তিগত সমাহার</p>
+      </div>
+
+      <div class="skills-grid" id="skills-container"></div>
+    </section>
+
+    <section class="contact-section" id="contact">
+      <div class="neon-border-box contact-container">
+        <div class="contact-info">
+          <h3 class="gradient-text" id="view-contact-heading">যোগাযোগের ঠিকানা</h3>
+          <p id="view-contact-sub">আপনার যেকোনো নতুন প্রজেক্ট, এআই অটোমেশন আলোচনা বা কনসালটেশনের জন্য সরাসরি যুক্ত হোন।</p>
+
+          <ul class="contact-list">
+            <li class="contact-item">
+              <span class="contact-item-icon">👤</span>
+              <div>
+                <strong id="lbl-name">নাম:</strong><br>
+                <span>আনোয়ার হোসেন</span>
+              </div>
+            </li>
+            <li class="contact-item">
+              <span class="contact-item-icon">📍</span>
+              <div>
+                <strong id="lbl-addr">ঠিকানা:</strong><br>
+                <span id="view-contact-address">খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩</span>
+              </div>
+            </li>
+            <li class="contact-item">
+              <span class="contact-item-icon">📞</span>
+              <div>
+                <strong id="lbl-phone">মোবাইল নম্বর:</strong><br>
+                <a href="tel:9143181401" class="contact-link" id="view-contact-phone">৯১৪৩১৮১৪০১</a>
+              </div>
+            </li>
+            <li class="contact-item">
+              <span class="contact-item-icon">✉️</span>
+              <div>
+                <strong id="lbl-email">ইমেইল অ্যাড্রেস:</strong><br>
+                <a href="mailto:rohanadisha@gmail.com" class="contact-link">rohanadisha@gmail.com</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="map-frame">
+          <iframe 
+            src="https://maps.google.com/maps?q=Deganga%2C%20North%2024%20Parganas%2C%20West%20Bengal%20743423&t=&z=13&ie=UTF8&iwloc=&output=embed" 
+            width="100%" 
+            height="100%" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="video-bubble-container" id="video-bubble-wrap">
+    <div class="video-hint-pill" id="video-hint" onclick="openVideoModal()">
+      <span>🎙️ ইন্ট্রো শুনতে ট্যাপ করুন!</span>
     </div>
 
-    <!-- TAB 1: HOMEPAGE SETTINGS -->
-    <div class="tab-content-panel active" id="panel-home">
-      <div class="panel-section-title">🏠 হোমপেজের কনটেন্ট ও এআই ভিডিও লিংক</div>
-      <p class="panel-section-desc">শুধুমাত্র যে ফিল্ডটি বদলাতে চান সেটি পূরণ করুন। অন্য যেকোনো তথ্য অক্ষুণ্ণ থাকবে।</p>
-
-      <div class="form-grid">
-        <div class="form-group full-width" style="background: rgba(99, 102, 241, 0.08); padding: 1rem; border-radius: 12px; border: 1px solid var(--indigo);">
-          <label style="color: #a5b4fc;">🎬 এআই ইন্ট্রো ভিডিও লিঙ্ক (Direct MP4, CDN অথবা YouTube):</label>
-          <input type="text" id="edit-video-url" placeholder="https://files.catbox.moe/fmhga1.mp4">
-          <small style="color: var(--text-muted); font-size: 0.78rem; margin-top: 4px;">টিপ: সরাসরি ক্যাটবক্স লিংক বা ইউটিউব ওয়াচ লিংক উভয়ই কাজ করবে।</small>
-        </div>
-
-        <div class="form-group full-width">
-          <label>📸 নিজের ছবির লিংক (URL):</label>
-          <input type="text" id="edit-photo-url" placeholder="https://...">
-        </div>
-
-        <div class="form-group">
-          <label>প্রতিষ্ঠাতার নাম (বাংলা):</label>
-          <input type="text" id="edit-name-bn">
-        </div>
-
-        <div class="form-group">
-          <label>Founder Name (English):</label>
-          <input type="text" id="edit-name-en">
-        </div>
-
-        <div class="form-group full-width">
-          <label>হোমপেজ বিবরণ (বাংলা):</label>
-          <textarea id="edit-desc-bn"></textarea>
-        </div>
-
-        <div class="form-group full-width">
-          <label>Home Description (English):</label>
-          <textarea id="edit-desc-en"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>হোয়াটসঅ্যাপ নম্বর (যেমন: 919143181401):</label>
-          <input type="text" id="edit-wa">
-        </div>
-
-        <div class="form-group">
-          <label>মোবাইল নম্বর (ডিসপ্লে):</label>
-          <input type="text" id="edit-phone">
-        </div>
-      </div>
-
-      <div style="margin-top: 1.5rem; display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-        <button class="btn-action-primary" onclick="saveHomeData()">💾 পরিবর্তিত তথ্য সেভ করুন</button>
-        <button class="btn-action-secondary" onclick="restoreDefaultHomeData()">🔄 মূল তথ্যে রিসেট করুন</button>
-      </div>
+    <div class="video-bubble-orb" id="video-bubble-orb" onclick="openVideoModal()">
+      <!-- DYNAMIC VIDEO/IFRAME IS INJECTED HERE VIA JAVASCRIPT -->
+      <div id="bubble-video-placeholder" style="width: 100%; height: 100%;"></div>
+      <div class="pulse-ring"></div>
     </div>
 
-    <!-- TAB 2: SCHOOL NOTES (V, VI, VII, VIII, IX, MADHYAMIK, XI, H.S) -->
-    <div class="tab-content-panel" id="panel-school">
-      <div class="panel-section-title">📚 আমার স্কুল: AI স্টাডি শিট ও প্রিন্ট A4 বুকলেট</div>
-      <p class="panel-section-desc">রয়্যাল ভায়োলেট ও গোল্ডেন প্রিমিয়াম থিমে স্বয়ংক্রিয়ভাবে ক্লাসভিত্তিক স্টাডি শিট তৈরি হবে।</p>
-
-      <div class="form-grid">
-        <div class="form-group">
-          <label>শ্রেণী নির্বাচন করুন:</label>
-          <select id="school-grade">
-            <option value="V">Class V (পঞ্চম শ্রেণী)</option>
-            <option value="VI">Class VI (ষষ্ঠ শ্রেণী)</option>
-            <option value="VII">Class VII (সপ্তম শ্রেণী)</option>
-            <option value="VIII" selected>Class VIII (অষ্টম শ্রেণী)</option>
-            <option value="IX">Class IX (নবম শ্রেণী)</option>
-            <option value="MADHYAMIK">Madhyamik (মাধ্যমিক শ্রেণী)</option>
-            <option value="XI">Class XI (একাদশ শ্রেণী)</option>
-            <option value="H.S">H.S (উচ্চ মাধ্যমিক শ্রেণী)</option>
-          </select>
+    <div class="video-modal-card" id="video-modal-card">
+      <div class="video-modal-header">
+        <div style="font-weight: 700; color: #ff62c0; font-size: 0.95rem;">
+          🤖 Aimanix AI Assistant
         </div>
-
-        <div class="form-group">
-          <label>অধ্যায় বা বিষয়ের নাম:</label>
-          <input type="text" id="school-subject" placeholder="যেমন: বাংলা - সাহিত্য মেলা (১ম অধ্যায়)">
-        </div>
-
-        <div class="form-group full-width">
-          <label>বইয়ের কাঁচা টেক্সট (Raw Text) পেস্ট করুন:</label>
-          <textarea id="school-raw" placeholder="বইয়ের যেকোনো টেক্সট এখানে পেস্ট করুন... AI স্বয়ংক্রিয়ভাবে সিলেবাস ও ক্লাস অনুযায়ী স্টাডি নোট তৈরি করবে।"></textarea>
-        </div>
+        <button class="video-close-btn" onclick="closeVideoModal()">✕</button>
       </div>
 
-      <div style="margin-top: 1rem;">
-        <button class="btn-action-primary" id="btn-school-submit" onclick="generateSchoolNote()">🚀 AI স্টাডি শিট তৈরি ও পাবলিশ করুন</button>
+      <div class="modal-video-frame" id="modal-video-frame">
+        <!-- DYNAMIC MODAL VIDEO/IFRAME IS INJECTED HERE VIA JAVASCRIPT -->
       </div>
 
-      <div class="manage-list-box">
-        <div style="font-weight: 800; color: var(--cyan); margin-bottom: 1rem;">📑 বর্তমান স্টাডি নোটসের তালিকা</div>
-        <div id="school-notes-list"></div>
-      </div>
-    </div>
-
-    <!-- TAB 3: KOBITAR AKASH (পূর্বের মতো VIII, IX ও special অপরিবর্তিত) -->
-    <div class="tab-content-panel" id="panel-kobita">
-      <div class="panel-section-title" style="color: var(--pink);">✍️ কবিতার আকাশ: AI স্বয়ংক্রিয় কবিতা সংকলন</div>
-      <p class="panel-section-desc">ডার্ক অরোরা নিওন পিঙ্ক থিমে স্বয়ংক্রিয়ভাবে পাবলিশ হবে।</p>
-
-      <div class="form-grid">
-        <div class="form-group">
-          <label style="color: var(--pink);">বিভাগ:</label>
-          <select id="kobita-category">
-            <option value="VIII">Class VIII সাহিত্য আসর</option>
-            <option value="IX">Class IX সাহিত্য আসর</option>
-            <option value="special">সৃজনশীল মুক্ত আসর</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label style="color: var(--pink);">কবির নাম (ঐচ্ছিক):</label>
-          <input type="text" id="kobita-author">
-        </div>
-
-        <div class="form-group full-width">
-          <label style="color: var(--pink);">Raw কবিতা পেস্ট করুন:</label>
-          <textarea id="kobita-raw" placeholder="কবিতার চরণগুলো লিখুন..."></textarea>
-        </div>
-      </div>
-
-      <div style="margin-top: 1rem;">
-        <button class="btn-action-primary btn-action-pink" id="btn-kobita-submit" onclick="processKobitaAI()">✨ কবিতা প্রসেস ও প্রকাশ করুন</button>
-      </div>
-
-      <div class="manage-list-box">
-        <div style="font-weight: 800; color: var(--pink); margin-bottom: 1rem;">📜 প্রকাশিত কবিতার তালিকা</div>
-        <div id="poems-list"></div>
+      <div class="video-action-bar">
+        <button class="btn-glow" style="padding: 0.5rem 1rem; font-size: 0.85rem; width: 100%; justify-content: center;" onclick="restartVideo()">
+          ▶️ আবার শুনুন
+        </button>
+        <a href="https://wa.me/919143181401" id="modal-wa-btn" target="_blank" class="btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+          WhatsApp
+        </a>
       </div>
     </div>
   </div>
 
   <script>
-    const firebaseConfig = {
-      authDomain: "aimanix-web.firebaseapp.com",
-      projectId: "aimanix-web",
-      storageBucket: "aimanix-web.appspot.com"
+    let currentLang = 'bn';
+
+    const defaultData = {
+      videoUrl: "https://files.catbox.moe/fmhga1.mp4",
+      photo: "https://i.postimg.cc/wTcMTtJv/Screenshot-20260903-000545.jpg",
+      whatsapp: "919143181401",
+      phone: "৯১৪৩১৮১৪০১",
+      phoneEn: "+91 9143181401",
+      email: "rohanadisha@gmail.com",
+      
+      bn: {
+        brandName: "Anowar Hossain",
+        heroGreeting: "হ্যালো, আমি",
+        heroName: "আনোয়ার হোসেন",
+        heroTag: "• নেক্সট-জেন ইন্টেলিজেন্ট সিস্টেমস",
+        heroDesc: "প্রতিষ্ঠাতা, <strong>Aimanix AI</strong> | AI-Powered Full-Stack Web Developer এবং এআই অটোমেশন স্পেশালিস্ট। ট্র্যাডিশনাল কোডিংয়ের শক্তিশালী ভিত্তি এবং আধুনিক এআই প্রযুক্তির (Vibe Coding) নিখুঁত কম্বিনেশন ব্যবহার করে আমি যেকোনো স্কেলের স্মার্ট, সিকিউর এবং হাই-পারফরম্যান্স ওয়েব অ্যাপ্লিকেশন তৈরি করতে পারি।",
+        btnWa: "💬 সরাসরি WhatsApp-এ বার্তা দিন",
+        btnPricing: "💎 প্যাকেজ ও প্রাইসিং দেখুন",
+        statSpeed: "দ্রুত এক্সিকিউশন",
+        statDb: "ডুয়াল ডেটাবেজ সাপোর্ট",
+        statSec: "নিরাপদ আর্কিটেকচার",
+        cardTitle: "প্রতিষ্ঠাতা, Aimanix AI",
+        spotlightTitle: "Aimanix AI: ইনটেলিজেন্ট অটোমেশন ও সফটওয়্যার সলিউশন",
+        spotlightDesc: "Aimanix AI হলো আমাদের বিশেষায়িত উদ্যোগ, যার লক্ষ্য জটিল বিজনেস প্রসেসকে কৃত্রিম বুদ্ধিমত্তা ও আধুনিক কোডিং আর্কিটেকচারের মাধ্যমে স্বয়ংক্রিয় এবং গতিশীল করা। এআই মডেল ইন্টিগ্রেশন থেকে শুরু করে হাই-স্পিড ওয়েব অ্যাপ্লিকেশন—সবকিছুতেই নির্ভরযোগ্য ও স্কেলেবল প্রযুক্তি সরবরাহ করে Aimanix AI।",
+        btnPartner: "পার্টনারশিপ করুন",
+        speedTitle: "আমার বিশেষত্ব ও কাজের গতি",
+        speedDesc: "আধুনিক 'Vibe Coding' এবং 'Ultimate AI Systems' প্রযুক্তিতে দক্ষ হওয়ায় আমি প্রম্পট ইঞ্জিনিয়ারিংয়ের মাধ্যমে সাধারণ সময়ের চেয়ে ১০ গুণ দ্রুত প্রজেক্ট ডিজাইন ও প্রোটোটাইপ তৈরি করতে পারি। তবে আমি শুধু এআই-এর ওপর নির্ভরশীল নই; আমার ব্যাকএন্ড (Node.js, Flask) এবং ডুয়াল-ডেটাবেজ (MySQL, MongoDB) নলেজ থাকার কারণে আমি এআই জেনারেটেড কোডকে নিখুঁতভাবে কাস্টমাইজ, আর্কিটেক্ট, ডিবাগ এবং হাই-সিকিউর করতে সক্ষম। সহজ কথায়—আপনি পাচ্ছেন এআই-এর আল্ট্রা-ফাস্ট স্পিড এবং একজন প্রো-ডেভেলপারের সলিড টেকনিক্যাল ফিনিশিং।",
+        
+        pricingTitle: "আমরা সবচেয়ে কম মূল্যে সেরা পরিষেবা দিই",
+        pricingSubtitle: "কোয়ালিটি ও সিকিউরিটিতে কোনো আপোষ ছাড়া সবচেয়ে সাশ্রয়ী প্যাকেজ",
+        pricingDisclaimer: "* সব ক্ষেত্রে শর্ত প্রযোজ্য (Terms & Conditions Apply based on project scope).",
+        p1Title: "ল্যান্ডিং পেজ ডেভেলপমেন্ট",
+        p1Amount: "₹৭,৯৯৯",
+        p1Unit: "/ এককালীন",
+        p1Desc: "ব্যবসা বা ব্যক্তিগত পোর্টফোলিওর জন্য আল্ট্রা-ফাস্ট, আধুনিক ও ১০০% মোবাইল রেসপন্সিভ হাই-কনভার্টিং ল্যান্ডিং পেজ।",
+        p1F1: "আধুনিক ও প্রিমিয়াম রেসপনসিভ UI/UX",
+        p1F2: "সুপারফাস্ট লোডিং স্পিড ও এসইও ফ্রেন্ডলি",
+        p1F3: "WhatsApp ও সরাসরি কল ইন্টিগ্রেশন",
+        p1Btn: "অর্ডার করুন",
+
+        p2Title: "ব্যাকএন্ড যুক্ত ওয়েবসাইট",
+        p2Amount: "₹১৫,৯৯৯",
+        p2Unit: "/ শুরু মাত্র",
+        p2Desc: "ডাইনামিক ফিচার, সুরক্ষিত ডেটাবেজ ও এপিআই সমৃদ্ধ শক্তিশালী কমপ্লিট ওয়েব অ্যাপ্লিকেশন।",
+        p2F1: "Node.js / Python Flask ব্যাকএন্ড সিস্টেম",
+        p2F2: "MySQL অথবা MongoDB ডেটাবেজ ম্যানেজমেন্ট",
+        p2F3: "কাস্টম অ্যাডমিন প্যানেল / এপিআই ইন্টিগ্রেশন",
+        p2Btn: "অর্ডার করুন",
+
+        p3Title: "মোবাইল অ্যাপ বিল্ডিং",
+        p3Amount: "₹৭,৯৯৯",
+        p3Unit: "/ প্লেস্টোর ছাড়া",
+        p3Desc: "আপনার বিজনেস বা সার্ভিসের জন্য রেডিমেড ক্রস-প্ল্যাটফর্ম মোবাইল অ্যাপ্লিকেশন (সরাসরি ইনস্টলযোগ্য APK বিল্ড)।",
+        p3F1: "স্মুথ এবং দ্রুতগতির অ্যান্ড্রয়েড APK ফাইল",
+        p3F2: "ওয়েব টু অ্যাপ অথবা কাস্টম ফাংশনালিটি",
+        p3F3: "প্লেস্টোর ছাড়াই সরাসরি শেয়ার ও ইনস্টলযোগ্য",
+        p3Btn: "অর্ডার করুন",
+
+        servicesTitle: "টেকনিক্যাল স্কিলসেট ও সার্ভিস",
+        servicesSubtitle: "Aimanix AI ও আধুনিক ওয়েব ডেভেলপমেন্টের সম্পূর্ণ প্রযুক্তিগত সমাহার",
+        contactHeading: "যোগাযোগের ঠিকানা",
+        contactSub: "আপনার যেকোনো নতুন প্রজেক্ট, এআই অটোমেশন আলোচনা বা কনসালটেশনের জন্য সরাসরি যুক্ত হোন।",
+        lblName: "নাম:",
+        lblAddr: "ঠিকানা:",
+        lblPhone: "মোবাইল নম্বর:",
+        lblEmail: "ইমেইল অ্যাড্রেস:",
+        address: "খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩"
+      },
+
+      en: {
+        brandName: "Anowar Hossain",
+        heroGreeting: "Hello, I am",
+        heroName: "Anowar Hossain",
+        heroTag: "• Next-Gen Intelligent Systems",
+        heroDesc: "Founder of <strong>Aimanix AI</strong> | AI-Powered Full-Stack Web Developer & Automation Specialist. Combining solid classical engineering with cutting-edge Vibe Coding, I build secure, ultra-fast, and scalable modern web applications.",
+        btnWa: "💬 Direct WhatsApp Message",
+        btnPricing: "💎 Explore Pricing Plans",
+        statSpeed: "Faster Execution",
+        statDb: "Dual Database Support",
+        statSec: "Secure Architecture",
+        cardTitle: "Founder, Aimanix AI",
+        spotlightTitle: "Aimanix AI: Intelligent Automation & Software Solutions",
+        spotlightDesc: "Aimanix AI is our specialized venture designed to streamline complex business workflows through artificial intelligence and modern code architecture. From bespoke AI integrations to high-speed web apps, Aimanix AI delivers scalable, high-performance systems.",
+        btnPartner: "Partner With Us",
+        speedTitle: "My Edge & Delivery Speed",
+        speedDesc: "By leveraging Vibe Coding and advanced Prompt Engineering, I build prototypes and architectures 10x faster than traditional timelines. Backed by solid Node.js, Flask, MySQL, and MongoDB engineering, I debug, secure, and deliver enterprise-grade performance.",
+        
+        pricingTitle: "Affordable High-Performance Digital Services",
+        pricingSubtitle: "Premium digital craftsmanship tailored to your budget without compromising security",
+        pricingDisclaimer: "* Terms and conditions apply based on project complexity and customization.",
+        p1Title: "Landing Page Development",
+        p1Amount: "₹7,999",
+        p1Unit: "/ one-time",
+        p1Desc: "Ultra-fast, high-converting, and responsive landing pages built specifically for your brand or enterprise.",
+        p1F1: "Modern & High-Tech responsive UI/UX",
+        p1F2: "SEO optimized & lightning fast loading",
+        p1F3: "WhatsApp & direct call action buttons",
+        p1Btn: "Order Now",
+
+        p2Title: "Backend Enabled Web App",
+        p2Amount: "₹15,999",
+        p2Unit: "/ starting from",
+        p2Desc: "Full-stack dynamic architecture with robust backend servers, databases, and secure APIs.",
+        p2F1: "Node.js / Python Flask robust backend",
+        p2F2: "MySQL or MongoDB database integration",
+        p2F3: "Custom control panel / API pipelines",
+        p2Btn: "Order Now",
+
+        p3Title: "Mobile App Building",
+        p3Amount: "₹7,999",
+        p3Unit: "/ without Play Store",
+        p3Desc: "Custom cross-platform standalone mobile application built and delivered directly as installable APK.",
+        p3F1: "Fluid & optimized Android APK output",
+        p3F2: "Web-to-app conversion & custom layout",
+        p3F3: "Direct install & share without Play Store fees",
+        p3Btn: "Order Now",
+
+        servicesTitle: "Core Technical Services",
+        servicesSubtitle: "Full-cycle digital delivery powered by modern AI and full-stack engineering",
+        contactHeading: "Get In Touch",
+        contactSub: "Reach out directly for digital projects, automation consulting, or enterprise web builds.",
+        lblName: "Name:",
+        lblAddr: "Address:",
+        lblPhone: "Mobile Number:",
+        lblEmail: "Email Address:",
+        address: "Khejurdanga, Deganga, Barasat, North 24 Parganas, 743423"
+      },
+
+      services: [
+        {
+          icon: "🎨",
+          titleBn: "Front-End & UI Design",
+          titleEn: "Front-End & UI Design",
+          descBn: "HTML, CSS, JavaScript এবং এআই-অ্যাসিস্টেড টুলস ব্যবহার করে আকর্ষণীয়, আধুনিক ও ১০০% রেসপন্সিভ ল্যান্ডিং পেজ বা ইউজার ইন্টারফেস তৈরি।",
+          descEn: "Building responsive, modern, and high-conversion user interfaces using HTML, CSS, JavaScript, and AI-accelerated frameworks."
+        },
+        {
+          icon: "⚡",
+          titleBn: "Back-End Development",
+          titleEn: "Back-End Development",
+          descBn: "Python (Flask) এবং Node.js ব্যবহার করে শক্তিশালী RESTful API, কাস্টম লজিক এবং সিকিউর সার্ভার ম্যানেজমেন্ট।",
+          descEn: "Scalable REST APIs, custom application logic, and resilient backend systems powered by Python (Flask) and Node.js."
+        },
+        {
+          icon: "🗄️",
+          titleBn: "Dual-Database Management",
+          titleEn: "Dual-Database Management",
+          descBn: "প্রজেক্টের চাহিদা অনুযায়ী MySQL (Relational) অথবা MongoDB (NoSQL) ডেটাবেজ ডিজাইন, কোয়েরি অপটিমাইজেশন এবং নিরাপদ ডেটা হ্যান্ডলিং।",
+          descEn: "Architecting relational structures with MySQL and high-throughput document datastores with MongoDB."
+        },
+        {
+          icon: "🔮",
+          titleBn: "Vibe Coding & AI Systems",
+          titleEn: "Vibe Coding & AI Systems",
+          descBn: "প্রম্পট ইঞ্জিনিয়ারিংয়ের মাধ্যমে যেকোনো জটিল বিজনেস আইডিয়াকে দ্রুততম সময়ে প্রফেশনাল লাইভ প্রজেক্টে রূপান্তর করা।",
+          descEn: "Translating raw ideas into functional, production-ready software rapidly using state-of-the-art AI systems."
+        },
+        {
+          icon: "⚙️",
+          titleBn: "Python Scripting",
+          titleEn: "Python Scripting & Automation",
+          descBn: "ডাটা প্রসেসিং, ওয়েব স্ক্র্যাপিং বা ব্যবসার প্রতিদিনের ম্যানুয়াল কাজের জন্য কাস্টম অটোমেশন স্ক্রিপ্ট তৈরি।",
+          descEn: "Custom automation scripts for repetitive tasks, web scraping pipelines, and background data processing."
+        }
+      ]
     };
 
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    function getSiteData() {
+      const storedStr = localStorage.getItem("aimanix_v3_data");
+      if (!storedStr) return defaultData;
 
-    const MASTER_PASS = "aimanix2088@";
+      try {
+        const stored = JSON.parse(storedStr);
+        return {
+          ...defaultData,
+          ...stored,
+          videoUrl: stored.videoUrl || defaultData.videoUrl,
+          photo: stored.photo || defaultData.photo,
+          whatsapp: stored.whatsapp || defaultData.whatsapp,
+          phone: stored.phone || defaultData.phone,
+          bn: { ...defaultData.bn, ...(stored.bn || {}) },
+          en: { ...defaultData.en, ...(stored.en || {}) },
+          services: defaultData.services
+        };
+      } catch (e) {
+        return defaultData;
+      }
+    }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      if (sessionStorage.getItem("aimanix_auth") === "unlocked") revealConsole();
+    let typeIndex = 0;
+    let typeTimer = null;
+
+    function startTypewriter(text) {
+      if (typeTimer) clearInterval(typeTimer);
+      const el = document.getElementById("typewriter-hero");
+      el.textContent = "";
+      typeIndex = 0;
+      
+      typeTimer = setInterval(() => {
+        if (typeIndex < text.length) {
+          el.textContent += text.charAt(typeIndex);
+          typeIndex++;
+        } else {
+          clearInterval(typeTimer);
+        }
+      }, 70);
+    }
+
+    const pythonCodeSnippet = `# Initializing Aimanix AI Engine
+from aimanix import NeuralCore, VibeCoder
+
+class ProductionApp:
+    def __init__(self):
+        self.lead = "Anowar Hossain"
+        self.speed = "10x Ultra Rapid"
+        self.stack = ["Python", "Node.js", "Flask"]
+        self.db = ["MySQL", "MongoDB"]
+
+    def build_system(self):
+        return VibeCoder.generate_production_ready()
+
+>> SYSTEM READY: 100% SECURE & ACTIVE`;
+
+    let codeIdx = 0;
+    let codeTimer = null;
+
+    function runCodeTypeFill() {
+      if (codeTimer) clearInterval(codeTimer);
+      const term = document.getElementById("code-terminal");
+      term.textContent = "";
+      codeIdx = 0;
+
+      codeTimer = setInterval(() => {
+        if (codeIdx < pythonCodeSnippet.length) {
+          term.textContent += pythonCodeSnippet.charAt(codeIdx);
+          codeIdx++;
+          term.scrollTop = term.scrollHeight;
+        } else {
+          clearInterval(codeTimer);
+          setTimeout(runCodeTypeFill, 5000);
+        }
+      }, 20);
+    }
+
+    let isYouTube = false;
+
+    function setupVideoPlayers(videoUrl) {
+      const bubbleHolder = document.getElementById("bubble-video-placeholder");
+      const modalHolder = document.getElementById("modal-video-frame");
+
+      isYouTube = videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be");
+
+      if (isYouTube) {
+        let embedUrl = videoUrl;
+        if (!embedUrl.includes("embed/")) {
+          const idMatch = videoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
+          const vidId = idMatch ? idMatch[1] : "";
+          embedUrl = `https://www.youtube.com/embed/${vidId}?autoplay=1&mute=1&loop=1&playlist=${vidId}&enablejsapi=1`;
+        }
+
+        bubbleHolder.innerHTML = `<iframe id="ai-bubble-video" src="${embedUrl}" allow="autoplay; encrypted-media"></iframe>`;
+        modalHolder.innerHTML = `<iframe id="ai-modal-video" src="${embedUrl.replace('mute=1', 'mute=0')}" allow="autoplay; encrypted-media"></iframe>`;
+      } else {
+        bubbleHolder.innerHTML = `
+          <video id="ai-bubble-video" loop muted autoplay playsinline webkit-playsinline preload="auto">
+            <source src="${videoUrl}" type="video/mp4">
+          </video>
+        `;
+        modalHolder.innerHTML = `
+          <video id="ai-modal-video" loop playsinline webkit-playsinline preload="auto">
+            <source src="${videoUrl}" type="video/mp4">
+          </video>
+        `;
+      }
+
+      setTimeout(playMutedBubble, 300);
+    }
+
+    function renderUI() {
+      const data = getSiteData();
+      const loc = data[currentLang];
+
+      document.body.lang = currentLang;
+      document.getElementById("lang-toggle").textContent = currentLang === 'bn' ? 'English' : 'বাংলা';
+
+      document.getElementById("view-profile-img").src = data.photo;
+      document.getElementById("view-brand-name").textContent = loc.brandName;
+      document.getElementById("view-hero-greeting").textContent = loc.heroGreeting;
+      document.getElementById("view-hero-tag").textContent = loc.heroTag;
+      document.getElementById("view-hero-desc").innerHTML = loc.heroDesc;
+      document.getElementById("view-btn-wa").textContent = loc.btnWa;
+      document.getElementById("view-btn-pricing").textContent = loc.btnPricing;
+      document.getElementById("stat-speed-label").textContent = loc.statSpeed;
+      document.getElementById("stat-db-label").textContent = loc.statDb;
+      document.getElementById("stat-sec-label").textContent = loc.statSec;
+
+      startTypewriter(loc.heroName);
+
+      document.getElementById("view-card-name").textContent = loc.brandName;
+      document.getElementById("view-card-title").textContent = loc.cardTitle;
+      document.getElementById("view-spotlight-title").textContent = loc.spotlightTitle;
+      document.getElementById("view-spotlight-desc").textContent = loc.spotlightDesc;
+      document.getElementById("view-btn-partner").textContent = loc.btnPartner;
+
+      document.getElementById("view-speed-title").textContent = loc.speedTitle;
+      document.getElementById("view-speed-desc").textContent = loc.speedDesc;
+
+      document.getElementById("view-pricing-title").textContent = loc.pricingTitle;
+      document.getElementById("view-pricing-subtitle").textContent = loc.pricingSubtitle;
+      document.getElementById("view-pricing-disclaimer").textContent = loc.pricingDisclaimer;
+
+      document.getElementById("p1-title").textContent = loc.p1Title;
+      document.getElementById("p1-desc").textContent = loc.p1Desc;
+      document.getElementById("p1-unit").textContent = loc.p1Unit;
+      document.getElementById("p1-f1").textContent = loc.p1F1;
+      document.getElementById("p1-f2").textContent = loc.p1F2;
+      document.getElementById("p1-f3").textContent = loc.p1F3;
+      document.getElementById("p1-btn").textContent = loc.p1Btn;
+
+      document.getElementById("p2-title").textContent = loc.p2Title;
+      document.getElementById("p2-desc").textContent = loc.p2Desc;
+      document.getElementById("p2-unit").textContent = loc.p2Unit;
+      document.getElementById("p2-f1").textContent = loc.p2F1;
+      document.getElementById("p2-f2").textContent = loc.p2F2;
+      document.getElementById("p2-f3").textContent = loc.p2F3;
+      document.getElementById("p2-btn").textContent = loc.p2Btn;
+
+      document.getElementById("p3-title").textContent = loc.p3Title;
+      document.getElementById("p3-desc").textContent = loc.p3Desc;
+      document.getElementById("p3-unit").textContent = loc.p3Unit;
+      document.getElementById("p3-f1").textContent = loc.p3F1;
+      document.getElementById("p3-f2").textContent = loc.p3F2;
+      document.getElementById("p3-f3").textContent = loc.p3F3;
+      document.getElementById("p3-btn").textContent = loc.p3Btn;
+
+      document.getElementById("view-services-title").textContent = loc.servicesTitle;
+      document.getElementById("view-services-subtitle").textContent = loc.servicesSubtitle;
+
+      document.getElementById("view-contact-heading").textContent = loc.contactHeading;
+      document.getElementById("view-contact-sub").textContent = loc.contactSub;
+      document.getElementById("lbl-name").textContent = loc.lblName;
+      document.getElementById("lbl-addr").textContent = loc.lblAddr;
+      document.getElementById("lbl-phone").textContent = loc.lblPhone;
+      document.getElementById("lbl-email").textContent = loc.lblEmail;
+      
+      document.getElementById("view-contact-address").textContent = loc.address;
+      document.getElementById("view-contact-phone").textContent = currentLang === 'bn' ? data.phone : data.phoneEn;
+      document.getElementById("view-contact-phone").href = `tel:${data.whatsapp}`;
+
+      const waClean = data.whatsapp.replace(/\+/g, '').replace(/\s/g, '');
+      document.getElementById("view-wa-link").href = `https://wa.me/${waClean}`;
+      const modalWa = document.getElementById("modal-wa-btn");
+      if (modalWa) modalWa.href = `https://wa.me/${waClean}`;
+
+      const container = document.getElementById("skills-container");
+      container.innerHTML = "";
+      data.services.forEach(s => {
+        const div = document.createElement("div");
+        div.className = "neon-border-box skill-box";
+        div.innerHTML = `
+          <span class="skill-icon">${s.icon}</span>
+          <h3 class="skill-title">${currentLang === 'bn' ? s.titleBn : s.titleEn}</h3>
+          <p class="skill-desc">${currentLang === 'bn' ? s.descBn : s.descEn}</p>
+        `;
+        container.appendChild(div);
+      });
+
+      setupVideoPlayers(data.videoUrl);
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'bn' ? 'en' : 'bn';
+      renderUI();
+    }
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      const isDark = root.getAttribute('data-theme') === 'dark';
+      root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('theme-toggle').textContent = isDark ? '🌙 নাইট' : '☀️ ডে';
+    }
+
+    /* ==========================================================
+       SYNTHESIZED SCI-FI AUDIO ENGINE (WEB AUDIO API)
+       ========================================================== */
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playSciFiPowerOnSound() {
+      try {
+        initAudio();
+        const now = audioCtx.currentTime;
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.18);
+        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.28);
+
+        gain.gain.setValueAtTime(0.01, now);
+        gain.gain.linearRampToValueAtTime(0.2, now + 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(600, now);
+        filter.frequency.linearRampToValueAtTime(1800, now + 0.28);
+        filter.Q.value = 4.0;
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.35);
+
+        setTimeout(() => {
+          if (!audioCtx) return;
+          const osc2 = audioCtx.createOscillator();
+          const gain2 = audioCtx.createGain();
+          const t2 = audioCtx.currentTime;
+
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(1760, t2);
+          gain2.gain.setValueAtTime(0.12, t2);
+          gain2.gain.exponentialRampToValueAtTime(0.001, t2 + 0.12);
+
+          osc2.connect(gain2);
+          gain2.connect(audioCtx.destination);
+          osc2.start(t2);
+          osc2.stop(t2 + 0.12);
+        }, 120);
+
+      } catch (e) {}
+    }
+
+    function playBeepClick() {
+      try {
+        initAudio();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(950, now);
+        osc.frequency.exponentialRampToValueAtTime(1400, now + 0.07);
+
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.07);
+      } catch (e) {}
+    }
+
+    function openSciFiMenu() {
+      playSciFiPowerOnSound();
+
+      const core = document.querySelector('.cpu-core-orb');
+      core.style.boxShadow = '0 0 35px #ff62c0, 0 0 70px #7a73ff';
+      core.style.transform = 'scale(1.25)';
+
+      setTimeout(() => {
+        core.style.boxShadow = '';
+        core.style.transform = '';
+        toggleSciFiMenuState(true);
+      }, 200);
+    }
+
+    function toggleSciFiMenuState(open) {
+      const overlay = document.getElementById('sci-fi-menu-overlay');
+      if (open) {
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      } else {
+        playBeepClick();
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function closeSciFiMenu(e) {
+      if (e.target.id === 'sci-fi-menu-overlay') {
+        toggleSciFiMenuState(false);
+      }
+    }
+
+    /* Robust Video Controller */
+    const modalCard = document.getElementById('video-modal-card');
+    const bubbleOrb = document.getElementById('video-bubble-orb');
+    const hintPill = document.getElementById('video-hint');
+
+    function playMutedBubble() {
+      if (!isYouTube) {
+        const bubbleVid = document.getElementById('ai-bubble-video');
+        if (bubbleVid) {
+          bubbleVid.muted = true;
+          const p = bubbleVid.play();
+          if (p !== undefined) {
+            p.catch(() => {
+              document.addEventListener('touchstart', () => { bubbleVid.play(); }, { once: true });
+            });
+          }
+        }
+      }
+    }
+
+    function openVideoModal() {
+      playBeepClick();
+      modalCard.style.display = 'block';
+      bubbleOrb.style.display = 'none';
+      hintPill.style.display = 'none';
+
+      if (!isYouTube) {
+        const bubbleVid = document.getElementById('ai-bubble-video');
+        const modalVid = document.getElementById('ai-modal-video');
+        if (bubbleVid) bubbleVid.pause();
+        if (modalVid) {
+          modalVid.currentTime = 0;
+          modalVid.muted = false;
+          const p = modalVid.play();
+          if (p !== undefined) {
+            p.catch(() => { modalVid.muted = true; modalVid.play(); });
+          }
+        }
+      }
+    }
+
+    function closeVideoModal() {
+      playBeepClick();
+      modalCard.style.display = 'none';
+      bubbleOrb.style.display = 'block';
+      hintPill.style.display = 'block';
+
+      if (!isYouTube) {
+        const modalVid = document.getElementById('ai-modal-video');
+        if (modalVid) modalVid.pause();
+        playMutedBubble();
+      }
+    }
+
+    function restartVideo() {
+      playBeepClick();
+      if (isYouTube) {
+        const modalFrame = document.getElementById('ai-modal-video');
+        if (modalFrame) {
+          const src = modalFrame.src;
+          modalFrame.src = src;
+        }
+      } else {
+        const modalVid = document.getElementById('ai-modal-video');
+        if (modalVid) {
+          modalVid.currentTime = 0;
+          modalVid.muted = false;
+          modalVid.play();
+        }
+      }
+    }
+
+    /* Neural Synapse Canvas Engine - Updated with Stripe Palette */
+    const canvas = document.getElementById('neural-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const mouse = { x: null, y: null, radius: 170 };
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      if (Math.random() > 0.45) ripples.push(new NeuralRipple(mouse.x, mouse.y));
     });
 
-    function handleAuthKey(e) { if (e.key === "Enter") verifyPassword(); }
-
-    function verifyPassword() {
-      if (document.getElementById("admin-pass-input").value === MASTER_PASS) {
-        sessionStorage.setItem("aimanix_auth", "unlocked");
-        revealConsole();
-      } else {
-        document.getElementById("auth-err").style.display = "block";
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        mouse.x = e.touches[0].clientX;
+        mouse.y = e.touches[0].clientY;
+        ripples.push(new NeuralRipple(mouse.x, mouse.y));
       }
-    }
+    }, { passive: true });
 
-    function revealConsole() {
-      document.getElementById("auth-screen").style.display = "none";
-      document.getElementById("admin-main").style.display = "block";
-      loadCurrentHomeData();
-      loadSchoolNotesList();
-      loadPoemsList();
-    }
+    // Stripe Palette Node Colors: Violet, Pink, Blue, Orange
+    const stripeColors = [
+      '122, 115, 255', // Stripe Violet
+      '255, 98, 192',  // Stripe Pink
+      '0, 212, 255',   // Stripe Cyan/Blue
+      '255, 111, 97'   // Stripe Coral
+    ];
 
-    function logoutAdmin() {
-      sessionStorage.removeItem("aimanix_auth");
-      location.reload();
-    }
+    class NeuralNode {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.9;
+        this.vy = (Math.random() - 0.5) * 0.9;
+        this.radius = Math.random() * 2.2 + 1;
+        this.color = stripeColors[Math.floor(Math.random() * stripeColors.length)];
+      }
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.master-tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.tab-content-panel').forEach(panel => panel.classList.remove('active'));
-      event.currentTarget.classList.add('active');
-      document.getElementById(`panel-${tabId}`).classList.add('active');
-    }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
 
-    async function getSecureGeminiKey() {
-      const snap = await db.collection("system_config").doc("ai_secrets").get();
-      if (snap.exists && snap.data().gemini_key) return snap.data().gemini_key.trim();
-      throw new Error("API Key ফায়ারবেসে পাওয়া যায়নি!");
-    }
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
 
-    // আপনার আসল এন্ডপয়েন্ট তালিকা (3.5-flash, flash-latest, 2.5-flash) অক্ষুণ্ণ রাখা হলো
-    async function executeGeminiAPI(systemInstruction, promptText) {
-      const key = await getSecureGeminiKey();
-      const endpoints = [
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${key}`,
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${key}`,
-        `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${key}`
-      ];
-
-      for (const url of endpoints) {
-        try {
-          const res = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              system_instruction: { parts: [{ text: systemInstruction }] },
-              contents: [{ role: "user", parts: [{ text: promptText }] }],
-              generationConfig: { temperature: 0.2 }
-            })
-          });
-          if (res.ok) {
-            const data = await res.json();
-            return data.candidates[0].content.parts[0].text;
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouse.radius) {
+            const force = (mouse.radius - dist) / mouse.radius;
+            this.x -= (dx / dist) * force * 3;
+            this.y -= (dy / dist) * force * 3;
           }
-        } catch (e) {}
+        }
       }
-      throw new Error("Gemini সার্ভার ব্যস্ত রয়েছে। অনুগ্রহ করে কয়েক সেকেন্ড পর আবার চেষ্টা করুন।");
-    }
 
-    // ==========================================
-    // HOMEPAGE FIXED CONTROLLER & VIDEO PARSER
-    // ==========================================
-    const DEFAULT_SITE_DATA = {
-      videoUrl: "https://files.catbox.moe/fmhga1.mp4",
-      photo: "",
-      whatsapp: "919143181401",
-      phone: "+91 9143181401",
-      email: "aimanixai@gmail.com",
-      bn: {
-        heroName: "আনোয়ার হোসেন",
-        brandName: "আনোয়ার হোসেন",
-        heroDesc: "Aimanix AI-এর প্রতিষ্ঠাতা। আধুনিক ওয়েব আর্কিটেকচার, ফুল-স্ট্যাক সিস্টেম এবং এআই ইঞ্জিনিয়ারিংয়ে অভিজ্ঞ ডেভেলপার।",
-        address: "দেগঙ্গা, উত্তর ২৪ পরগণা, পশ্চিমবঙ্গ"
-      },
-      en: {
-        heroName: "Anowar Hossain",
-        brandName: "Anowar Hossain",
-        heroDesc: "Founder of Aimanix AI. Specialist in modern web architectures, scalable serverless solutions and next-gen AI applications.",
-        address: "Deganga, North 24 Parganas, West Bengal"
-      }
-    };
-
-    function sanitizeVideoUrl(rawUrl) {
-      if (!rawUrl) return "";
-      let url = rawUrl.trim();
-      if (url.includes("youtube.com/watch?v=")) {
-        const id = url.split("v=")[1]?.split("&")[0];
-        if (id) return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}`;
-      } else if (url.includes("youtu.be/")) {
-        const id = url.split("youtu.be/")[1]?.split("?")[0];
-        if (id) return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}`;
-      } else if (url.includes("youtube.com/shorts/")) {
-        const id = url.split("shorts/")[1]?.split("?")[0];
-        if (id) return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}`;
-      }
-      return url;
-    }
-
-    function loadCurrentHomeData() {
-      const stored = JSON.parse(localStorage.getItem("aimanix_v3_data") || "null") || DEFAULT_SITE_DATA;
-      document.getElementById("edit-video-url").value = stored.videoUrl || DEFAULT_SITE_DATA.videoUrl;
-      document.getElementById("edit-photo-url").value = stored.photo || "";
-      document.getElementById("edit-name-bn").value = stored.bn?.heroName || DEFAULT_SITE_DATA.bn.heroName;
-      document.getElementById("edit-name-en").value = stored.en?.heroName || DEFAULT_SITE_DATA.en.heroName;
-      document.getElementById("edit-desc-bn").value = stored.bn?.heroDesc || DEFAULT_SITE_DATA.bn.heroDesc;
-      document.getElementById("edit-desc-en").value = stored.en?.heroDesc || DEFAULT_SITE_DATA.en.heroDesc;
-      document.getElementById("edit-wa").value = stored.whatsapp || DEFAULT_SITE_DATA.whatsapp;
-      document.getElementById("edit-phone").value = stored.phone || DEFAULT_SITE_DATA.phone;
-    }
-
-    function saveHomeData() {
-      let existing = JSON.parse(localStorage.getItem("aimanix_v3_data") || "null");
-      if (!existing) existing = JSON.parse(JSON.stringify(DEFAULT_SITE_DATA));
-
-      const videoVal = document.getElementById("edit-video-url").value.trim();
-      const photoVal = document.getElementById("edit-photo-url").value.trim();
-      const nameBn = document.getElementById("edit-name-bn").value.trim();
-      const nameEn = document.getElementById("edit-name-en").value.trim();
-      const descBn = document.getElementById("edit-desc-bn").value.trim();
-      const descEn = document.getElementById("edit-desc-en").value.trim();
-      const waVal = document.getElementById("edit-wa").value.trim();
-      const phoneVal = document.getElementById("edit-phone").value.trim();
-
-      if (videoVal) existing.videoUrl = sanitizeVideoUrl(videoVal);
-      if (photoVal) existing.photo = photoVal;
-      if (waVal) existing.whatsapp = waVal;
-      if (phoneVal) existing.phone = phoneVal;
-
-      if (!existing.bn) existing.bn = { ...DEFAULT_SITE_DATA.bn };
-      if (!existing.en) existing.en = { ...DEFAULT_SITE_DATA.en };
-
-      if (nameBn) {
-        existing.bn.heroName = nameBn;
-        existing.bn.brandName = nameBn;
-      }
-      if (nameEn) {
-        existing.en.heroName = nameEn;
-        existing.en.brandName = nameEn;
-      }
-      if (descBn) existing.bn.heroDesc = descBn;
-      if (descEn) existing.en.heroDesc = descEn;
-
-      localStorage.setItem("aimanix_v3_data", JSON.stringify(existing));
-      alert("✅ তথ্য সফলভাবে আপডেট হয়েছে! শুধু পরিবর্তিত তথ্যগুলো সেভ হয়েছে, কোনো পূর্বের লেখা মুছে যায়নি।");
-    }
-
-    function restoreDefaultHomeData() {
-      if (confirm("আপনি কি হোমপেজের সমস্ত তথ্য ও ভিডিও লিঙ্ক ডিফল্ট অবস্থায় রিসেট করতে চান?")) {
-        localStorage.setItem("aimanix_v3_data", JSON.stringify(DEFAULT_SITE_DATA));
-        loadCurrentHomeData();
-        alert("✅ হোমপেজ মূল তথ্যে সফলভাবে রিসেট করা হয়েছে।");
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgb(${this.color})`;
+        ctx.fill();
       }
     }
 
-    // ==========================================================
-    // SCHOOL NOTES ENGINE (V, VI, VII, VIII, IX, MADHYAMIK, XI, H.S)
-    // ==========================================================
-    const ROYAL_VIOLET_STUDY_PROMPT = `
-তুমি একজন বিশ্বমানের বাংলা স্টাডি নোট ডিজাইনার এবং অভিজ্ঞ শিক্ষাবিদ।
-ইনপুটে প্রদত্ত শ্রেণী (Grade/Class), বিষয় এবং কাঁচা পাঠ্য (Raw Text) বিশ্লেষণ করে স্বয়ংক্রিয়ভাবে একটি রেডি-টু-প্রিন্ট A4 কালার স্টাডি শিট তৈরি করবে।
-
-ক্লাসভিত্তিক প্রয়োজনীয় কাঠামো:
-1. Class V, VI, VII: সহজ-সরল ভাষা, মূল ভাবার্থ, শব্দার্থ এবং সংক্ষিপ্ত প্রশ্নোত্তর।
-2. Class VIII, IX: বিশদ ভাবার্থ, গুরুত্বপূর্ণ বুলেট পয়েন্ট, চরিত্র/বিষয় বিশ্লেষণ এবং MCQ ও সংক্ষিপ্ত প্রশ্ন।
-3. Madhyamik (দশম শ্রেণী): মাধ্যমিক বোর্ডের প্রশ্নরীতির অনুরূপ ৩ ও ৫ নম্বরের মানসম্মত সাজেস্টিভ উত্তর, উৎস-প্রসঙ্গ এবং পয়েন্টভিত্তিক উত্তর।
-4. Class XI, H.S (উচ্চ মাধ্যমিক): উচ্চমাধ্যমিক স্তরের গভীর সাহিত্য পর্যালোচনা, দর্শন, ব্যাকরণ ও শিল্প-সংস্কৃতির সমন্বিত আলোচনা।
-
-স্টাইল ও ডিজাইন গাইডলাইন (বাধ্যতামূলক):
-- হেডার কার্ড:
-  <div class="note-header-card">
-    <span class="note-badge-gold">শ্রেণী: [শ্রেণী নাম] | পাঠ্য অধ্যায়</span>
-    <h1>[বিষয়ের নাম / অধ্যায় শিরোনাম]</h1>
-    <p style="color: #f3e8ff; font-size: 0.95rem; margin-top: 4px;">Aimanix AI Smart Gurukul Education Framework</p>
-  </div>
-- সেকশন কার্ড:
-  <div class="note-section-card border-accent-purple floating-card-touch">
-    <div class="note-section-title">১. মূল সারসংক্ষেপ ও ভাবার্থ</div>
-    <p class="note-body-text">...</p>
-  </div>
-- পয়েন্ট কার্ড:
-  <div class="note-section-card border-accent-cyan floating-card-touch">
-    <div class="note-section-title">২. গুরুত্বপূর্ণ মূল পয়েন্ট ও তথ্যসূত্র</div>
-    <ul class="note-body-text" style="padding-left: 20px;">...</ul>
-  </div>
-- প্রশ্নোত্তর কার্ড:
-  <div class="note-section-card border-accent-gold floating-card-touch">
-    <div class="note-section-title">৩. সম্ভাব্য গুরুত্বপূর্ণ প্রশ্নোত্তর (বোর্ড ও পরীক্ষা মান)</div>
-    <div class="qa-block">
-      <div class="qa-q">প্রশ্ন ১: ...</div>
-      <div class="qa-a">উত্তর: ...</div>
-    </div>
-  </div>
-
-গুরুত্বপূর্ণ নির্দেশ:
-কোনো রকম ব্যাকটিক বা মার্কডাউন (\`\`\`html) দেবে না। শুধুমাত্র সরাসরি পরিচ্ছন্ন HTML কোড দেবে।
-`;
-
-    async function generateSchoolNote() {
-      const grade = document.getElementById("school-grade").value;
-      const subject = document.getElementById("school-subject").value.trim() || "বাংলা পাঠ্য";
-      const rawText = document.getElementById("school-raw").value.trim();
-      const btn = document.getElementById("btn-school-submit");
-
-      if (!rawText) return alert("পাঠ্য টেক্সট পেস্ট করুন!");
-      btn.textContent = "AI স্টাডি শিট তৈরি করছে..."; btn.disabled = true;
-
-      try {
-        let aiHtml = await executeGeminiAPI(ROYAL_VIOLET_STUDY_PROMPT, `নির্বাচিত শ্রেণী: ${grade}\nবিষয়/অধ্যায়: ${subject}\nকাঁচা পাঠ্য (Raw Text):\n${rawText}`);
-        aiHtml = aiHtml.replace(/```html|```/g, "").trim();
-
-        const noteObj = {
-          grade: grade,
-          subject: subject,
-          htmlContent: aiHtml,
-          timestamp: Date.now()
-        };
-
-        let localNotes = JSON.parse(localStorage.getItem("aimanix_school_notes") || "[]");
-        localNotes.unshift(noteObj);
-        localStorage.setItem("aimanix_school_notes", JSON.stringify(localNotes));
-
-        await db.collection("school_notes").add(noteObj);
-
-        alert(`✅ ক্লাস ${grade}-এর নোট সফলভাবে প্রকাশিত হয়েছে! school.html এ এখন দেখা যাবে।`);
-        document.getElementById("school-raw").value = "";
-        loadSchoolNotesList();
-      } catch (err) {
-        alert("ত্রুটি: " + err.message);
-      } finally {
-        btn.textContent = "🚀 AI স্টাডি শিট তৈরি ও পাবলিশ করুন"; btn.disabled = false;
+    class NeuralRipple {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.radius = 2;
+        this.alpha = 0.8;
+      }
+      update() {
+        this.radius += 2.5;
+        this.alpha -= 0.02;
+      }
+      draw() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 98, 192, ${this.alpha})`;
+        ctx.lineWidth = 1.3;
+        ctx.stroke();
+        ctx.restore();
       }
     }
 
-    async function loadSchoolNotesList() {
-      const box = document.getElementById("school-notes-list");
-      box.innerHTML = "লোড হচ্ছে...";
-      try {
-        const snap = await db.collection("school_notes").orderBy("timestamp", "desc").get();
-        if (snap.empty) { box.innerHTML = "কোনো নোট নেই।"; return; }
-        box.innerHTML = "";
-        snap.forEach(doc => {
-          const d = doc.data();
-          box.innerHTML += `
-            <div class="data-item-card">
-              <div><strong>Class ${d.grade}</strong>: ${d.subject}</div>
-              <button class="btn-delete-item" onclick="deleteSchoolNote('${doc.id}')">🗑️ ডিলিট</button>
-            </div>`;
-        });
-      } catch(e) { box.innerHTML = "লোড করতে সমস্যা হয়েছে।"; }
-    }
+    const nodes = Array.from({ length: 65 }, () => new NeuralNode());
+    let ripples = [];
 
-    async function deleteSchoolNote(id) {
-      if (confirm("নোটটি মুছে ফেলতে চান?")) {
-        await db.collection("school_notes").doc(id).delete();
-        loadSchoolNotesList();
+    function renderEngine() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        ripples[i].update();
+        ripples[i].draw();
+        if (ripples[i].alpha <= 0) ripples.splice(i, 1);
       }
-    }
 
-    // ==========================================
-    // KOBITAR AKASH ENGINE (100% UNCHANGED)
-    // ==========================================
-    const KOBITA_AURORA_PROMPT = `
-তুমি আধুনিক বাংলা কবিতার সংকলক। কাঁচা কবিতা থেকে উপযুক্ত JSON রিটার্ন করবে।
-JSON ফরম্যাট:
-{
-  "title": "কবিতার সুন্দর নাম",
-  "author": "কবির নাম",
-  "body": "কবিতার লাইন..."
-}
-শুধুমাত্র পিওর JSON কোড দেবে।
-`;
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
 
-    async function processKobitaAI() {
-      const category = document.getElementById("kobita-category").value;
-      const author = document.getElementById("kobita-author").value.trim();
-      const raw = document.getElementById("kobita-raw").value.trim();
-      const btn = document.getElementById("btn-kobita-submit");
-
-      if (!raw) return alert("কবিতার কাঁচা লাইন পেস্ট করুন!");
-      btn.textContent = "AI কবিতা সংকলন করছে..."; btn.disabled = true;
-
-      try {
-        let jsonStr = await executeGeminiAPI(KOBITA_AURORA_PROMPT, raw);
-        jsonStr = jsonStr.replace(/```json|```/g, "").trim();
-        const parsed = JSON.parse(jsonStr);
-
-        const poemObj = {
-          title: parsed.title || "অনন্ত সুর",
-          author: author || parsed.author || "অজ্ঞাতনামা",
-          body: parsed.body || raw,
-          category: category,
-          imageUrl: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80",
-          timestamp: Date.now()
-        };
-
-        let localPoems = JSON.parse(localStorage.getItem("aimanix_poems") || "[]");
-        localPoems.unshift(poemObj);
-        localStorage.setItem("aimanix_poems", JSON.stringify(localPoems));
-
-        await db.collection("poems").add(poemObj);
-
-        alert("✅ কবিতা সফলভাবে কবিতার আকাশে প্রকাশিত হয়েছে!");
-        document.getElementById("kobita-raw").value = "";
-        loadPoemsList();
-      } catch (err) {
-        alert("ত্রুটি: " + err.message);
-      } finally {
-        btn.textContent = "✨ কবিতা প্রসেস ও প্রকাশ করুন"; btn.disabled = false;
+          if (dist < 130) {
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            // Stripe Blend Linear Gradient between Connected Points
+            ctx.strokeStyle = `rgba(122, 115, 255, ${(1 - dist / 130) * 0.35})`;
+            ctx.lineWidth = 0.9;
+            ctx.stroke();
+          }
+        }
       }
+
+      nodes.forEach(node => {
+        node.update();
+        node.draw();
+      });
+
+      requestAnimationFrame(renderEngine);
     }
 
-    async function loadPoemsList() {
-      const box = document.getElementById("poems-list");
-      box.innerHTML = "লোড হচ্ছে...";
-      try {
-        const snap = await db.collection("poems").orderBy("timestamp", "desc").get();
-        if (snap.empty) { box.innerHTML = "কোনো কবিতা নেই।"; return; }
-        box.innerHTML = "";
-        snap.forEach(doc => {
-          const d = doc.data();
-          box.innerHTML += `
-            <div class="data-item-card">
-              <div style="color: #ffa8d2;"><strong>${d.title}</strong> (${d.author})</div>
-              <button class="btn-delete-item" onclick="deletePoem('${doc.id}')">🗑️ ডিলিট</button>
-            </div>`;
-        });
-      } catch(e) { box.innerHTML = "লোড করতে সমস্যা হয়েছে।"; }
-    }
-
-    async function deletePoem(id) {
-      if (confirm("কবিতাটি মুছে ফেলতে চান?")) {
-        await db.collection("poems").doc(id).delete();
-        loadPoemsList();
-      }
-    }
+    renderUI();
+    runCodeTypeFill();
+    renderEngine();
   </script>
 </body>
 </html>

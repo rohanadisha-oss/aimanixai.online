@@ -313,7 +313,7 @@
       </div>
     </div>
 
-    <!-- TAB 3: KOBITAR AKASH (পূর্বের মতো VIII, IX ও special অপরিবর্তিত) -->
+    <!-- TAB 3: KOBITAR AKASH -->
     <div class="tab-content-panel" id="panel-kobita">
       <div class="panel-section-title" style="color: var(--pink);">✍️ কবিতার আকাশ: AI স্বয়ংক্রিয় কবিতা সংকলন</div>
       <p class="panel-section-desc">ডার্ক অরোরা নিওন পিঙ্ক থিমে স্বয়ংক্রিয়ভাবে পাবলিশ হবে।</p>
@@ -360,7 +360,20 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    const MASTER_PASS = "aimanix2088@";
+    // ==========================================================
+    // SECURE CRYPTOGRAPHIC SHA-256 HASH AUTH ENGINE
+    // নতুন পাসওয়ার্ড (Aitan2088#) এর জন্য তৈরি করা ক্রিপ্টোগ্রাফিক হ্যাশ
+    // ==========================================================
+    const AUTH_SALT = "aimanix_secret_salt_2026";
+    const TARGET_HASH = "c144e5f7cf8e0c812c29bc95264b38bf2ca293fbf6bcf4bf8cb75d1d6a7147b3";
+
+    async function computeSHA256(text) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(text);
+      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+    }
 
     window.addEventListener('DOMContentLoaded', () => {
       if (sessionStorage.getItem("aimanix_auth") === "unlocked") revealConsole();
@@ -368,12 +381,23 @@
 
     function handleAuthKey(e) { if (e.key === "Enter") verifyPassword(); }
 
-    function verifyPassword() {
-      if (document.getElementById("admin-pass-input").value === MASTER_PASS) {
+    async function verifyPassword() {
+      const input = document.getElementById("admin-pass-input").value;
+      const err = document.getElementById("auth-err");
+
+      if (!input) {
+        err.style.display = "block";
+        return;
+      }
+
+      // ইনপুট এবং সল্টের হ্যাশ তৈরি করে ভেরিফাই
+      const inputHash = await computeSHA256(input + AUTH_SALT);
+
+      if (inputHash === TARGET_HASH) {
         sessionStorage.setItem("aimanix_auth", "unlocked");
         revealConsole();
       } else {
-        document.getElementById("auth-err").style.display = "block";
+        err.style.display = "block";
       }
     }
 
@@ -403,7 +427,6 @@
       throw new Error("API Key ফায়ারবেসে পাওয়া যায়নি!");
     }
 
-    // আপনার আসল এন্ডপয়েন্ট তালিকা (3.5-flash, flash-latest, 2.5-flash) অক্ষুণ্ণ রাখা হলো
     async function executeGeminiAPI(systemInstruction, promptText) {
       const key = await getSecureGeminiKey();
       const endpoints = [

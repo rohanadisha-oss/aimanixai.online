@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>চাকরির বাজার | Aimanix Career Hub</title>
+
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;700&family=Hind+Siliguri:wght@400;500;600;700;800&family=Noto+Serif+Bengali:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Firebase Compat Libraries -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #070c18;
+      --surface: #0d1527;
+      --card-bg: rgba(16, 26, 48, 0.75);
+      --card-border: rgba(56, 189, 248, 0.2);
+      --cyan: #00f2fe;
+      --blue: #38bdf8;
+      --indigo: #6366f1;
+      --purple: #8b5cf6;
+      --magenta: #d946ef;
+      --accent-pink: #ec4899;
+      --gold: #fbbf24;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Hind Siliguri', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.06) 0%, transparent 45%);
+    }
+
+    /* TOP NAVIGATION */
+    .job-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(14px);
+      background: rgba(7, 12, 24, 0.85);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .brand-badge {
+      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      color: #fff;
+      font-family: 'Fira Code', monospace;
+      font-weight: 800;
+      font-size: 0.9rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.35);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .btn-nav-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 0.45rem 0.95rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-nav-home:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      transform: translateY(-2px);
+    }
+
+    /* HERO HEADER POSTER SECTION */
+    .hero-container {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1.2rem;
+    }
+
+    .poster-hero {
+      position: relative;
+      background: linear-gradient(145deg, #0f1a30, #080e1d);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 24px;
+      overflow: hidden;
+      padding: 3rem 2.2rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(0, 242, 254, 0.05);
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .poster-badge {
+      display: inline-block;
+      background: linear-gradient(90deg, #d946ef, #ec4899);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.95rem;
+      padding: 0.4rem 1.1rem;
+      border-radius: 6px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      box-shadow: 0 0 25px rgba(217, 70, 239, 0.5);
+      margin-bottom: 1.2rem;
+    }
+
+    .poster-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #ffffff;
+      margin-bottom: 0.8rem;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .poster-title span {
+      background: linear-gradient(90deg, var(--cyan), #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .poster-subtitle {
+      color: #cbd5e1;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 1.6rem;
+      max-width: 580px;
+    }
+
+    .poster-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .meta-tag {
+      background: rgba(3, 7, 18, 0.7);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--cyan);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+    }
+
+    .poster-image-box {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      transform: perspective(800px) rotateY(-4deg);
+      transition: all 0.4s ease;
+    }
+
+    .poster-image-box:hover {
+      transform: perspective(800px) rotateY(0deg) scale(1.02);
+      border-color: var(--cyan);
+    }
+
+    .poster-image-box img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* DYNAMIC FILTER CATEGORY PILLS */
+    .filter-section {
+      max-width: 1200px;
+      margin: 1.8rem auto 1.2rem;
+      padding: 0 1.2rem;
+    }
+
+    .category-pills {
+      display: flex;
+      gap: 0.65rem;
+      overflow-x: auto;
+      padding-bottom: 0.6rem;
+      scrollbar-width: none;
+    }
+    .category-pills::-webkit-scrollbar { display: none; }
+
+    .cat-btn {
+      flex-shrink: 0;
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.65rem 1.2rem;
+      border-radius: 50px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cat-btn:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .cat-btn.active {
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(99, 102, 241, 0.25));
+      color: var(--cyan);
+      border-color: var(--cyan);
+      box-shadow: 0 0 18px rgba(0, 242, 254, 0.25);
+    }
+
+    /* JOB CARDS CONTAINER */
+    .jobs-feed-wrapper {
+      max-width: 1200px;
+      margin: 1rem auto 4rem;
+      padding: 0 1.2rem;
+    }
+
+    .section-counter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.4rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .counter-text {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .job-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* LUXURY JOB CARD STYLING */
+    .job-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    }
+
+    .job-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--cyan);
+      box-shadow: 0 16px 36px rgba(0, 242, 254, 0.15);
+    }
+
+    .job-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--magenta));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .job-card:hover::before {
+      opacity: 1;
+    }
+
+    .card-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .category-chip {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #a5b4fc;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.25rem 0.7rem;
+      border-radius: 6px;
+    }
+
+    .post-date {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .job-headline {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.35;
+      margin-bottom: 0.9rem;
+    }
+
+    .job-key-details {
+      background: rgba(3, 7, 18, 0.5);
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      color: #cbd5e1;
+    }
+
+    .detail-item strong {
+      color: var(--cyan);
+      font-weight: 700;
+      min-width: 95px;
+    }
+
+    .job-summary-content {
+      color: #94a3b8;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      margin-bottom: 1.4rem;
+      flex-grow: 1;
+    }
+
+    /* CARD ACTION BUTTONS */
+    .card-footer-btns {
+      display: flex;
+      gap: 0.7rem;
+      align-items: center;
+    }
+
+    .btn-apply-link {
+      flex: 1;
+      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.92rem;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .btn-apply-link:hover {
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.45);
+      transform: translateY(-2px);
+    }
+
+    .btn-read-modal {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .btn-read-modal:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #fff;
+    }
+
+    /* EMPTY STATE */
+    .empty-jobs-notice {
+      text-align: center;
+      padding: 4rem 1.5rem;
+      background: var(--card-bg);
+      border: 1px dashed var(--card-border);
+      border-radius: 20px;
+      grid-column: 1 / -1;
+    }
+    .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+    /* DETAIL MODAL POPUP */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 1.5rem;
+    }
+
+    .modal-card {
+      background: #0d1527;
+      border: 1px solid var(--cyan);
+      box-shadow: 0 0 50px rgba(0, 242, 254, 0.25);
+      border-radius: 22px;
+      width: 100%;
+      max-width: 700px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 2.2rem;
+      position: relative;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      background: rgba(255,255,255,0.08);
+      border: none;
+      color: #fff;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .modal-close-btn:hover { background: #ef4444; }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 900px) {
+      .poster-hero {
+        grid-template-columns: 1fr;
+        padding: 2rem 1.5rem;
+      }
+      .poster-title { font-size: 2.1rem; }
+      .poster-image-box { transform: none; }
+      .job-cards-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP APP BAR -->
+  <nav class="job-nav">
+    <a href="index.html" class="brand-group">
+      <span class="brand-badge">Aimanix.AI</span>
+      <span class="brand-title">চাকরির বাজার</span>
+    </a>
+    <div class="nav-actions">
+      <a href="school.html" class="btn-nav-home">📚 আমার স্কুল</a>
+      <a href="index.html" class="btn-nav-home">🏠 হোমপেজ</a>
+    </div>
+  </nav>
+
+  <!-- HERO BANNER POSTER SECTION -->
+  <header class="hero-container">
+    <div class="poster-hero">
+      <div class="poster-text-content">
+        <span class="poster-badge" id="hero-badge">OFFICIAL RECRUITMENT HUB</span>
+        <h1 class="poster-title" id="hero-title">স্মার্ট <span>চাকরির বাজার</span> ও প্রস্তুতি</h1>
+        <p class="poster-subtitle" id="hero-subtitle">
+          পশ্চিমবঙ্গ ও কেন্দ্রীয় সরকারি চাকরির সর্বশেষ নির্ভরযোগ্য নোটিফিকেশন, পরীক্ষার সিলেবাস এবং এআই-চালিত সাজেস্টিভ গাইডলাইন এক ছাতার নিচে।
+        </p>
+        <div class="poster-meta">
+          <span class="meta-tag">⚡ রিয়েলটাইম আপডেট</span>
+          <span class="meta-tag">🎯 নির্ভুল গাইডলাইন</span>
+          <span class="meta-tag">📱 রেডি-টু-প্রিন্ট স্টাডি শিট</span>
+        </div>
+      </div>
+      <div class="poster-image-box">
+        <img id="hero-image" src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80" alt="Career Hub">
+      </div>
+    </div>
+  </header>
+
+  <!-- DYNAMIC CATEGORY FILTER TABS -->
+  <section class="filter-section">
+    <div class="category-pills" id="category-pills-container">
+      <button class="cat-btn active" onclick="filterJobs('all')">🌟 সকল আপডেট</button>
+      <button class="cat-btn" data-cat="notice" onclick="filterJobs('notice')">📢 নিয়োগ বিজ্ঞপ্তি</button>
+      <button class="cat-btn" data-cat="dates" onclick="filterJobs('dates')">🗓️ পরীক্ষার তারিখ</button>
+      <button class="cat-btn" data-cat="anganwadi" onclick="filterJobs('anganwadi')">👶 অঙ্গনওয়াড়ি / নার্সিং</button>
+      <button class="cat-btn" data-cat="primary" onclick="filterJobs('primary')">🎒 প্রাইমারি টেট</button>
+      <button class="cat-btn" data-cat="police" onclick="filterJobs('police')">👮 পুলিশ কনস্টেবল</button>
+      <button class="cat-btn" data-cat="ssc" onclick="filterJobs('ssc')">🏫 স্কুল সার্ভিস (SSC)</button>
+      <button class="cat-btn" data-cat="result" onclick="filterJobs('result')">🏆 চাকরির রেজাল্ট</button>
+    </div>
+  </section>
+
+  <!-- CARDS DISPLAY CONTAINER -->
+  <main class="jobs-feed-wrapper">
+    <div class="section-counter-bar">
+      <div class="counter-text" id="active-cat-heading">সর্বশেষ বিজ্ঞপ্তি ও প্রিপারেশন গাইড</div>
+      <div style="font-size: 0.85rem; color: var(--cyan);" id="total-count-badge">মোট পোস্ট: ০টি</div>
+    </div>
+
+    <div class="job-cards-grid" id="jobs-grid">
+      <!-- Loading Skeleton -->
+      <div class="empty-jobs-notice">
+        <div class="empty-icon">⏳</div>
+        <h3>তথ্য লোড হচ্ছে...</h3>
+        <p style="color: var(--text-muted); margin-top: 6px;">দয়া করে কয়েক সেকেন্ড অপেক্ষা করুন।</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- DETAILS MODAL POPUP -->
+  <div class="modal-overlay" id="job-modal">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeJobModal()">&times;</button>
+      <div id="modal-content-area"></div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // 1. FIREBASE CONFIGURATION & INITIALIZATION
+    // ==========================================
+    const firebaseConfig = {
+      authDomain: "aimanix-web.firebaseapp.com",
+      projectId: "aimanix-web",
+      storageBucket: "aimanix-web.appspot.com"
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ডিফল্ট ক্যাটাগরি ও সেটিংস
+    let currentCategory = 'all';
+    let allJobsData = [];
+
+    const DEFAULT_JOB_CATEGORIES = {
+      notice: "📢 নিয়োগ বিজ্ঞপ্তি",
+      dates: "🗓️ পরীক্ষার তারিখ",
+      anganwadi: "👶 অঙ্গনওয়াড়ি / নার্সিং প্রিপারেশন",
+      primary: "🎒 প্রাইমারি টেট প্রিপারেশন",
+      police: "👮 পুলিশ কনস্টেবল প্রিপারেশন",
+      ssc: "🏫 স্কুল সার্ভিস কমিশন (SSC)",
+      result: "🏆 চাকরির রেজাল্ট ও মেধা তালিকা"
+    };
+
+    // ==========================================
+    // 2. LOAD BANNER & CUSTOM CATEGORIES FROM CLOUD
+    // ==========================================
+    async function loadPortalHeaderAndLabels() {
+      try {
+        const doc = await db.collection("system_config").doc("job_portal_settings").get();
+        if (doc.exists) {
+          const cfg = doc.data();
+          if (cfg.heroTitle) document.getElementById("hero-title").innerHTML = cfg.heroTitle;
+          if (cfg.heroSubtitle) document.getElementById("hero-subtitle").textContent = cfg.heroSubtitle;
+          if (cfg.heroImage) document.getElementById("hero-image").src = cfg.heroImage;
+          if (cfg.heroBadge) document.getElementById("hero-badge").textContent = cfg.heroBadge;
+
+          // ক্যাটাগরির নাম কাস্টমাইজেশন (যেমন অঙ্গনওয়াড়ির বদলে নার্সিং)
+          if (cfg.categories) {
+            Object.keys(cfg.categories).forEach(catKey => {
+              const btn = document.querySelector(`.cat-btn[data-cat="${catKey}"]`);
+              if (btn && cfg.categories[catKey]) {
+                btn.textContent = cfg.categories[catKey];
+              }
+            });
+          }
+        }
+      } catch (err) {
+        console.warn("কাস্টম ব্যানার লোড হতে সমস্যা হয়েছে, ডিফল্ট সক্রিয় রয়েছে।", err);
+      }
+    }
+
+    // ==========================================
+    // 3. FETCH AND DISPLAY JOB POSTS
+    // ==========================================
+    async function fetchJobsPortalData() {
+      const grid = document.getElementById("jobs-grid");
+      try {
+        const snap = await db.collection("jobs_portal").orderBy("timestamp", "desc").get();
+        
+        if (snap.empty) {
+          // লোকালস্টোরেজ ফলব্যাক চেক
+          const localData = JSON.parse(localStorage.getItem("aimanix_jobs_local") || "[]");
+          if (localData.length > 0) {
+            allJobsData = localData;
+            renderJobCards(allJobsData);
+            return;
+          }
+
+          grid.innerHTML = `
+            <div class="empty-jobs-notice">
+              <div class="empty-icon">💼</div>
+              <h3>বর্তমানে কোনো চাকরির বিজ্ঞপ্তি বা প্রিপারেশন শিট নেই</h3>
+              <p style="color: var(--text-muted); margin-top: 6px;">অ্যাডমিন প্যানেল থেকে নতুন বিজ্ঞপ্তি যুক্ত করলে এখানে প্রকাশিত হবে।</p>
+            </div>
+          `;
+          document.getElementById("total-count-badge").textContent = "মোট পোস্ট: ০টি";
+          return;
+        }
+
+        allJobsData = [];
+        snap.forEach(doc => {
+          allJobsData.push({ id: doc.id, ...doc.data() });
+        });
+
+        // লোকাল ক্যাশ সেভ
+        localStorage.setItem("aimanix_jobs_local", JSON.stringify(allJobsData));
+        renderJobCards(allJobsData);
+
+      } catch (err) {
+        console.error("ডেটাবেস লোডিং ত্রুটি:", err);
+        const localData = JSON.parse(localStorage.getItem("aimanix_jobs_local") || "[]");
+        if (localData.length > 0) {
+          allJobsData = localData;
+          renderJobCards(allJobsData);
+        } else {
+          grid.innerHTML = `
+            <div class="empty-jobs-notice">
+              <div class="empty-icon">⚠️</div>
+              <h3>তথ্য লোড করা সম্ভব হয়নি</h3>
+              <p style="color: var(--text-muted);">অনুগ্রহ করে আপনার ইন্টারনেট সংযোগ পরীক্ষা করে পুনরায় রিফ্রেশ করুন।</p>
+            </div>`;
+        }
+      }
+    }
+
+    // ==========================================
+    // 4. RENDER CARDS ACCORDING TO FILTER
+    // ==========================================
+    function renderJobCards(items) {
+      const grid = document.getElementById("jobs-grid");
+      const filtered = (currentCategory === 'all') 
+        ? items 
+        : items.filter(j => j.category === currentCategory);
+
+      document.getElementById("total-count-badge").textContent = `মোট পোস্ট: ${filtered.length}টি`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-jobs-notice">
+            <div class="empty-icon">📂</div>
+            <h3>এই ক্যাটাগরিতে কোনো তথ্য পাওয়া যায়নি</h3>
+            <p style="color: var(--text-muted); margin-top: 6px;">অন্য কোনো ক্যাটাগরি নির্বাচন করুন বা পরবর্তীতে আবার চেক করুন।</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => {
+        const catName = DEFAULT_JOB_CATEGORIES[item.category] || "বিজ্ঞপ্তি";
+        const dateFormatted = item.timestamp ? new Date(item.timestamp).toLocaleDateString('bn-BD', { day: 'numeric', month: 'short', year: 'numeric' }) : "সাম্প্রতিক";
+
+        return `
+          <div class="job-card">
+            <div>
+              <div class="card-top-row">
+                <span class="category-chip">${catName}</span>
+                <span class="post-date">📅 ${dateFormatted}</span>
+              </div>
+              <h2 class="job-headline">${escapeHtml(item.title)}</h2>
+
+              <div class="job-key-details">
+                ${item.postName ? `<div class="detail-item"><strong>পদ:</strong> <span>${escapeHtml(item.postName)}</span></div>` : ''}
+                ${item.vacancy ? `<div class="detail-item"><strong>মোট শূন্যপদ:</strong> <span>${escapeHtml(item.vacancy)}</span></div>` : ''}
+                ${item.qualification ? `<div class="detail-item"><strong>যোগ্যতা:</strong> <span>${escapeHtml(item.qualification)}</span></div>` : ''}
+                ${item.lastDate ? `<div class="detail-item"><strong>আবেদনের শেষ তারিখ:</strong> <span style="color: #f87171; font-weight:700;">${escapeHtml(item.lastDate)}</span></div>` : ''}
+              </div>
+
+              <div class="job-summary-content">
+                ${item.summary ? escapeHtml(item.summary) : 'বিস্তারিত নোটিশ ও প্রিপারেশন নোট দেখতে নিচের বাটনে ক্লিক করুন।'}
+              </div>
+            </div>
+
+            <div class="card-footer-btns">
+              ${item.applyLink ? `<a href="${item.applyLink}" target="_blank" class="btn-apply-link">🌐 আবেদন / অফিশিয়াল লিঙ্ক</a>` : ''}
+              <button class="btn-read-modal" onclick="openJobModal('${item.id}')">📄 বিস্তারিত</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ক্যাটাগরি ফিল্টার টগল
+    function filterJobs(cat) {
+      currentCategory = cat;
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-cat") === cat || (cat === 'all' && !btn.getAttribute("data-cat")));
+      });
+
+      const headingMap = {
+        all: "সর্বশেষ সকল বিজ্ঞপ্তি ও প্রিপারেশন গাইড",
+        notice: "📢 নতুন সরকারি ও বেসরকারি নিয়োগ বিজ্ঞপ্তি",
+        dates: "🗓️ আসন্ন গুরুত্বপূর্ণ পরীক্ষার সময়সূচী",
+        anganwadi: "👶 অঙ্গনওয়াড়ি / স্বাস্থ্যকর্মী স্পেশাল প্রস্তুতি",
+        primary: "🎒 পশ্চিমবঙ্গ প্রাইমারি টেট (TET) প্রিপারেশন",
+        police: "👮 ডব্লুবি পুলিশ কনস্টেবল ও এসআই প্রিপারেশন",
+        ssc: "🏫 স্কুল সার্ভিস কমিশন (SLST / SSC) গাইড",
+        result: "🏆 চাকরির রেজাল্ট ও অফিশিয়াল কাট-অফ"
+      };
+      document.getElementById("active-cat-heading").textContent = headingMap[cat] || "চাকরির বাজার আপডেট";
+      renderJobCards(allJobsData);
+    }
+
+    // ==========================================
+    // 5. MODAL POPUP (FULL CONTENT & PRINT VIEW)
+    // ==========================================
+    function openJobModal(id) {
+      const item = allJobsData.find(j => j.id === id);
+      if (!item) return;
+
+      const modal = document.getElementById("job-modal");
+      const area = document.getElementById("modal-content-area");
+
+      area.innerHTML = `
+        <div style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
+          <span class="category-chip" style="margin-bottom: 0.8rem; display:inline-block;">${DEFAULT_JOB_CATEGORIES[item.category] || "বিজ্ঞপ্তি"}</span>
+          <h2 style="font-size: 1.8rem; color: #fff; margin-bottom: 0.6rem;">${escapeHtml(item.title)}</h2>
+          ${item.lastDate ? `<p style="color: var(--cyan); font-weight: 700;">📅 শেষ তারিখ: ${escapeHtml(item.lastDate)}</p>` : ''}
+        </div>
+
+        <div style="line-height: 1.8; color: #e2e8f0; font-size: 1rem;">
+          ${item.fullHtml ? item.fullHtml : `<p>${escapeHtml(item.summary)}</p>`}
+        </div>
+
+        <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+          ${item.applyLink ? `<a href="${item.applyLink}" target="_blank" class="btn-apply-link" style="flex:1;">🌐 অফিশিয়াল পোর্টালে যান</a>` : ''}
+          <button class="btn-read-modal" onclick="window.print()" style="border-color: var(--cyan); color: var(--cyan);">🖨️ প্রিন্ট / সেভ PDF</button>
+        </div>
+      `;
+      modal.style.display = "flex";
+    }
+
+    function closeJobModal() {
+      document.getElementById("job-modal").style.display = "none";
+    }
+
+    window.onclick = function(e) {
+      const modal = document.getElementById("job-modal");
+      if (e.target === modal) closeJobModal();
+    };
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // STARTUP
+    document.addEventListener("DOMContentLoaded", () => {
+      loadPortalHeaderAndLabels();
+      fetchJobsPortalData();
+    });
+  </script>
+</body>
+</html>

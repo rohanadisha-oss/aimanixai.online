@@ -451,8 +451,8 @@
       box-shadow: 0 0 50px rgba(0, 242, 254, 0.25);
       border-radius: 22px;
       width: 100%;
-      max-width: 780px;
-      max-height: 88vh;
+      max-width: 800px;
+      max-height: 90vh;
       overflow-y: auto;
       padding: 2.2rem;
       position: relative;
@@ -477,24 +477,33 @@
     .modal-close-btn:hover { background: #ef4444; }
 
     /* ==========================================================================
-       PRINT ARCHITECTURE (হুবহু আপনার দেওয়া রেফারেন্স ছবির মতো প্রফেশনাল স্টাইল)
+       PRINT ARCHITECTURE (হুবহু আপনার দেওয়া রেফারেন্স ছবির ১০০% নির্ভুল স্টাইল)
        ========================================================================== */
+    .print-only-element {
+      display: none !important;
+    }
+
     @media print {
       @page {
-        size: A4;
-        margin: 12mm 15mm;
+        size: A4 portrait;
+        margin: 10mm 12mm;
       }
 
-      /* পেজের অপ্রয়োজনীয় নেভিগেশন, ক্যানভাস ও ব্যাকগ্রাউন্ড সম্পূর্ণ অদৃশ্য */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
       body, html {
         background: #ffffff !important;
-        color: #000000 !important;
+        color: #0f172a !important;
         font-family: 'Hind Siliguri', sans-serif !important;
       }
 
+      /* পেজের অপ্রয়োজনীয় নেভিগেশন, ক্যানভাস ও ওয়েব হেডার অদৃশ্য */
       .cyber-grid-bg, #jobs-particle-canvas, .job-nav, .hero-container, 
       .filter-section, .jobs-feed-wrapper, .modal-close-btn, 
-      .modal-footer-btns, .btn-apply-link, .btn-read-modal {
+      .modal-footer-btns, .btn-apply-link, .btn-read-modal, .web-only-head {
         display: none !important;
       }
 
@@ -513,76 +522,102 @@
         max-width: 100% !important;
         max-height: none !important;
         overflow: visible !important;
-        background: transparent !important;
-        color: #111827 !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
       }
 
-      /* রেফারেন্স ছবির মতো টপ হেডার বার */
-      .print-official-banner {
+      .print-only-element {
+        display: block !important;
+      }
+
+      /* ১. রেফারেন্স ছবির মতো টপ হেডার বার */
+      .poster-top-bar {
         display: flex !important;
         justify-content: space-between;
         align-items: center;
         background: #111a44 !important;
         color: #ffffff !important;
-        padding: 10px 18px !important;
-        border-radius: 12px 12px 0 0 !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-        margin-bottom: 12px;
+        padding: 12px 20px !important;
+        border-radius: 8px 8px 0 0 !important;
+        margin-bottom: 22px !important;
       }
 
-      .print-official-banner h2 {
-        font-size: 1.4rem !important;
+      .poster-top-bar h1 {
+        font-size: 1.45rem !important;
         font-weight: 800 !important;
         color: #ffffff !important;
+        letter-spacing: -0.2px;
       }
 
-      .print-official-banner span {
-        font-size: 0.85rem !important;
+      .poster-top-bar .brand-naresh {
+        font-size: 0.95rem !important;
         font-family: 'Fira Code', monospace;
         color: #facc15 !important;
-        font-weight: 700;
+        font-weight: 800;
       }
 
-      /* সেকশন কার্ড: পার্পল বর্ডার ও গোলাকার প্রান্ত (রেফারেন্স ছবির মতো) */
-      .print-box-card {
-        border: 1.5px solid #6b21a8 !important;
+      /* ২. মূল শিরোনাম ও শেষ তারিখের নোটিশ */
+      .poster-main-title {
+        text-align: center;
+        margin-bottom: 22px;
+        padding: 0 10px;
+      }
+
+      .poster-main-title h2 {
+        font-size: 1.35rem !important;
+        font-weight: 800 !important;
+        color: #1e1b4b !important;
+        line-height: 1.35;
+        margin-bottom: 6px;
+      }
+
+      .poster-main-title .deadline-badge {
+        display: inline-block;
+        background: #fee2e2 !important;
+        color: #dc2626 !important;
+        border: 1px solid #f87171 !important;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 3px 12px;
+        border-radius: 6px;
+      }
+
+      /* ৩. রেফারেন্স ছবির মতো পার্পল ক্যাপসুল কার্ড স্ট্রাকচার */
+      .ref-card-box {
+        border: 1.5px solid #581c87 !important;
         border-radius: 14px !important;
-        padding: 14px 16px !important;
-        margin-bottom: 14px !important;
+        padding: 16px 16px 14px 16px !important;
+        margin-bottom: 22px !important;
         position: relative !important;
         page-break-inside: avoid !important;
         background: #ffffff !important;
       }
 
-      /* রেফারেন্স ছবির মতো ক্যাপসুল/পিল হেডার */
-      .print-capsule-badge {
-        display: table !important;
-        background: #581c87 !important;
+      /* ক্যাপসুল পিল হেডার */
+      .ref-capsule-title {
+        position: absolute !important;
+        top: -14px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        background: #4c1d95 !important;
         color: #ffffff !important;
         font-weight: 800 !important;
-        font-size: 0.92rem !important;
-        padding: 4px 18px !important;
+        font-size: 0.88rem !important;
+        padding: 3px 22px !important;
         border-radius: 50px !important;
-        margin: -24px auto 10px auto !important;
+        white-space: nowrap !important;
         box-shadow: 0 2px 4px rgba(0,0,0,0.15) !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-        text-align: center;
       }
 
-      /* পয়েন্ট ও বুলেট স্টাইল (রেফারেন্স ছবির মতো তীরচিহ্ন ও গ্রিড) */
-      .print-list-grid {
+      /* রেফারেন্স ছবির মতো ২ কলাম বিশিষ্ট গ্রিড */
+      .ref-grid-columns {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
-        gap: 8px 16px !important;
-        list-style: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
+        gap: 10px 18px !important;
       }
 
-      .print-list-item {
-        font-size: 0.95rem !important;
+      .ref-item {
+        font-size: 0.88rem !important;
         line-height: 1.45 !important;
         color: #1e293b !important;
         display: flex !important;
@@ -590,21 +625,37 @@
         gap: 6px !important;
       }
 
-      .print-list-item::before {
+      .ref-item::before {
         content: "➔" !important;
-        color: #4338ca !important;
+        color: #3b82f6 !important;
         font-weight: 900 !important;
-        font-size: 0.9rem !important;
+        font-size: 0.85rem !important;
+        flex-shrink: 0;
       }
 
-      .print-footer-tag {
+      .ref-full-text {
+        font-size: 0.88rem !important;
+        line-height: 1.55 !important;
+        color: #1e293b !important;
+      }
+
+      .ref-full-text ul, .ref-full-text ol {
+        padding-left: 18px;
+        margin: 6px 0;
+      }
+
+      .ref-full-text li {
+        margin-bottom: 4px;
+      }
+
+      .poster-footer {
         display: block !important;
         text-align: center;
-        font-size: 0.78rem !important;
+        font-size: 0.75rem !important;
         color: #64748b !important;
-        margin-top: 15px;
+        margin-top: 20px;
         border-top: 1px dashed #cbd5e1;
-        padding-top: 6px;
+        padding-top: 8px;
       }
     }
   </style>
@@ -823,49 +874,63 @@
       const area = document.getElementById("modal-content-area");
 
       area.innerHTML = `
-        <!-- PRINT EXCLUSIVE HEADER (প্রিন্টে স্বয়ংক্রিয়ভাবে একটিভ হবে) -->
-        <div class="print-official-banner" style="display:none;">
-          <h2>AIMANIX CAREER HUB</h2>
-          <span>OFFICIAL PREPARATION GUIDE</span>
+        <!-- PRINT EXCLUSIVE TOP HEADER BAR (রেফারেন্স ছবির মতো) -->
+        <div class="poster-top-bar print-only-element">
+          <h1>Aimanix Career Hub</h1>
+          <span class="brand-naresh">OFFICIAL PORTAL</span>
         </div>
 
-        <div style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
+        <!-- PRINT EXCLUSIVE TITLE BLOCK -->
+        <div class="poster-main-title print-only-element">
+          <h2>${escapeHtml(item.title)}</h2>
+          ${item.lastDate ? `<span class="deadline-badge">আবেদনের শেষ তারিখ: ${escapeHtml(item.lastDate)}</span>` : ''}
+        </div>
+
+        <!-- WEB VIEW HEADER (ওয়েবসাইটে ডার্ক মোডে দেখাবে) -->
+        <div class="web-only-head" style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
           <span class="category-chip" style="margin-bottom: 0.6rem; display:inline-block;">${DEFAULT_JOB_CATEGORIES[item.category] || "বিজ্ঞপ্তি"}</span>
           <h2 style="font-size: 1.6rem; color: #fff; margin-bottom: 0.6rem;">${escapeHtml(item.title)}</h2>
           ${item.lastDate ? `<p style="color: var(--cyan); font-weight: 700;">📅 আবেদনের শেষ তারিখ: ${escapeHtml(item.lastDate)}</p>` : ''}
         </div>
 
-        <div class="print-content-wrapper" style="line-height: 1.7; color: #e2e8f0;">
-          <!-- CARD 1: গুরুত্বপূর্ণ তথ্যাবলী -->
-          <div class="print-box-card">
-            <div class="print-capsule-badge">১. মূল হাইলাইটস ও সারসংক্ষেপ</div>
-            <ul class="print-list-grid">
-              ${item.postName ? `<li class="print-list-item"><strong>পদের নাম:</strong> ${escapeHtml(item.postName)}</li>` : ''}
-              ${item.vacancy ? `<li class="print-list-item"><strong>মোট শূন্যপদ:</strong> ${escapeHtml(item.vacancy)}</li>` : ''}
-              ${item.qualification ? `<li class="print-list-item"><strong>শিক্ষাগত যোগ্যতা:</strong> ${escapeHtml(item.qualification)}</li>` : ''}
-              ${item.lastDate ? `<li class="print-list-item"><strong>শেষ তারিখ:</strong> ${escapeHtml(item.lastDate)}</li>` : ''}
-            </ul>
+        <!-- CONTENT SECTION: রেফারেন্স ছবির মতো সুনির্দিষ্ট বক্স -->
+        <div class="print-content-wrapper">
+          <!-- CARD 1: গুরুত্বপূর্ণ তথ্যাবলী (২ কলাম বিশিষ্ট অ্যারো তালিকা) -->
+          <div class="ref-card-box">
+            <div class="ref-capsule-title">১. মূল হাইলাইটস ও সারসংক্ষেপ</div>
+            <div class="ref-grid-columns">
+              ${item.postName ? `<div class="ref-item"><strong>পদ:</strong> ${escapeHtml(item.postName)}</div>` : ''}
+              ${item.vacancy ? `<div class="ref-item"><strong>মোট শূন্যপদ:</strong> ${escapeHtml(item.vacancy)}</div>` : ''}
+              ${item.qualification ? `<div class="ref-item"><strong>যোগ্যতা:</strong> ${escapeHtml(item.qualification)}</div>` : ''}
+              ${item.lastDate ? `<div class="ref-item"><strong>শেষ তারিখ:</strong> ${escapeHtml(item.lastDate)}</div>` : ''}
+            </div>
           </div>
 
-          <!-- CARD 2: বিস্তারিত নোটিশ ও সিলেবাস -->
-          <div class="print-box-card" style="margin-top: 20px;">
-            <div class="print-capsule-badge">২. পূর্ণ বিবরণ ও নির্দেশিকা</div>
-            <div style="font-size: 0.95rem; line-height: 1.6; color: inherit;">
+          <!-- CARD 2: পূর্ণ বিবরণ ও নির্দেশিকা -->
+          <div class="ref-card-box" style="margin-top: 24px;">
+            <div class="ref-capsule-title">২. পূর্ণ বিবরণ ও নির্দেশিকা</div>
+            <div class="ref-full-text">
               ${item.fullHtml ? item.fullHtml : `<p>${escapeHtml(item.summary)}</p>`}
             </div>
           </div>
         </div>
 
-        <div class="print-footer-tag" style="display:none;">
+        <!-- PRINT FOOTER -->
+        <div class="poster-footer print-only-element">
           Aimanix AI Official Job Booklet Framework • Print & Share
         </div>
 
+        <!-- WEB BUTTONS -->
         <div class="modal-footer-btns" style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
           ${item.applyLink ? `<a href="${item.applyLink}" target="_blank" class="btn-apply-link" style="flex:1;">🌐 অফিশিয়াল ওয়েবসাইটে যান</a>` : ''}
-          <button class="btn-read-modal" onclick="window.print()" style="border-color: var(--cyan); color: var(--cyan); font-weight:800;">🖨️ প্রিন্ট / সেভ PDF</button>
+          <button class="btn-read-modal" onclick="triggerCleanPrint()" style="border-color: var(--cyan); color: var(--cyan); font-weight:800;">🖨️ প্রিন্ট / সেভ PDF</button>
         </div>
       `;
       modal.style.display = "flex";
+    }
+
+    function triggerCleanPrint() {
+      window.print();
     }
 
     function closeJobModal() {

@@ -93,7 +93,7 @@
     }
     .auth-btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    .auth-err-msg { color: #ef4444; font-size: 0.82rem; margin-top: 0.8rem; display: none; }
+    .auth-err-msg { color: #ef4444; font-size: 0.82rem; margin-top: 0.8rem; display: none; line-height: 1.4; }
 
     .admin-wrapper { display: none; max-width: 950px; margin: 0 auto 3rem; }
 
@@ -197,7 +197,7 @@
       <h2>Aimanix Admin Auth</h2>
       <p>সুরক্ষিত ক্লাউড ড্যাশবোর্ডে প্রবেশ করতে লগইন করুন</p>
       
-      <input type="email" id="admin-email-input" class="auth-input-field" placeholder="admin@aimanixai.in" onkeypress="handleAuthKey(event)">
+      <input type="email" id="admin-email-input" class="auth-input-field" placeholder="rohanadisha@gmail.com" onkeypress="handleAuthKey(event)">
       <input type="password" id="admin-pass-input" class="auth-input-field" placeholder="••••••••••••" onkeypress="handleAuthKey(event)">
       
       <button class="auth-btn-login" id="btn-login-submit" onclick="loginWithFirebase()">লগইন করুন 🚀</button>
@@ -360,7 +360,7 @@
 
   <script>
     // ==========================================================
-    // 1. FIREBASE CONFIGURATION
+    // 1. FIREBASE CONFIGURATION & INITIALIZATION (FIXED ORDER)
     // ==========================================================
     const firebaseConfig = {
       authDomain: "aimanix-web.firebaseapp.com",
@@ -368,17 +368,21 @@
       storageBucket: "aimanix-web.appspot.com"
     };
 
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    
+    // Auth ও Firestore আগে ডিফাইন করা হলো যাতে কোনো কলিং ক্র্যাশ না হয়
+    var auth = firebase.auth();
+    var db = firebase.firestore();
 
     // ==========================================================
-    // 2. FIREBASE BACKEND AUTH CONTROLLER
+    // 2. FIREBASE AUTH LISTENER & LOGIN CONTROLLER
     // ==========================================================
-    // ক্লাউড সেশন লিসেনার: পেজ লোড হলে স্বয়ংক্রিয়ভাবে সেশন ভেরিফাই করবে
-    auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged(function(user) {
       if (user) {
-        document.getElementById("user-display-email").textContent = `অ্যাক্টিভ: ${user.email}`;
+        var emailEl = document.getElementById("user-display-email");
+        if (emailEl) emailEl.textContent = "অ্যাক্টিভ: " + user.email;
         revealConsole();
       } else {
         document.getElementById("auth-screen").style.display = "flex";
@@ -408,9 +412,8 @@
 
       try {
         await auth.signInWithEmailAndPassword(email, pass);
-        // onAuthStateChanged নিজে থেকেই revealConsole() কল করবে
       } catch (error) {
-        errEl.textContent = `❌ ${error.message}`;
+        errEl.textContent = "❌ " + error.message;
         errEl.style.display = "block";
       } finally {
         btn.textContent = "লগইন করুন 🚀";
@@ -434,13 +437,13 @@
     }
 
     function switchTab(e, tabId) {
-      document.querySelectorAll('.master-tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.tab-content-panel').forEach(panel => panel.classList.remove('active'));
+      document.querySelectorAll('.master-tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
+      document.querySelectorAll('.tab-content-panel').forEach(function(panel) { panel.classList.remove('active'); });
       
-      const activeBtn = e ? e.currentTarget : document.querySelector(`.master-tab-btn[onclick*="${tabId}"]`);
+      const activeBtn = e ? e.currentTarget : document.querySelector('.master-tab-btn[onclick*="' + tabId + '"]');
       if (activeBtn) activeBtn.classList.add('active');
       
-      const panel = document.getElementById(`panel-${tabId}`);
+      const panel = document.getElementById('panel-' + tabId);
       if (panel) panel.classList.add('active');
     }
 
@@ -481,9 +484,9 @@
       throw new Error("Gemini সার্ভার ব্যস্ত রয়েছে। অনুগ্রহ করে কয়েক সেকেন্ড পর আবার চেষ্টা করুন।");
     }
 
-    // ==========================================================
+    // ==========================================
     // 4. HOMEPAGE CONTROLLER & VIDEO PARSER
-    // ==========================================================
+    // ==========================================
     const DEFAULT_SITE_DATA = {
       videoUrl: "https://files.catbox.moe/fmhga1.mp4",
       photo: "",
@@ -662,7 +665,7 @@
         const snap = await db.collection("school_notes").orderBy("timestamp", "desc").get();
         if (snap.empty) { box.innerHTML = "কোনো নোট নেই।"; return; }
         box.innerHTML = "";
-        snap.forEach(doc => {
+        snap.forEach(function(doc) {
           const d = doc.data();
           box.innerHTML += `
             <div class="data-item-card">
@@ -678,7 +681,7 @@
         try {
           await db.collection("school_notes").doc(id).delete();
           let localNotes = JSON.parse(localStorage.getItem("aimanix_school_notes") || "[]");
-          localNotes = localNotes.filter(n => n.id !== id);
+          localNotes = localNotes.filter(function(n) { return n.id !== id; });
           localStorage.setItem("aimanix_school_notes", JSON.stringify(localNotes));
           loadSchoolNotesList();
         } catch (e) {
@@ -687,9 +690,9 @@
       }
     }
 
-    // ==========================================================
+    // ==========================================
     // 6. KOBITAR AKASH ENGINE
-    // ==========================================================
+    // ==========================================
     const KOBITA_AURORA_PROMPT = `
 তুমি আধুনিক বাংলা কবিতার সংকলক। কাঁচা কবিতা থেকে উপযুক্ত JSON রিটার্ন করবে।
 JSON ফরম্যাট:
@@ -747,7 +750,7 @@ JSON ফরম্যাট:
         const snap = await db.collection("poems").orderBy("timestamp", "desc").get();
         if (snap.empty) { box.innerHTML = "কোনো কবিতা নেই।"; return; }
         box.innerHTML = "";
-        snap.forEach(doc => {
+        snap.forEach(function(doc) {
           const d = doc.data();
           box.innerHTML += `
             <div class="data-item-card">
@@ -763,7 +766,7 @@ JSON ফরম্যাট:
         try {
           await db.collection("poems").doc(id).delete();
           let localPoems = JSON.parse(localStorage.getItem("aimanix_poems") || "[]");
-          localPoems = localPoems.filter(p => p.id !== id);
+          localPoems = localPoems.filter(function(p) { return p.id !== id; });
           localStorage.setItem("aimanix_poems", JSON.stringify(localPoems));
           loadPoemsList();
         } catch (e) {

@@ -36,11 +36,6 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
-
-    p, span, h1, h2, h3, h4, li {
-      user-select: text;
     }
 
     body {
@@ -52,14 +47,14 @@
       position: relative;
     }
 
-    /* CYBER MATRIX & PARTICLE CANVAS */
+    /* CYBER MATRIX & SYNAPSE CANVAS BACKGROUND */
     .cyber-grid-bg {
       position: fixed;
       inset: 0;
       background-image: 
         linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(139, 92, 246, 0.05) 1px, transparent 1px);
-      background-size: 32px 32px;
+      background-size: 34px 34px;
       pointer-events: none;
       z-index: 0;
     }
@@ -239,7 +234,7 @@
       display: block;
     }
 
-    /* CATEGORY PILLS (ENHANCED TOUCH) */
+    /* DYNAMIC FILTER CATEGORY PILLS */
     .filter-section {
       max-width: 1200px;
       margin: 1.4rem auto 1rem;
@@ -535,7 +530,6 @@
         padding: 0 !important;
       }
 
-      /* পেজের অপ্রয়োজনীয় নেভিগেশন, ক্যানভাস ও ওয়েব হেডার অদৃশ্য */
       .cyber-grid-bg, #jobs-particle-canvas, .job-nav, .hero-container, 
       .filter-section, .jobs-feed-wrapper, .modal-close-btn, 
       .modal-footer-btns, .btn-apply-link, .btn-read-modal, .web-only-head {
@@ -989,7 +983,7 @@
     }
 
     // ==========================================================
-    // 3. SYNAPSE CANVAS & TOUCH ANIMATION ENGINE
+    // 3. INTERACTIVE TOUCH & MOUSE RIPPLE BUBBLE ENGINE
     // ==========================================================
     const canvas = document.getElementById('jobs-particle-canvas');
     const ctx = canvas.getContext('2d');
@@ -1002,30 +996,108 @@
     window.addEventListener('resize', resize);
     resize();
 
-    const particles = Array.from({ length: 40 }, () => ({
+    // মাউস ও টাচ পজিশন ট্র্যাকার
+    const pointer = { x: null, y: null, radius: 150 };
+    const ripples = [];
+
+    class TouchRippleBubble {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.radius = 4;
+        this.maxRadius = Math.random() * 45 + 35;
+        this.alpha = 0.85;
+        this.speed = Math.random() * 2.5 + 2;
+        this.color = ['0, 242, 254', '217, 70, 239', '99, 102, 241'][Math.floor(Math.random() * 3)];
+      }
+
+      update() {
+        this.radius += this.speed;
+        this.alpha -= 0.022;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(${this.color}, ${this.alpha})`;
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
+
+        // ভেতরের গ্লো বাবল
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius * 0.45, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${this.color}, ${this.alpha * 0.25})`;
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    // টাচ ও মাউস ইভেন্ট লিসেনার
+    window.addEventListener('mousemove', (e) => {
+      pointer.x = e.clientX;
+      pointer.y = e.clientY;
+      if (Math.random() > 0.4) ripples.push(new TouchRippleBubble(e.clientX, e.clientY));
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        pointer.x = e.touches[0].clientX;
+        pointer.y = e.touches[0].clientY;
+        ripples.push(new TouchRippleBubble(pointer.x, pointer.y));
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 0) {
+        pointer.x = e.touches[0].clientX;
+        pointer.y = e.touches[0].clientY;
+        for (let i = 0; i < 3; i++) {
+          setTimeout(() => {
+            ripples.push(new TouchRippleBubble(pointer.x, pointer.y));
+          }, i * 60);
+        }
+      }
+    }, { passive: true });
+
+    window.addEventListener('mouseleave', () => { pointer.x = null; pointer.y = null; });
+    window.addEventListener('touchend', () => { pointer.x = null; pointer.y = null; });
+
+    // ডায়নামিক ব্যাকগ্রাউন্ড কণা (Synapse Particles)
+    const particles = Array.from({ length: 50 }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.6,
-      vy: (Math.random() - 0.5) * 0.6,
-      radius: Math.random() * 2 + 1,
+      vx: (Math.random() - 0.5) * 0.8,
+      vy: (Math.random() - 0.5) * 0.8,
+      radius: Math.random() * 2.2 + 1.2,
       color: ['0, 242, 254', '139, 92, 246', '217, 70, 239'][Math.floor(Math.random() * 3)]
     }));
 
-    function renderSynapses() {
+    function renderEngine() {
       ctx.clearRect(0, 0, width, height);
 
+      // ১. টাচ বাবল রিপল রেন্ডার
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        ripples[i].update();
+        ripples[i].draw();
+        if (ripples[i].alpha <= 0 || ripples[i].radius >= ripples[i].maxRadius) {
+          ripples.splice(i, 1);
+        }
+      }
+
+      // ২. কণা ও কানেক্টিং জালিকা রেন্ডার
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 110) {
+          if (dist < 125) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(56, 189, 248, ${(1 - dist / 110) * 0.22})`;
-            ctx.lineWidth = 0.8;
+            ctx.strokeStyle = `rgba(56, 189, 248, ${(1 - dist / 125) * 0.28})`;
+            ctx.lineWidth = 0.9;
             ctx.stroke();
           }
         }
@@ -1034,23 +1106,39 @@
       particles.forEach(p => {
         p.x += p.vx;
         p.y += p.vy;
+
         if (p.x < 0 || p.x > width) p.vx *= -1;
         if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        // আঙুল বা মাউসের দিকে হালকা আকর্ষণ
+        if (pointer.x !== null && pointer.y !== null) {
+          const dx = pointer.x - p.x;
+          const dy = pointer.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < pointer.radius) {
+            const force = (pointer.radius - dist) / pointer.radius;
+            p.x -= (dx / dist) * force * 2.5;
+            p.y -= (dy / dist) * force * 2.5;
+          }
+        }
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgb(${p.color})`;
+        ctx.shadowColor = `rgb(${p.color})`;
+        ctx.shadowBlur = 8;
         ctx.fill();
+        ctx.shadowBlur = 0;
       });
 
-      requestAnimationFrame(renderSynapses);
+      requestAnimationFrame(renderEngine);
     }
 
     // STARTUP
     document.addEventListener("DOMContentLoaded", () => {
       loadPortalHeaderAndLabels();
       fetchJobsPortalData();
-      renderSynapses();
+      renderEngine();
     });
   </script>
 </body>

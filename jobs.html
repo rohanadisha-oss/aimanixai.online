@@ -18,7 +18,7 @@
     :root {
       --bg-dark: #070c18;
       --surface: #0d1527;
-      --card-bg: rgba(16, 26, 48, 0.85);
+      --card-bg: rgba(16, 26, 48, 0.88);
       --card-border: rgba(56, 189, 248, 0.25);
       --cyan: #00f2fe;
       --blue: #38bdf8;
@@ -36,6 +36,11 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    p, span, h1, h2, h3, h4, li {
+      user-select: text;
     }
 
     body {
@@ -47,14 +52,14 @@
       position: relative;
     }
 
-    /* CYBER MATRIX & SYNAPSE CANVAS BACKGROUND */
+    /* CYBER MATRIX & PARTICLE CANVAS */
     .cyber-grid-bg {
       position: fixed;
       inset: 0;
       background-image: 
         linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(139, 92, 246, 0.05) 1px, transparent 1px);
-      background-size: 36px 36px;
+      background-size: 32px 32px;
       pointer-events: none;
       z-index: 0;
     }
@@ -78,10 +83,10 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      backdrop-filter: blur(16px);
-      background: rgba(7, 12, 24, 0.85);
+      backdrop-filter: blur(18px);
+      background: rgba(7, 12, 24, 0.88);
       border-bottom: 1px solid var(--card-border);
-      padding: 0.9rem 1.5rem;
+      padding: 0.85rem 1.4rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -99,64 +104,70 @@
       color: #fff;
       font-family: 'Fira Code', monospace;
       font-weight: 800;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       padding: 0.35rem 0.65rem;
       border-radius: 8px;
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+      box-shadow: 0 0 16px rgba(0, 242, 254, 0.45);
+      transition: transform 0.2s ease;
+    }
+
+    .brand-group:active .brand-badge {
+      transform: scale(0.92);
     }
 
     .brand-title {
       font-size: 1.15rem;
       font-weight: 800;
       color: #fff;
+      letter-spacing: -0.2px;
     }
 
     .nav-actions {
       display: flex;
-      gap: 0.6rem;
+      gap: 0.5rem;
       align-items: center;
     }
 
     .btn-nav-home {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      background: rgba(255, 255, 255, 0.06);
+      gap: 0.35rem;
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--card-border);
       color: #fff;
-      padding: 0.45rem 0.95rem;
+      padding: 0.45rem 0.85rem;
       border-radius: 10px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       text-decoration: none;
-      transition: all 0.25s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .btn-nav-home:hover {
-      background: rgba(56, 189, 248, 0.2);
+    .btn-nav-home:active {
+      transform: scale(0.92);
+      background: rgba(56, 189, 248, 0.25);
       border-color: var(--cyan);
-      transform: translateY(-2px);
     }
 
     /* HERO HEADER POSTER SECTION */
     .hero-container {
       max-width: 1200px;
-      margin: 1.5rem auto;
-      padding: 0 1.2rem;
+      margin: 1.2rem auto;
+      padding: 0 1rem;
     }
 
     .poster-hero {
       position: relative;
       background: linear-gradient(145deg, #0e172e, #080d1a);
       border: 1px solid rgba(56, 189, 248, 0.35);
-      border-radius: 24px;
+      border-radius: 22px;
       overflow: hidden;
-      padding: 3rem 2.2rem;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(0, 242, 254, 0.05);
+      padding: 2.5rem 1.8rem;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 0 35px rgba(0, 242, 254, 0.05);
       display: grid;
       grid-template-columns: 1.2fr 0.8fr;
       align-items: center;
-      gap: 2rem;
+      gap: 1.8rem;
     }
 
     .poster-badge {
@@ -164,20 +175,20 @@
       background: linear-gradient(90deg, #d946ef, #ec4899);
       color: #fff;
       font-weight: 800;
-      font-size: 0.95rem;
-      padding: 0.4rem 1.1rem;
+      font-size: 0.9rem;
+      padding: 0.35rem 1rem;
       border-radius: 6px;
       letter-spacing: 0.8px;
-      box-shadow: 0 0 25px rgba(217, 70, 239, 0.5);
-      margin-bottom: 1.2rem;
+      box-shadow: 0 0 20px rgba(217, 70, 239, 0.45);
+      margin-bottom: 1rem;
     }
 
     .poster-title {
-      font-size: 2.8rem;
+      font-size: 2.5rem;
       font-weight: 800;
-      line-height: 1.2;
+      line-height: 1.25;
       color: #ffffff;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.75rem;
     }
 
     .poster-title span {
@@ -188,60 +199,59 @@
 
     .poster-subtitle {
       color: #cbd5e1;
-      font-size: 1.05rem;
+      font-size: 1rem;
       line-height: 1.6;
-      margin-bottom: 1.6rem;
+      margin-bottom: 1.4rem;
     }
 
     .poster-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.8rem;
+      gap: 0.6rem;
     }
 
     .meta-tag {
       background: rgba(3, 7, 18, 0.7);
       border: 1px solid rgba(56, 189, 248, 0.25);
       color: var(--cyan);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 600;
-      padding: 0.4rem 0.85rem;
+      padding: 0.35rem 0.75rem;
       border-radius: 8px;
     }
 
     .poster-image-box {
-      border-radius: 18px;
+      border-radius: 16px;
       overflow: hidden;
       border: 1px solid rgba(0, 242, 254, 0.3);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      transition: all 0.4s ease;
+      transition: all 0.3s ease;
     }
 
-    .poster-image-box:hover {
-      transform: scale(1.02);
-      border-color: var(--cyan);
-      box-shadow: 0 0 25px rgba(0, 242, 254, 0.35);
+    .poster-image-box:active {
+      transform: scale(0.98);
     }
 
     .poster-image-box img {
       width: 100%;
-      height: 280px;
+      height: 260px;
       object-fit: cover;
       display: block;
     }
 
-    /* DYNAMIC FILTER CATEGORY PILLS */
+    /* CATEGORY PILLS (ENHANCED TOUCH) */
     .filter-section {
       max-width: 1200px;
-      margin: 1.8rem auto 1.2rem;
-      padding: 0 1.2rem;
+      margin: 1.4rem auto 1rem;
+      padding: 0 1rem;
     }
 
     .category-pills {
       display: flex;
-      gap: 0.65rem;
+      gap: 0.6rem;
       overflow-x: auto;
       padding-bottom: 0.6rem;
+      -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
     .category-pills::-webkit-scrollbar { display: none; }
@@ -251,79 +261,80 @@
       background: var(--surface);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      padding: 0.65rem 1.2rem;
+      padding: 0.6rem 1.15rem;
       border-radius: 50px;
       font-family: inherit;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 0.45rem;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .cat-btn:hover {
-      color: #fff;
+    .cat-btn:active {
+      transform: scale(0.92);
       border-color: var(--cyan);
-      transform: translateY(-2px);
+      background: rgba(0, 242, 254, 0.15);
     }
 
     .cat-btn.active {
-      background: linear-gradient(135deg, rgba(0, 242, 254, 0.18), rgba(99, 102, 241, 0.28));
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.22), rgba(99, 102, 241, 0.32));
       color: var(--cyan);
       border-color: var(--cyan);
-      box-shadow: 0 0 18px rgba(0, 242, 254, 0.3);
+      box-shadow: 0 0 18px rgba(0, 242, 254, 0.35);
     }
 
     /* JOB CARDS CONTAINER */
     .jobs-feed-wrapper {
       max-width: 1200px;
-      margin: 1rem auto 4rem;
-      padding: 0 1.2rem;
+      margin: 0.8rem auto 4rem;
+      padding: 0 1rem;
     }
 
     .section-counter-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.4rem;
+      margin-bottom: 1.2rem;
       padding-bottom: 0.6rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .counter-text {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 800;
       color: #fff;
     }
 
     .job-cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.4rem;
     }
 
-    /* LUXURY JOB CARD STYLING */
+    /* CARD DESIGN WITH HAPTIC TOUCH FEEL */
     .job-card {
       background: var(--card-bg);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 1.6rem;
+      padding: 1.4rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
       overflow: hidden;
-      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      cursor: pointer;
     }
 
-    .job-card:hover, .job-card:active {
-      transform: translateY(-6px);
+    .job-card:active {
+      transform: scale(0.975);
       border-color: var(--cyan);
-      box-shadow: 0 16px 36px rgba(0, 242, 254, 0.2);
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.3);
     }
 
     .card-top-row {
@@ -331,7 +342,7 @@
       justify-content: space-between;
       align-items: flex-start;
       gap: 0.5rem;
-      margin-bottom: 0.9rem;
+      margin-bottom: 0.8rem;
     }
 
     .category-chip {
@@ -340,7 +351,7 @@
       color: #a5b4fc;
       font-size: 0.78rem;
       font-weight: 700;
-      padding: 0.25rem 0.7rem;
+      padding: 0.25rem 0.65rem;
       border-radius: 6px;
     }
 
@@ -351,21 +362,21 @@
     }
 
     .job-headline {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 800;
       color: #ffffff;
       line-height: 1.4;
-      margin-bottom: 0.9rem;
+      margin-bottom: 0.85rem;
     }
 
     .job-key-details {
       background: rgba(3, 7, 18, 0.5);
       border-radius: 12px;
-      padding: 0.85rem 1rem;
-      margin-bottom: 1.1rem;
+      padding: 0.8rem 0.95rem;
+      margin-bottom: 1rem;
       display: flex;
       flex-direction: column;
-      gap: 0.45rem;
+      gap: 0.4rem;
     }
 
     .detail-item {
@@ -379,21 +390,21 @@
     .detail-item strong {
       color: var(--cyan);
       font-weight: 700;
-      min-width: 95px;
+      min-width: 90px;
     }
 
     .job-summary-content {
       color: #94a3b8;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       line-height: 1.6;
-      margin-bottom: 1.4rem;
+      margin-bottom: 1.3rem;
       flex-grow: 1;
     }
 
     /* CARD ACTION BUTTONS */
     .card-footer-btns {
       display: flex;
-      gap: 0.7rem;
+      gap: 0.65rem;
       align-items: center;
     }
 
@@ -403,32 +414,37 @@
       color: #fff;
       text-decoration: none;
       font-weight: 800;
-      font-size: 0.92rem;
-      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      padding: 0.72rem 1rem;
       border-radius: 10px;
       text-align: center;
       box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
-      transition: all 0.25s ease;
+      transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.4rem;
     }
 
+    .btn-apply-link:active {
+      transform: scale(0.94);
+    }
+
     .btn-read-modal {
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--card-border);
       color: #fff;
-      padding: 0.75rem 1rem;
+      padding: 0.72rem 1rem;
       border-radius: 10px;
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition: all 0.2s ease;
     }
 
-    .btn-read-modal:hover {
-      background: rgba(255, 255, 255, 0.12);
+    .btn-read-modal:active {
+      transform: scale(0.94);
+      background: rgba(255, 255, 255, 0.15);
       border-color: #fff;
     }
 
@@ -437,36 +453,36 @@
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 10000;
-      padding: 1.5rem;
+      padding: 1.2rem;
     }
 
     .modal-card {
       background: #0d1527;
       border: 1px solid var(--cyan);
       box-shadow: 0 0 50px rgba(0, 242, 254, 0.25);
-      border-radius: 22px;
+      border-radius: 20px;
       width: 100%;
-      max-width: 800px;
-      max-height: 90vh;
+      max-width: 780px;
+      max-height: 88vh;
       overflow-y: auto;
-      padding: 2.2rem;
+      padding: 1.8rem;
       position: relative;
     }
 
     .modal-close-btn {
       position: absolute;
-      top: 1.2rem;
-      right: 1.2rem;
+      top: 1rem;
+      right: 1rem;
       background: rgba(255,255,255,0.08);
       border: none;
       color: #fff;
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       font-size: 1.2rem;
       cursor: pointer;
@@ -474,10 +490,25 @@
       align-items: center;
       justify-content: center;
     }
-    .modal-close-btn:hover { background: #ef4444; }
+    .modal-close-btn:active {
+      transform: scale(0.9);
+      background: #ef4444;
+    }
+
+    /* MOBILE SPECIFIC TUNING */
+    @media (max-width: 900px) {
+      .poster-hero {
+        grid-template-columns: 1fr;
+        padding: 1.8rem 1.4rem;
+        gap: 1.4rem;
+      }
+      .poster-title { font-size: 2rem; }
+      .poster-image-box img { height: 210px; }
+      .job-cards-grid { grid-template-columns: 1fr; }
+    }
 
     /* ==========================================================================
-       PRINT ARCHITECTURE (হুবহু আপনার দেওয়া রেফারেন্স ছবির ১০০% নির্ভুল স্টাইল)
+       PRINT ARCHITECTURE (A4 সাইজের সাথে ১০০% নির্ভুল ফিট ও নিখুঁত মার্জিন)
        ========================================================================== */
     .print-only-element {
       display: none !important;
@@ -485,19 +516,23 @@
 
     @media print {
       @page {
-        size: A4 portrait;
-        margin: 10mm 12mm;
+        size: A4 portrait !important;
+        margin: 8mm 10mm !important;
       }
 
       * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+        box-sizing: border-box !important;
       }
 
       body, html {
         background: #ffffff !important;
         color: #0f172a !important;
         font-family: 'Hind Siliguri', sans-serif !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
       }
 
       /* পেজের অপ্রয়োজনীয় নেভিগেশন, ক্যানভাস ও ওয়েব হেডার অদৃশ্য */
@@ -512,12 +547,15 @@
         display: block !important;
         background: transparent !important;
         padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
       }
 
       .modal-card {
         border: none !important;
         box-shadow: none !important;
         padding: 0 !important;
+        margin: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
         max-height: none !important;
@@ -537,125 +575,128 @@
         align-items: center;
         background: #111a44 !important;
         color: #ffffff !important;
-        padding: 12px 20px !important;
-        border-radius: 8px 8px 0 0 !important;
-        margin-bottom: 22px !important;
+        padding: 10px 18px !important;
+        border-radius: 6px 6px 0 0 !important;
+        margin-bottom: 16px !important;
       }
 
       .poster-top-bar h1 {
-        font-size: 1.45rem !important;
+        font-size: 1.35rem !important;
         font-weight: 800 !important;
         color: #ffffff !important;
-        letter-spacing: -0.2px;
       }
 
       .poster-top-bar .brand-naresh {
-        font-size: 0.95rem !important;
+        font-size: 0.9rem !important;
         font-family: 'Fira Code', monospace;
         color: #facc15 !important;
         font-weight: 800;
       }
 
-      /* ২. মূল শিরোনাম ও শেষ তারিখের নোটিশ */
+      /* ২. মূল শিরোনাম ও শেষ তারিখ */
       .poster-main-title {
-        text-align: center;
-        margin-bottom: 22px;
-        padding: 0 10px;
+        text-align: center !important;
+        margin-bottom: 18px !important;
+        padding: 0 8px !important;
       }
 
       .poster-main-title h2 {
-        font-size: 1.35rem !important;
+        font-size: 1.25rem !important;
         font-weight: 800 !important;
         color: #1e1b4b !important;
-        line-height: 1.35;
-        margin-bottom: 6px;
+        line-height: 1.35 !important;
+        margin-bottom: 4px !important;
       }
 
       .poster-main-title .deadline-badge {
-        display: inline-block;
+        display: inline-block !important;
         background: #fee2e2 !important;
         color: #dc2626 !important;
         border: 1px solid #f87171 !important;
-        font-weight: 700;
-        font-size: 0.85rem;
-        padding: 3px 12px;
-        border-radius: 6px;
+        font-weight: 700 !important;
+        font-size: 0.8rem !important;
+        padding: 2px 10px !important;
+        border-radius: 4px !important;
       }
 
-      /* ৩. রেফারেন্স ছবির মতো পার্পল ক্যাপসুল কার্ড স্ট্রাকচার */
+      /* ৩. রেফারেন্স ছবির মতো পার্পল ক্যাপসুল কার্ড বক্স */
       .ref-card-box {
         border: 1.5px solid #581c87 !important;
-        border-radius: 14px !important;
-        padding: 16px 16px 14px 16px !important;
-        margin-bottom: 22px !important;
+        border-radius: 12px !important;
+        padding: 14px 14px 12px 14px !important;
+        margin-bottom: 18px !important;
         position: relative !important;
         page-break-inside: avoid !important;
+        break-inside: avoid !important;
         background: #ffffff !important;
+        width: 100% !important;
       }
 
       /* ক্যাপসুল পিল হেডার */
       .ref-capsule-title {
         position: absolute !important;
-        top: -14px !important;
+        top: -12px !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         background: #4c1d95 !important;
         color: #ffffff !important;
         font-weight: 800 !important;
-        font-size: 0.88rem !important;
-        padding: 3px 22px !important;
+        font-size: 0.82rem !important;
+        padding: 2px 18px !important;
         border-radius: 50px !important;
         white-space: nowrap !important;
         box-shadow: 0 2px 4px rgba(0,0,0,0.15) !important;
       }
 
-      /* রেফারেন্স ছবির মতো ২ কলাম বিশিষ্ট গ্রিড */
+      /* ২ কলাম বিশিষ্ট অ্যারো গ্রিড (কাটবে না) */
       .ref-grid-columns {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
-        gap: 10px 18px !important;
+        gap: 8px 14px !important;
+        width: 100% !important;
       }
 
       .ref-item {
-        font-size: 0.88rem !important;
-        line-height: 1.45 !important;
+        font-size: 0.85rem !important;
+        line-height: 1.4 !important;
         color: #1e293b !important;
         display: flex !important;
         align-items: flex-start !important;
         gap: 6px !important;
+        word-break: break-word !important;
       }
 
       .ref-item::before {
         content: "➔" !important;
         color: #3b82f6 !important;
         font-weight: 900 !important;
-        font-size: 0.85rem !important;
-        flex-shrink: 0;
+        font-size: 0.82rem !important;
+        flex-shrink: 0 !important;
       }
 
       .ref-full-text {
-        font-size: 0.88rem !important;
-        line-height: 1.55 !important;
+        font-size: 0.85rem !important;
+        line-height: 1.5 !important;
         color: #1e293b !important;
       }
 
       .ref-full-text ul, .ref-full-text ol {
-        padding-left: 18px;
-        margin: 6px 0;
+        padding-left: 18px !important;
+        margin: 4px 0 !important;
       }
 
       .ref-full-text li {
-        margin-bottom: 4px;
+        margin-bottom: 3px !important;
       }
 
       .poster-footer {
         display: block !important;
-        text-align: center;
-        font-size: 0.75rem !important;
+        text-align: center !important;
+        font-size: 0.72rem !important;
         color: #64748b !important;
-        margin-top: 20px;
-        border-top: 1px dashed #cbd5e1;
-        padding-top: 8px;
+        margin-top: 14px !important;
+        border-top: 1px dashed #cbd5e1 !important;
+        padding-top: 6px !important;
       }
     }
   </style>
@@ -690,7 +731,7 @@
         <div class="poster-meta">
           <span class="meta-tag">⚡ রিয়েলটাইম আপডেট</span>
           <span class="meta-tag">🎯 নির্ভুল গাইডলাইন</span>
-          <span class="meta-tag">🖨️ প্রিমিয়াম প্রিন্ট বুকলেট</span>
+          <span class="meta-tag">🖨️ A4 প্রিন্ট রেডি</span>
         </div>
       </div>
       <div class="poster-image-box">
@@ -826,7 +867,7 @@
         const dateFormatted = item.timestamp ? new Date(item.timestamp).toLocaleDateString('bn-BD', { day: 'numeric', month: 'short', year: 'numeric' }) : "সাম্প্রতিক";
 
         return `
-          <div class="job-card">
+          <div class="job-card" onclick="openJobModal('${item.id}')">
             <div>
               <div class="card-top-row">
                 <span class="category-chip">${catName}</span>
@@ -842,11 +883,11 @@
               </div>
 
               <div class="job-summary-content">
-                ${item.summary ? escapeHtml(item.summary) : 'বিস্তারিত তথ্য ও স্টাডি মেটেরিয়াল দেখতে নিচের বাটনে ক্লিক করুন।'}
+                ${item.summary ? escapeHtml(item.summary) : 'বিস্তারিত তথ্য ও স্টাডি মেটেরিয়াল দেখতে ট্যাপ করুন।'}
               </div>
             </div>
 
-            <div class="card-footer-btns">
+            <div class="card-footer-btns" onclick="event.stopPropagation()">
               ${item.applyLink ? `<a href="${item.applyLink}" target="_blank" class="btn-apply-link">🌐 আবেদন লিঙ্ক</a>` : ''}
               <button class="btn-read-modal" onclick="openJobModal('${item.id}')">📄 বিস্তারিত ও প্রিন্ট</button>
             </div>
@@ -864,7 +905,7 @@
     }
 
     // ==========================================================
-    // 2. MODAL & ADAPTIVE PRINT GENERATOR (হুবহু রেফারেন্স ছবির অনুরূপ)
+    // 2. MODAL & ADAPTIVE PRINT GENERATOR (A4 ফিট আর্কিটেকচার)
     // ==========================================================
     function openJobModal(id) {
       const item = allJobsData.find(j => j.id === id);
@@ -887,10 +928,10 @@
         </div>
 
         <!-- WEB VIEW HEADER (ওয়েবসাইটে ডার্ক মোডে দেখাবে) -->
-        <div class="web-only-head" style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
+        <div class="web-only-head" style="margin-bottom: 1.4rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.9rem;">
           <span class="category-chip" style="margin-bottom: 0.6rem; display:inline-block;">${DEFAULT_JOB_CATEGORIES[item.category] || "বিজ্ঞপ্তি"}</span>
-          <h2 style="font-size: 1.6rem; color: #fff; margin-bottom: 0.6rem;">${escapeHtml(item.title)}</h2>
-          ${item.lastDate ? `<p style="color: var(--cyan); font-weight: 700;">📅 আবেদনের শেষ তারিখ: ${escapeHtml(item.lastDate)}</p>` : ''}
+          <h2 style="font-size: 1.55rem; color: #fff; margin-bottom: 0.5rem; line-height:1.35;">${escapeHtml(item.title)}</h2>
+          ${item.lastDate ? `<p style="color: var(--cyan); font-weight: 700; font-size: 0.95rem;">📅 আবেদনের শেষ তারিখ: ${escapeHtml(item.lastDate)}</p>` : ''}
         </div>
 
         <!-- CONTENT SECTION: রেফারেন্স ছবির মতো সুনির্দিষ্ট বক্স -->
@@ -907,7 +948,7 @@
           </div>
 
           <!-- CARD 2: পূর্ণ বিবরণ ও নির্দেশিকা -->
-          <div class="ref-card-box" style="margin-top: 24px;">
+          <div class="ref-card-box" style="margin-top: 22px;">
             <div class="ref-capsule-title">২. পূর্ণ বিবরণ ও নির্দেশিকা</div>
             <div class="ref-full-text">
               ${item.fullHtml ? item.fullHtml : `<p>${escapeHtml(item.summary)}</p>`}
@@ -921,16 +962,12 @@
         </div>
 
         <!-- WEB BUTTONS -->
-        <div class="modal-footer-btns" style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+        <div class="modal-footer-btns" style="margin-top: 1.8rem; display: flex; gap: 0.8rem; flex-wrap: wrap;">
           ${item.applyLink ? `<a href="${item.applyLink}" target="_blank" class="btn-apply-link" style="flex:1;">🌐 অফিশিয়াল ওয়েবসাইটে যান</a>` : ''}
-          <button class="btn-read-modal" onclick="triggerCleanPrint()" style="border-color: var(--cyan); color: var(--cyan); font-weight:800;">🖨️ প্রিন্ট / সেভ PDF</button>
+          <button class="btn-read-modal" onclick="window.print()" style="border-color: var(--cyan); color: var(--cyan); font-weight:800;">🖨️ প্রিন্ট / সেভ PDF</button>
         </div>
       `;
       modal.style.display = "flex";
-    }
-
-    function triggerCleanPrint() {
-      window.print();
     }
 
     function closeJobModal() {
@@ -965,11 +1002,11 @@
     window.addEventListener('resize', resize);
     resize();
 
-    const particles = Array.from({ length: 45 }, () => ({
+    const particles = Array.from({ length: 40 }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.7,
-      vy: (Math.random() - 0.5) * 0.7,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: (Math.random() - 0.5) * 0.6,
       radius: Math.random() * 2 + 1,
       color: ['0, 242, 254', '139, 92, 246', '217, 70, 239'][Math.floor(Math.random() * 3)]
     }));
@@ -983,11 +1020,11 @@
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 120) {
+          if (dist < 110) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(56, 189, 248, ${(1 - dist / 120) * 0.25})`;
+            ctx.strokeStyle = `rgba(56, 189, 248, ${(1 - dist / 110) * 0.22})`;
             ctx.lineWidth = 0.8;
             ctx.stroke();
           }

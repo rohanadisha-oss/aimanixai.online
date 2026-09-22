@@ -807,35 +807,48 @@
       </div>
 
       <div class="hud-nav-links">
+        <!-- আমার স্কুল লিঙ্ক -->
         <a href="school.html" class="hud-link-card" onclick="playBeepClick()">
           <div class="hud-link-icon">📚</div>
           <div>
-            <div>আমার স্কুল</div>
-            <small style="color: var(--text-muted); font-size: 0.75rem;">Class VIII & IX স্মার্ট স্টাডি নোটস</small>
+            <div id="nav-school-title">আমার স্কুল</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem;" id="nav-school-desc">Class V থেকে H.S স্মার্ট স্টাডি নোটস</small>
           </div>
         </a>
 
+        <!-- চাকরির বাজার লিঙ্ক (নতুন যুক্ত) -->
+        <a href="jobs.html" class="hud-link-card" onclick="playBeepClick()">
+          <div class="hud-link-icon">💼</div>
+          <div>
+            <div id="nav-jobs-title">চাকরির বাজার</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem;" id="nav-jobs-desc">নিয়োগ বিজ্ঞপ্তি, প্রস্তুতি ও রেজাল্ট</small>
+          </div>
+        </a>
+
+        <!-- কবিতার আকাশ লিঙ্ক -->
         <a href="kobita.html" class="hud-link-card" onclick="playBeepClick()">
           <div class="hud-link-icon">✍️</div>
           <div>
-            <div>কবিতার আকাশ</div>
-            <small style="color: var(--text-muted); font-size: 0.75rem;">এআই সাহিত্য ও সৃজনশীল আসর</small>
+            <div id="nav-kobita-title">কবিতার আকাশ</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem;" id="nav-kobita-desc">এআই সাহিত্য ও সৃজনশীল আসর</small>
           </div>
         </a>
 
+        <!-- প্যাকেজ ও রেট লিঙ্ক -->
         <a href="#pricing" class="hud-link-card" onclick="playBeepClick(); toggleSciFiMenuState(false);">
           <div class="hud-link-icon">💎</div>
           <div>
-            <div>প্যাকেজ ও রেট</div>
-            <small style="color: var(--text-muted); font-size: 0.75rem;">ল্যান্ডিং পেজ, ব্যাকএন্ড ও অ্যাপ</small>
+            <div id="nav-pricing-title">প্যাকেজ ও রেট</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem;" id="nav-pricing-desc">ল্যান্ডিং পেজ, ব্যাকএন্ড ও অ্যাপ</small>
           </div>
         </a>
 
+        <!-- যোগাযোগ লিঙ্ক -->
         <a href="#contact" class="hud-link-card" onclick="playBeepClick(); toggleSciFiMenuState(false);">
           <div class="hud-link-icon">📍</div>
           <div>
-            <div>যোগাযোগ</div>
-            <small style="color: var(--text-muted); font-size: 0.75rem;">ঠিকানা, হোয়াটসঅ্যাপ ও ম্যাপ</small>
+            <div id="nav-contact-title">যোগাযোগ</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem;" id="nav-contact-desc">ঠিকানা, হোয়াটসঅ্যাপ ও ম্যাপ</small>
           </div>
         </a>
       </div>
@@ -1187,7 +1200,19 @@
         lblAddr: "ঠিকানা:",
         lblPhone: "মোবাইল নম্বর:",
         lblEmail: "ইমেইল অ্যাড্রেস:",
-        address: "খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩"
+        address: "খেজুর ডাঙ্গা, দেগঙ্গা, বারাসাত, উত্তর ২৪ পরগণা, ৭৪৩৪২৩",
+
+        // মেনু আইটেম লোকালাইজেশন (বাংলা)
+        navSchoolTitle: "আমার স্কুল",
+        navSchoolDesc: "Class V থেকে H.S স্মার্ট স্টাডি নোটস",
+        navJobsTitle: "চাকরির বাজার",
+        navJobsDesc: "নিয়োগ বিজ্ঞপ্তি, প্রস্তুতি ও রেজাল্ট",
+        navKobitaTitle: "কবিতার আকাশ",
+        navKobitaDesc: "এআই সাহিত্য ও সৃজনশীল আসর",
+        navPricingTitle: "প্যাকেজ ও রেট",
+        navPricingDesc: "ল্যান্ডিং পেজ, ব্যাকএন্ড ও অ্যাপ",
+        navContactTitle: "যোগাযোগ",
+        navContactDesc: "ঠিকানা, হোয়াটসঅ্যাপ ও ম্যাপ"
       },
 
       en: {
@@ -1246,7 +1271,19 @@
         lblAddr: "Address:",
         lblPhone: "Mobile Number:",
         lblEmail: "Email Address:",
-        address: "Khejurdanga, Deganga, Barasat, North 24 Parganas, 743423"
+        address: "Khejurdanga, Deganga, Barasat, North 24 Parganas, 743423",
+
+        // মেনু আইটেম লোকালাইজেশন (English)
+        navSchoolTitle: "Amar School",
+        navSchoolDesc: "Class V to H.S Smart Study Sheets",
+        navJobsTitle: "Career Hub",
+        navJobsDesc: "Jobs, Prep Guidelines & Results",
+        navKobitaTitle: "Kobitar Akash",
+        navKobitaDesc: "AI Bengali Literature & Creative Corner",
+        navPricingTitle: "Packages & Rates",
+        navPricingDesc: "Landing Pages, Backends & Mobile Apps",
+        navContactTitle: "Contact Info",
+        navContactDesc: "Address, WhatsApp & Google Maps"
       },
 
       services: [
@@ -1416,6 +1453,18 @@ class ProductionApp:
       document.getElementById("stat-speed-label").textContent = loc.statSpeed;
       document.getElementById("stat-db-label").textContent = loc.statDb;
       document.getElementById("stat-sec-label").textContent = loc.statSec;
+
+      // ড্রয়ার মেনু টেক্সট আপডেট
+      if (document.getElementById("nav-school-title")) document.getElementById("nav-school-title").textContent = loc.navSchoolTitle;
+      if (document.getElementById("nav-school-desc")) document.getElementById("nav-school-desc").textContent = loc.navSchoolDesc;
+      if (document.getElementById("nav-jobs-title")) document.getElementById("nav-jobs-title").textContent = loc.navJobsTitle;
+      if (document.getElementById("nav-jobs-desc")) document.getElementById("nav-jobs-desc").textContent = loc.navJobsDesc;
+      if (document.getElementById("nav-kobita-title")) document.getElementById("nav-kobita-title").textContent = loc.navKobitaTitle;
+      if (document.getElementById("nav-kobita-desc")) document.getElementById("nav-kobita-desc").textContent = loc.navKobitaDesc;
+      if (document.getElementById("nav-pricing-title")) document.getElementById("nav-pricing-title").textContent = loc.navPricingTitle;
+      if (document.getElementById("nav-pricing-desc")) document.getElementById("nav-pricing-desc").textContent = loc.navPricingDesc;
+      if (document.getElementById("nav-contact-title")) document.getElementById("nav-contact-title").textContent = loc.navContactTitle;
+      if (document.getElementById("nav-contact-desc")) document.getElementById("nav-contact-desc").textContent = loc.navContactDesc;
 
       startTypewriter(loc.heroName);
 
@@ -1809,7 +1858,6 @@ class ProductionApp:
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
-            // Stripe Blend Linear Gradient between Connected Points
             ctx.strokeStyle = `rgba(122, 115, 255, ${(1 - dist / 130) * 0.35})`;
             ctx.lineWidth = 0.9;
             ctx.stroke();

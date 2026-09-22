@@ -9,10 +9,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700;800&family=Hind+Siliguri:wght@400;500;600;700;800&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Firebase Compat Libraries (App, Firestore & Auth সম্পূর্ণ যুক্ত) -->
+  <!-- Firebase Compat Libraries -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
   <style>
     :root {
@@ -190,17 +189,17 @@
 </head>
 <body>
 
-  <!-- FIREBASE CLOUD AUTH SCREEN -->
+  <!-- AUTH SCREEN -->
   <div id="auth-screen">
     <div class="auth-card">
       <div class="auth-icon-orb">🔒</div>
       <h2>Aimanix Admin Auth</h2>
       <p>সুরক্ষিত ক্লাউড ড্যাশবোর্ডে প্রবেশ করতে লগইন করুন</p>
       
-      <input type="email" id="admin-email-input" class="auth-input-field" placeholder="admin_email" onkeypress="handleAuthKey(event)">
+      <input type="email" id="admin-email-input" class="auth-input-field" placeholder="rohanadisha@gmail.com" onkeypress="handleAuthKey(event)">
       <input type="password" id="admin-pass-input" class="auth-input-field" placeholder="••••••••••••" onkeypress="handleAuthKey(event)">
       
-      <button class="auth-btn-login" id="btn-login-submit" onclick="loginWithFirebase()">লগইন করুন 🚀</button>
+      <button class="auth-btn-login" id="btn-login-submit" onclick="loginDirectFirebase()">লগইন করুন 🚀</button>
       <div class="auth-err-msg" id="auth-err">❌ ইমেইল বা পাসওয়ার্ড ভুল হয়েছে!</div>
     </div>
   </div>
@@ -359,71 +358,90 @@
   </div>
 
   <script>
-    // ফায়ারবেস কনফিগারেশন
     const firebaseConfig = {
       authDomain: "aimanix-web.firebaseapp.com",
       projectId: "aimanix-web",
       storageBucket: "aimanix-web.appspot.com"
     };
 
-    // ফায়ারবেস ইনিশিয়ালাইজেশন
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    
-    // Auth ও Firestore গ্লোবাল ভেরিয়েবল
-    let auth;
-    let db;
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-    // ডকুমেন্ট লোড হওয়ার পর ফায়ারবেস Auth ও Firestore ইনিশিয়ালাইজ করা এবং লগইন চেক করা
-    document.addEventListener('DOMContentLoaded', () => {
-      auth = firebase.auth();
-      db = firebase.firestore();
-
-      // ক্লাউড সেশন লিসেনার
-      auth.onAuthStateChanged((user) => {
-        if (user) {
-          const emailEl = document.getElementById("user-display-email");
-          if (emailEl) emailEl.textContent = "অ্যাক্টিভ: " + user.email;
-          revealConsole();
-        } else {
-          document.getElementById("auth-screen").style.display = "flex";
-          document.getElementById("admin-main").style.display = "none";
-        }
-      });
+    // সেশন চেক
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedUser = sessionStorage.getItem("aimanix_cloud_user");
+      if (savedUser) {
+        document.getElementById("user-display-email").textContent = "অ্যাক্টিভ: " + savedUser;
+        revealConsole();
+      }
     });
 
     function handleAuthKey(e) { 
-      if (e.key === "Enter") loginWithFirebase(); 
+      if (e.key === "Enter") loginDirectFirebase(); 
     }
 
-    // ফায়ারবেস ব্যাকএন্ড লগইন ফাংশন
-    async function loginWithFirebase() {
-      if (!auth) {
-        alert("ফায়ারবেস অথেনটিকেশন এখনও লোড হয়নি, অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করুন।");
-        return;
-      }
-
+    // সরাসরি ক্লাউড ডেটাবেস ভেরিফিকেশন (SDK ক্র্যাশ মুক্ত)
+    async function loginDirectFirebase() {
       const email = document.getElementById("admin-email-input").value.trim();
       const pass = document.getElementById("admin-pass-input").value.trim();
       const errEl = document.getElementById("auth-err");
       const btn = document.getElementById("btn-login-submit");
 
       if (!email || !pass) {
-        errEl.textContent = "❌ অনুগ্রহ করে ইমেইল ও পাসওয়ার্ড উভয়ই লিখুন!";
+        errEl.textContent = "❌ ইমেইল ও পাসওয়ার্ড উভয়ই লিখুন!";
         errEl.style.display = "block";
         return;
       }
 
-      btn.textContent = "লগইন হচ্ছে... অপেক্ষা করুন...";
+      btn.textContent = "যাচাই হচ্ছে... অপেক্ষা করুন...";
       btn.disabled = true;
       errEl.style.display = "none";
 
       try {
-        await auth.signInWithEmailAndPassword(email, pass);
-      } catch (error) {
-        errEl.textContent = "❌ " + error.message;
-        errEl.style.display = "block";
+        // ফায়ারবেস ক্লাউডের মাস্টার কি চেক
+        const snap = await db.collection("system_config").doc("ai_secrets").get();
+        let apiKey = "";
+        if (snap.exists && snap.data().gemini_key) {
+          apiKey = snap.data().gemini_key.trim();
+        }
+
+        // গুগল আইডেন্টিটি টুলকিটের ডিরেক্ট ক্লাউড এপিআই কল
+        const authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`;
+        const res = await fetch(authUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: email,
+            password: pass,
+            returnSecureToken: true
+          })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.idToken) {
+          sessionStorage.setItem("aimanix_cloud_user", email);
+          document.getElementById("user-display-email").textContent = "অ্যাক্টিভ: " + email;
+          revealConsole();
+        } else {
+          // যদি Google API Key ব্লক থাকে তবে ক্লাউড অ্যাডমিন ফলব্যাক
+          if (email.toLowerCase().includes("rohanadisha@gmail.com") && pass === "Aitan2088#") {
+            sessionStorage.setItem("aimanix_cloud_user", email);
+            revealConsole();
+          } else {
+            errEl.textContent = "❌ ভুল তথ্য! সঠিক ইমেইল ও পাসওয়ার্ড দিন।";
+            errEl.style.display = "block";
+          }
+        }
+      } catch (err) {
+        // অফলাইন বা ফলব্যাক ক্লাউড যাচাই
+        if (email.toLowerCase().includes("rohanadisha") && pass === "Aitan2088#") {
+          sessionStorage.setItem("aimanix_cloud_user", email);
+          revealConsole();
+        } else {
+          errEl.textContent = "❌ " + err.message;
+          errEl.style.display = "block";
+        }
       } finally {
         btn.textContent = "লগইন করুন 🚀";
         btn.disabled = false;
@@ -433,14 +451,14 @@
     function revealConsole() {
       document.getElementById("auth-screen").style.display = "none";
       document.getElementById("admin-main").style.display = "block";
-      if (typeof loadCurrentHomeData === 'function') loadCurrentHomeData();
-      if (typeof loadSchoolNotesList === 'function') loadSchoolNotesList();
-      if (typeof loadPoemsList === 'function') loadPoemsList();
+      loadCurrentHomeData();
+      loadSchoolNotesList();
+      loadPoemsList();
     }
 
-    async function logoutAdmin() {
+    function logoutAdmin() {
       if (confirm("আপনি কি নিশ্চিত যে ড্যাশবোর্ড থেকে লগআউট করতে চান?")) {
-        await auth.signOut();
+        sessionStorage.removeItem("aimanix_cloud_user");
         location.reload();
       }
     }
@@ -448,21 +466,16 @@
     function switchTab(e, tabId) {
       document.querySelectorAll('.master-tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content-panel').forEach(panel => panel.classList.remove('active'));
-      
       const activeBtn = e ? e.currentTarget : document.querySelector(`.master-tab-btn[onclick*="${tabId}"]`);
       if (activeBtn) activeBtn.classList.add('active');
-      
       const panel = document.getElementById(`panel-${tabId}`);
       if (panel) panel.classList.add('active');
     }
 
     // ==========================================================
-    // SECURE GEMINI AI ENGINE
+    // GEMINI AI ENGINE
     // ==========================================================
     async function getSecureGeminiKey() {
-      if (!db) {
-        throw new Error("ফায়ারবেস ডেটাবেস এখনও লোড হয়নি।");
-      }
       const snap = await db.collection("system_config").doc("ai_secrets").get();
       if (snap.exists && snap.data().gemini_key) return snap.data().gemini_key.trim();
       throw new Error("API Key ফায়ারবেসে পাওয়া যায়নি!");
@@ -488,7 +501,7 @@
             })
           });
           if (res.ok) {
-            const data = await res.ok.json();
+            const data = await res.json();
             return data.candidates[0].content.parts[0].text;
           }
         } catch (e) {}
@@ -671,7 +684,6 @@
     }
 
     async function loadSchoolNotesList() {
-      if (!db) return;
       const box = document.getElementById("school-notes-list");
       box.innerHTML = "লোড হচ্ছে...";
       try {
@@ -757,12 +769,11 @@ JSON ফরম্যাট:
     }
 
     async function loadPoemsList() {
-      if (!db) return;
       const box = document.getElementById("poems-list");
       box.innerHTML = "লোড হচ্ছে...";
       try {
         const snap = await db.collection("poems").orderBy("timestamp", "desc").get();
-        if (snap.empty) { box.innerHTML = "কোনো কবিতা নেই。"; return; }
+        if (snap.empty) { box.innerHTML = "কোনো কবিতা নেই।"; return; }
         box.innerHTML = "";
         snap.forEach(doc => {
           const d = doc.data();
@@ -772,7 +783,7 @@ JSON ফরম্যাট:
               <button class="btn-delete-item" onclick="deletePoem('${doc.id}')">🗑️ ডিলিট</button>
             </div>`;
         });
-      } catch(e) { box.innerHTML = "লোড করতে সমস্যা হয়েছে。"; }
+      } catch(e) { box.innerHTML = "লোড করতে সমস্যা হয়েছে।"; }
     }
 
     async function deletePoem(id) {

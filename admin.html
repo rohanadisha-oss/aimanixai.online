@@ -23,6 +23,7 @@
       --indigo: #6366f1;
       --pink: #ff2a7a;
       --green: #10b981;
+      --amber: #f59e0b;
       --text: #f8fafc;
       --text-muted: #94a3b8;
     }
@@ -94,7 +95,7 @@
 
     .auth-err-msg { color: #ef4444; font-size: 0.82rem; margin-top: 0.8rem; display: none; line-height: 1.4; }
 
-    .admin-wrapper { display: none; max-width: 950px; margin: 0 auto 3rem; }
+    .admin-wrapper { display: none; max-width: 1000px; margin: 0 auto 3rem; }
 
     .admin-header {
       background: var(--surface); border: 1px solid var(--border);
@@ -124,10 +125,11 @@
     }
 
     .master-tab-btn {
-      flex: 1; min-width: 160px; background: transparent; border: none;
-      color: var(--text-muted); padding: 0.75rem 1rem; border-radius: 10px;
+      flex: 1; min-width: 150px; background: transparent; border: none;
+      color: var(--text-muted); padding: 0.75rem 0.8rem; border-radius: 10px;
       font-family: inherit; font-weight: 700; font-size: 0.92rem; cursor: pointer;
       display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      white-space: nowrap;
     }
 
     .master-tab-btn.active {
@@ -156,7 +158,7 @@
       color: #fff; padding: 0.75rem 1rem; border-radius: 10px;
       font-family: inherit; font-size: 0.9rem;
     }
-    textarea { min-height: 140px; line-height: 1.6; }
+    textarea { min-height: 130px; line-height: 1.6; }
 
     .btn-action-primary {
       background: linear-gradient(135deg, var(--cyan), var(--indigo));
@@ -169,6 +171,7 @@
       font-weight: 800; font-size: 0.95rem; cursor: pointer; margin-left: 0.6rem;
     }
     .btn-action-pink { background: linear-gradient(135deg, #ff5e62, #ff2a7a); }
+    .btn-action-amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
 
     .manage-list-box { margin-top: 2.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; }
     .data-item-card {
@@ -179,6 +182,14 @@
     .btn-delete-item {
       background: rgba(239, 68, 68, 0.12); border: 1px solid #ef4444;
       color: #ef4444; padding: 0.4rem 0.8rem; border-radius: 8px; cursor: pointer;
+    }
+
+    .sub-box-card {
+      background: rgba(3, 7, 18, 0.6);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 14px;
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
     }
 
     @media (max-width: 768px) {
@@ -213,8 +224,9 @@
           <p style="font-size: 0.78rem; color: var(--text-muted);" id="user-display-email">সুরক্ষিত ব্যাকএন্ড সেশন অ্যাক্টিভ</p>
         </div>
       </div>
-      <div style="display: flex; gap: 0.6rem; align-items: center;">
-        <a href="index.html" target="_blank" class="btn-live-view">🌐 মূল সাইট</a>
+      <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+        <a href="index.html" target="_blank" class="btn-live-view">🌐 হোমপেজ</a>
+        <a href="jobs.html" target="_blank" class="btn-live-view" style="border-color: var(--amber); color: var(--amber);">💼 চাকরির বাজার</a>
         <button class="btn-logout" onclick="logoutAdmin()">লগআউট 🔒</button>
       </div>
     </header>
@@ -223,6 +235,7 @@
       <button class="master-tab-btn active" onclick="switchTab(event, 'home')">🏠 হোমপেজ ও ভিডিও</button>
       <button class="master-tab-btn" onclick="switchTab(event, 'school')">📚 আমার স্কুল</button>
       <button class="master-tab-btn" onclick="switchTab(event, 'kobita')">✍️ কবিতার আকাশ</button>
+      <button class="master-tab-btn" onclick="switchTab(event, 'jobs')">💼 চাকরির বাজার</button>
     </div>
 
     <!-- TAB 1: HOMEPAGE SETTINGS -->
@@ -279,7 +292,7 @@
       </div>
     </div>
 
-    <!-- TAB 2: SCHOOL NOTES (V, VI, VII, VIII, IX, MADHYAMIK, XI, H.S) -->
+    <!-- TAB 2: SCHOOL NOTES -->
     <div class="tab-content-panel" id="panel-school">
       <div class="panel-section-title">📚 আমার স্কুল: AI স্টাডি শিট ও প্রিন্ট A4 বুকলেট</div>
       <p class="panel-section-desc">রয়্যাল ভায়োলেট ও গোল্ডেন প্রিমিয়াম থিমে স্বয়ংক্রিয়ভাবে ক্লাসভিত্তিক স্টাডি শিট তৈরি হবে।</p>
@@ -355,6 +368,112 @@
         <div id="poems-list"></div>
       </div>
     </div>
+
+    <!-- TAB 4: CHAKRIR BAZAR CONTROLLER (NEW) -->
+    <div class="tab-content-panel" id="panel-jobs">
+      <div class="panel-section-title" style="color: var(--amber);">💼 চাকরির বাজার: নিয়োগ বিজ্ঞপ্তি ও প্রিপারেশন হাব</div>
+      <p class="panel-section-desc">কোড না ছুঁয়েই পেজের ব্যানার ছবি, সেকশনের নাম এবং AI দিয়ে সম্পূর্ণ বিজ্ঞপ্তি তৈরি করুন।</p>
+
+      <!-- SUB SECTION A: BANNER & HERO CUSTOMIZER -->
+      <div class="sub-box-card">
+        <div style="font-weight: 800; color: var(--cyan); margin-bottom: 0.8rem;">🖼️ ১. হেডার ব্যানার ও পোস্টার কাস্টমাইজার (jobs.html)</div>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>হিরো ইমেজ লিঙ্ক (URL):</label>
+            <input type="text" id="job-hero-img" placeholder="https://images.unsplash.com/...">
+          </div>
+          <div class="form-group">
+            <label>টপ ব্যাজ টেক্সট:</label>
+            <input type="text" id="job-hero-badge" placeholder="OFFICIAL RECRUITMENT HUB">
+          </div>
+          <div class="form-group">
+            <label>মূল হেডলাইন:</label>
+            <input type="text" id="job-hero-title" placeholder="স্মার্ট চাকরির বাজার ও প্রস্তুতি">
+          </div>
+          <div class="form-group full-width">
+            <label>সাবটাইটেল / বিবরণ:</label>
+            <textarea id="job-hero-sub" style="min-height: 80px;" placeholder="পশ্চিমবঙ্গ ও কেন্দ্রীয় সরকারি চাকরির সর্বশেষ নির্ভরযোগ্য নোটিফিকেশন..."></textarea>
+          </div>
+        </div>
+        <button class="btn-action-primary" onclick="saveJobPortalHeader()">💾 ব্যানার সেটিংস সেভ করুন</button>
+      </div>
+
+      <!-- SUB SECTION B: CATEGORY LABEL CUSTOMIZER -->
+      <div class="sub-box-card">
+        <div style="font-weight: 800; color: var(--cyan); margin-bottom: 0.8rem;">🏷️ ২. সেকশন ও ক্যাটাগরি ম্যানেজার (কোড ছাড়া নাম বদলান)</div>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;">যেকোনো ক্যাটাগরির নাম আপনার প্রয়োজন অনুযায়ী পরিবর্তন করতে পারেন (যেমন: অঙ্গনওয়াড়ির বদলে নার্সিং প্রিপারেশন)।</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>ক্যাটাগরি ১ (Notice):</label>
+            <input type="text" id="cat-name-notice" value="📢 নিয়োগ বিজ্ঞপ্তি">
+          </div>
+          <div class="form-group">
+            <label>ক্যাটাগরি ২ (Dates):</label>
+            <input type="text" id="cat-name-dates" value="🗓️ পরীক্ষার তারিখ">
+          </div>
+          <div class="form-group">
+            <label>ক্যাটাগরি ৩ (Anganwadi / Custom):</label>
+            <input type="text" id="cat-name-anganwadi" value="👶 অঙ্গনওয়াড়ি / নার্সিং প্রিপারেশন">
+          </div>
+          <div class="form-group">
+            <label>ক্যাটাগরি ৪ (Primary):</label>
+            <input type="text" id="cat-name-primary" value="🎒 প্রাইমারি টেট প্রিপারেশন">
+          </div>
+          <div class="form-group">
+            <label>ক্যাটাগরি ৫ (Police):</label>
+            <input type="text" id="cat-name-police" value="👮 পুলিশ কনস্টেবল প্রিপারেশন">
+          </div>
+          <div class="form-group">
+            <label>ক্যাটাগরি ৬ (SSC):</label>
+            <input type="text" id="cat-name-ssc" value="🏫 স্কুল সার্ভিস কমিশন (SSC)">
+          </div>
+          <div class="form-group full-width">
+            <label>ক্যাটাগরি ৭ (Result):</label>
+            <input type="text" id="cat-name-result" value="🏆 চাকরির রেজাল্ট ও মেধা তালিকা">
+          </div>
+        </div>
+        <button class="btn-action-primary" onclick="saveJobCategories()">🏷️ ক্যাটাগরি নামগুলো সেভ করুন</button>
+      </div>
+
+      <!-- SUB SECTION C: AI JOB POST GENERATOR -->
+      <div class="sub-box-card">
+        <div style="font-weight: 800; color: var(--amber); margin-bottom: 0.8rem;">🚀 ৩. AI দিয়ে বিজ্ঞপ্তি বা প্রিপারেশন নোট তৈরি করুন</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label style="color: var(--amber);">কোন ক্যাটাগরিতে পোস্ট করবেন?</label>
+            <select id="job-target-cat">
+              <option value="notice">📢 নিয়োগ বিজ্ঞপ্তি</option>
+              <option value="dates">🗓️ পরীক্ষার তারিখ ও নোটিশ</option>
+              <option value="anganwadi">👶 অঙ্গনওয়াড়ি / নার্সিং</option>
+              <option value="primary">🎒 প্রাইমারি টেট</option>
+              <option value="police">👮 পুলিশ কনস্টেবল</option>
+              <option value="ssc">🏫 স্কুল সার্ভিস (SSC)</option>
+              <option value="result">🏆 চাকরির রেজাল্ট</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label style="color: var(--amber);">অফিশিয়াল আবেদন লিঙ্ক (ঐচ্ছিক):</label>
+            <input type="text" id="job-apply-url" placeholder="https://prb.wb.gov.in বা অফিশিয়াল পোর্টাল">
+          </div>
+
+          <div class="form-group full-width">
+            <label style="color: var(--amber);">অফিশিয়াল নোটিশ বা সিলেবাসের কাঁচা টেক্সট (Raw Text):</label>
+            <textarea id="job-raw-input" placeholder="যেকোনো নিয়োগ বিজ্ঞপ্তি, খবরের কাটিং বা প্রিপারেশন প্রশ্নোত্তরের কাঁচা টেক্সট এখানে পেস্ট করুন... AI স্বয়ংক্রিয়ভাবে পদের নাম, শূন্যপদ, শেষ তারিখ, যোগ্যতা ও মডেল স্টাডি শিট প্রস্তুত করবে।"></textarea>
+          </div>
+        </div>
+
+        <div style="margin-top: 1rem;">
+          <button class="btn-action-primary btn-action-amber" id="btn-job-submit" onclick="generateJobPostAI()">⚡ AI জব পোস্ট প্রসেস ও প্রকাশ করুন</button>
+        </div>
+      </div>
+
+      <!-- SUB SECTION D: POST LIST & DELETE -->
+      <div class="manage-list-box">
+        <div style="font-weight: 800; color: var(--amber); margin-bottom: 1rem;">📜 চাকরির বাজারে প্রকাশিত তথ্যের তালিকা</div>
+        <div id="jobs-published-list"></div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -380,7 +499,6 @@
       if (e.key === "Enter") loginDirectFirebase(); 
     }
 
-    // সরাসরি ক্লাউড ডেটাবেস ভেরিফিকেশন (SDK ক্র্যাশ মুক্ত)
     async function loginDirectFirebase() {
       const email = document.getElementById("admin-email-input").value.trim();
       const pass = document.getElementById("admin-pass-input").value.trim();
@@ -398,23 +516,17 @@
       errEl.style.display = "none";
 
       try {
-        // ফায়ারবেস ক্লাউডের মাস্টার কি চেক
         const snap = await db.collection("system_config").doc("ai_secrets").get();
         let apiKey = "";
         if (snap.exists && snap.data().gemini_key) {
           apiKey = snap.data().gemini_key.trim();
         }
 
-        // গুগল আইডেন্টিটি টুলকিটের ডিরেক্ট ক্লাউড এপিআই কল
         const authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`;
         const res = await fetch(authUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: email,
-            password: pass,
-            returnSecureToken: true
-          })
+          body: JSON.stringify({ email: email, password: pass, returnSecureToken: true })
         });
 
         const data = await res.json();
@@ -424,7 +536,6 @@
           document.getElementById("user-display-email").textContent = "অ্যাক্টিভ: " + email;
           revealConsole();
         } else {
-          // যদি Google API Key ব্লক থাকে তবে ক্লাউড অ্যাডমিন ফলব্যাক
           if (email.toLowerCase().includes("rohanadisha@gmail.com") && pass === "Aitan2088#") {
             sessionStorage.setItem("aimanix_cloud_user", email);
             revealConsole();
@@ -434,7 +545,6 @@
           }
         }
       } catch (err) {
-        // অফলাইন বা ফলব্যাক ক্লাউড যাচাই
         if (email.toLowerCase().includes("rohanadisha") && pass === "Aitan2088#") {
           sessionStorage.setItem("aimanix_cloud_user", email);
           revealConsole();
@@ -454,6 +564,8 @@
       loadCurrentHomeData();
       loadSchoolNotesList();
       loadPoemsList();
+      loadJobPortalSettings();
+      loadPublishedJobsList();
     }
 
     function logoutAdmin() {
@@ -794,6 +906,176 @@ JSON ফরম্যাট:
           localPoems = localPoems.filter(p => p.id !== id);
           localStorage.setItem("aimanix_poems", JSON.stringify(localPoems));
           loadPoemsList();
+        } catch (e) {
+          alert("ডিলিট করতে সমস্যা হয়েছে: " + e.message);
+        }
+      }
+    }
+
+    // ==========================================================
+    // 4. CHAKRIR BAZAR CONTROLLER LOGIC (NEW ENGINE)
+    // ==========================================================
+    async function loadJobPortalSettings() {
+      try {
+        const snap = await db.collection("system_config").doc("job_portal_settings").get();
+        if (snap.exists) {
+          const d = snap.data();
+          if (d.heroImage) document.getElementById("job-hero-img").value = d.heroImage;
+          if (d.heroBadge) document.getElementById("job-hero-badge").value = d.heroBadge;
+          if (d.heroTitle) document.getElementById("job-hero-title").value = d.heroTitle;
+          if (d.heroSubtitle) document.getElementById("job-hero-sub").value = d.heroSubtitle;
+
+          if (d.categories) {
+            if (d.categories.notice) document.getElementById("cat-name-notice").value = d.categories.notice;
+            if (d.categories.dates) document.getElementById("cat-name-dates").value = d.categories.dates;
+            if (d.categories.anganwadi) document.getElementById("cat-name-anganwadi").value = d.categories.anganwadi;
+            if (d.categories.primary) document.getElementById("cat-name-primary").value = d.categories.primary;
+            if (d.categories.police) document.getElementById("cat-name-police").value = d.categories.police;
+            if (d.categories.ssc) document.getElementById("cat-name-ssc").value = d.categories.ssc;
+            if (d.categories.result) document.getElementById("cat-name-result").value = d.categories.result;
+          }
+        }
+      } catch (e) {
+        console.warn("জব পোর্টাল সেটিংস লোড করা যায়নি:", e);
+      }
+    }
+
+    async function saveJobPortalHeader() {
+      const heroImage = document.getElementById("job-hero-img").value.trim();
+      const heroBadge = document.getElementById("job-hero-badge").value.trim();
+      const heroTitle = document.getElementById("job-hero-title").value.trim();
+      const heroSubtitle = document.getElementById("job-hero-sub").value.trim();
+
+      try {
+        await db.collection("system_config").doc("job_portal_settings").set({
+          heroImage: heroImage,
+          heroBadge: heroBadge,
+          heroTitle: heroTitle,
+          heroSubtitle: heroSubtitle
+        }, { merge: true });
+
+        alert("✅ হেডার ব্যানার সেটিংস সফলভাবে সেভ হয়েছে! jobs.html এ তাৎক্ষণিকভাবে আপডেট হয়ে গেছে।");
+      } catch (err) {
+        alert("সংরক্ষণ করতে সমস্যা হয়েছে: " + err.message);
+      }
+    }
+
+    async function saveJobCategories() {
+      const categories = {
+        notice: document.getElementById("cat-name-notice").value.trim(),
+        dates: document.getElementById("cat-name-dates").value.trim(),
+        anganwadi: document.getElementById("cat-name-anganwadi").value.trim(),
+        primary: document.getElementById("cat-name-primary").value.trim(),
+        police: document.getElementById("cat-name-police").value.trim(),
+        ssc: document.getElementById("cat-name-ssc").value.trim(),
+        result: document.getElementById("cat-name-result").value.trim()
+      };
+
+      try {
+        await db.collection("system_config").doc("job_portal_settings").set({
+          categories: categories
+        }, { merge: true });
+
+        alert("✅ সেকশন ও ক্যাটাগরির নামগুলো সফলভাবে সংরক্ষিত হয়েছে! jobs.html এর সব বাটনের নাম বদলে গেছে।");
+      } catch (err) {
+        alert("ক্যাটাগরি সেভ করতে সমস্যা হয়েছে: " + err.message);
+      }
+    }
+
+    const JOB_AI_PROMPT = `
+তুমি একজন শীর্ষস্থানীয় রিক্রুটমেন্ট অ্যানালিস্ট এবং ক্যারিয়ার কোচ।
+ইনপুটে দেওয়া সরকারি/বেসরকারি চাকরির কাঁচা নোটিশ বা স্টাডি মেটেরিয়াল থেকে নিচের JSON ফরম্যাটে একটি নির্ভুল বাংলা অবজেক্ট তৈরি করবে:
+
+{
+  "title": "সংক্ষিপ্ত ও আকর্ষণীয় শিরোনাম",
+  "postName": "পদের নাম",
+  "vacancy": "মোট শূন্যপদ (যেমন: ৫,৫০০+ বা বিজ্ঞপ্তি অনুযায়ী)",
+  "qualification": "শিক্ষাগত যোগ্যতা (যেমন: মাধ্যমিক / উচ্চমাধ্যমিক / স্নাতক)",
+  "lastDate": "আবেদনের শেষ তারিখ বা পরীক্ষার তারিখ",
+  "summary": "২-৩ লাইনে মূল হাইলাইটস এবং আবেদন করার সংক্ষেপ তথ্য",
+  "fullHtml": "এইচটিএমএল ফরম্যাটে পূর্ণ বিবরণ, পদের বিস্তারিত, বয়সসীমা, পরীক্ষার সিলেবাস ও গুরুত্বপূর্ণ মডেল প্রশ্নোত্তর (HTML ট্যাগ সহ, কোনো markdown backticks ছাড়া)"
+}
+শুধুমাত্র পিওর JSON কোড রিটার্ন করবে।
+`;
+
+    async function generateJobPostAI() {
+      const category = document.getElementById("job-target-cat").value;
+      const applyLink = document.getElementById("job-apply-url").value.trim();
+      const rawText = document.getElementById("job-raw-input").value.trim();
+      const btn = document.getElementById("btn-job-submit");
+
+      if (!rawText) return alert("দয়া করে নোটিশ বা সিলেবাসের টেক্সট পেস্ট করুন!");
+      btn.textContent = "AI নোটিশ প্রসেস করছে..."; btn.disabled = true;
+
+      try {
+        let jsonStr = await executeGeminiAPI(JOB_AI_PROMPT, rawText);
+        jsonStr = jsonStr.replace(/```json|```/g, "").trim();
+        const parsed = JSON.parse(jsonStr);
+
+        const jobDoc = {
+          category: category,
+          title: parsed.title || "নিয়োগ বিজ্ঞপ্তি",
+          postName: parsed.postName || "",
+          vacancy: parsed.vacancy || "",
+          qualification: parsed.qualification || "",
+          lastDate: parsed.lastDate || "",
+          summary: parsed.summary || "",
+          fullHtml: parsed.fullHtml || "",
+          applyLink: applyLink || "",
+          timestamp: Date.now()
+        };
+
+        // লোকালস্টোরেজ ব্যাকআপ
+        let localJobs = JSON.parse(localStorage.getItem("aimanix_jobs_local") || "[]");
+        localJobs.unshift(jobDoc);
+        localStorage.setItem("aimanix_jobs_local", JSON.stringify(localJobs));
+
+        // ফায়ারবেস ক্লাউড সেভ
+        await db.collection("jobs_portal").add(jobDoc);
+
+        alert("✅ চাকরির পোস্টটি সফলভাবে তৈরি ও প্রকাশিত হয়েছে! jobs.html এ সরাসরি দেখতে পারবেন।");
+        document.getElementById("job-raw-input").value = "";
+        document.getElementById("job-apply-url").value = "";
+        loadPublishedJobsList();
+      } catch (err) {
+        alert("AI প্রসেসিংয়ে ত্রুটি হয়েছে: " + err.message);
+      } finally {
+        btn.textContent = "⚡ AI জব পোস্ট প্রসেস ও প্রকাশ করুন"; btn.disabled = false;
+      }
+    }
+
+    async function loadPublishedJobsList() {
+      const box = document.getElementById("jobs-published-list");
+      box.innerHTML = "লোড হচ্ছে...";
+      try {
+        const snap = await db.collection("jobs_portal").orderBy("timestamp", "desc").get();
+        if (snap.empty) { box.innerHTML = "বর্তমানে কোনো প্রকাশিত চাকরির পোস্ট নেই।"; return; }
+        box.innerHTML = "";
+        snap.forEach(doc => {
+          const d = doc.data();
+          box.innerHTML += `
+            <div class="data-item-card">
+              <div>
+                <strong style="color: var(--amber);">${d.title}</strong> 
+                <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 8px;">(${d.category})</span>
+              </div>
+              <button class="btn-delete-item" onclick="deleteJobPost('${doc.id}')">🗑️ ডিলিট</button>
+            </div>`;
+        });
+      } catch (e) {
+        box.innerHTML = "তালিকা লোড করতে সমস্যা হয়েছে।";
+      }
+    }
+
+    async function deleteJobPost(id) {
+      if (confirm("বিজ্ঞপ্তিটি কি সত্যি মুছে ফেলতে চান?")) {
+        try {
+          await db.collection("jobs_portal").doc(id).delete();
+          let localJobs = JSON.parse(localStorage.getItem("aimanix_jobs_local") || "[]");
+          localJobs = localJobs.filter(j => j.id !== id);
+          localStorage.setItem("aimanix_jobs_local", JSON.stringify(localJobs));
+          loadPublishedJobsList();
+          alert("✅ পোস্ট সফলভাবে ডিলিট করা হয়েছে।");
         } catch (e) {
           alert("ডিলিট করতে সমস্যা হয়েছে: " + e.message);
         }

@@ -8,7 +8,7 @@
   <!-- Google Web Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;700&family=Hind+Siliguri:wght@400;500;600;700;800&family=Noto+Serif+Bengali:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;700;800&family=Hind+Siliguri:wght@400;500;600;700;800&family=Noto+Serif+Bengali:wght@600;700;800&display=swap" rel="stylesheet">
 
   <!-- Firebase Compat Libraries -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -18,8 +18,8 @@
     :root {
       --bg-dark: #070c18;
       --surface: #0d1527;
-      --card-bg: rgba(16, 26, 48, 0.75);
-      --card-border: rgba(56, 189, 248, 0.2);
+      --card-bg: rgba(16, 26, 48, 0.85);
+      --card-border: rgba(56, 189, 248, 0.25);
       --cyan: #00f2fe;
       --blue: #38bdf8;
       --indigo: #6366f1;
@@ -44,9 +44,33 @@
       font-family: 'Hind Siliguri', sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
+    }
+
+    /* CYBER MATRIX & SYNAPSE CANVAS BACKGROUND */
+    .cyber-grid-bg {
+      position: fixed;
+      inset: 0;
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.05) 0%, transparent 45%),
-        radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.06) 0%, transparent 45%);
+        linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(139, 92, 246, 0.05) 1px, transparent 1px);
+      background-size: 36px 36px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #jobs-particle-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    nav, header, section, main, footer {
+      position: relative;
+      z-index: 2;
     }
 
     /* TOP NAVIGATION */
@@ -54,7 +78,7 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(16px);
       background: rgba(7, 12, 24, 0.85);
       border-bottom: 1px solid var(--card-border);
       padding: 0.9rem 1.5rem;
@@ -78,14 +102,13 @@
       font-size: 0.9rem;
       padding: 0.35rem 0.65rem;
       border-radius: 8px;
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.35);
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
     }
 
     .brand-title {
       font-size: 1.15rem;
       font-weight: 800;
       color: #fff;
-      letter-spacing: -0.3px;
     }
 
     .nav-actions {
@@ -98,7 +121,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--card-border);
       color: #fff;
       padding: 0.45rem 0.95rem;
@@ -110,7 +133,7 @@
     }
 
     .btn-nav-home:hover {
-      background: rgba(56, 189, 248, 0.15);
+      background: rgba(56, 189, 248, 0.2);
       border-color: var(--cyan);
       transform: translateY(-2px);
     }
@@ -124,8 +147,8 @@
 
     .poster-hero {
       position: relative;
-      background: linear-gradient(145deg, #0f1a30, #080e1d);
-      border: 1px solid rgba(56, 189, 248, 0.3);
+      background: linear-gradient(145deg, #0e172e, #080d1a);
+      border: 1px solid rgba(56, 189, 248, 0.35);
       border-radius: 24px;
       overflow: hidden;
       padding: 3rem 2.2rem;
@@ -145,7 +168,6 @@
       padding: 0.4rem 1.1rem;
       border-radius: 6px;
       letter-spacing: 0.8px;
-      text-transform: uppercase;
       box-shadow: 0 0 25px rgba(217, 70, 239, 0.5);
       margin-bottom: 1.2rem;
     }
@@ -156,7 +178,6 @@
       line-height: 1.2;
       color: #ffffff;
       margin-bottom: 0.8rem;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
 
     .poster-title span {
@@ -167,10 +188,9 @@
 
     .poster-subtitle {
       color: #cbd5e1;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       line-height: 1.6;
       margin-bottom: 1.6rem;
-      max-width: 580px;
     }
 
     .poster-meta {
@@ -190,18 +210,17 @@
     }
 
     .poster-image-box {
-      position: relative;
       border-radius: 18px;
       overflow: hidden;
       border: 1px solid rgba(0, 242, 254, 0.3);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      transform: perspective(800px) rotateY(-4deg);
       transition: all 0.4s ease;
     }
 
     .poster-image-box:hover {
-      transform: perspective(800px) rotateY(0deg) scale(1.02);
+      transform: scale(1.02);
       border-color: var(--cyan);
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.35);
     }
 
     .poster-image-box img {
@@ -246,15 +265,15 @@
 
     .cat-btn:hover {
       color: #fff;
-      border-color: rgba(56, 189, 248, 0.5);
+      border-color: var(--cyan);
       transform: translateY(-2px);
     }
 
     .cat-btn.active {
-      background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(99, 102, 241, 0.25));
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.18), rgba(99, 102, 241, 0.28));
       color: var(--cyan);
       border-color: var(--cyan);
-      box-shadow: 0 0 18px rgba(0, 242, 254, 0.25);
+      box-shadow: 0 0 18px rgba(0, 242, 254, 0.3);
     }
 
     /* JOB CARDS CONTAINER */
@@ -301,24 +320,10 @@
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
     }
 
-    .job-card:hover {
+    .job-card:hover, .job-card:active {
       transform: translateY(-6px);
       border-color: var(--cyan);
-      box-shadow: 0 16px 36px rgba(0, 242, 254, 0.15);
-    }
-
-    .job-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--cyan), var(--magenta));
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .job-card:hover::before {
-      opacity: 1;
+      box-shadow: 0 16px 36px rgba(0, 242, 254, 0.2);
     }
 
     .card-top-row {
@@ -346,10 +351,10 @@
     }
 
     .job-headline {
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       font-weight: 800;
       color: #ffffff;
-      line-height: 1.35;
+      line-height: 1.4;
       margin-bottom: 0.9rem;
     }
 
@@ -410,11 +415,6 @@
       gap: 0.4rem;
     }
 
-    .btn-apply-link:hover {
-      box-shadow: 0 0 25px rgba(0, 242, 254, 0.45);
-      transform: translateY(-2px);
-    }
-
     .btn-read-modal {
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--card-border);
@@ -432,18 +432,7 @@
       border-color: #fff;
     }
 
-    /* EMPTY STATE */
-    .empty-jobs-notice {
-      text-align: center;
-      padding: 4rem 1.5rem;
-      background: var(--card-bg);
-      border: 1px dashed var(--card-border);
-      border-radius: 20px;
-      grid-column: 1 / -1;
-    }
-    .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
-
-    /* DETAIL MODAL POPUP */
+    /* MODAL OVERLAY */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -462,8 +451,8 @@
       box-shadow: 0 0 50px rgba(0, 242, 254, 0.25);
       border-radius: 22px;
       width: 100%;
-      max-width: 700px;
-      max-height: 85vh;
+      max-width: 780px;
+      max-height: 88vh;
       overflow-y: auto;
       padding: 2.2rem;
       position: relative;
@@ -484,25 +473,149 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
     }
     .modal-close-btn:hover { background: #ef4444; }
 
-    /* RESPONSIVE DESIGN */
-    @media (max-width: 900px) {
-      .poster-hero {
-        grid-template-columns: 1fr;
-        padding: 2rem 1.5rem;
+    /* ==========================================================================
+       PRINT ARCHITECTURE (হুবহু আপনার দেওয়া রেফারেন্স ছবির মতো প্রফেশনাল স্টাইল)
+       ========================================================================== */
+    @media print {
+      @page {
+        size: A4;
+        margin: 12mm 15mm;
       }
-      .poster-title { font-size: 2.1rem; }
-      .poster-image-box { transform: none; }
-      .job-cards-grid { grid-template-columns: 1fr; }
+
+      /* পেজের অপ্রয়োজনীয় নেভিগেশন, ক্যানভাস ও ব্যাকগ্রাউন্ড সম্পূর্ণ অদৃশ্য */
+      body, html {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-family: 'Hind Siliguri', sans-serif !important;
+      }
+
+      .cyber-grid-bg, #jobs-particle-canvas, .job-nav, .hero-container, 
+      .filter-section, .jobs-feed-wrapper, .modal-close-btn, 
+      .modal-footer-btns, .btn-apply-link, .btn-read-modal {
+        display: none !important;
+      }
+
+      .modal-overlay {
+        position: static !important;
+        display: block !important;
+        background: transparent !important;
+        padding: 0 !important;
+      }
+
+      .modal-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: none !important;
+        overflow: visible !important;
+        background: transparent !important;
+        color: #111827 !important;
+      }
+
+      /* রেফারেন্স ছবির মতো টপ হেডার বার */
+      .print-official-banner {
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+        background: #111a44 !important;
+        color: #ffffff !important;
+        padding: 10px 18px !important;
+        border-radius: 12px 12px 0 0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        margin-bottom: 12px;
+      }
+
+      .print-official-banner h2 {
+        font-size: 1.4rem !important;
+        font-weight: 800 !important;
+        color: #ffffff !important;
+      }
+
+      .print-official-banner span {
+        font-size: 0.85rem !important;
+        font-family: 'Fira Code', monospace;
+        color: #facc15 !important;
+        font-weight: 700;
+      }
+
+      /* সেকশন কার্ড: পার্পল বর্ডার ও গোলাকার প্রান্ত (রেফারেন্স ছবির মতো) */
+      .print-box-card {
+        border: 1.5px solid #6b21a8 !important;
+        border-radius: 14px !important;
+        padding: 14px 16px !important;
+        margin-bottom: 14px !important;
+        position: relative !important;
+        page-break-inside: avoid !important;
+        background: #ffffff !important;
+      }
+
+      /* রেফারেন্স ছবির মতো ক্যাপসুল/পিল হেডার */
+      .print-capsule-badge {
+        display: table !important;
+        background: #581c87 !important;
+        color: #ffffff !important;
+        font-weight: 800 !important;
+        font-size: 0.92rem !important;
+        padding: 4px 18px !important;
+        border-radius: 50px !important;
+        margin: -24px auto 10px auto !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        text-align: center;
+      }
+
+      /* পয়েন্ট ও বুলেট স্টাইল (রেফারেন্স ছবির মতো তীরচিহ্ন ও গ্রিড) */
+      .print-list-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px 16px !important;
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .print-list-item {
+        font-size: 0.95rem !important;
+        line-height: 1.45 !important;
+        color: #1e293b !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        gap: 6px !important;
+      }
+
+      .print-list-item::before {
+        content: "➔" !important;
+        color: #4338ca !important;
+        font-weight: 900 !important;
+        font-size: 0.9rem !important;
+      }
+
+      .print-footer-tag {
+        display: block !important;
+        text-align: center;
+        font-size: 0.78rem !important;
+        color: #64748b !important;
+        margin-top: 15px;
+        border-top: 1px dashed #cbd5e1;
+        padding-top: 6px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- TOP APP BAR -->
+  <!-- BACKGROUND GRID & ANIMATED PARTICLE CANVAS -->
+  <div class="cyber-grid-bg"></div>
+  <canvas id="jobs-particle-canvas"></canvas>
+
+  <!-- TOP NAVIGATION -->
   <nav class="job-nav">
     <a href="index.html" class="brand-group">
       <span class="brand-badge">Aimanix.AI</span>
@@ -526,7 +639,7 @@
         <div class="poster-meta">
           <span class="meta-tag">⚡ রিয়েলটাইম আপডেট</span>
           <span class="meta-tag">🎯 নির্ভুল গাইডলাইন</span>
-          <span class="meta-tag">📱 রেডি-টু-প্রিন্ট স্টাডি শিট</span>
+          <span class="meta-tag">🖨️ প্রিমিয়াম প্রিন্ট বুকলেট</span>
         </div>
       </div>
       <div class="poster-image-box">
@@ -535,7 +648,7 @@
     </div>
   </header>
 
-  <!-- DYNAMIC CATEGORY FILTER TABS -->
+  <!-- CATEGORY FILTER PILLS -->
   <section class="filter-section">
     <div class="category-pills" id="category-pills-container">
       <button class="cat-btn active" onclick="filterJobs('all')">🌟 সকল আপডেট</button>
@@ -556,17 +669,10 @@
       <div style="font-size: 0.85rem; color: var(--cyan);" id="total-count-badge">মোট পোস্ট: ০টি</div>
     </div>
 
-    <div class="job-cards-grid" id="jobs-grid">
-      <!-- Loading Skeleton -->
-      <div class="empty-jobs-notice">
-        <div class="empty-icon">⏳</div>
-        <h3>তথ্য লোড হচ্ছে...</h3>
-        <p style="color: var(--text-muted); margin-top: 6px;">দয়া করে কয়েক সেকেন্ড অপেক্ষা করুন।</p>
-      </div>
-    </div>
+    <div class="job-cards-grid" id="jobs-grid"></div>
   </main>
 
-  <!-- DETAILS MODAL POPUP -->
+  <!-- DETAILS & PRINT MODAL POPUP -->
   <div class="modal-overlay" id="job-modal">
     <div class="modal-card">
       <button class="modal-close-btn" onclick="closeJobModal()">&times;</button>
@@ -576,7 +682,7 @@
 
   <script>
     // ==========================================
-    // 1. FIREBASE CONFIGURATION & INITIALIZATION
+    // 1. FIREBASE CONFIG & INITIALIZATION
     // ==========================================
     const firebaseConfig = {
       authDomain: "aimanix-web.firebaseapp.com",
@@ -587,7 +693,6 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ডিফল্ট ক্যাটাগরি ও সেটিংস
     let currentCategory = 'all';
     let allJobsData = [];
 
@@ -601,9 +706,6 @@
       result: "🏆 চাকরির রেজাল্ট ও মেধা তালিকা"
     };
 
-    // ==========================================
-    // 2. LOAD BANNER & CUSTOM CATEGORIES FROM CLOUD
-    // ==========================================
     async function loadPortalHeaderAndLabels() {
       try {
         const doc = await db.collection("system_config").doc("job_portal_settings").get();
@@ -614,7 +716,6 @@
           if (cfg.heroImage) document.getElementById("hero-image").src = cfg.heroImage;
           if (cfg.heroBadge) document.getElementById("hero-badge").textContent = cfg.heroBadge;
 
-          // ক্যাটাগরির নাম কাস্টমাইজেশন (যেমন অঙ্গনওয়াড়ির বদলে নার্সিং)
           if (cfg.categories) {
             Object.keys(cfg.categories).forEach(catKey => {
               const btn = document.querySelector(`.cat-btn[data-cat="${catKey}"]`);
@@ -624,68 +725,38 @@
             });
           }
         }
-      } catch (err) {
-        console.warn("কাস্টম ব্যানার লোড হতে সমস্যা হয়েছে, ডিফল্ট সক্রিয় রয়েছে।", err);
-      }
+      } catch (err) {}
     }
 
-    // ==========================================
-    // 3. FETCH AND DISPLAY JOB POSTS
-    // ==========================================
     async function fetchJobsPortalData() {
       const grid = document.getElementById("jobs-grid");
       try {
         const snap = await db.collection("jobs_portal").orderBy("timestamp", "desc").get();
         
         if (snap.empty) {
-          // লোকালস্টোরেজ ফলব্যাক চেক
           const localData = JSON.parse(localStorage.getItem("aimanix_jobs_local") || "[]");
           if (localData.length > 0) {
             allJobsData = localData;
             renderJobCards(allJobsData);
             return;
           }
-
-          grid.innerHTML = `
-            <div class="empty-jobs-notice">
-              <div class="empty-icon">💼</div>
-              <h3>বর্তমানে কোনো চাকরির বিজ্ঞপ্তি বা প্রিপারেশন শিট নেই</h3>
-              <p style="color: var(--text-muted); margin-top: 6px;">অ্যাডমিন প্যানেল থেকে নতুন বিজ্ঞপ্তি যুক্ত করলে এখানে প্রকাশিত হবে।</p>
-            </div>
-          `;
-          document.getElementById("total-count-badge").textContent = "মোট পোস্ট: ০টি";
+          grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem; color:var(--text-muted);">বর্তমানে কোনো চাকরির পোস্ট পাওয়া যায়নি।</div>`;
           return;
         }
 
         allJobsData = [];
-        snap.forEach(doc => {
-          allJobsData.push({ id: doc.id, ...doc.data() });
-        });
-
-        // লোকাল ক্যাশ সেভ
+        snap.forEach(doc => allJobsData.push({ id: doc.id, ...doc.data() }));
         localStorage.setItem("aimanix_jobs_local", JSON.stringify(allJobsData));
         renderJobCards(allJobsData);
-
       } catch (err) {
-        console.error("ডেটাবেস লোডিং ত্রুটি:", err);
         const localData = JSON.parse(localStorage.getItem("aimanix_jobs_local") || "[]");
         if (localData.length > 0) {
           allJobsData = localData;
           renderJobCards(allJobsData);
-        } else {
-          grid.innerHTML = `
-            <div class="empty-jobs-notice">
-              <div class="empty-icon">⚠️</div>
-              <h3>তথ্য লোড করা সম্ভব হয়নি</h3>
-              <p style="color: var(--text-muted);">অনুগ্রহ করে আপনার ইন্টারনেট সংযোগ পরীক্ষা করে পুনরায় রিফ্রেশ করুন।</p>
-            </div>`;
         }
       }
     }
 
-    // ==========================================
-    // 4. RENDER CARDS ACCORDING TO FILTER
-    // ==========================================
     function renderJobCards(items) {
       const grid = document.getElementById("jobs-grid");
       const filtered = (currentCategory === 'all') 
@@ -695,13 +766,7 @@
       document.getElementById("total-count-badge").textContent = `মোট পোস্ট: ${filtered.length}টি`;
 
       if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div class="empty-jobs-notice">
-            <div class="empty-icon">📂</div>
-            <h3>এই ক্যাটাগরিতে কোনো তথ্য পাওয়া যায়নি</h3>
-            <p style="color: var(--text-muted); margin-top: 6px;">অন্য কোনো ক্যাটাগরি নির্বাচন করুন বা পরবর্তীতে আবার চেক করুন।</p>
-          </div>
-        `;
+        grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem; color:var(--text-muted);">এই ক্যাটাগরিতে কোনো তথ্য পাওয়া যায়নি।</div>`;
         return;
       }
 
@@ -722,47 +787,34 @@
                 ${item.postName ? `<div class="detail-item"><strong>পদ:</strong> <span>${escapeHtml(item.postName)}</span></div>` : ''}
                 ${item.vacancy ? `<div class="detail-item"><strong>মোট শূন্যপদ:</strong> <span>${escapeHtml(item.vacancy)}</span></div>` : ''}
                 ${item.qualification ? `<div class="detail-item"><strong>যোগ্যতা:</strong> <span>${escapeHtml(item.qualification)}</span></div>` : ''}
-                ${item.lastDate ? `<div class="detail-item"><strong>আবেদনের শেষ তারিখ:</strong> <span style="color: #f87171; font-weight:700;">${escapeHtml(item.lastDate)}</span></div>` : ''}
+                ${item.lastDate ? `<div class="detail-item"><strong>শেষ তারিখ:</strong> <span style="color:#f87171; font-weight:700;">${escapeHtml(item.lastDate)}</span></div>` : ''}
               </div>
 
               <div class="job-summary-content">
-                ${item.summary ? escapeHtml(item.summary) : 'বিস্তারিত নোটিশ ও প্রিপারেশন নোট দেখতে নিচের বাটনে ক্লিক করুন।'}
+                ${item.summary ? escapeHtml(item.summary) : 'বিস্তারিত তথ্য ও স্টাডি মেটেরিয়াল দেখতে নিচের বাটনে ক্লিক করুন।'}
               </div>
             </div>
 
             <div class="card-footer-btns">
-              ${item.applyLink ? `<a href="${item.applyLink}" target="_blank" class="btn-apply-link">🌐 আবেদন / অফিশিয়াল লিঙ্ক</a>` : ''}
-              <button class="btn-read-modal" onclick="openJobModal('${item.id}')">📄 বিস্তারিত</button>
+              ${item.applyLink ? `<a href="${item.applyLink}" target="_blank" class="btn-apply-link">🌐 আবেদন লিঙ্ক</a>` : ''}
+              <button class="btn-read-modal" onclick="openJobModal('${item.id}')">📄 বিস্তারিত ও প্রিন্ট</button>
             </div>
           </div>
         `;
       }).join('');
     }
 
-    // ক্যাটাগরি ফিল্টার টগল
     function filterJobs(cat) {
       currentCategory = cat;
       document.querySelectorAll(".cat-btn").forEach(btn => {
         btn.classList.toggle("active", btn.getAttribute("data-cat") === cat || (cat === 'all' && !btn.getAttribute("data-cat")));
       });
-
-      const headingMap = {
-        all: "সর্বশেষ সকল বিজ্ঞপ্তি ও প্রিপারেশন গাইড",
-        notice: "📢 নতুন সরকারি ও বেসরকারি নিয়োগ বিজ্ঞপ্তি",
-        dates: "🗓️ আসন্ন গুরুত্বপূর্ণ পরীক্ষার সময়সূচী",
-        anganwadi: "👶 অঙ্গনওয়াড়ি / স্বাস্থ্যকর্মী স্পেশাল প্রস্তুতি",
-        primary: "🎒 পশ্চিমবঙ্গ প্রাইমারি টেট (TET) প্রিপারেশন",
-        police: "👮 ডব্লুবি পুলিশ কনস্টেবল ও এসআই প্রিপারেশন",
-        ssc: "🏫 স্কুল সার্ভিস কমিশন (SLST / SSC) গাইড",
-        result: "🏆 চাকরির রেজাল্ট ও অফিশিয়াল কাট-অফ"
-      };
-      document.getElementById("active-cat-heading").textContent = headingMap[cat] || "চাকরির বাজার আপডেট";
       renderJobCards(allJobsData);
     }
 
-    // ==========================================
-    // 5. MODAL POPUP (FULL CONTENT & PRINT VIEW)
-    // ==========================================
+    // ==========================================================
+    // 2. MODAL & ADAPTIVE PRINT GENERATOR (হুবহু রেফারেন্স ছবির অনুরূপ)
+    // ==========================================================
     function openJobModal(id) {
       const item = allJobsData.find(j => j.id === id);
       if (!item) return;
@@ -771,19 +823,46 @@
       const area = document.getElementById("modal-content-area");
 
       area.innerHTML = `
+        <!-- PRINT EXCLUSIVE HEADER (প্রিন্টে স্বয়ংক্রিয়ভাবে একটিভ হবে) -->
+        <div class="print-official-banner" style="display:none;">
+          <h2>AIMANIX CAREER HUB</h2>
+          <span>OFFICIAL PREPARATION GUIDE</span>
+        </div>
+
         <div style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
-          <span class="category-chip" style="margin-bottom: 0.8rem; display:inline-block;">${DEFAULT_JOB_CATEGORIES[item.category] || "বিজ্ঞপ্তি"}</span>
-          <h2 style="font-size: 1.8rem; color: #fff; margin-bottom: 0.6rem;">${escapeHtml(item.title)}</h2>
-          ${item.lastDate ? `<p style="color: var(--cyan); font-weight: 700;">📅 শেষ তারিখ: ${escapeHtml(item.lastDate)}</p>` : ''}
+          <span class="category-chip" style="margin-bottom: 0.6rem; display:inline-block;">${DEFAULT_JOB_CATEGORIES[item.category] || "বিজ্ঞপ্তি"}</span>
+          <h2 style="font-size: 1.6rem; color: #fff; margin-bottom: 0.6rem;">${escapeHtml(item.title)}</h2>
+          ${item.lastDate ? `<p style="color: var(--cyan); font-weight: 700;">📅 আবেদনের শেষ তারিখ: ${escapeHtml(item.lastDate)}</p>` : ''}
         </div>
 
-        <div style="line-height: 1.8; color: #e2e8f0; font-size: 1rem;">
-          ${item.fullHtml ? item.fullHtml : `<p>${escapeHtml(item.summary)}</p>`}
+        <div class="print-content-wrapper" style="line-height: 1.7; color: #e2e8f0;">
+          <!-- CARD 1: গুরুত্বপূর্ণ তথ্যাবলী -->
+          <div class="print-box-card">
+            <div class="print-capsule-badge">১. মূল হাইলাইটস ও সারসংক্ষেপ</div>
+            <ul class="print-list-grid">
+              ${item.postName ? `<li class="print-list-item"><strong>পদের নাম:</strong> ${escapeHtml(item.postName)}</li>` : ''}
+              ${item.vacancy ? `<li class="print-list-item"><strong>মোট শূন্যপদ:</strong> ${escapeHtml(item.vacancy)}</li>` : ''}
+              ${item.qualification ? `<li class="print-list-item"><strong>শিক্ষাগত যোগ্যতা:</strong> ${escapeHtml(item.qualification)}</li>` : ''}
+              ${item.lastDate ? `<li class="print-list-item"><strong>শেষ তারিখ:</strong> ${escapeHtml(item.lastDate)}</li>` : ''}
+            </ul>
+          </div>
+
+          <!-- CARD 2: বিস্তারিত নোটিশ ও সিলেবাস -->
+          <div class="print-box-card" style="margin-top: 20px;">
+            <div class="print-capsule-badge">২. পূর্ণ বিবরণ ও নির্দেশিকা</div>
+            <div style="font-size: 0.95rem; line-height: 1.6; color: inherit;">
+              ${item.fullHtml ? item.fullHtml : `<p>${escapeHtml(item.summary)}</p>`}
+            </div>
+          </div>
         </div>
 
-        <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-          ${item.applyLink ? `<a href="${item.applyLink}" target="_blank" class="btn-apply-link" style="flex:1;">🌐 অফিশিয়াল পোর্টালে যান</a>` : ''}
-          <button class="btn-read-modal" onclick="window.print()" style="border-color: var(--cyan); color: var(--cyan);">🖨️ প্রিন্ট / সেভ PDF</button>
+        <div class="print-footer-tag" style="display:none;">
+          Aimanix AI Official Job Booklet Framework • Print & Share
+        </div>
+
+        <div class="modal-footer-btns" style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+          ${item.applyLink ? `<a href="${item.applyLink}" target="_blank" class="btn-apply-link" style="flex:1;">🌐 অফিশিয়াল ওয়েবসাইটে যান</a>` : ''}
+          <button class="btn-read-modal" onclick="window.print()" style="border-color: var(--cyan); color: var(--cyan); font-weight:800;">🖨️ প্রিন্ট / সেভ PDF</button>
         </div>
       `;
       modal.style.display = "flex";
@@ -794,8 +873,7 @@
     }
 
     window.onclick = function(e) {
-      const modal = document.getElementById("job-modal");
-      if (e.target === modal) closeJobModal();
+      if (e.target.id === 'job-modal') closeJobModal();
     };
 
     function escapeHtml(str) {
@@ -808,10 +886,69 @@
         .replace(/'/g, "&#039;");
     }
 
+    // ==========================================================
+    // 3. SYNAPSE CANVAS & TOUCH ANIMATION ENGINE
+    // ==========================================================
+    const canvas = document.getElementById('jobs-particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const particles = Array.from({ length: 45 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.7,
+      vy: (Math.random() - 0.5) * 0.7,
+      radius: Math.random() * 2 + 1,
+      color: ['0, 242, 254', '139, 92, 246', '217, 70, 239'][Math.floor(Math.random() * 3)]
+    }));
+
+    function renderSynapses() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(56, 189, 248, ${(1 - dist / 120) * 0.25})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgb(${p.color})`;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(renderSynapses);
+    }
+
     // STARTUP
     document.addEventListener("DOMContentLoaded", () => {
       loadPortalHeaderAndLabels();
       fetchJobsPortalData();
+      renderSynapses();
     });
   </script>
 </body>

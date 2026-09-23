@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>বিজ্ঞাপন বাজার | Aimanix Creative Ads Hub</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@600;800&family=Hind+Siliguri:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Firebase Compat Libraries -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #070314;
+      --surface: #100726;
+      --purple-main: #6b21a8;
+      --purple-neon: #a855f7;
+      --magenta-neon: #d946ef;
+      --cyan-neon: #00f2fe;
+      --yellow-neon: #facc15;
+      --card-bg: rgba(20, 8, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    p, span, h1, h2, h3, h4, li {
+      user-select: text;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Hind Siliguri', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* সাইবার পার্পল সিন্যাপ্স ক্যানভাস ও গ্রিড ব্যাকগ্রাউন্ড */
+    .purple-grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(168, 85, 247, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(217, 70, 239, 0.12) 0%, transparent 45%),
+        linear-gradient(to right, rgba(168, 85, 247, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(217, 70, 239, 0.05) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 34px 34px, 34px 34px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #ads-particle-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    nav, header, section, main, footer {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* টপ নেভিগেশন */
+    .ads-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(18px);
+      background: rgba(10, 3, 26, 0.88);
+      border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+      padding: 0.85rem 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .brand-badge {
+      background: linear-gradient(135deg, var(--magenta-neon), var(--purple-main));
+      color: #fff;
+      font-family: 'Fira Code', monospace;
+      font-weight: 800;
+      font-size: 0.88rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 8px;
+      box-shadow: 0 0 16px rgba(217, 70, 239, 0.5);
+    }
+
+    .brand-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.2px;
+    }
+
+    .btn-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      color: #fff;
+      padding: 0.45rem 0.85rem;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav-link:active {
+      transform: scale(0.92);
+      border-color: var(--magenta-neon);
+      background: rgba(217, 70, 239, 0.2);
+    }
+
+    /* হিরো ব্যানার */
+    .hero-container {
+      max-width: 1200px;
+      margin: 1.2rem auto;
+      padding: 0 1rem;
+    }
+
+    .poster-hero {
+      background: linear-gradient(145deg, #1b0a3d, #0d041f);
+      border: 1px solid rgba(217, 70, 239, 0.35);
+      border-radius: 22px;
+      padding: 2.2rem 1.8rem;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 0 35px rgba(168, 85, 247, 0.15);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: linear-gradient(90deg, #d946ef, #8b5cf6);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 0.35rem 1.1rem;
+      border-radius: 50px;
+      letter-spacing: 0.8px;
+      box-shadow: 0 0 20px rgba(217, 70, 239, 0.45);
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-title {
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-title span {
+      background: linear-gradient(90deg, #facc15, #ff007f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      color: #cbd5e1;
+      font-size: 1rem;
+      max-width: 650px;
+      margin: 0 auto 1.2rem;
+      line-height: 1.6;
+    }
+
+    /* গ্রিড কন্টেইনার */
+    .ads-feed-wrapper {
+      max-width: 1200px;
+      margin: 1rem auto 4rem;
+      padding: 0 1rem;
+    }
+
+    .ads-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 2rem;
+    }
+
+    /* রানিং নিয়ন বর্ডারযুক্ত পোস্টার কার্ড */
+    .ad-card-wrapper {
+      position: relative;
+      border-radius: 24px;
+      padding: 3px;
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .ad-card-wrapper:active {
+      transform: scale(0.975);
+    }
+
+    /* রানিং নিয়ন লাইট এফেক্ট */
+    .ad-card-wrapper::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(
+        transparent, 
+        rgba(217, 70, 239, 0.8), 
+        rgba(0, 242, 254, 0.8), 
+        rgba(250, 204, 21, 0.8), 
+        transparent 40%
+      );
+      animation: rotateNeon 4s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes rotateNeon {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .ad-card-inner {
+      position: relative;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border-radius: 22px;
+      padding: 1.2rem;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    /* পোস্টার প্রিভিউ ক্যানভাস বা ফ্রেম */
+    .ad-visual-frame {
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      background: #150930;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      margin-bottom: 1rem;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ad-visual-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .ad-badge-corner {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: linear-gradient(135deg, #facc15, #f97316);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .ad-info-box {
+      margin-bottom: 1rem;
+    }
+
+    .ad-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.35;
+      margin-bottom: 0.4rem;
+    }
+
+    .ad-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* সোশাল শেয়ার ও অ্যাকশন বাটন */
+    .ad-actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+    }
+
+    .btn-share {
+      border: none;
+      padding: 0.65rem;
+      border-radius: 12px;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(37, 211, 102, 0.3);
+    }
+
+    .btn-facebook {
+      background: linear-gradient(135deg, #1877F2, #0d5cb6);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(24, 119, 242, 0.3);
+    }
+
+    .btn-download-full {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, var(--magenta-neon), var(--purple-main));
+      color: #fff;
+      box-shadow: 0 0 15px rgba(217, 70, 239, 0.35);
+      margin-top: 0.2rem;
+    }
+
+    .btn-share:active {
+      transform: scale(0.94);
+    }
+
+    @media (max-width: 600px) {
+      .hero-title { font-size: 1.85rem; }
+      .ads-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ডায়নামিক পার্পল ব্যাকগ্রাউন্ড ও পার্টিকেল ক্যানভাস -->
+  <div class="purple-grid-bg"></div>
+  <canvas id="ads-particle-canvas"></canvas>
+
+  <!-- টপ নেভ -->
+  <nav class="ads-nav">
+    <a href="index.html" class="brand-group">
+      <span class="brand-badge">AIMANIX.AI</span>
+      <span class="brand-title">বিজ্ঞাপন বাজার</span>
+    </a>
+    <div style="display:flex; gap:0.5rem;">
+      <a href="jobs.html" class="btn-nav-link">💼 চাকরির বাজার</a>
+      <a href="index.html" class="btn-nav-link">🏠 হোমপেজ</a>
+    </div>
+  </nav>
+
+  <!-- হিরো সেকশন -->
+  <header class="hero-container">
+    <div class="poster-hero">
+      <span class="hero-badge">VIRAL ADS & POSTER GALLERY</span>
+      <h1 class="hero-title">স্মার্ট <span>বিজ্ঞাপন ও ক্রিয়েটিভ</span> হাব</h1>
+      <p class="hero-subtitle">
+        সোশ্যাল মিডিয়া ক্যাম্পেইন, প্রফেশনাল কোর্স ও ডিজিটাল প্রোডাক্টের আকর্ষণীয় হাই-কনভার্সন বিজ্ঞাপন পোস্টার গ্যালারি।
+      </p>
+    </div>
+  </header>
+
+  <!-- পোস্টার গ্যালারি ফিড -->
+  <main class="ads-feed-wrapper">
+    <div class="ads-grid" id="ads-container">
+      <!-- ফায়ারবেস বা লোকালস্টোরেজ থেকে স্বয়ংক্রিয়ভাবে লোড হবে -->
+    </div>
+  </main>
+
+  <script>
+    // ফায়ারবেস কনফিগারেশন
+    const firebaseConfig = {
+      authDomain: "aimanix-web.firebaseapp.com",
+      projectId: "aimanix-web",
+      storageBucket: "aimanix-web.appspot.com"
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ডিফল্ট ডেমো পোস্টার (যদি ফায়ারবেসে এখনও কোনো পোস্ট না থাকে)
+    const DEMO_ADS = [
+      {
+        id: "demo_1",
+        title: "৮টি এআই কার্টুন ভিডিও জেনারেটর ২০২৬",
+        desc: "শেয়ার দিয়ে কমেন্ট করুন এবং ফ্রিতে নিয়ে নিন কার্টুন ভিডিও তৈরির কমপ্লিট গাইডলাইন!",
+        imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+        badge: "AI COURSE",
+        ctaWord: "8"
+      },
+      {
+        id: "demo_2",
+        title: "ডাটাবেজ আর্কিটেকচার ও ডিজাইন গাইড",
+        desc: "একটি রিয়েল সফটওয়্যারের ডাটাবেজ কীভাবে শুরু থেকে ডিজাইন করা হয় শিখুন।",
+        imageUrl: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
+        badge: "DATABASE",
+        ctaWord: "DB"
+      }
+    ];
+
+    async function loadAdvertisements() {
+      const container = document.getElementById("ads-container");
+      try {
+        const snap = await db.collection("ad_posters").orderBy("timestamp", "desc").get();
+        let ads = [];
+
+        if (!snap.empty) {
+          snap.forEach(doc => ads.push({ id: doc.id, ...doc.data() }));
+        } else {
+          const local = JSON.parse(localStorage.getItem("aimanix_ad_posters") || "[]");
+          ads = local.length > 0 ? local : DEMO_ADS;
+        }
+
+        renderAdsGrid(ads);
+      } catch (err) {
+        const local = JSON.parse(localStorage.getItem("aimanix_ad_posters") || "[]");
+        renderAdsGrid(local.length > 0 ? local : DEMO_ADS);
+      }
+    }
+
+    function renderAdsGrid(items) {
+      const container = document.getElementById("ads-container");
+      container.innerHTML = items.map(ad => {
+        const shareUrl = window.location.href;
+        const shareText = encodeURIComponent(`${ad.title}\n${ad.desc}\nবিস্তারিত দেখুন: `);
+        const waLink = `https://api.whatsapp.com/send?text=${shareText}${encodeURIComponent(shareUrl)}`;
+        const fbLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+
+        return `
+          <div class="ad-card-wrapper">
+            <div class="ad-card-inner">
+              <div>
+                <div class="ad-visual-frame">
+                  <span class="ad-badge-corner">${escapeHtml(ad.badge || 'PROMO')}</span>
+                  <img src="${ad.imageUrl}" alt="${escapeHtml(ad.title)}" loading="lazy">
+                </div>
+                <div class="ad-info-box">
+                  <h2 class="ad-title">${escapeHtml(ad.title)}</h2>
+                  <p class="ad-desc">${escapeHtml(ad.desc)}</p>
+                </div>
+              </div>
+
+              <div>
+                <div class="ad-actions-grid">
+                  <a href="${waLink}" target="_blank" class="btn-share btn-whatsapp">
+                    🟢 WhatsApp
+                  </a>
+                  <a href="${fbLink}" target="_blank" class="btn-share btn-facebook">
+                    🔵 Facebook
+                  </a>
+                  <button class="btn-share btn-download-full" onclick="downloadImage('${ad.imageUrl}', '${escapeHtml(ad.title)}')">
+                    💾 হাই-রেজোলিউশন ইমেজ সেভ করুন
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function downloadImage(url, title) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${title.replace(/\s+/g, '_')}_poster.jpg`;
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // ==========================================================
+    // টাচ বাবল ও পার্পল সিন্যাপ্স অ্যানিমেশন ইঞ্জিন
+    // ==========================================================
+    const canvas = document.getElementById('ads-particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const pointer = { x: null, y: null, radius: 140 };
+    const ripples = [];
+
+    class TouchBubble {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.radius = 4;
+        this.maxRadius = Math.random() * 40 + 35;
+        this.alpha = 0.9;
+        this.speed = Math.random() * 2.5 + 2;
+        this.color = ['217, 70, 239', '168, 85, 247', '0, 242, 254'][Math.floor(Math.random() * 3)];
+      }
+      update() {
+        this.radius += this.speed;
+        this.alpha -= 0.025;
+      }
+      draw() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(${this.color}, ${this.alpha})`;
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    window.addEventListener('mousemove', (e) => {
+      pointer.x = e.clientX;
+      pointer.y = e.clientY;
+      if (Math.random() > 0.45) ripples.push(new TouchBubble(e.clientX, e.clientY));
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        pointer.x = e.touches[0].clientX;
+        pointer.y = e.touches[0].clientY;
+        ripples.push(new TouchBubble(pointer.x, pointer.y));
+      }
+    }, { passive: true });
+
+    const particles = Array.from({ length: 45 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.7,
+      vy: (Math.random() - 0.5) * 0.7,
+      radius: Math.random() * 2.2 + 1,
+      color: ['217, 70, 239', '168, 85, 247', '250, 204, 21'][Math.floor(Math.random() * 3)]
+    }));
+
+    function renderEngine() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        ripples[i].update();
+        ripples[i].draw();
+        if (ripples[i].alpha <= 0) ripples.splice(i, 1);
+      }
+
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 115) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(168, 85, 247, ${(1 - dist / 115) * 0.25})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgb(${p.color})`;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(renderEngine);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadAdvertisements();
+      renderEngine();
+    });
+  </script>
+</body>
+</html>

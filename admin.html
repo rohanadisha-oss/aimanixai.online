@@ -224,7 +224,7 @@
       box-shadow: 0 0 20px rgba(250, 204, 21, 0.35);
     }
 
-    /* হুবহু 9:16 ফ্রেম */
+    /* 9:16 রেশিও ফ্রেম */
     .model-thumb-frame-9-16 {
       width: 100%;
       aspect-ratio: 9 / 16;
@@ -1271,56 +1271,73 @@ JSON ফরম্যাট:
     // 5. 9:16 VIRAL POSTER MAKER WITH ADVANCED PROMPTS (UPGRADED)
     // ==========================================================
     const AD_9_16_GENERATOR_PROMPT = `
-তুমি বিশ্বের শীর্ষস্থানীয় হাই-কনভার্সন সোশ্যাল মিডিয়া গ্রাফিক ডিরেক্টর ও প্রম্পট ইঞ্জিনিয়ার।
-ইনপুটে প্রদত্ত বিষয় (Topic) ও অতিরিক্ত বিবরণের ওপর ভিত্তি করে হুবহু 9:16 রেশিওর (1080x1920 / Vertical Reel / Story Poster) জন্য ৪টি মাস্টারপিস পোস্টার আর্কিটেকচার তৈরি করবে।
+তুমি বিশ্বের শীর্ষস্থানীয় হাই-কনভার্সন সোশ্যাল মিডিয়া গ্রাফিক আর্ট ডিরেক্টর ও প্রম্পট ইঞ্জিনিয়ার।
+ইনপুটে প্রদত্ত বিষয় (Topic), ব্যবহারকারীর কাস্টম ছবি/লিংক এবং বিবরণের ওপর ভিত্তি করে হুবহু 9:16 রেশিওর (1080x1920 / Vertical Social Reel & Story Format) ৪টি মাস্টারপিস পোস্টার আর্কিটেকচার তৈরি করবে।
 
-ইউজারের দেওয়া ৬টি রেফারেন্স মডেলের স্টাইল ফ্রেমওয়ার্ক:
-- মডেল ১ (Database & System Architecture): উপরে বড় বোল্ড প্রশ্নবোধক টাইটেল "একটি Real Software-এর Database শুরু থেকে কীভাবে Design করা হয়?", মাঝে ৩ডি সিলিন্ড্রিক্যাল আর্কিটেকচার ড্রয়িং/ব্লুপ্রিন্ট, টেবিল রিলেশনশিপস, স্কেলাবিলিটি ডায়াগ্রাম, আর্কিটেকচারাল স্কেচ।
-- মডেল ২ (Viral Presenter & Info-List): একজন উদ্যমী ভারতীয়/বাঙালি মডেল/প্রেজেন্টার ডানহাতে পয়েন্ট করছে, ব্যাকগ্রাউন্ডে পার্পল/ম্যাজেন্টা নিয়ন গ্লো, পাশে ৮টি টুলস বা কার্টুন ভিডিও জেনারেটরের রঙিন ব্যাজযুক্ত তালিকা, নিচে আকর্ষণীয় শেয়ার ও কমেন্ট পিল বাটন।
-- মডেল ৩ (Cute 3D Character & Gadget): আকর্ষণীয় কিউট ৩ডি ক্যারেক্টার ল্যাপটপে বসে কোডিং বা কাজ করছে, ফ্লোটিং ৩ডি উইন্ডো, উপহারের গিফট বক্স এবং "Full Process + Prompt চাইলে Comment করুন" ব্যাজ।
-- মডেল ৪ (Modern Mobile App & Fintech / Workflow): স্মার্টফোন থেকে ৩ডি পেমেন্ট ও কিউআর কোড বা ড্যাশবোর্ড পপ-আউট হয়ে আসছে, ভাসমান ফিচার কিউব বা আইকন, পরিষ্কার টাইপোগ্রাফি এবং নিচে গাঢ় কনভার্সন রিবন।
+রেফারেন্স ডিজাইনের ৪টি নির্দিষ্ট ভিজ্যুয়াল ক্যাটাগরি:
+১. মডেল ১ (Unique Gurukul - Presenter & Tool Stack):
+   - ভিজ্যুয়াল: প্রাণবন্ত মডেল/প্রেজেন্টার হাত দিয়ে স্ক্রিনের ডানদিকে ইঙ্গিত করছে।
+   - উপাদান: উপরে বিশাল বোল্ড গ্রেডিয়েন্ট টাইটেল (যেমন: "8 AI CARTOON VIDEO"), পাশে ১ থেকে ৮ পর্যন্ত রঙিন বৃত্তাকার ব্যাজসহ টুলস তালিকা।
+   - বটম বার: গাঢ় বেগুনি পিল রিবনে "একটি Share দিয়ে Comment লিখুন — [Keyword]"।
 
-বাধ্যতামূলক JSON আউটপুট ফরম্যাট (পিওর JSON অ্যারে):
+২. মডেল ২ (Laptop Floating UI & Python Web Automation):
+   - ভিজ্যুয়াল: আধুনিক ওয়ার্কস্পেস ডেস্কে ল্যাপটপ খোলা, স্ক্রিন থেকে ৩ডি গ্লাস কার্ড (Login, Automation, Data Extraction, CSV Export) ভাসমান অবস্থায় ওপরের দিকে স্টেপ-বাই-স্টেপ উঠে আসছে।
+   - উপাদান: উপরে বড় বোল্ড কালো ও সায়ান টাইটেল "পাইথন ওয়েব অটোমেশন — শুধু স্ক্র্যাপিং নয়", পাশে পাইথন লোগো ও কফি মগ।
+
+৩. মডেল ৩ (Dark Cyber Neon Grid - Coolify DevOps & Server Style):
+   - ভিজ্যুয়াল: পিচ-ব্ল্যাক আধুনিক ব্যাকগ্রাউন্ডে ৬টি সমান সাইবার নিয়ন বর্ডার বক্স গ্রিড (VPS Deployment, PostgreSQL, CI/CD, SSL, Storage Backup, Server Monitoring)।
+   - কালার প্যালেট: ইলেকট্রিক নিয়ন গ্রিন, রয়্যাল ভায়োলেট ও সায়ান ব্লু।
+   - উপাদান: উপরে বোল্ড লোগো ও সাবটাইটেল "আধুনিক DevOps ও Server Management — সবকিছু এক প্ল্যাটফর্মে!"।
+
+৪. মডেল ৪ (Cute 3D Character & Gadget - Custom GPT & Mobile UI):
+   - ভিজ্যুয়াল: ৩ডি পিক্সার স্টাইলের কিউট ক্যারেক্টার ল্যাপটপে বসে কাজ করছে অথবা হাতে স্মার্টফোন থেকে ৩ডি পেমেন্ট কিউআর কোড পপ-আউট হয়ে বের হচ্ছে।
+   - উপাদান: ভাসমান চ্যাট বুদ্বুদ, উপহারের বক্স, ফ্লোটিং আইকন এবং নিচে আকর্ষণীয় কমেন্ট বক্স।
+
+বাধ্যতামূলক JSON আউটপুট ফরম্যাট (শুধুমাত্র পিওর JSON অ্যারে):
 [
   {
-    "modelType": "architecture_blueprint",
-    "badge": "DATABASE ARCHITECTURE",
-    "headline": "একটি Real Software-এর Database শুরু থেকে কীভাবে Design করা হয়?",
-    "subHeadline": "User Needs, ERD Schema, Constraints এবং Scalability-এর পূর্ণাঙ্গ গাইডলাইন।",
-    "ctaText": "একটি Share দিয়ে Comment লিখুন — DB",
-    "bgGradient": "linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%)",
-    "imagePrompt": "Vertical 9:16 poster composition, a realistic 3D architectural blueprint of a circular multi-story database data center building showing cross-section wireframes and illuminated servers, technical architectural sketching lines with user needs, schema tables, pencil and blueprint paper background, photorealistic, clean studio lighting, high resolution --ar 9:16",
-    "fallbackBg": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    "modelType": "viral_presenter",
-    "badge": "AI MASTERCLASS 2026",
-    "headline": "৮টি AI CARTOON VIDEO GENERATORS যা আপনার জানা প্রয়োজন!",
-    "subHeadline": "স্ক্রিপ্ট থেকে আকর্ষণীয় কার্টুন ভিডিও তৈরির কমপ্লিট এআই টুলস তালিকা।",
-    "ctaText": "পুরো process পেতে চান? একটি Share দিয়ে Comment লিখুন — 8",
+    "modelType": "unique_gurukul_presenter",
+    "badge": "AI VIRAL MASTERCLASS",
+    "headline": "৮টি AI CARTOON VIDEO জেনারেটর যা ২০২৬-এ আপনার জানা প্রয়োজন!",
+    "subHeadline": "Same Person New Possibilities! পুরো প্রসেস পেতে শেয়ার দিয়ে কমেন্ট লিখুন।",
+    "ctaText": "একটি Share দিয়ে Comment লিখুন — 8",
+    "themeColor": "purple",
     "bgGradient": "linear-gradient(135deg, #18093d 0%, #0d041f 100%)",
-    "imagePrompt": "Vertical 9:16 poster, dynamic young Indian male presenter in casual stylish outfit pointing excitedly toward a floating list of AI cartoon generator app icons, vibrant neon purple and deep electric violet volumetric lighting, 3D floating social media badges, clean cinematic hyper-realistic portrait photography --ar 9:16",
+    "imagePrompt": "Vertical 9:16 ratio social media promotional poster, an energetic young professional presenter pointing excitedly towards a floating list of 8 colorful mobile app icons, volumetric glowing purple and electric violet studio lights, 3D floating emojis and notification badges, bold commercial typography, ultra-high resolution photography --ar 9:16",
     "fallbackBg": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80"
   },
   {
-    "modelType": "cute_3d_character",
-    "badge": "AUTOMATION TOOLS",
-    "headline": "ChatGPT দিয়ে নিজের Custom GPT তৈরি করুন সহজে!",
-    "subHeadline": "বারবার একই Prompt লেখার ঝামেলা চিরতরে শেষ।",
-    "ctaText": "Full Process + Prompt চাইলে Comment করুন — GPT",
-    "bgGradient": "linear-gradient(135deg, #2b0938 0%, #10041a 100%)",
-    "imagePrompt": "Vertical 9:16 social poster, adorable 3D animated Pixar style female character with laptop, pointing at screen happily, floating neon violet chat bubbles, 3D golden gift boxes and prompts floating around, cozy modern desk setup, soft studio cinematic lighting, 8k resolution --ar 9:16",
-    "fallbackBg": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80"
+    "modelType": "laptop_floating_automation",
+    "badge": "PYTHON AUTOMATION",
+    "headline": "পাইথন ওয়েব অটোমেশন — শুধু স্ক্র্যাপিং নয়!",
+    "subHeadline": "রিয়েল-ওয়ার্ল্ড অটোমেশন সিস্টেম তৈরি শিখুন: ফর্ম সাবমিট, ডাটা এক্সট্রাকশন ও বট ডেপ্লয়মেন্ট।",
+    "ctaText": "কমপ্লিট রোডম্যাপ পেতে Comment করুন — PYTHON",
+    "themeColor": "cyan",
+    "bgGradient": "linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%)",
+    "imagePrompt": "Vertical 9:16 poster, modern sleek laptop sitting on a clean wooden desk with morning coffee, glowing 3D modular user interface cards popping out and floating upward in sequential steps showing data extraction, automated workflows and code snippets, soft professional daylight studio lighting, clean tech layout --ar 9:16",
+    "fallbackBg": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80"
   },
   {
-    "modelType": "modern_mobile_ui",
-    "badge": "SMART REVOLUTION",
-    "headline": "মোবাইল দিয়ে বিল পেমেন্ট ও স্মার্ট অটোমেশন এখন আরও সহজ!",
-    "subHeadline": "সব প্রয়োজনীয় সার্ভিস এক প্ল্যাটফর্মে কয়েক সেকেন্ডের মধ্যে।",
-    "ctaText": "ফ্রি এক্সেস পেতে এখনই Comment করুন — APP",
-    "bgGradient": "linear-gradient(135deg, #02203e 0%, #060d1f 100%)",
-    "imagePrompt": "Vertical 9:16 promotional poster, modern 3D smartphone floating in center with glowing UPI QR code and payment successful green checkmark bursting with colorful coins, floating icons for electricity, internet and recharge, deep blue and turquoise neon atmosphere, commercial product photography --ar 9:16",
-    "fallbackBg": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80"
+    "modelType": "dark_cyber_devops_grid",
+    "badge": "SERVER & DEVOPS",
+    "headline": "আধুনিক DevOps ও সার্ভার ম্যানেজমেন্ট — সবকিছু এক প্ল্যাটফর্মে!",
+    "subHeadline": "VPS ডেপ্লয়মেন্ট, ডাটাবেজ সেটআপ, ডোমেন ও SSL কনফিগারেশন এক ক্লিকে।",
+    "ctaText": "ফ্রি সেটআপ গাইড পেতে Comment লিখুন — DEVOPS",
+    "themeColor": "neon_green",
+    "bgGradient": "linear-gradient(180deg, #050508 0%, #0c0d14 100%)",
+    "imagePrompt": "Vertical 9:16 dark mode infographic poster, pitch black sleek background with a clean 6-box rounded neon card grid glowing in electric green, cyan and violet, modern server racks and database cloud icons inside each box, crisp UI presentation, minimalist cyber aesthetics --ar 9:16",
+    "fallbackBg": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "modelType": "cute_3d_custom_gpt",
+    "badge": "CUSTOM AI ASSISTANT",
+    "headline": "ChatGPT দিয়ে নিজের Custom GPT তৈরি করুন সহজে!",
+    "subHeadline": "বারবার একই Prompt লেখার ঝামেলা চিরতরে দূর করুন।",
+    "ctaText": "Full Process + Prompt চাইলে Comment করুন — GPT",
+    "themeColor": "yellow_magenta",
+    "bgGradient": "linear-gradient(135deg, #2b0938 0%, #10041a 100%)",
+    "imagePrompt": "Vertical 9:16 3D animated character poster, an adorable stylized Pixar character happily sitting behind a pastel laptop, pointing forward with a wink, floating glowing chat bubbles, prompt cards, and 3D golden gift boxes, bright volumetric rim lighting, 8k resolution --ar 9:16",
+    "fallbackBg": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80"
   }
 ]
 `;

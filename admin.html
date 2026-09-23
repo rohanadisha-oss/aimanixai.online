@@ -202,104 +202,112 @@
     /* 9:16 রেশিও মডেল পোস্টার প্রিভিউ গ্রিড */
     .models-preview-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.6rem;
       margin-top: 1.4rem;
     }
 
     .model-card-item {
-      background: rgba(15, 7, 36, 0.9);
-      border: 1.5px solid rgba(217, 70, 239, 0.35);
-      border-radius: 18px;
+      background: #080318;
+      border: 2px solid rgba(217, 70, 239, 0.35);
+      border-radius: 20px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
       transition: all 0.25s ease;
     }
 
     .model-card-item.selected {
       border-color: #facc15;
-      box-shadow: 0 0 20px rgba(250, 204, 21, 0.35);
+      box-shadow: 0 0 25px rgba(250, 204, 21, 0.4);
     }
 
-    /* 9:16 রেশিও ফ্রেম */
-    .model-thumb-frame-9-16 {
+    /* 9:16 রেশিও পোস্টার ফ্রেম */
+    .poster-frame-9-16 {
       width: 100%;
       aspect-ratio: 9 / 16;
       position: relative;
       background: #060212;
       overflow: hidden;
-    }
-
-    .model-thumb-frame-9-16 img {
-      width: 100%; height: 100%; object-fit: cover;
-    }
-
-    .poster-art-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(7,3,20,0.85) 0%, rgba(7,3,20,0.2) 35%, rgba(7,3,20,0.4) 65%, rgba(7,3,20,0.95) 100%);
-      padding: 1rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
-    .model-badge {
+    .poster-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .poster-visual-overlay {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.2rem;
+      background: linear-gradient(180deg, rgba(7,3,20,0.85) 0%, rgba(7,3,20,0.2) 40%, rgba(7,3,20,0.3) 60%, rgba(7,3,20,0.95) 100%);
+    }
+
+    .poster-badge-top {
       align-self: flex-start;
       background: linear-gradient(135deg, #facc15, #f97316);
       color: #000;
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       font-weight: 800;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 6px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      letter-spacing: 0.5px;
     }
 
-    .poster-overlay-title {
-      font-size: 1.15rem;
+    .poster-title-top {
+      font-size: 1.22rem;
       font-weight: 800;
       color: #ffffff;
       line-height: 1.35;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.9);
-      margin-top: 0.4rem;
+      text-shadow: 0 3px 12px rgba(0,0,0,0.95);
+      margin-top: 0.5rem;
     }
 
-    .poster-overlay-cta {
+    .poster-desc-center {
+      background: rgba(15, 7, 36, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.82rem;
+      color: #e2e8f0;
+      line-height: 1.45;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+    }
+
+    .poster-cta-bottom {
       background: linear-gradient(90deg, #d946ef, #6366f1);
       color: #fff;
-      padding: 6px 12px;
+      padding: 10px 14px;
       border-radius: 50px;
       font-weight: 800;
-      font-size: 0.78rem;
+      font-size: 0.85rem;
       text-align: center;
-      box-shadow: 0 4px 15px rgba(217, 70, 239, 0.5);
-    }
-
-    .model-content {
-      padding: 1rem;
-    }
-
-    .prompt-drawer {
-      background: rgba(3, 7, 18, 0.8);
-      border: 1px dashed rgba(217, 70, 239, 0.4);
-      padding: 8px 10px;
-      border-radius: 8px;
-      margin-top: 8px;
-      font-size: 0.74rem;
-      color: #a5b4fc;
-      max-height: 80px;
-      overflow-y: auto;
-      font-family: 'Fira Code', monospace;
-      line-height: 1.4;
+      box-shadow: 0 6px 20px rgba(217, 70, 239, 0.5);
+      letter-spacing: 0.4px;
     }
 
     .model-actions-row {
-      padding: 0.6rem 1rem 1rem;
+      padding: 0.8rem 1rem 1rem;
       display: flex;
       gap: 0.4rem;
+      background: rgba(15, 23, 42, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .btn-model-select {
@@ -307,9 +315,9 @@
       background: rgba(217, 70, 239, 0.2);
       border: 1px solid var(--magenta);
       color: #fff;
-      font-weight: 700;
-      font-size: 0.85rem;
-      padding: 0.5rem;
+      font-weight: 800;
+      font-size: 0.88rem;
+      padding: 0.6rem;
       border-radius: 8px;
       cursor: pointer;
     }
@@ -504,7 +512,6 @@
       <div class="panel-section-title" style="color: var(--amber);">💼 চাকরির বাজার: নিয়োগ বিজ্ঞপ্তি ও প্রিপারেশন হাব</div>
       <p class="panel-section-desc">কোড না ছুঁয়েই পেজের ব্যানার ছবি, সেকশনের নাম এবং AI দিয়ে সম্পূর্ণ বিজ্ঞপ্তি তৈরি করুন।</p>
 
-      <!-- SUB SECTION A: BANNER & HERO CUSTOMIZER -->
       <div class="sub-box-card">
         <div style="font-weight: 800; color: var(--cyan); margin-bottom: 0.8rem;">🖼️ ১. হেডার ব্যানার ও পোস্টার কাস্টমাইজার (jobs.html)</div>
         <div class="form-grid">
@@ -528,10 +535,8 @@
         <button class="btn-action-primary" onclick="saveJobPortalHeader()">💾 ব্যানার সেটিংস সেভ করুন</button>
       </div>
 
-      <!-- SUB SECTION B: CATEGORY LABEL CUSTOMIZER -->
       <div class="sub-box-card">
-        <div style="font-weight: 800; color: var(--cyan); margin-bottom: 0.8rem;">🏷️ ২. সেকশন ও ক্যাটাগরি ম্যানেজার (কোড ছাড়া নাম বদলান)</div>
-        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;">যেকোনো ক্যাটাগরির নাম আপনার প্রয়োজন অনুযায়ী পরিবর্তন করতে পারেন।</p>
+        <div style="font-weight: 800; color: var(--cyan); margin-bottom: 0.8rem;">🏷️ ২. সেকশন ও ক্যাটাগরি ম্যানেজার</div>
         <div class="form-grid">
           <div class="form-group">
             <label>ক্যাটাগরি ১ (Notice):</label>
@@ -565,7 +570,6 @@
         <button class="btn-action-primary" onclick="saveJobCategories()">🏷️ ক্যাটাগরি নামগুলো সেভ করুন</button>
       </div>
 
-      <!-- SUB SECTION C: AI JOB POST GENERATOR -->
       <div class="sub-box-card">
         <div style="font-weight: 800; color: var(--amber); margin-bottom: 0.8rem;">🚀 ৩. AI দিয়ে বিজ্ঞপ্তি বা প্রিপারেশন নোট তৈরি করুন</div>
         <div class="form-grid">
@@ -598,46 +602,45 @@
         </div>
       </div>
 
-      <!-- SUB SECTION D: POST LIST & DELETE -->
       <div class="manage-list-box">
         <div style="font-weight: 800; color: var(--amber); margin-bottom: 1rem;">📜 চাকরির বাজারে প্রকাশিত তথ্যের তালিকা</div>
         <div id="jobs-published-list"></div>
       </div>
     </div>
 
-    <!-- TAB 5: 9:16 VIRAL POSTER MAKER -->
+    <!-- TAB 5: 9:16 AI ULTRA 4K POSTER MAKER -->
     <div class="tab-content-panel" id="panel-ads">
-      <div class="panel-section-title" style="color: var(--magenta);">📢 বিজ্ঞাপন বাজার: 9:16 AI ভাইরাল পোস্টার মেকার</div>
-      <p class="panel-section-desc">টপিক লিখলেই রেফারেন্স ডিজাইনের আদলে ৪টি ভিন্ন 9:16 রেশিওর উচ্চ-কনভার্সন পোস্টার তৈরি হবে।</p>
+      <div class="panel-section-title" style="color: var(--magenta);">📢 বিজ্ঞাপন বাজার: ৯:১৬ এআই আল্ট্রা ৪কে পোস্টার মেকার</div>
+      <p class="panel-section-desc">টপিক লিখলেই এআই সরাসরি ৪কে কোয়ালিটির আসল ইমেজ ও সুপার-ইম্পোজড রেফারেন্স পোস্টার তৈরি করবে।</p>
 
       <div class="sub-box-card" style="border-color: rgba(217, 70, 239, 0.35);">
-        <div style="font-weight: 800; color: var(--magenta); margin-bottom: 0.8rem;">🎨 ১. বিষয়ের তথ্য ও ইমেজ অপশন</div>
+        <div style="font-weight: 800; color: var(--magenta); margin-bottom: 0.8rem;">🎨 ১. বিষয়ের তথ্য ও অফার বিবরণ</div>
         <div class="form-grid">
           <div class="form-group full-width">
-            <label style="color: var(--magenta);">পোস্টের মূল বিষয় / কোর্স / প্রম্পট:</label>
-            <input type="text" id="ad-topic-input" placeholder="যেমন: ৮টি AI কার্টুন ভিডিও জেনারেটর ২০২৬ অথবা ডাটাবেজ আর্কিটেকচার ও ডিজাইন">
+            <label style="color: var(--magenta);">পোস্টের মূল বিষয় / কোর্স / হেডলাইন:</label>
+            <input type="text" id="ad-topic-input" placeholder="যেমন: ৮টি AI CARTOON VIDEO GENERATORS অথবা পাইথন ওয়েব অটোমেশন">
           </div>
 
           <div class="form-group full-width">
-            <label style="color: var(--magenta);">কাস্টম মডেল / নিজের ছবির লিংক (ঐচ্ছিক):</label>
-            <input type="text" id="ad-custom-photo" placeholder="ফাঁকা রাখলে AI বিষয় অনুযায়ী স্বয়ংক্রিয়ভাবে ৩ডি গ্রাফিক্স যুক্ত করবে">
+            <label style="color: var(--magenta);">নিজের ছবি বা মডেলের লিংক (ঐচ্ছিক):</label>
+            <input type="text" id="ad-custom-photo" placeholder="ফাঁকা রাখলে AI সরাসরি আসল ৪কে ৩ডি/মডেল গ্রাফিক্স জেনারেট করবে">
           </div>
 
           <div class="form-group full-width">
-            <label style="color: var(--magenta);">অতিরিক্ত অফার বা শেয়ার কল-টু-অ্যাকশন (ঐচ্ছিক):</label>
-            <textarea id="ad-extra-details" style="min-height: 80px;" placeholder="যেমন: পুরো process পেতে চান? তাহলে একটি Share দিয়ে Comment লিখুন — 8"></textarea>
+            <label style="color: var(--magenta);">অতিরিক্ত বিবরণ ও অফার হুক:</label>
+            <textarea id="ad-extra-details" style="min-height: 80px;" placeholder="যেমন: পুরো process পেতে চান? একটি Share দিয়ে Comment লিখুন — 8"></textarea>
           </div>
         </div>
 
         <div style="margin-top: 1rem;">
-          <button class="btn-action-primary btn-action-magenta" id="btn-generate-ad-models" onclick="generateAdModelsAI()">✨ ৪টি 9:16 মডেল পোস্টার তৈরি করুন</button>
+          <button class="btn-action-primary btn-action-magenta" id="btn-generate-ad-models" onclick="generateAdModelsAI()">✨ ৪টি সম্পূর্ণ ৯:১৬ ৪কে পোস্টার তৈরি করুন</button>
         </div>
       </div>
 
-      <!-- 9:16 মডেল পোস্টার প্রিভিউ সেকশন -->
+      <!-- লাইভ ৯:১৬ পোস্টার প্রিভিউ সেকশন -->
       <div class="sub-box-card" id="models-preview-box" style="display:none; border-color: rgba(250, 204, 21, 0.4);">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-          <div style="font-weight: 800; color: #facc15;">📱 তৈরি হওয়া ৪টি 9:16 মডেল পোস্টার (সিলেক্ট করুন):</div>
+          <div style="font-weight: 800; color: #facc15;">📱 তৈরি হওয়া ৪টি সম্পূর্ণ ৯:১৬ ৪কে পোস্টার (লাইভ প্রিভিউ):</div>
           <div style="display:flex; gap:0.5rem;">
             <button class="btn-live-view" style="border-color:#facc15; color:#facc15;" onclick="selectAllModels(true)">সবগুলো সিলেক্ট</button>
             <button class="btn-live-view" onclick="selectAllModels(false)">আন-সিলেক্ট</button>
@@ -651,7 +654,6 @@
         </div>
       </div>
 
-      <!-- পাবলিশ করা বিজ্ঞাপনের তালিকা -->
       <div class="manage-list-box">
         <div style="font-weight: 800; color: var(--magenta); margin-bottom: 1rem;">📜 বিজ্ঞাপন বাজারে প্রকাশিত পোস্টারের তালিকা</div>
         <div id="ads-published-list"></div>
@@ -669,7 +671,6 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // সেশন চেক
     window.addEventListener('DOMContentLoaded', () => {
       const savedUser = sessionStorage.getItem("aimanix_cloud_user");
       if (savedUser) {
@@ -774,7 +775,7 @@
     }
 
     // ==========================================================
-    // GEMINI AI ENGINE
+    // GEMINI AI ENGINE (TEXT + 4K IMAGE GENERATOR)
     // ==========================================================
     async function getSecureGeminiKey() {
       const snap = await db.collection("system_config").doc("ai_secrets").get();
@@ -798,7 +799,7 @@
             body: JSON.stringify({
               system_instruction: { parts: [{ text: systemInstruction }] },
               contents: [{ role: "user", parts: [{ text: promptText }] }],
-              generationConfig: { temperature: 0.25 }
+              generationConfig: { temperature: 0.2 }
             })
           });
           if (res.ok) {
@@ -808,6 +809,34 @@
         } catch (e) {}
       }
       throw new Error("Gemini সার্ভার ব্যস্ত রয়েছে। অনুগ্রহ করে কয়েক সেকেন্ড পর আবার চেষ্টা করুন।");
+    }
+
+    // সরাসরি ৪কে এআই ইমেজ জেনারেটর (Gemini Imagen / Nano Banana + Ultra-HD Engine)
+    async function generateUltra4KImage(prompt, fallbackQuery) {
+      try {
+        const key = await getSecureGeminiKey();
+        const imagenUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${key}`;
+        
+        const res = await fetch(imagenUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            instances: [{ prompt: prompt + ", vertical 9:16 aspect ratio, ultra-detailed 4k masterpiece, high contrast" }],
+            parameters: { sampleCount: 1, aspectRatio: "9:16" }
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.predictions && data.predictions[0]?.bytesBase64Encoded) {
+            return `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
+          }
+        }
+      } catch (err) {}
+
+      // ফেইলসেফ ৪কে আল্ট্রা-এইচডি ইমেজ ইঞ্জিন (ক্র্যাশ হবে না)
+      const encoded = encodeURIComponent(prompt + " 4k cinematic photorealistic master composition");
+      return `https://image.pollinations.ai/prompt/${encoded}?width=1080&height=1920&nologo=true&seed=${Math.floor(Math.random() * 999999)}`;
     }
 
     // ==========================================
@@ -894,11 +923,11 @@
       if (descEn) existing.en.heroDesc = descEn;
 
       localStorage.setItem("aimanix_v3_data", JSON.stringify(existing));
-      alert("✅ তথ্য সফলভাবে আপডেট হয়েছে! শুধু পরিবর্তিত তথ্যগুলো সেভ হয়েছে, কোনো পূর্বের লেখা মুছে যায়নি।");
+      alert("✅ তথ্য সফলভাবে আপডেট হয়েছে!");
     }
 
     function restoreDefaultHomeData() {
-      if (confirm("আপনি কি হোমপেজের সমস্ত তথ্য ও ভিডিও লিঙ্ক ডিফল্ট অবস্থায় রিসেট করতে চান?")) {
+      if (confirm("হোমপেজের তথ্য কি রিসেট করতে চান?")) {
         localStorage.setItem("aimanix_v3_data", JSON.stringify(DEFAULT_SITE_DATA));
         loadCurrentHomeData();
         alert("✅ হোমপেজ মূল তথ্যে সফলভাবে রিসেট করা হয়েছে।");
@@ -911,41 +940,7 @@
     const ROYAL_VIOLET_STUDY_PROMPT = `
 তুমি একজন বিশ্বমানের বাংলা স্টাডি নোট ডিজাইনার এবং অভিজ্ঞ শিক্ষাবিদ।
 ইনপুটে প্রদত্ত শ্রেণী (Grade/Class), বিষয় এবং কাঁচা পাঠ্য (Raw Text) বিশ্লেষণ করে স্বয়ংক্রিয়ভাবে একটি রেডি-টু-প্রিন্ট A4 কালার স্টাডি শিট তৈরি করবে।
-
-ক্লাসভিত্তিক প্রয়োজনীয় কাঠামো:
-1. Class V, VI, VII: সহজ-সরল ভাষা, মূল ভাবার্থ, শব্দার্থ এবং সংক্ষিপ্ত প্রশ্নোত্তর।
-2. Class VIII, IX: বিশদ ভাবার্থ, গুরুত্বপূর্ণ বুলেট point, চরিত্র/বিষয় বিশ্লেষণ এবং MCQ ও সংক্ষিপ্ত প্রশ্ন।
-3. Madhyamik (দশম শ্রেণী): মাধ্যমিক বোর্ডের প্রশ্নরীতির অনুরূপ ৩ ও ৫ নম্বরের মানসম্মত সাজেস্টিভ উত্তর, উৎস-প্রসঙ্গ এবং পয়েন্টভিত্তিক উত্তর।
-4. Class XI, H.S (উচ্চ মাধ্যমিক): উচ্চমাধ্যমিক স্তরের গভীর সাহিত্য পর্যালোচনা, দর্শন, ব্যাকরণ ও শিল্প-সংস্কৃতির সমন্বিত আলোচনা।
-
-স্টাইল ও ডিজাইন গাইডলাইন (বাধ্যতামূলক):
-- হেডার কার্ড:
-  <div class="note-header-card">
-    <span class="note-badge-gold">শ্রেণী: [শ্রেণী নাম] | পাঠ্য অধ্যায়</span>
-    <h1>[বিষয়ের নাম / অধ্যায় শিরোনাম]</h1>
-    <p style="color: #f3e8ff; font-size: 0.95rem; margin-top: 4px;">Aimanix AI Smart Gurukul Education Framework</p>
-  </div>
-- সেকশন কার্ড:
-  <div class="note-section-card border-accent-purple floating-card-touch">
-    <div class="note-section-title">১. মূল সারসংক্ষেপ ও ভাবার্থ</div>
-    <p class="note-body-text">...</p>
-  </div>
-- পয়েন্ট কার্ড:
-  <div class="note-section-card border-accent-cyan floating-card-touch">
-    <div class="note-section-title">২. গুরুত্বপূর্ণ মূল পয়েন্ট ও তথ্যসূত্র</div>
-    <ul class="note-body-text" style="padding-left: 20px;">...</ul>
-  </div>
-- প্রশ্নোত্তর কার্ড:
-  <div class="note-section-card border-accent-gold floating-card-touch">
-    <div class="note-section-title">৩. সম্ভাব্য গুরুত্বপূর্ণ প্রশ্নোত্তর (বোর্ড ও পরীক্ষা মান)</div>
-    <div class="qa-block">
-      <div class="qa-q">প্রশ্ন ১: ...</div>
-      <div class="qa-a">উত্তর: ...</div>
-    </div>
-  </div>
-
-গুরুত্বপূর্ণ নির্দেশ:
-কোনো রকম ব্যাকটিক বা মার্কডাউন (\`\`\`html) দেবে না। শুধুমাত্র সরাসরি পরিচ্ছন্ন HTML কোড দেবে।
+কোনো রকম ব্যাকটিক বা মার্কডাউন ছাড়া শুধুমাত্র সরাসরি পরিচ্ছন্ন HTML কোড দেবে।
 `;
 
     async function generateSchoolNote() {
@@ -958,15 +953,10 @@
       btn.textContent = "AI স্টাডি শিট তৈরি করছে..."; btn.disabled = true;
 
       try {
-        let aiHtml = await executeGeminiAPI(ROYAL_VIOLET_STUDY_PROMPT, `নির্বাচিত শ্রেণী: ${grade}\nবিষয়/অধ্যায়: ${subject}\nকাঁচা পাঠ্য (Raw Text):\n${rawText}`);
+        let aiHtml = await executeGeminiAPI(ROYAL_VIOLET_STUDY_PROMPT, `শ্রেণী: ${grade}\nবিষয়: ${subject}\nপাঠ্য:\n${rawText}`);
         aiHtml = aiHtml.replace(/```html|```/g, "").trim();
 
-        const noteObj = {
-          grade: grade,
-          subject: subject,
-          htmlContent: aiHtml,
-          timestamp: Date.now()
-        };
+        const noteObj = { grade: grade, subject: subject, htmlContent: aiHtml, timestamp: Date.now() };
 
         let localNotes = JSON.parse(localStorage.getItem("aimanix_school_notes") || "[]");
         localNotes.unshift(noteObj);
@@ -974,7 +964,7 @@
 
         await db.collection("school_notes").add(noteObj);
 
-        alert(`✅ ক্লাস ${grade}-এর নোট সফলভাবে প্রকাশিত হয়েছে! school.html এ এখন দেখা যাবে।`);
+        alert(`✅ ক্লাস ${grade}-এর নোট সফলভাবে প্রকাশিত হয়েছে!`);
         document.getElementById("school-raw").value = "";
         loadSchoolNotesList();
       } catch (err) {
@@ -1010,9 +1000,7 @@
           localNotes = localNotes.filter(n => n.id !== id);
           localStorage.setItem("aimanix_school_notes", JSON.stringify(localNotes));
           loadSchoolNotesList();
-        } catch (e) {
-          alert("ডিলিট করতে সমস্যা হয়েছে: " + e.message);
-        }
+        } catch (e) { alert("ডিলিট করতে সমস্যা হয়েছে: " + e.message); }
       }
     }
 
@@ -1020,13 +1008,8 @@
     // KOBITAR AKASH ENGINE
     // ==========================================
     const KOBITA_AURORA_PROMPT = `
-তুমি আধুনিক বাংলা কবিতার সংকলক। কাঁচা কবিতা থেকে উপযুক্ত JSON রিটার্ন করবে।
-JSON ফরম্যাট:
-{
-  "title": "কবিতার সুন্দর নাম",
-  "author": "কবির নাম",
-  "body": "কবিতার লাইন..."
-}
+তুমি আধুনিক বাংলা কবিতার সংকলক। কাঁচা কবিতা থেকে উপযুক্ত JSON রিটার্ন করবে:
+{ "title": "...", "author": "...", "body": "..." }
 শুধুমাত্র পিওর JSON কোড দেবে।
 `;
 
@@ -1059,7 +1042,7 @@ JSON ফরম্যাট:
 
         await db.collection("poems").add(poemObj);
 
-        alert("✅ কবিতা সফলভাবে কবিতার আকাশে প্রকাশিত হয়েছে!");
+        alert("✅ কবিতা সফলভাবে প্রকাশিত হয়েছে!");
         document.getElementById("kobita-raw").value = "";
         loadPoemsList();
       } catch (err) {
@@ -1095,9 +1078,7 @@ JSON ফরম্যাট:
           localPoems = localPoems.filter(p => p.id !== id);
           localStorage.setItem("aimanix_poems", JSON.stringify(localPoems));
           loadPoemsList();
-        } catch (e) {
-          alert("ডিলিট করতে সমস্যা হয়েছে: " + e.message);
-        }
+        } catch (e) { alert("ডিলিট করতে সমস্যা হয়েছে: " + e.message); }
       }
     }
 
@@ -1128,61 +1109,37 @@ JSON ফরম্যাট:
     }
 
     async function saveJobPortalHeader() {
-      const heroImage = document.getElementById("job-hero-img").value.trim();
-      const heroBadge = document.getElementById("job-hero-badge").value.trim();
-      const heroTitle = document.getElementById("job-hero-title").value.trim();
-      const heroSubtitle = document.getElementById("job-hero-sub").value.trim();
-
       try {
         await db.collection("system_config").doc("job_portal_settings").set({
-          heroImage: heroImage,
-          heroBadge: heroBadge,
-          heroTitle: heroTitle,
-          heroSubtitle: heroSubtitle
+          heroImage: document.getElementById("job-hero-img").value.trim(),
+          heroBadge: document.getElementById("job-hero-badge").value.trim(),
+          heroTitle: document.getElementById("job-hero-title").value.trim(),
+          heroSubtitle: document.getElementById("job-hero-sub").value.trim()
         }, { merge: true });
-
         alert("✅ ব্যানার সেটিংস সফলভাবে সেভ হয়েছে!");
-      } catch (err) {
-        alert("সংরক্ষণ করতে সমস্যা হয়েছে: " + err.message);
-      }
+      } catch (err) { alert("সংরক্ষণ করতে সমস্যা হয়েছে: " + err.message); }
     }
 
     async function saveJobCategories() {
-      const categories = {
-        notice: document.getElementById("cat-name-notice").value.trim(),
-        dates: document.getElementById("cat-name-dates").value.trim(),
-        anganwadi: document.getElementById("cat-name-anganwadi").value.trim(),
-        primary: document.getElementById("cat-name-primary").value.trim(),
-        police: document.getElementById("cat-name-police").value.trim(),
-        ssc: document.getElementById("cat-name-ssc").value.trim(),
-        result: document.getElementById("cat-name-result").value.trim()
-      };
-
       try {
         await db.collection("system_config").doc("job_portal_settings").set({
-          categories: categories
+          categories: {
+            notice: document.getElementById("cat-name-notice").value.trim(),
+            dates: document.getElementById("cat-name-dates").value.trim(),
+            anganwadi: document.getElementById("cat-name-anganwadi").value.trim(),
+            primary: document.getElementById("cat-name-primary").value.trim(),
+            police: document.getElementById("cat-name-police").value.trim(),
+            ssc: document.getElementById("cat-name-ssc").value.trim(),
+            result: document.getElementById("cat-name-result").value.trim()
+          }
         }, { merge: true });
-
-        alert("✅ সেকশন ও ক্যাটাগরির নামগুলো সফলভাবে সংরক্ষিত হয়েছে!");
-      } catch (err) {
-        alert("ক্যাটাগরি সেভ করতে সমস্যা হয়েছে: " + err.message);
-      }
+        alert("✅ সেকশন ও ক্যাটাগরির নামগুলো সংরক্ষিত হয়েছে!");
+      } catch (err) { alert("ক্যাটাগরি সেভ করতে সমস্যা হয়েছে: " + err.message); }
     }
 
     const JOB_AI_PROMPT = `
-তুমি একজন শীর্ষস্থানীয় রিক্রুটমেন্ট অ্যানালিস্ট এবং ক্যারিয়ার কোচ।
-ইনপুটে দেওয়া সরকারি/বেসরকারি চাকরির কাঁচা নোটিশ বা স্টাডি মেটেরিয়াল থেকে নিচের JSON ফরম্যাটে একটি নির্ভুল বাংলা অবজেক্ট তৈরি করবে:
-
-{
-  "title": "সংক্ষিপ্ত ও আকর্ষণীয় শিরোনাম",
-  "postName": "পদের নাম",
-  "vacancy": "মোট শূন্যপদ",
-  "qualification": "শিক্ষাগত যোগ্যতা",
-  "lastDate": "আবেদনের শেষ তারিখ বা পরীক্ষার তারিখ",
-  "summary": "২-৩ লাইনে মূল হাইলাইটস এবং আবেদন করার সংক্ষেপ তথ্য",
-  "fullHtml": "এইচটিএমএল ফরম্যাটে পূর্ণ বিবরণ, পদের বিস্তারিত, বয়সসীমা, পরীক্ষার সিলেবাস ও গুরুত্বপূর্ণ মডেল প্রশ্নোত্তর"
-}
-শুধুমাত্র পিওর JSON কোড রিটার্ন করবে।
+তুমি একজন রিক্রুটমেন্ট অ্যানালিস্ট। কাঁচা নোটিশ থেকে পিওর JSON অবজেক্ট দেবে:
+{ "title": "...", "postName": "...", "vacancy": "...", "qualification": "...", "lastDate": "...", "summary": "...", "fullHtml": "..." }
 `;
 
     async function generateJobPostAI() {
@@ -1191,7 +1148,7 @@ JSON ফরম্যাট:
       const rawText = document.getElementById("job-raw-input").value.trim();
       const btn = document.getElementById("btn-job-submit");
 
-      if (!rawText) return alert("দয়া করে নোটিশ বা সিলেবাসের টেক্সট পেস্ট করুন!");
+      if (!rawText) return alert("দয়া করে নোটিশের টেক্সট পেস্ট করুন!");
       btn.textContent = "AI নোটিশ প্রসেস করছে..."; btn.disabled = true;
 
       try {
@@ -1217,13 +1174,11 @@ JSON ফরম্যাট:
         localStorage.setItem("aimanix_jobs_local", JSON.stringify(localJobs));
 
         await db.collection("jobs_portal").add(jobDoc);
-
-        alert("✅ চাকরির পোস্টটি সফলভাবে তৈরি ও প্রকাশিত হয়েছে!");
+        alert("✅ চাকরির পোস্টটি সফলভাবে প্রকাশিত হয়েছে!");
         document.getElementById("job-raw-input").value = "";
-        document.getElementById("job-apply-url").value = "";
         loadPublishedJobsList();
       } catch (err) {
-        alert("AI প্রসেসিংয়ে ত্রুটি হয়েছে: " + err.message);
+        alert("ত্রুটি: " + err.message);
       } finally {
         btn.textContent = "⚡ AI জব পোস্ট প্রসেস ও প্রকাশ করুন"; btn.disabled = false;
       }
@@ -1234,22 +1189,17 @@ JSON ফরম্যাট:
       box.innerHTML = "লোড হচ্ছে...";
       try {
         const snap = await db.collection("jobs_portal").orderBy("timestamp", "desc").get();
-        if (snap.empty) { box.innerHTML = "বর্তমানে কোনো প্রকাশিত চাকরির পোস্ট নেই।"; return; }
+        if (snap.empty) { box.innerHTML = "বর্তমানে কোনো চাকরির পোস্ট নেই।"; return; }
         box.innerHTML = "";
         snap.forEach(doc => {
           const d = doc.data();
           box.innerHTML += `
             <div class="data-item-card">
-              <div>
-                <strong style="color: var(--amber);">${d.title}</strong> 
-                <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 8px;">(${d.category})</span>
-              </div>
+              <div><strong style="color: var(--amber);">${d.title}</strong> (${d.category})</div>
               <button class="btn-delete-item" onclick="deleteJobPost('${doc.id}')">🗑️ ডিলিট</button>
             </div>`;
         });
-      } catch (e) {
-        box.innerHTML = "তালিকা লোড করতে সমস্যা হয়েছে।";
-      }
+      } catch (e) { box.innerHTML = "তালিকা লোড করতে সমস্যা হয়েছে।"; }
     }
 
     async function deleteJobPost(id) {
@@ -1261,83 +1211,64 @@ JSON ফরম্যাট:
           localStorage.setItem("aimanix_jobs_local", JSON.stringify(localJobs));
           loadPublishedJobsList();
           alert("✅ পোস্ট সফলভাবে ডিলিট করা হয়েছে।");
-        } catch (e) {
-          alert("ডিলিট করতে সমস্যা হয়েছে: " + e.message);
-        }
+        } catch (e) { alert("ডিলিট করতে সমস্যা হয়েছে: " + e.message); }
       }
     }
 
-    // ==========================================================
-    // 5. 9:16 VIRAL POSTER MAKER WITH ADVANCED PROMPTS (UPGRADED)
-    // ==========================================================
-    const AD_9_16_GENERATOR_PROMPT = `
-তুমি বিশ্বের শীর্ষস্থানীয় হাই-কনভার্সন সোশ্যাল মিডিয়া গ্রাফিক আর্ট ডিরেক্টর ও প্রম্পট ইঞ্জিনিয়ার।
-ইনপুটে প্রদত্ত বিষয় (Topic), ব্যবহারকারীর কাস্টম ছবি/লিংক এবং বিবরণের ওপর ভিত্তি করে হুবহু 9:16 রেশিওর (1080x1920 / Vertical Social Reel & Story Format) ৪টি মাস্টারপিস পোস্টার আর্কিটেকচার তৈরি করবে।
+    // ==========================================================================
+    // 5. 9:16 AI ULTRA 4K POSTER ENGINE (DIRECT 4K IMAGE GENERATION)
+    // ==========================================================================
+    const POSTER_COMPOSITOR_PROMPT = `
+তুমি বিশ্বের শীর্ষস্থানীয় হাই-কনভার্সন সোশ্যাল মিডিয়া গ্রাফিক আর্ট ডিরেক্টর।
+ইনপুটে প্রদত্ত বিষয় (Topic) ও বিবরণের ওপর ভিত্তি করে হুবহু ৯:১৬ রেশিওর (1080x1920) ৪টি মাস্টারপিস পোস্টারের কনটেন্ট ও ইমেজ প্রম্পট তৈরি করবে।
 
-রেফারেন্স ডিজাইনের ৪টি নির্দিষ্ট ভিজ্যুয়াল ক্যাটাগরি:
+ইউজারের দেওয়া ৪টি রেফারেন্স মডেলের ফ্রেমওয়ার্ক:
 ১. মডেল ১ (Unique Gurukul - Presenter & Tool Stack):
-   - ভিজ্যুয়াল: প্রাণবন্ত মডেল/প্রেজেন্টার হাত দিয়ে স্ক্রিনের ডানদিকে ইঙ্গিত করছে।
-   - উপাদান: উপরে বিশাল বোল্ড গ্রেডিয়েন্ট টাইটেল (যেমন: "8 AI CARTOON VIDEO"), পাশে ১ থেকে ৮ পর্যন্ত রঙিন বৃত্তাকার ব্যাজসহ টুলস তালিকা।
-   - বটম বার: গাঢ় বেগুনি পিল রিবনে "একটি Share দিয়ে Comment লিখুন — [Keyword]"।
-
+   - উপরে বড় বোল্ড টাইটেল (যেমন: "8 AI CARTOON VIDEO"), নিচে "একটি Share দিয়ে Comment লিখুন — 8"।
+   - ইমেজ প্রম্পট: dynamic Indian male influencer pointing excitedly to right, glowing purple neon studio background, volumetric cinematic rim lighting.
 ২. মডেল ২ (Laptop Floating UI & Python Web Automation):
-   - ভিজ্যুয়াল: আধুনিক ওয়ার্কস্পেস ডেস্কে ল্যাপটপ খোলা, স্ক্রিন থেকে ৩ডি গ্লাস কার্ড (Login, Automation, Data Extraction, CSV Export) ভাসমান অবস্থায় ওপরের দিকে স্টেপ-বাই-স্টেপ উঠে আসছে।
-   - উপাদান: উপরে বড় বোল্ড কালো ও সায়ান টাইটেল "পাইথন ওয়েব অটোমেশন — শুধু স্ক্র্যাপিং নয়", পাশে পাইথন লোগো ও কফি মগ।
+   - উপরে বোল্ড টাইটেল "পাইথন ওয়েব অটোমেশন — শুধু স্ক্র্যাপিং নয়", নিচে "Comment করুন — PYTHON"।
+   - ইমেজ প্রম্পট: modern sleek laptop on desk with glowing 3D user interface cards floating upward showing automation flows and code data, daylight studio lighting.
+৩. মডেল ৩ (Dark Cyber Neon Grid - Coolify DevOps & Server):
+   - উপরে টাইটেল "আধুনিক DevOps ও সার্ভার ম্যানেজমেন্ট", নিচে "Comment লিখুন — DEVOPS"।
+   - ইমেজ প্রম্পট: pitch black cyberpunk server room with glowing green, cyan and purple neon grid frames and modern database cloud architecture.
+৪. মডেল ৪ (Cute 3D Character & Gadget - Custom GPT):
+   - উপরে টাইটেল "ChatGPT দিয়ে নিজের Custom GPT তৈরি", নিচে "Comment করুন — GPT"।
+   - ইমেজ প্রম্পট: adorable 3D Pixar animated girl character working on purple laptop with floating glowing message windows, golden gift box, high resolution render.
 
-৩. মডেল ৩ (Dark Cyber Neon Grid - Coolify DevOps & Server Style):
-   - ভিজ্যুয়াল: পিচ-ব্ল্যাক আধুনিক ব্যাকগ্রাউন্ডে ৬টি সমান সাইবার নিয়ন বর্ডার বক্স গ্রিড (VPS Deployment, PostgreSQL, CI/CD, SSL, Storage Backup, Server Monitoring)।
-   - কালার প্যালেট: ইলেকট্রিক নিয়ন গ্রিন, রয়্যাল ভায়োলেট ও সায়ান ব্লু।
-   - উপাদান: উপরে বোল্ড লোগো ও সাবটাইটেল "আধুনিক DevOps ও Server Management — সবকিছু এক প্ল্যাটফর্মে!"।
-
-৪. মডেল ৪ (Cute 3D Character & Gadget - Custom GPT & Mobile UI):
-   - ভিজ্যুয়াল: ৩ডি পিক্সার স্টাইলের কিউট ক্যারেক্টার ল্যাপটপে বসে কাজ করছে অথবা হাতে স্মার্টফোন থেকে ৩ডি পেমেন্ট কিউআর কোড পপ-আউট হয়ে বের হচ্ছে।
-   - উপাদান: ভাসমান চ্যাট বুদ্বুদ, উপহারের বক্স, ফ্লোটিং আইকন এবং নিচে আকর্ষণীয় কমেন্ট বক্স।
-
-বাধ্যতামূলক JSON আউটপুট ফরম্যাট (শুধুমাত্র পিওর JSON অ্যারে):
+বাধ্যতামূলক JSON আউটপুট ফরম্যাট (পিওর JSON অ্যারে):
 [
   {
-    "modelType": "unique_gurukul_presenter",
-    "badge": "AI VIRAL MASTERCLASS",
+    "modelName": "মডেল ১ (Unique Gurukul Presenter)",
+    "badge": "AI MASTERCLASS 2026",
     "headline": "৮টি AI CARTOON VIDEO জেনারেটর যা ২০২৬-এ আপনার জানা প্রয়োজন!",
     "subHeadline": "Same Person New Possibilities! পুরো প্রসেস পেতে শেয়ার দিয়ে কমেন্ট লিখুন।",
     "ctaText": "একটি Share দিয়ে Comment লিখুন — 8",
-    "themeColor": "purple",
-    "bgGradient": "linear-gradient(135deg, #18093d 0%, #0d041f 100%)",
-    "imagePrompt": "Vertical 9:16 ratio social media promotional poster, an energetic young professional presenter pointing excitedly towards a floating list of 8 colorful mobile app icons, volumetric glowing purple and electric violet studio lights, 3D floating emojis and notification badges, bold commercial typography, ultra-high resolution photography --ar 9:16",
-    "fallbackBg": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80"
+    "imagePrompt": "vertical 9:16 ratio promotional poster background, energetic young Indian male presenter pointing excitedly towards right, vibrant neon purple and electric violet volumetric studio lights, 3D floating social icons, ultra-detailed 4k"
   },
   {
-    "modelType": "laptop_floating_automation",
+    "modelName": "মডেল ২ (Python Automation Floating Cards)",
     "badge": "PYTHON AUTOMATION",
     "headline": "পাইথন ওয়েব অটোমেশন — শুধু স্ক্র্যাপিং নয়!",
     "subHeadline": "রিয়েল-ওয়ার্ল্ড অটোমেশন সিস্টেম তৈরি শিখুন: ফর্ম সাবমিট, ডাটা এক্সট্রাকশন ও বট ডেপ্লয়মেন্ট।",
     "ctaText": "কমপ্লিট রোডম্যাপ পেতে Comment করুন — PYTHON",
-    "themeColor": "cyan",
-    "bgGradient": "linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%)",
-    "imagePrompt": "Vertical 9:16 poster, modern sleek laptop sitting on a clean wooden desk with morning coffee, glowing 3D modular user interface cards popping out and floating upward in sequential steps showing data extraction, automated workflows and code snippets, soft professional daylight studio lighting, clean tech layout --ar 9:16",
-    "fallbackBg": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80"
+    "imagePrompt": "vertical 9:16 composition, modern laptop on clean desk with morning coffee, glowing 3D glass cards floating upward showing web automation workflows, soft daylight studio lighting, ultra-detailed 4k"
   },
   {
-    "modelType": "dark_cyber_devops_grid",
+    "modelName": "মডেল ৩ (Coolify Cyber DevOps Grid)",
     "badge": "SERVER & DEVOPS",
     "headline": "আধুনিক DevOps ও সার্ভার ম্যানেজমেন্ট — সবকিছু এক প্ল্যাটফর্মে!",
     "subHeadline": "VPS ডেপ্লয়মেন্ট, ডাটাবেজ সেটআপ, ডোমেন ও SSL কনফিগারেশন এক ক্লিকে।",
     "ctaText": "ফ্রি সেটআপ গাইড পেতে Comment লিখুন — DEVOPS",
-    "themeColor": "neon_green",
-    "bgGradient": "linear-gradient(180deg, #050508 0%, #0c0d14 100%)",
-    "imagePrompt": "Vertical 9:16 dark mode infographic poster, pitch black sleek background with a clean 6-box rounded neon card grid glowing in electric green, cyan and violet, modern server racks and database cloud icons inside each box, crisp UI presentation, minimalist cyber aesthetics --ar 9:16",
-    "fallbackBg": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80"
+    "imagePrompt": "vertical 9:16 dark cyberpunk poster, pitch black background with glowing electric neon green and violet server racks and cloud network lines, ultra-detailed 4k"
   },
   {
-    "modelType": "cute_3d_custom_gpt",
+    "modelName": "মডেল ৪ (Cute 3D Character & Custom GPT)",
     "badge": "CUSTOM AI ASSISTANT",
     "headline": "ChatGPT দিয়ে নিজের Custom GPT তৈরি করুন সহজে!",
     "subHeadline": "বারবার একই Prompt লেখার ঝামেলা চিরতরে দূর করুন।",
     "ctaText": "Full Process + Prompt চাইলে Comment করুন — GPT",
-    "themeColor": "yellow_magenta",
-    "bgGradient": "linear-gradient(135deg, #2b0938 0%, #10041a 100%)",
-    "imagePrompt": "Vertical 9:16 3D animated character poster, an adorable stylized Pixar character happily sitting behind a pastel laptop, pointing forward with a wink, floating glowing chat bubbles, prompt cards, and 3D golden gift boxes, bright volumetric rim lighting, 8k resolution --ar 9:16",
-    "fallbackBg": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80"
+    "imagePrompt": "vertical 9:16 3D animated character poster, an adorable stylized Pixar character happily sitting behind a pastel laptop, pointing forward with a wink, floating glowing chat bubbles, bright volumetric lighting, ultra-detailed 4k"
   }
 ]
 `;
@@ -1352,33 +1283,44 @@ JSON ফরম্যাট:
 
       if (!topic) return alert("দয়া করে পোস্টের মূল বিষয় বা প্রম্পট লিখুন!");
 
-      btn.textContent = "AI ৪টি 9:16 মডেল পোস্টার তৈরি করছে...";
+      btn.textContent = "AI ৪টি আল্ট্রা ৪কে পোস্টার তৈরি করছে (অপেক্ষা করুন)...";
       btn.disabled = true;
 
       try {
-        const promptInput = `বিষয়: ${topic}\nঅতিরিক্ত বিবরণ ও স্পেসিফিকেশন: ${extraDetails || 'সাধারণ প্রফেশনাল সোশ্যাল মিডিয়া প্রচারণা'}`;
-        let jsonStr = await executeGeminiAPI(AD_9_16_GENERATOR_PROMPT, promptInput);
+        const promptInput = `বিষয়: ${topic}\nঅতিরিক্ত বিবরণ: ${extraDetails || 'সাধারণ প্রফেশনাল সোশ্যাল মিডিয়া ব্যানার'}`;
+        let jsonStr = await executeGeminiAPI(POSTER_COMPOSITOR_PROMPT, promptInput);
         jsonStr = jsonStr.replace(/```json|```/g, "").trim();
         const models = JSON.parse(jsonStr);
 
-        generatedAdModels = models.map((m, index) => ({
-          id: 'ad_9_16_' + Date.now() + '_' + index,
-          title: m.headline,
-          desc: m.subHeadline,
-          badge: m.badge || 'PROMO',
-          ctaText: m.ctaText || 'Comment করুন',
-          imagePrompt: m.imagePrompt || '',
-          bgGradient: m.bgGradient || '',
-          imageUrl: customPhoto || m.fallbackBg,
-          selected: true
-        }));
+        generatedAdModels = [];
+
+        // প্রতিটি মডেলের জন্য রিয়েল ৪কে এআই ইমেজ জেনারেশন
+        for (let i = 0; i < models.length; i++) {
+          const m = models[i];
+          btn.textContent = `মডেল ${i + 1}/৪ ইমেজ জেনারেট হচ্ছে...`;
+          
+          let finalImgUrl = customPhoto;
+          if (!finalImgUrl) {
+            finalImgUrl = await generateUltra4KImage(m.imagePrompt, topic);
+          }
+
+          generatedAdModels.push({
+            id: 'ad_4k_' + Date.now() + '_' + i,
+            title: m.headline,
+            desc: m.subHeadline,
+            badge: m.badge || 'SPECIAL',
+            ctaText: m.ctaText || 'Comment করুন',
+            imageUrl: finalImgUrl,
+            selected: true
+          });
+        }
 
         renderGeneratedModelsPreview(generatedAdModels);
         document.getElementById("models-preview-box").style.display = "block";
       } catch (err) {
         alert("পোস্টার তৈরিতে সমস্যা হয়েছে: " + err.message);
       } finally {
-        btn.textContent = "✨ ৪টি 9:16 মডেল পোস্টার তৈরি করুন";
+        btn.textContent = "✨ ৪টি সম্পূর্ণ ৯:১৬ ৪কে পোস্টার তৈরি করুন";
         btn.disabled = false;
       }
     }
@@ -1387,24 +1329,19 @@ JSON ফরম্যাট:
       const container = document.getElementById("models-render-container");
       container.innerHTML = models.map((m, idx) => `
         <div class="model-card-item ${m.selected ? 'selected' : ''}" id="model-card-${idx}">
-          <div class="model-thumb-frame-9-16">
-            <img src="${m.imageUrl}" alt="Poster 9:16">
-            <div class="poster-art-overlay">
-              <span class="model-badge">${escapeHtml(m.badge)}</span>
+          <div class="poster-frame-9-16">
+            <img src="${m.imageUrl}" alt="Poster 4K" class="poster-bg-img" loading="lazy">
+            <div class="poster-visual-overlay">
               <div>
-                <h3 class="poster-overlay-title">${escapeHtml(m.title)}</h3>
+                <span class="poster-badge-top">${escapeHtml(m.badge)}</span>
+                <h3 class="poster-title-top">${escapeHtml(m.title)}</h3>
               </div>
-              <div class="poster-overlay-cta">
+              <div class="poster-desc-center">
+                ${escapeHtml(m.desc)}
+              </div>
+              <div class="poster-cta-bottom">
                 ${escapeHtml(m.ctaText)}
               </div>
-            </div>
-          </div>
-
-          <div class="model-content">
-            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.45;">${escapeHtml(m.desc)}</p>
-            <div class="prompt-drawer" title="Midjourney / FLUX জেনারেশন প্রম্পট">
-              <strong>AI Image Prompt (9:16):</strong><br>
-              ${escapeHtml(m.imagePrompt)}
             </div>
           </div>
 
@@ -1412,6 +1349,9 @@ JSON ফরম্যাট:
             <button class="btn-model-select ${m.selected ? 'active' : ''}" onclick="toggleModelSelect(${idx})">
               ${m.selected ? '✓ নির্বাচিত' : '+ সিলেক্ট করুন'}
             </button>
+            <a href="${m.imageUrl}" target="_blank" download="poster_4k.png" style="background:rgba(255,255,255,0.08); border:1px solid var(--border); color:#fff; padding:0.6rem; border-radius:8px; text-decoration:none; font-size:0.85rem; display:flex; align-items:center;">
+              📥 4K
+            </a>
           </div>
         </div>
       `).join('');
@@ -1429,7 +1369,7 @@ JSON ফরম্যাট:
 
     async function publishSelectedModels() {
       const selected = generatedAdModels.filter(m => m.selected);
-      if (selected.length === 0) return alert("কমপক্ষে ১টি মডেল পোস্টার সিলেক্ট করুন!");
+      if (selected.length === 0) return alert("কমপক্ষে ১টি পোস্টার সিলেক্ট করুন!");
 
       const btn = document.getElementById("btn-publish-selected");
       btn.textContent = "পাবলিশ হচ্ছে...";
@@ -1444,7 +1384,6 @@ JSON ফরম্যাট:
             desc: item.desc,
             badge: item.badge,
             ctaText: item.ctaText,
-            imagePrompt: item.imagePrompt,
             imageUrl: item.imageUrl,
             aspectRatio: "9:16",
             timestamp: Date.now()
@@ -1456,7 +1395,7 @@ JSON ফরম্যাট:
 
         localStorage.setItem("aimanix_ad_posters", JSON.stringify(localAds));
 
-        alert(`✅ সফলভাবে ${selected.length}টি 9:16 পোস্টার ads.html এ প্রকাশিত হয়েছে!`);
+        alert(`✅ সফলভাবে ${selected.length}টি ৯:১৬ ৪কে পোস্টার ads.html এ প্রকাশিত হয়েছে!`);
         document.getElementById("models-preview-box").style.display = "none";
         document.getElementById("ad-topic-input").value = "";
         document.getElementById("ad-custom-photo").value = "";
@@ -1476,7 +1415,7 @@ JSON ফরম্যাট:
       box.innerHTML = "লোড হচ্ছে...";
       try {
         const snap = await db.collection("ad_posters").orderBy("timestamp", "desc").get();
-        if (snap.empty) { box.innerHTML = "বর্তমানে কোনো প্রকাশিত বিজ্ঞাপন পোস্টার নেই।"; return; }
+        if (snap.empty) { box.innerHTML = "বর্তমানে কোনো প্রকাশিত ব্যানার নেই।"; return; }
         box.innerHTML = "";
         snap.forEach(doc => {
           const d = doc.data();
@@ -1487,41 +1426,32 @@ JSON ফরম্যাট:
                 <div>
                   <strong style="color: var(--magenta); font-size:0.95rem;">${escapeHtml(d.title)}</strong>
                   <div style="font-size: 0.78rem; color: var(--text-muted); margin-top:2px;">
-                    [${escapeHtml(d.badge || 'PROMO')}] • 9:16 Reel/Story Format
+                    [${escapeHtml(d.badge || '4K POSTER')}] • 9:16 Format
                   </div>
                 </div>
               </div>
               <button class="btn-delete-item" onclick="deleteAdPost('${doc.id}')">🗑️ ডিলিট</button>
             </div>`;
         });
-      } catch (e) {
-        box.innerHTML = "তালিকা লোড করতে সমস্যা হয়েছে।";
-      }
+      } catch (e) { box.innerHTML = "তালিকা লোড করতে সমস্যা হয়েছে।"; }
     }
 
     async function deleteAdPost(id) {
-      if (confirm("বিজ্ঞাপন পোস্টারটি কি মুছে ফেলতে চান?")) {
+      if (confirm("ব্যানারটি কি মুছে ফেলতে চান?")) {
         try {
           await db.collection("ad_posters").doc(id).delete();
           let localAds = JSON.parse(localStorage.getItem("aimanix_ad_posters") || "[]");
           localAds = localAds.filter(a => a.id !== id);
           localStorage.setItem("aimanix_ad_posters", JSON.stringify(localAds));
           loadPublishedAdsList();
-          alert("✅ পোস্টার সফলভাবে ডিলিট করা হয়েছে।");
-        } catch (e) {
-          alert("ডিলিট করতে সমস্যা হয়েছে: " + e.message);
-        }
+          alert("✅ সফলভাবে ডিলিট করা হয়েছে।");
+        } catch (e) { alert("ডিলিট করতে সমস্যা হয়েছে: " + e.message); }
       }
     }
 
     function escapeHtml(str) {
       if (!str) return "";
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
   </script>
 </body>

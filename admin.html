@@ -199,7 +199,7 @@
       margin-bottom: 1.5rem;
     }
 
-    /* 9:16 রেশিও মডেল পোস্টার প্রিভিউ গ্রিড */
+    /* ৯:১৬ লাইভ ৪কে পোস্টার গ্রিড */
     .models-preview-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -225,7 +225,7 @@
       box-shadow: 0 0 25px rgba(250, 204, 21, 0.4);
     }
 
-    /* 9:16 রেশিও পোস্টার ফ্রেম */
+    /* ৯:১৬ পোস্টার ফ্রেম */
     .poster-frame-9-16 {
       width: 100%;
       aspect-ratio: 9 / 16;
@@ -246,6 +246,7 @@
       z-index: 0;
     }
 
+    /* পরিচ্ছন্ন ও স্বচ্ছ ওভারলে (পেছনের ৪কে ছবি স্পষ্ট ফুটে উঠবে) */
     .poster-visual-overlay {
       position: relative;
       z-index: 1;
@@ -253,24 +254,23 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 1.2rem;
-      background: linear-gradient(180deg, rgba(7,3,20,0.85) 0%, rgba(7,3,20,0.2) 40%, rgba(7,3,20,0.3) 60%, rgba(7,3,20,0.95) 100%);
+      padding: 1.4rem 1.1rem;
+      background: linear-gradient(180deg, rgba(5,2,15,0.78) 0%, rgba(5,2,15,0.05) 45%, rgba(5,2,15,0.85) 100%) !important;
     }
 
     .poster-badge-top {
       align-self: flex-start;
       background: linear-gradient(135deg, #facc15, #f97316);
       color: #000;
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       font-weight: 800;
       padding: 4px 10px;
       border-radius: 6px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      letter-spacing: 0.5px;
     }
 
     .poster-title-top {
-      font-size: 1.22rem;
+      font-size: 1.25rem;
       font-weight: 800;
       color: #ffffff;
       line-height: 1.35;
@@ -279,15 +279,15 @@
     }
 
     .poster-desc-center {
-      background: rgba(15, 7, 36, 0.7);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(10, 5, 25, 0.45) !important;
+      backdrop-filter: blur(8px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
       border-radius: 12px;
-      padding: 0.65rem 0.85rem;
-      font-size: 0.82rem;
-      color: #e2e8f0;
+      padding: 0.75rem 0.95rem;
+      font-size: 0.85rem;
+      color: #ffffff !important;
       line-height: 1.45;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.9);
     }
 
     .poster-cta-bottom {
@@ -299,7 +299,6 @@
       font-size: 0.85rem;
       text-align: center;
       box-shadow: 0 6px 20px rgba(217, 70, 239, 0.5);
-      letter-spacing: 0.4px;
     }
 
     .model-actions-row {
@@ -317,7 +316,7 @@
       color: #fff;
       font-weight: 800;
       font-size: 0.88rem;
-      padding: 0.6rem;
+      padding: 0.65rem;
       border-radius: 8px;
       cursor: pointer;
     }
@@ -608,10 +607,10 @@
       </div>
     </div>
 
-    <!-- TAB 5: 9:16 AI ULTRA 4K POSTER MAKER -->
+    <!-- TAB 5: 9:16 AI NANO BANANA PRO POSTER ENGINE -->
     <div class="tab-content-panel" id="panel-ads">
-      <div class="panel-section-title" style="color: var(--magenta);">📢 বিজ্ঞাপন বাজার: ৯:১৬ এআই আল্ট্রা ৪কে পোস্টার মেকার</div>
-      <p class="panel-section-desc">টপিক লিখলেই এআই সরাসরি ৪কে কোয়ালিটির আসল ইমেজ ও সুপার-ইম্পোজড রেফারেন্স পোস্টার তৈরি করবে।</p>
+      <div class="panel-section-title" style="color: var(--magenta);">📢 বিজ্ঞাপন বাজার: ৯:১৬ এআই ন্যানো ব্যানানা প্রো ৪কে পোস্টার মেকার</div>
+      <p class="panel-section-desc">টপিক লিখলেই Gemini Nano Banana ও Imagen Pro মডেলের মাধ্যমে আসল ৪কে ছবি ও নিওন পোস্টার তৈরি হবে।</p>
 
       <div class="sub-box-card" style="border-color: rgba(217, 70, 239, 0.35);">
         <div style="font-weight: 800; color: var(--magenta); margin-bottom: 0.8rem;">🎨 ১. বিষয়ের তথ্য ও অফার বিবরণ</div>
@@ -622,8 +621,8 @@
           </div>
 
           <div class="form-group full-width">
-            <label style="color: var(--magenta);">নিজের ছবি বা মডেলের লিংক (ঐচ্ছিক):</label>
-            <input type="text" id="ad-custom-photo" placeholder="ফাঁকা রাখলে AI সরাসরি আসল ৪কে ৩ডি/মডেল গ্রাফিক্স জেনারেট করবে">
+            <label style="color: var(--magenta);">নিজের ছবি বা কাস্টম মডেলের লিংক (ঐচ্ছিক):</label>
+            <input type="text" id="ad-custom-photo" placeholder="ফাঁকা রাখলে AI সরাসরি আসল ৪কে ৩ডি বা মডেল ইমেজ তৈরি করবে">
           </div>
 
           <div class="form-group full-width">
@@ -775,7 +774,7 @@
     }
 
     // ==========================================================
-    // GEMINI AI ENGINE (TEXT + 4K IMAGE GENERATOR)
+    // GEMINI AI ENGINE (TEXT API)
     // ==========================================================
     async function getSecureGeminiKey() {
       const snap = await db.collection("system_config").doc("ai_secrets").get();
@@ -811,18 +810,30 @@
       throw new Error("Gemini সার্ভার ব্যস্ত রয়েছে। অনুগ্রহ করে কয়েক সেকেন্ড পর আবার চেষ্টা করুন।");
     }
 
-    // সরাসরি ৪কে এআই ইমেজ জেনারেটর (Gemini Imagen / Nano Banana + Ultra-HD Engine)
-    async function generateUltra4KImage(prompt, fallbackQuery) {
+    // ==========================================================
+    // GEMINI NANO BANANA PRO & ULTRA 4K IMAGE GENERATION ENGINE
+    // ==========================================================
+    async function generateUltra4KImage(prompt, topic) {
       try {
         const key = await getSecureGeminiKey();
-        const imagenUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${key}`;
         
+        // ১. Gemini Nano Banana / Imagen 3 Pro অফিসিয়াল ক্লাউড এন্ডপয়েন্ট
+        const imagenUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict`;
+
         const res = await fetch(imagenUrl, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": key
+          },
           body: JSON.stringify({
-            instances: [{ prompt: prompt + ", vertical 9:16 aspect ratio, ultra-detailed 4k masterpiece, high contrast" }],
-            parameters: { sampleCount: 1, aspectRatio: "9:16" }
+            instances: [{
+              prompt: `${prompt}, realistic 4k photography, cinematic volumetric light, ultra detailed vertical 9:16 poster masterpiece, high dynamic range`
+            }],
+            parameters: {
+              sampleCount: 1,
+              aspectRatio: "9:16"
+            }
           })
         });
 
@@ -832,11 +843,13 @@
             return `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
           }
         }
-      } catch (err) {}
+      } catch (err) {
+        console.warn("Nano Banana Pro ব্যাকআপ ইঞ্জিনে যাচ্ছে...", err);
+      }
 
-      // ফেইলসেফ ৪কে আল্ট্রা-এইচডি ইমেজ ইঞ্জিন (ক্র্যাশ হবে না)
-      const encoded = encodeURIComponent(prompt + " 4k cinematic photorealistic master composition");
-      return `https://image.pollinations.ai/prompt/${encoded}?width=1080&height=1920&nologo=true&seed=${Math.floor(Math.random() * 999999)}`;
+      // ২. হাই-স্পিড ৪কে আল্ট্রা ফলব্যাক ইঞ্জিন (কখনই ফাঁকা বা কালো স্ক্রিন থাকবে না)
+      const cleanPrompt = encodeURIComponent(`${prompt}, ${topic}, highly detailed 4k cinematic photorealistic master composition, 9:16 vertical ratio`);
+      return `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1080&height=1920&nologo=true&seed=${Math.floor(Math.random() * 999999)}`;
     }
 
     // ==========================================
@@ -1216,7 +1229,7 @@
     }
 
     // ==========================================================================
-    // 5. 9:16 AI ULTRA 4K POSTER ENGINE (DIRECT 4K IMAGE GENERATION)
+    // 5. 9:16 AI NANO BANANA PRO & VIRAL POSTER ENGINE
     // ==========================================================================
     const POSTER_COMPOSITOR_PROMPT = `
 তুমি বিশ্বের শীর্ষস্থানীয় হাই-কনভার্সন সোশ্যাল মিডিয়া গ্রাফিক আর্ট ডিরেক্টর।
@@ -1225,16 +1238,16 @@
 ইউজারের দেওয়া ৪টি রেফারেন্স মডেলের ফ্রেমওয়ার্ক:
 ১. মডেল ১ (Unique Gurukul - Presenter & Tool Stack):
    - উপরে বড় বোল্ড টাইটেল (যেমন: "8 AI CARTOON VIDEO"), নিচে "একটি Share দিয়ে Comment লিখুন — 8"।
-   - ইমেজ প্রম্পট: dynamic Indian male influencer pointing excitedly to right, glowing purple neon studio background, volumetric cinematic rim lighting.
+   - ইমেজ প্রম্পট: energetic young professional presenter pointing excitedly towards right, vibrant neon purple and electric violet volumetric studio lights, 3D floating social icons, ultra-detailed 4k masterpiece.
 ২. মডেল ২ (Laptop Floating UI & Python Web Automation):
    - উপরে বোল্ড টাইটেল "পাইথন ওয়েব অটোমেশন — শুধু স্ক্র্যাপিং নয়", নিচে "Comment করুন — PYTHON"।
-   - ইমেজ প্রম্পট: modern sleek laptop on desk with glowing 3D user interface cards floating upward showing automation flows and code data, daylight studio lighting.
+   - ইমেজ প্রম্পট: modern sleek laptop on desk with glowing 3D user interface cards floating upward showing automation flows and code data, daylight studio lighting, ultra-detailed 4k.
 ৩. মডেল ৩ (Dark Cyber Neon Grid - Coolify DevOps & Server):
    - উপরে টাইটেল "আধুনিক DevOps ও সার্ভার ম্যানেজমেন্ট", নিচে "Comment লিখুন — DEVOPS"।
-   - ইমেজ প্রম্পট: pitch black cyberpunk server room with glowing green, cyan and purple neon grid frames and modern database cloud architecture.
+   - ইমেজ প্রম্পট: pitch black cyberpunk server room with glowing electric green, cyan and violet neon grid frames and modern database cloud architecture, ultra-detailed 4k.
 ৪. মডেল ৪ (Cute 3D Character & Gadget - Custom GPT):
    - উপরে টাইটেল "ChatGPT দিয়ে নিজের Custom GPT তৈরি", নিচে "Comment করুন — GPT"।
-   - ইমেজ প্রম্পট: adorable 3D Pixar animated girl character working on purple laptop with floating glowing message windows, golden gift box, high resolution render.
+   - ইমেজ প্রম্পট: adorable 3D Pixar animated girl character working on purple laptop with floating glowing message windows, golden gift box, high resolution render, ultra-detailed 4k.
 
 বাধ্যতামূলক JSON আউটপুট ফরম্যাট (পিওর JSON অ্যারে):
 [
@@ -1244,7 +1257,7 @@
     "headline": "৮টি AI CARTOON VIDEO জেনারেটর যা ২০২৬-এ আপনার জানা প্রয়োজন!",
     "subHeadline": "Same Person New Possibilities! পুরো প্রসেস পেতে শেয়ার দিয়ে কমেন্ট লিখুন।",
     "ctaText": "একটি Share দিয়ে Comment লিখুন — 8",
-    "imagePrompt": "vertical 9:16 ratio promotional poster background, energetic young Indian male presenter pointing excitedly towards right, vibrant neon purple and electric violet volumetric studio lights, 3D floating social icons, ultra-detailed 4k"
+    "imagePrompt": "vertical 9:16 promotional poster background, energetic young Indian male presenter pointing excitedly towards right, vibrant neon purple and electric violet volumetric studio lights, 3D floating icons, ultra-detailed 4k"
   },
   {
     "modelName": "মডেল ২ (Python Automation Floating Cards)",
@@ -1252,7 +1265,7 @@
     "headline": "পাইথন ওয়েব অটোমেশন — শুধু স্ক্র্যাপিং নয়!",
     "subHeadline": "রিয়েল-ওয়ার্ল্ড অটোমেশন সিস্টেম তৈরি শিখুন: ফর্ম সাবমিট, ডাটা এক্সট্রাকশন ও বট ডেপ্লয়মেন্ট।",
     "ctaText": "কমপ্লিট রোডম্যাপ পেতে Comment করুন — PYTHON",
-    "imagePrompt": "vertical 9:16 composition, modern laptop on clean desk with morning coffee, glowing 3D glass cards floating upward showing web automation workflows, soft daylight studio lighting, ultra-detailed 4k"
+    "imagePrompt": "vertical 9:16 composition, modern laptop on clean desk, glowing 3D glass cards floating upward showing web automation workflows, soft daylight studio lighting, ultra-detailed 4k"
   },
   {
     "modelName": "মডেল ৩ (Coolify Cyber DevOps Grid)",
@@ -1294,10 +1307,10 @@
 
         generatedAdModels = [];
 
-        // প্রতিটি মডেলের জন্য রিয়েল ৪কে এআই ইমেজ জেনারেশন
+        // প্রতিটি মডেলের জন্য আসল ৪কে ইমেজ তৈরি
         for (let i = 0; i < models.length; i++) {
           const m = models[i];
-          btn.textContent = `মডেল ${i + 1}/৪ ইমেজ জেনারেট হচ্ছে...`;
+          btn.textContent = `মডেল ${i + 1}/৪ ইমেজ তৈরি হচ্ছে...`;
           
           let finalImgUrl = customPhoto;
           if (!finalImgUrl) {
@@ -1349,9 +1362,6 @@
             <button class="btn-model-select ${m.selected ? 'active' : ''}" onclick="toggleModelSelect(${idx})">
               ${m.selected ? '✓ নির্বাচিত' : '+ সিলেক্ট করুন'}
             </button>
-            <a href="${m.imageUrl}" target="_blank" download="poster_4k.png" style="background:rgba(255,255,255,0.08); border:1px solid var(--border); color:#fff; padding:0.6rem; border-radius:8px; text-decoration:none; font-size:0.85rem; display:flex; align-items:center;">
-              📥 4K
-            </a>
           </div>
         </div>
       `).join('');

@@ -321,21 +321,21 @@
     .hud-nav-links {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.85rem;
     }
 
     .hud-link-card {
       display: flex;
       align-items: center;
       gap: 1rem;
-      padding: 1rem 1.2rem;
+      padding: 0.9rem 1.1rem;
       border-radius: 14px;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--surface-border);
       color: var(--text);
       text-decoration: none;
       font-weight: 700;
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       transition: all 0.25s ease;
       position: relative;
       overflow: hidden;
@@ -349,15 +349,16 @@
     }
 
     .hud-link-icon {
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       background: rgba(122, 115, 255, 0.15);
-      width: 42px;
-      height: 42px;
+      width: 40px;
+      height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 10px;
       color: var(--stripe-blue);
+      flex-shrink: 0;
     }
 
     .hud-quick-controls {
@@ -816,12 +817,21 @@
           </div>
         </a>
 
-        <!-- চাকরির বাজার লিঙ্ক (নতুন যুক্ত) -->
+        <!-- চাকরির বাজার লিঙ্ক -->
         <a href="jobs.html" class="hud-link-card" onclick="playBeepClick()">
           <div class="hud-link-icon">💼</div>
           <div>
             <div id="nav-jobs-title">চাকরির বাজার</div>
             <small style="color: var(--text-muted); font-size: 0.75rem;" id="nav-jobs-desc">নিয়োগ বিজ্ঞপ্তি, প্রস্তুতি ও রেজাল্ট</small>
+          </div>
+        </a>
+
+        <!-- বিজ্ঞাপন বাজার লিঙ্ক (নতুন যুক্ত) -->
+        <a href="ads.html" class="hud-link-card" onclick="playBeepClick()">
+          <div class="hud-link-icon" style="color: var(--stripe-pink); background: rgba(255, 98, 192, 0.15);">📢</div>
+          <div>
+            <div id="nav-ads-title">বিজ্ঞাপন বাজার</div>
+            <small style="color: var(--text-muted); font-size: 0.75rem;" id="nav-ads-desc">সোশ্যাল পোস্টার, কোর্স ও প্রোডাক্ট অ্যাডস</small>
           </div>
         </a>
 
@@ -1207,6 +1217,8 @@
         navSchoolDesc: "Class V থেকে H.S স্মার্ট স্টাডি নোটস",
         navJobsTitle: "চাকরির বাজার",
         navJobsDesc: "নিয়োগ বিজ্ঞপ্তি, প্রস্তুতি ও রেজাল্ট",
+        navAdsTitle: "বিজ্ঞাপন বাজার",
+        navAdsDesc: "সোশ্যাল পোস্টার, কোর্স ও প্রোডাক্ট অ্যাডস",
         navKobitaTitle: "কবিতার আকাশ",
         navKobitaDesc: "এআই সাহিত্য ও সৃজনশীল আসর",
         navPricingTitle: "প্যাকেজ ও রেট",
@@ -1278,6 +1290,8 @@
         navSchoolDesc: "Class V to H.S Smart Study Sheets",
         navJobsTitle: "Career Hub",
         navJobsDesc: "Jobs, Prep Guidelines & Results",
+        navAdsTitle: "Ads Market",
+        navAdsDesc: "Viral Social Posters & Promo Creatives",
         navKobitaTitle: "Kobitar Akash",
         navKobitaDesc: "AI Bengali Literature & Creative Corner",
         navPricingTitle: "Packages & Rates",
@@ -1459,6 +1473,8 @@ class ProductionApp:
       if (document.getElementById("nav-school-desc")) document.getElementById("nav-school-desc").textContent = loc.navSchoolDesc;
       if (document.getElementById("nav-jobs-title")) document.getElementById("nav-jobs-title").textContent = loc.navJobsTitle;
       if (document.getElementById("nav-jobs-desc")) document.getElementById("nav-jobs-desc").textContent = loc.navJobsDesc;
+      if (document.getElementById("nav-ads-title")) document.getElementById("nav-ads-title").textContent = loc.navAdsTitle;
+      if (document.getElementById("nav-ads-desc")) document.getElementById("nav-ads-desc").textContent = loc.navAdsDesc;
       if (document.getElementById("nav-kobita-title")) document.getElementById("nav-kobita-title").textContent = loc.navKobitaTitle;
       if (document.getElementById("nav-kobita-desc")) document.getElementById("nav-kobita-desc").textContent = loc.navKobitaDesc;
       if (document.getElementById("nav-pricing-title")) document.getElementById("nav-pricing-title").textContent = loc.navPricingTitle;
@@ -1769,7 +1785,6 @@ class ProductionApp:
       }
     }, { passive: true });
 
-    // Stripe Palette Node Colors: Violet, Pink, Blue, Orange
     const stripeColors = [
       '122, 115, 255', // Stripe Violet
       '255, 98, 192',  // Stripe Pink

@@ -199,11 +199,11 @@
       margin-bottom: 1.5rem;
     }
 
-    /* ৯:১৬ লাইভ ৪কে পোস্টার গ্রিড */
+    /* ৯:১৬ পিওর এআই পোস্টার গ্রিড */
     .models-preview-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.6rem;
+      gap: 1.8rem;
       margin-top: 1.4rem;
     }
 
@@ -225,80 +225,20 @@
       box-shadow: 0 0 25px rgba(250, 204, 21, 0.4);
     }
 
-    /* ৯:১৬ পোস্টার ফ্রেম */
+    /* হুবহু ৯:১৬ ফ্রেম */
     .poster-frame-9-16 {
       width: 100%;
       aspect-ratio: 9 / 16;
       position: relative;
-      background: #060212;
+      background: #000;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
     }
 
-    .poster-bg-img {
-      position: absolute;
-      inset: 0;
+    .poster-frame-9-16 img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      z-index: 0;
-    }
-
-    /* পরিচ্ছন্ন ও স্বচ্ছ ওভারলে (পেছনের ৪কে ছবি স্পষ্ট ফুটে উঠবে) */
-    .poster-visual-overlay {
-      position: relative;
-      z-index: 1;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 1.4rem 1.1rem;
-      background: linear-gradient(180deg, rgba(5,2,15,0.78) 0%, rgba(5,2,15,0.05) 45%, rgba(5,2,15,0.85) 100%) !important;
-    }
-
-    .poster-badge-top {
-      align-self: flex-start;
-      background: linear-gradient(135deg, #facc15, #f97316);
-      color: #000;
-      font-size: 0.78rem;
-      font-weight: 800;
-      padding: 4px 10px;
-      border-radius: 6px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
-
-    .poster-title-top {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: #ffffff;
-      line-height: 1.35;
-      text-shadow: 0 3px 12px rgba(0,0,0,0.95);
-      margin-top: 0.5rem;
-    }
-
-    .poster-desc-center {
-      background: rgba(10, 5, 25, 0.45) !important;
-      backdrop-filter: blur(8px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.2) !important;
-      border-radius: 12px;
-      padding: 0.75rem 0.95rem;
-      font-size: 0.85rem;
-      color: #ffffff !important;
-      line-height: 1.45;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.9);
-    }
-
-    .poster-cta-bottom {
-      background: linear-gradient(90deg, #d946ef, #6366f1);
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 50px;
-      font-weight: 800;
-      font-size: 0.85rem;
-      text-align: center;
-      box-shadow: 0 6px 20px rgba(217, 70, 239, 0.5);
+      display: block;
     }
 
     .model-actions-row {
@@ -610,36 +550,31 @@
     <!-- TAB 5: 9:16 AI NANO BANANA PRO POSTER ENGINE -->
     <div class="tab-content-panel" id="panel-ads">
       <div class="panel-section-title" style="color: var(--magenta);">📢 বিজ্ঞাপন বাজার: ৯:১৬ এআই ন্যানো ব্যানানা প্রো ৪কে পোস্টার মেকার</div>
-      <p class="panel-section-desc">টপিক লিখলেই Gemini Nano Banana ও Imagen Pro মডেলের মাধ্যমে আসল ৪কে ছবি ও নিওন পোস্টার তৈরি হবে।</p>
+      <p class="panel-section-desc">টপিক লিখলেই Gemini Nano Banana Pro সরাসরি একটি একক পূর্ণাঙ্গ ৪কে পোস্টার আর্টওয়ার্ক তৈরি করবে।</p>
 
       <div class="sub-box-card" style="border-color: rgba(217, 70, 239, 0.35);">
         <div style="font-weight: 800; color: var(--magenta); margin-bottom: 0.8rem;">🎨 ১. বিষয়ের তথ্য ও অফার বিবরণ</div>
         <div class="form-grid">
           <div class="form-group full-width">
-            <label style="color: var(--magenta);">পোস্টের মূল বিষয় / কোর্স / হেডলাইন:</label>
-            <input type="text" id="ad-topic-input" placeholder="যেমন: ৮টি AI CARTOON VIDEO GENERATORS অথবা পাইথন ওয়েব অটোমেশন">
-          </div>
-
-          <div class="form-group full-width">
-            <label style="color: var(--magenta);">নিজের ছবি বা কাস্টম মডেলের লিংক (ঐচ্ছিক):</label>
-            <input type="text" id="ad-custom-photo" placeholder="ফাঁকা রাখলে AI সরাসরি আসল ৪কে ৩ডি বা মডেল ইমেজ তৈরি করবে">
+            <label style="color: var(--magenta);">পোস্টের মূল বিষয় / প্রতিষ্ঠান / হেডলাইন:</label>
+            <input type="text" id="ad-topic-input" placeholder="যেমন: ফুলবাড়ি আমিনিয়া হাই মাদ্রাসা অথবা ৮টি AI CARTOON VIDEO GENERATORS">
           </div>
 
           <div class="form-group full-width">
             <label style="color: var(--magenta);">অতিরিক্ত বিবরণ ও অফার হুক:</label>
-            <textarea id="ad-extra-details" style="min-height: 80px;" placeholder="যেমন: পুরো process পেতে চান? একটি Share দিয়ে Comment লিখুন — 8"></textarea>
+            <textarea id="ad-extra-details" style="min-height: 80px;" placeholder="যেমন: দ্বীনি মূল্যবোধ ও আধুনিক বিজ্ঞান শিক্ষার সেরা ঠিকানা! ভর্তি তথ্যের জন্য Comment করুন — ADMISSION"></textarea>
           </div>
         </div>
 
         <div style="margin-top: 1rem;">
-          <button class="btn-action-primary btn-action-magenta" id="btn-generate-ad-models" onclick="generateAdModelsAI()">✨ ৪টি সম্পূর্ণ ৯:১৬ ৪কে পোস্টার তৈরি করুন</button>
+          <button class="btn-action-primary btn-action-magenta" id="btn-generate-ad-models" onclick="generateAdModelsAI()">✨ ৪টি সম্পূর্ণ ৯:১৬ পোস্টার ইমেজ তৈরি করুন</button>
         </div>
       </div>
 
       <!-- লাইভ ৯:১৬ পোস্টার প্রিভিউ সেকশন -->
       <div class="sub-box-card" id="models-preview-box" style="display:none; border-color: rgba(250, 204, 21, 0.4);">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-          <div style="font-weight: 800; color: #facc15;">📱 তৈরি হওয়া ৪টি সম্পূর্ণ ৯:১৬ ৪কে পোস্টার (লাইভ প্রিভিউ):</div>
+          <div style="font-weight: 800; color: #facc15;">📱 তৈরি হওয়া ৪টি সম্পূর্ণ ৯:১৬ পোস্টার (লাইভ প্রিভিউ):</div>
           <div style="display:flex; gap:0.5rem;">
             <button class="btn-live-view" style="border-color:#facc15; color:#facc15;" onclick="selectAllModels(true)">সবগুলো সিলেক্ট</button>
             <button class="btn-live-view" onclick="selectAllModels(false)">আন-সিলেক্ট</button>
@@ -811,24 +746,20 @@
     }
 
     // ==========================================================
-    // GEMINI NANO BANANA PRO & ULTRA 4K IMAGE GENERATION ENGINE
+    // GEMINI NANO BANANA PRO DIRECT 4K IMAGE GENERATOR ENGINE
     // ==========================================================
-    async function generateUltra4KImage(prompt, topic) {
-      try {
-        const key = await getSecureGeminiKey();
-        
-        // ১. Gemini Nano Banana / Imagen 3 Pro অফিসিয়াল ক্লাউড এন্ডপয়েন্ট
-        const imagenUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict`;
+    async function generateNanoBananaPosterImage(fullPromptText) {
+      const key = await getSecureGeminiKey();
 
+      // ১. মেথড ১: Google Imagen 3 / Nano Banana Pro অফিসিয়াল ক্লাউড এন্ডপয়েন্ট
+      try {
+        const imagenUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${key}`;
         const res = await fetch(imagenUrl, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-goog-api-key": key
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             instances: [{
-              prompt: `${prompt}, realistic 4k photography, cinematic volumetric light, ultra detailed vertical 9:16 poster masterpiece, high dynamic range`
+              prompt: fullPromptText + ", 4k resolution, cinematic lighting, sharp focus, 9:16 vertical orientation, masterpiece commercial poster"
             }],
             parameters: {
               sampleCount: 1,
@@ -843,13 +774,41 @@
             return `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
           }
         }
-      } catch (err) {
-        console.warn("Nano Banana Pro ব্যাকআপ ইঞ্জিনে যাচ্ছে...", err);
+      } catch (e) {
+        console.warn("Imagen 3 এ কল ব্যর্থ, বিকল্প ট্রাই করা হচ্ছে...", e);
       }
 
-      // ২. হাই-স্পিড ৪কে আল্ট্রা ফলব্যাক ইঞ্জিন (কখনই ফাঁকা বা কালো স্ক্রিন থাকবে না)
-      const cleanPrompt = encodeURIComponent(`${prompt}, ${topic}, highly detailed 4k cinematic photorealistic master composition, 9:16 vertical ratio`);
-      return `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1080&height=1920&nologo=true&seed=${Math.floor(Math.random() * 999999)}`;
+      // ২. মেথড ২: Gemini Native Multimodal Image (gemini-3.1-flash-image-preview)
+      try {
+        const geminiNativeUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=${key}`;
+        const res = await fetch(geminiNativeUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `Generate a high quality 9:16 vertical poster background image for: ${fullPromptText}. Clean commercial studio shot, no watermarks.`
+              }]
+            }]
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          const parts = data.candidates?.[0]?.content?.parts || [];
+          for (const p of parts) {
+            if (p.inlineData && p.inlineData.data) {
+              return `data:${p.inlineData.mimeType || 'image/png'};base64,${p.inlineData.data}`;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("Gemini Native Image এ কল ব্যর্থ...", e);
+      }
+
+      // ৩. মেথড ৩: লাইভ 4K ভিজ্যুয়াল রেন্ডারার (কখনও ফাঁকা বা কালো স্ক্রিন আসবে না)
+      const encoded = encodeURIComponent(fullPromptText + " vertical 9:16 ratio high quality commercial graphic advertisement poster masterpiece");
+      return `https://image.pollinations.ai/prompt/${encoded}?width=1080&height=1920&nologo=true&seed=${Math.floor(Math.random() * 999999)}`;
     }
 
     // ==========================================
@@ -1229,59 +1188,35 @@
     }
 
     // ==========================================================================
-    // 5. 9:16 AI NANO BANANA PRO & VIRAL POSTER ENGINE
+    // 5. 9:16 GEMINI NANO BANANA PRO MASTERPOSTER ENGINE
     // ==========================================================================
-    const POSTER_COMPOSITOR_PROMPT = `
-তুমি বিশ্বের শীর্ষস্থানীয় হাই-কনভার্সন সোশ্যাল মিডিয়া গ্রাফিক আর্ট ডিরেক্টর।
-ইনপুটে প্রদত্ত বিষয় (Topic) ও বিবরণের ওপর ভিত্তি করে হুবহু ৯:১৬ রেশিওর (1080x1920) ৪টি মাস্টারপিস পোস্টারের কনটেন্ট ও ইমেজ প্রম্পট তৈরি করবে।
+    const NANO_BANANA_ARCHITECT_PROMPT = `
+তুমি Gemini Nano Banana Pro ইমেজ জেনারেটরের প্রধান আর্ট ডিরেক্টর।
+ইনপুটে প্রদত্ত বিষয় (Topic) ও বিবরণ থেকে হুবহু ৯:১৬ রেশিওর (1080x1920) ৪টি একক সম্পূর্ণ পোস্টারের জন্য ৪টি অতি-বিস্তারিত প্রম্পট তৈরি করবে।
 
-ইউজারের দেওয়া ৪টি রেফারেন্স মডেলের ফ্রেমওয়ার্ক:
-১. মডেল ১ (Unique Gurukul - Presenter & Tool Stack):
-   - উপরে বড় বোল্ড টাইটেল (যেমন: "8 AI CARTOON VIDEO"), নিচে "একটি Share দিয়ে Comment লিখুন — 8"।
-   - ইমেজ প্রম্পট: energetic young professional presenter pointing excitedly towards right, vibrant neon purple and electric violet volumetric studio lights, 3D floating social icons, ultra-detailed 4k masterpiece.
-২. মডেল ২ (Laptop Floating UI & Python Web Automation):
-   - উপরে বোল্ড টাইটেল "পাইথন ওয়েব অটোমেশন — শুধু স্ক্র্যাপিং নয়", নিচে "Comment করুন — PYTHON"।
-   - ইমেজ প্রম্পট: modern sleek laptop on desk with glowing 3D user interface cards floating upward showing automation flows and code data, daylight studio lighting, ultra-detailed 4k.
-৩. মডেল ৩ (Dark Cyber Neon Grid - Coolify DevOps & Server):
-   - উপরে টাইটেল "আধুনিক DevOps ও সার্ভার ম্যানেজমেন্ট", নিচে "Comment লিখুন — DEVOPS"।
-   - ইমেজ প্রম্পট: pitch black cyberpunk server room with glowing electric green, cyan and violet neon grid frames and modern database cloud architecture, ultra-detailed 4k.
-৪. মডেল ৪ (Cute 3D Character & Gadget - Custom GPT):
-   - উপরে টাইটেল "ChatGPT দিয়ে নিজের Custom GPT তৈরি", নিচে "Comment করুন — GPT"।
-   - ইমেজ প্রম্পট: adorable 3D Pixar animated girl character working on purple laptop with floating glowing message windows, golden gift box, high resolution render, ultra-detailed 4k.
+ইউজারের দেওয়া ৪টি রেফারেন্স মডেল আর্কিটেকচার:
+মডেল ১ (Unique Gurukul Style Presenter): একজন তরুণ আত্মবিশ্বাসী স্মার্ট শিক্ষক/প্রেজেন্টার ল্যাপটপ হাতে দাঁড়িয়ে ডানহাতের তর্জনী দিয়ে পাশের ৩ডি টেক্সট ও ফ্লোটিং ব্যাজের দিকে নির্দেশ করছে। উপরে বড় ৩ডি ড্রপ-শ্যাডো টাইটেল, ১-৮ রঙিন বৃত্তাকার ব্যাজ, এবং নিচে গাঢ় বেগুনি পিল বাটনে 'Comment করুন — KEYWORD'।
+মডেল ২ (Python Automation / 3D Laptop UI): পরিষ্কার ডেস্কে খোলা ল্যাপটপ, স্ক্রিন থেকে ৩ডি গ্লাস কার্ডস ও আর্কিটেকচার মডিউল শূন্যে ভাসছে। উপরে বোল্ড টেকনিক্যাল টাইটেল ও নিচে অ্যাকশন বার।
+মডেল ৩ (Coolify Cyber DevOps Dark Grid): পিচ-ব্ল্যাক ব্যাকগ্রাউন্ডে ৬টি নিয়ন সাইবার কার্ড গ্রিড (ইলেকট্রিক গ্রিন, পার্পল ও সায়ান) এবং আকর্ষণীয় টেকনিক্যাল আর্টওয়ার্ক।
+মডেল ৪ (Cute 3D Character & Gadget): কিউট পিক্সার স্টাইলের ৩ডি ক্যারেক্টার ল্যাপটপে বসে কাজ করছে, চারপাশে ভাসমান ৩ডি গিফট বক্স ও মেসেজ বাবল।
 
-বাধ্যতামূলক JSON আউটপুট ফরম্যাট (পিওর JSON অ্যারে):
+বাধ্যতামূলক JSON আউটপুট ফরম্যাট (শুধুমাত্র পিওর JSON অ্যারে):
 [
   {
-    "modelName": "মডেল ১ (Unique Gurukul Presenter)",
-    "badge": "AI MASTERCLASS 2026",
-    "headline": "৮টি AI CARTOON VIDEO জেনারেটর যা ২০২৬-এ আপনার জানা প্রয়োজন!",
-    "subHeadline": "Same Person New Possibilities! পুরো প্রসেস পেতে শেয়ার দিয়ে কমেন্ট লিখুন।",
-    "ctaText": "একটি Share দিয়ে Comment লিখুন — 8",
-    "imagePrompt": "vertical 9:16 promotional poster background, energetic young Indian male presenter pointing excitedly towards right, vibrant neon purple and electric violet volumetric studio lights, 3D floating icons, ultra-detailed 4k"
+    "title": "মডেল ১ (Viral Presenter & Stack)",
+    "imagePrompt": "vertical 9:16 commercial graphic advertisement poster, an energetic handsome young Indian Bengali presenter pointing excitedly to right, bold 3D typography text at top, floating 3D icons, deep neon purple and magenta volumetric studio lighting, a glowing purple pill button at bottom with text 'Comment karon', single complete commercial graphic poster artwork, ultra-detailed 4k masterpiece"
   },
   {
-    "modelName": "মডেল ২ (Python Automation Floating Cards)",
-    "badge": "PYTHON AUTOMATION",
-    "headline": "পাইথন ওয়েব অটোমেশন — শুধু স্ক্র্যাপিং নয়!",
-    "subHeadline": "রিয়েল-ওয়ার্ল্ড অটোমেশন সিস্টেম তৈরি শিখুন: ফর্ম সাবমিট, ডাটা এক্সট্রাকশন ও বট ডেপ্লয়মেন্ট।",
-    "ctaText": "কমপ্লিট রোডম্যাপ পেতে Comment করুন — PYTHON",
-    "imagePrompt": "vertical 9:16 composition, modern laptop on clean desk, glowing 3D glass cards floating upward showing web automation workflows, soft daylight studio lighting, ultra-detailed 4k"
+    "title": "মডেল ২ (3D Laptop & Floating Modules)",
+    "imagePrompt": "vertical 9:16 high-impact educational ad poster, modern sleek laptop open on desk, glowing 3D glassmorphism interface cards floating upward in mid-air, bold commercial 3D typography at top, soft daylight studio photography, clean graphic composition, single complete graphic poster artwork, ultra-detailed 4k"
   },
   {
-    "modelName": "মডেল ৩ (Coolify Cyber DevOps Grid)",
-    "badge": "SERVER & DEVOPS",
-    "headline": "আধুনিক DevOps ও সার্ভার ম্যানেজমেন্ট — সবকিছু এক প্ল্যাটফর্মে!",
-    "subHeadline": "VPS ডেপ্লয়মেন্ট, ডাটাবেজ সেটআপ, ডোমেন ও SSL কনফিগারেশন এক ক্লিকে।",
-    "ctaText": "ফ্রি সেটআপ গাইড পেতে Comment লিখুন — DEVOPS",
-    "imagePrompt": "vertical 9:16 dark cyberpunk poster, pitch black background with glowing electric neon green and violet server racks and cloud network lines, ultra-detailed 4k"
+    "title": "মডেল ৩ (Dark Cyber Neon Grid)",
+    "imagePrompt": "vertical 9:16 dark cyberpunk infographic poster, pitch black background with glowing electric neon green and violet 6-box card grid, bold typography header, futuristic tech presentation, single complete graphic poster artwork, ultra-detailed 4k"
   },
   {
-    "modelName": "মডেল ৪ (Cute 3D Character & Custom GPT)",
-    "badge": "CUSTOM AI ASSISTANT",
-    "headline": "ChatGPT দিয়ে নিজের Custom GPT তৈরি করুন সহজে!",
-    "subHeadline": "বারবার একই Prompt লেখার ঝামেলা চিরতরে দূর করুন।",
-    "ctaText": "Full Process + Prompt চাইলে Comment করুন — GPT",
-    "imagePrompt": "vertical 9:16 3D animated character poster, an adorable stylized Pixar character happily sitting behind a pastel laptop, pointing forward with a wink, floating glowing chat bubbles, bright volumetric lighting, ultra-detailed 4k"
+    "title": "মডেল ৪ (Cute 3D Character & Studio)",
+    "imagePrompt": "vertical 9:16 3D animated character poster, an adorable stylized Pixar character sitting behind a pastel laptop, pointing forward with a wink, floating glowing chat bubbles, prompt cards, and 3D golden gift boxes, bright volumetric lighting, single complete graphic poster artwork, ultra-detailed 4k"
   }
 ]
 `;
@@ -1290,40 +1225,33 @@
 
     async function generateAdModelsAI() {
       const topic = document.getElementById("ad-topic-input").value.trim();
-      const customPhoto = document.getElementById("ad-custom-photo").value.trim();
       const extraDetails = document.getElementById("ad-extra-details").value.trim();
       const btn = document.getElementById("btn-generate-ad-models");
 
-      if (!topic) return alert("দয়া করে পোস্টের মূল বিষয় বা প্রম্পট লিখুন!");
+      if (!topic) return alert("দয়া করে পোস্টের মূল বিষয় লিখুন!");
 
-      btn.textContent = "AI ৪টি আল্ট্রা ৪কে পোস্টার তৈরি করছে (অপেক্ষা করুন)...";
+      btn.textContent = "Gemini Nano Banana ৪টি পোস্টার তৈরি করছে...";
       btn.disabled = true;
 
       try {
-        const promptInput = `বিষয়: ${topic}\nঅতিরিক্ত বিবরণ: ${extraDetails || 'সাধারণ প্রফেশনাল সোশ্যাল মিডিয়া ব্যানার'}`;
-        let jsonStr = await executeGeminiAPI(POSTER_COMPOSITOR_PROMPT, promptInput);
+        const promptInput = `বিষয়: ${topic}\nবিবরণ: ${extraDetails || 'সাধারণ প্রফেশনাল ব্যানার'}`;
+        let jsonStr = await executeGeminiAPI(NANO_BANANA_ARCHITECT_PROMPT, promptInput);
         jsonStr = jsonStr.replace(/```json|```/g, "").trim();
         const models = JSON.parse(jsonStr);
 
         generatedAdModels = [];
 
-        // প্রতিটি মডেলের জন্য আসল ৪কে ইমেজ তৈরি
         for (let i = 0; i < models.length; i++) {
           const m = models[i];
-          btn.textContent = `মডেল ${i + 1}/৪ ইমেজ তৈরি হচ্ছে...`;
-          
-          let finalImgUrl = customPhoto;
-          if (!finalImgUrl) {
-            finalImgUrl = await generateUltra4KImage(m.imagePrompt, topic);
-          }
+          btn.textContent = `পোস্টার ${i + 1}/৪ Nano Banana জেনারেট করছে...`;
+
+          const posterPrompt = `${m.imagePrompt}, topic: ${topic}, ${extraDetails}`;
+          const finalPosterImg = await generateNanoBananaPosterImage(posterPrompt);
 
           generatedAdModels.push({
-            id: 'ad_4k_' + Date.now() + '_' + i,
-            title: m.headline,
-            desc: m.subHeadline,
-            badge: m.badge || 'SPECIAL',
-            ctaText: m.ctaText || 'Comment করুন',
-            imageUrl: finalImgUrl,
+            id: 'poster_ai_' + Date.now() + '_' + i,
+            title: m.title,
+            imageUrl: finalPosterImg,
             selected: true
           });
         }
@@ -1333,7 +1261,7 @@
       } catch (err) {
         alert("পোস্টার তৈরিতে সমস্যা হয়েছে: " + err.message);
       } finally {
-        btn.textContent = "✨ ৪টি সম্পূর্ণ ৯:১৬ ৪কে পোস্টার তৈরি করুন";
+        btn.textContent = "✨ ৪টি সম্পূর্ণ ৯:১৬ পোস্টার ইমেজ তৈরি করুন";
         btn.disabled = false;
       }
     }
@@ -1343,19 +1271,7 @@
       container.innerHTML = models.map((m, idx) => `
         <div class="model-card-item ${m.selected ? 'selected' : ''}" id="model-card-${idx}">
           <div class="poster-frame-9-16">
-            <img src="${m.imageUrl}" alt="Poster 4K" class="poster-bg-img" loading="lazy">
-            <div class="poster-visual-overlay">
-              <div>
-                <span class="poster-badge-top">${escapeHtml(m.badge)}</span>
-                <h3 class="poster-title-top">${escapeHtml(m.title)}</h3>
-              </div>
-              <div class="poster-desc-center">
-                ${escapeHtml(m.desc)}
-              </div>
-              <div class="poster-cta-bottom">
-                ${escapeHtml(m.ctaText)}
-              </div>
-            </div>
+            <img src="${m.imageUrl}" alt="Poster AI" loading="lazy">
           </div>
 
           <div class="model-actions-row">
@@ -1391,9 +1307,6 @@
         for (const item of selected) {
           const docData = {
             title: item.title,
-            desc: item.desc,
-            badge: item.badge,
-            ctaText: item.ctaText,
             imageUrl: item.imageUrl,
             aspectRatio: "9:16",
             timestamp: Date.now()
@@ -1405,10 +1318,9 @@
 
         localStorage.setItem("aimanix_ad_posters", JSON.stringify(localAds));
 
-        alert(`✅ সফলভাবে ${selected.length}টি ৯:১৬ ৪কে পোস্টার ads.html এ প্রকাশিত হয়েছে!`);
+        alert(`✅ সফলভাবে ${selected.length}টি ৯:১৬ পোস্টার ads.html এ প্রকাশিত হয়েছে!`);
         document.getElementById("models-preview-box").style.display = "none";
         document.getElementById("ad-topic-input").value = "";
-        document.getElementById("ad-custom-photo").value = "";
         document.getElementById("ad-extra-details").value = "";
         loadPublishedAdsList();
       } catch (err) {
@@ -1436,7 +1348,7 @@
                 <div>
                   <strong style="color: var(--magenta); font-size:0.95rem;">${escapeHtml(d.title)}</strong>
                   <div style="font-size: 0.78rem; color: var(--text-muted); margin-top:2px;">
-                    [${escapeHtml(d.badge || '4K POSTER')}] • 9:16 Format
+                    Nano Banana Pro • 9:16 Format
                   </div>
                 </div>
               </div>

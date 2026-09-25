@@ -1,57 +1,59 @@
 // api/gemini.js
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'শুধুমাত্র POST রিকোয়েস্ট অনুমোদিত।' });
+    return res.status(405).json({ error: 'শুধুমাত্র POST মেথড অনুমোদিত।' });
   }
 
   const { prompt, systemInstruction } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    return res.status(500).json({ error: 'Vercel-এ GEMINI_API_KEY সেট করা নেই!' });
+    return res.status(500).json({ error: 'Vercel Environment-এ GEMINI_API_KEY পাওয়া যায়নি।' });
   }
 
-  try {
-    // গুগলের নির্দেশিত নতুন Interactions API এন্ডপয়েন্ট
-    const url = 'https://generativelanguage.googleapis.com/v1/interactions';
+  // উচ্চ কোটা সম্পন্ন স্ট্যাবল মডেলের তালিকা (আগের ব্যাকআপ ধারায়)
+  const models = [
+    'gemini-flash-latest',
+    'gemini-1.5-flash',
+    'gemini-3.5-flash'
+  ];
 
-    const fullPrompt = systemInstruction 
-      ? `${systemInstruction}\n\nUser Task:\n${prompt}` 
-      : prompt;
+  let lastError = null;
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': apiKey
-      },
-      body: JSON.stringify({
-        model: 'gemini-3.5-flash',
-        input: fullPrompt
-      })
-    });
+  for (const model of models) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      
+      const payload = {
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.2 }
+      };
 
-    const data = await response.json();
+      if (systemInstruction) {
+        payload.system_instruction = { parts: [{ text: systemInstruction }] };
+      }
 
-    if (!response.ok) {
-      return res.status(response.status).json({ 
-        error: data.error?.message || 'গুগল সার্ভার থেকে ত্রুটি এসেছে।' 
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
+
+      const data = await response.json();
+
+      if (response.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+        return res.status(200).json({ 
+          output: data.candidates[0].content.parts[0].text 
+        });
+      } else {
+        lastError = data.error?.message || `${model} থেকে ত্রুটি এসেছে`;
+      }
+    } catch (err) {
+      lastError = err.message;
     }
-
-    // নতুন রেসপন্স স্ট্রাকচার থেকে টেক্সট এক্সট্র্যাক্ট করা
-    let outputText = '';
-    if (typeof data.output === 'string') {
-      outputText = data.output;
-    } else if (data.output?.text) {
-      outputText = data.output.text;
-    } else if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
-      outputText = data.candidates[0].content.parts[0].text;
-    }
-
-    return res.status(200).json({ output: outputText });
-
-  } catch (error) {
-    return res.status(500).json({ error: 'সার্ভার প্রসেসিং ব্যর্থ হয়েছে: ' + error.message });
   }
+
+  return res.status(500).json({ 
+    error: `সার্ভার প্রসেস সম্পন্ন করা যায়নি: ${lastError}` 
+  });
 }

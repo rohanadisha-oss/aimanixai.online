@@ -567,42 +567,17 @@
       errEl.style.display = "none";
 
       try {
-        const snap = await db.collection("system_config").doc("ai_secrets").get();
-        let apiKey = "";
-        if (snap.exists && snap.data().gemini_key) {
-          apiKey = snap.data().gemini_key.trim();
-        }
-
-        const authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`;
-        const res = await fetch(authUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email, password: pass, returnSecureToken: true })
-        });
-
-        const data = await res.json();
-
-        if (res.ok && data.idToken) {
+        if (email.toLowerCase().includes("rohanadisha@gmail.com") && pass === "Aitan2088#") {
           sessionStorage.setItem("aimanix_cloud_user", email);
           document.getElementById("user-display-email").textContent = "অ্যাক্টিভ: " + email;
           revealConsole();
         } else {
-          if (email.toLowerCase().includes("rohanadisha@gmail.com") && pass === "Aitan2088#") {
-            sessionStorage.setItem("aimanix_cloud_user", email);
-            revealConsole();
-          } else {
-            errEl.textContent = "❌ ভুল তথ্য! সঠিক ইমেইল ও পাসওয়ার্ড দিন।";
-            errEl.style.display = "block";
-          }
-        }
-      } catch (err) {
-        if (email.toLowerCase().includes("rohanadisha") && pass === "Aitan2088#") {
-          sessionStorage.setItem("aimanix_cloud_user", email);
-          revealConsole();
-        } else {
-          errEl.textContent = "❌ " + err.message;
+          errEl.textContent = "❌ ভুল তথ্য! সঠিক ইমেইল ও পাসওয়ার্ড দিন।";
           errEl.style.display = "block";
         }
+      } catch (err) {
+        errEl.textContent = "❌ " + err.message;
+        errEl.style.display = "block";
       } finally {
         btn.textContent = "লগইন করুন 🚀";
         btn.disabled = false;
@@ -642,40 +617,31 @@
     }
 
     // ==========================================================
-    // GEMINI AI ENGINE (TEXT API FOR SCHOOL/KOBITA/JOBS)
+    // VERCEL SERVERLESS SECURE GEMINI ENGINE (Zero Key Leakage)
     // ==========================================================
-    async function getSecureGeminiKey() {
-      const snap = await db.collection("system_config").doc("ai_secrets").get();
-      if (snap.exists && snap.data().gemini_key) return snap.data().gemini_key.trim();
-      throw new Error("API Key ফায়ারবেসে পাওয়া যায়নি!");
-    }
-
     async function executeGeminiAPI(systemInstruction, promptText) {
-      const key = await getSecureGeminiKey();
-      const endpoints = [
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${key}`,
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${key}`,
-        `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${key}`
-      ];
+      try {
+        const res = await fetch('/api/gemini', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            systemInstruction: systemInstruction,
+            prompt: promptText
+          })
+        });
 
-      for (const url of endpoints) {
-        try {
-          const res = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              system_instruction: { parts: [{ text: systemInstruction }] },
-              contents: [{ role: "user", parts: [{ text: promptText }] }],
-              generationConfig: { temperature: 0.2 }
-            })
-          });
-          if (res.ok) {
-            const data = await res.json();
-            return data.candidates[0].content.parts[0].text;
-          }
-        } catch (e) {}
+        const data = await res.json();
+        if (!res.ok || data.error) {
+          throw new Error(data.error || "সার্ভারলেস এপিআই রেসপন্স দেয়নি।");
+        }
+
+        return data.output;
+      } catch (err) {
+        console.error("AI Proxy Error:", err);
+        throw new Error(err.message);
       }
-      throw new Error("Gemini সার্ভার ব্যস্ত রয়েছে। অনুগ্রহ করে কয়েক সেকেন্ড পর আবার চেষ্টা করুন।");
     }
 
     // ==========================================
@@ -1093,17 +1059,14 @@
           timestamp: Date.now()
         };
 
-        // লোকাল ব্যাকআপ
         let localAds = JSON.parse(localStorage.getItem("aimanix_ad_posters") || "[]");
         localAds.unshift(docData);
         localStorage.setItem("aimanix_ad_posters", JSON.stringify(localAds));
 
-        // ফায়ারবেস ক্লাউড স্টোরেজ
         await db.collection("ad_posters").add(docData);
 
         alert("✅ পোস্টারটি সফলভাবে ads.html (বিজ্ঞাপন বাজার)-এ প্রকাশিত হয়েছে!");
 
-        // ইনপুট রিসেট
         document.getElementById("ad-post-title").value = "";
         document.getElementById("ad-post-badge").value = "";
         document.getElementById("ad-post-cta").value = "";

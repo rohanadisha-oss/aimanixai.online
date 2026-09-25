@@ -8,49 +8,38 @@ export default async function handler(req, res) {
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    return res.status(500).json({ error: 'Vercel-এ GEMINI_API_KEY সেট করা নেই!' });
+    return res.status(500).json({ error: 'Vercel Environment-এ GEMINI_API_KEY পাওয়া যায়নি।' });
   }
 
-  // শুধুমাত্র 3.5 flash এবং 3.8 flash
-  const models = [
-    'gemini-3.5-flash',
-    'gemini-3.8-flash'
+  // আপনার মূল কোডের ৩টি নির্দিষ্ট মডেল ও এন্ডপয়েন্ট তালিকা
+  const endpoints = [
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
+    `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`
   ];
 
   let lastError = null;
 
-  for (const model of models) {
+  for (const url of endpoints) {
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-
-      const payload = {
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.2
-        }
-      };
-
-      if (systemInstruction) {
-        payload.system_instruction = {
-          parts: [{ text: systemInstruction }]
-        };
-      }
-
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: systemInstruction || '' }] },
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.2 }
+        })
       });
 
       const data = await response.json();
 
       if (response.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
         return res.status(200).json({
-          output: data.candidates[0].content.parts[0].text,
-          activeModel: model
+          output: data.candidates[0].content.parts[0].text
         });
       } else {
-        lastError = data.error?.message || `${model} থেকে সঠিক উত্তর পাওয়া যায়নি`;
+        lastError = data.error?.message || 'সঠিক উত্তর পাওয়া যায়নি';
       }
     } catch (err) {
       lastError = err.message;
@@ -58,6 +47,6 @@ export default async function handler(req, res) {
   }
 
   return res.status(500).json({
-    error: `সার্ভার রেসপন্স দেয়নি। এরর: ${lastError}`
+    error: `Gemini সার্ভার ব্যস্ত রয়েছে। অনুগ্রহ করে কয়েক সেকেন্ড পর আবার চেষ্টা করুন। (${lastError})`
   });
 }

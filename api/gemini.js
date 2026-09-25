@@ -26,7 +26,7 @@ export default async function handler(req, res) {
         'x-goog-api-key': apiKey
       },
       body: JSON.stringify({
-        model: 'gemini-3.8-flash',
+        model: 'gemini-3.5-flash',
         input: fullPrompt
       })
     });

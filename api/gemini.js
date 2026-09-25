@@ -12,38 +12,46 @@ export default async function handler(req, res) {
   }
 
   try {
-    // গুগলের বর্তমান অফিসিয়াল v1 স্ট্যাবল এন্ডপয়েন্ট
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    // গুগলের অফিশিয়াল Interactions API এন্ডপয়েন্ট
+    const url = 'https://generativelanguage.googleapis.com/v1/interactions';
 
-    const payload = {
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.2
-      }
-    };
-
-    if (systemInstruction) {
-      payload.system_instruction = {
-        parts: [{ text: systemInstruction }]
-      };
-    }
+    const fullPrompt = systemInstruction 
+      ? `${systemInstruction}\n\nUser Task:\n${prompt}` 
+      : prompt;
 
     const response = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey
+      },
+      body: JSON.stringify({
+        model: 'gemini-3.8-flash',
+        input: fullPrompt
+      })
     });
 
     const data = await response.json();
 
     if (!response.ok) {
       return res.status(response.status).json({
-        error: data.error?.message || 'গুগল সার্ভার থেকে ত্রুটি এসেছে।'
+        error: data.error?.message || 'গুগল এপিআই থেকে ত্রুটি এসেছে।'
       });
     }
 
-    const output = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    return res.status(200).json({ output });
+    // Interactions API-এর বিভিন্ন সম্ভাব্য রেসপন্স ফরম্যাট হ্যান্ডলিং
+    let textOutput = '';
+    if (typeof data.output === 'string') {
+      textOutput = data.output;
+    } else if (data.output?.text) {
+      textOutput = data.output.text;
+    } else if (Array.isArray(data.output)) {
+      textOutput = data.output.map(item => item.text || item).join('\n');
+    } else if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
+      textOutput = data.candidates[0].content.parts[0].text;
+    }
+
+    return res.status(200).json({ output: textOutput });
 
   } catch (error) {
     return res.status(500).json({ error: 'সার্ভার প্রসেসিং ব্যর্থ হয়েছে: ' + error.message });

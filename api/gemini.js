@@ -1,38 +1,48 @@
 // api/gemini.js
 export default async function handler(req, res) {
+  // শুধুমাত্র POST রিকোয়েস্ট গ্রহণ করবে
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'শুধুমাত্র POST রিকোয়েস্ট অনুমোদিত' });
+    return res.status(405).json({ error: 'শুধুমাত্র POST মেথড অনুমোদিত।' });
   }
 
   const { prompt, systemInstruction } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    return res.status(500).json({ error: 'Vercel Settings-এ GEMINI_API_KEY কনফিগার করা নেই!' });
+    return res.status(500).json({ error: 'Vercel Environment-এ GEMINI_API_KEY পাওয়া যায়নি।' });
   }
 
-  // কম থেকে ক্রমানুসারে ৪টি মডেলের লিস্ট
+  // গুগলের অফিশিয়াল এবং সক্রিয় মডেল সমূহের ক্রমতালিকা
   const models = [
     'gemini-1.5-flash',
-    'gemini-2.5-flash',
-    'gemini-3.5-flash',
-    'gemini-3.8-flash'
+    'gemini-2.0-flash',
+    'gemini-1.5-pro'
   ];
 
   let lastError = null;
 
-  // ক্রমানুসারে প্রতিটি মডেল দিয়ে কল পাঠানোর চেষ্টা করবে
   for (const model of models) {
     try {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      
+      const payload = {
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: { 
+          temperature: 0.2,
+          maxOutputTokens: 8192
+        }
+      };
+
+      if (systemInstruction) {
+        payload.system_instruction = { 
+          parts: [{ text: systemInstruction }] 
+        };
+      }
+
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: systemInstruction || '' }] },
-          contents: [{ role: 'user', parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.2 }
-        })
+        body: JSON.stringify(payload)
       });
 
       const data = await response.json();
@@ -43,7 +53,7 @@ export default async function handler(req, res) {
           activeModel: model 
         });
       } else {
-        lastError = data.error?.message || `${model} থেকে ত্রুটি পাওয়া গেছে`;
+        lastError = data.error?.message || `${model} থেকে সঠিক টেক্সট রেসপন্স পাওয়া যায়নি।`;
       }
     } catch (err) {
       lastError = err.message;
@@ -51,6 +61,6 @@ export default async function handler(req, res) {
   }
 
   return res.status(500).json({ 
-    error: `সবগুলো মডেল ব্যর্থ হয়েছে। সর্বশেষ এরর: ${lastError}` 
+    error: `সার্ভার ব্যস্ত রয়েছে। অনুগ্রহ করে কয়েক সেকেন্ড পর আবার চেষ্টা করুন। বিস্তারিত: ${lastError}` 
   });
 }

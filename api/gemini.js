@@ -8,45 +8,50 @@ export default async function handler(req, res) {
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    return res.status(500).json({ error: 'Vercel Environment-এ GEMINI_API_KEY পাওয়া যায়নি।' });
+    return res.status(500).json({ error: 'Vercel-এ GEMINI_API_KEY সেট করা নেই!' });
   }
 
-  // আপনার মূল কোডের ৩টি নির্দিষ্ট মডেল ও এন্ডপয়েন্ট তালিকা
-  const endpoints = [
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`,
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
-    `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`
-  ];
+  try {
+    // গুগলের নির্দেশিত নতুন Interactions API এন্ডপয়েন্ট
+    const url = 'https://generativelanguage.googleapis.com/v1/interactions';
 
-  let lastError = null;
+    const fullPrompt = systemInstruction 
+      ? `${systemInstruction}\n\nUser Task:\n${prompt}` 
+      : prompt;
 
-  for (const url of endpoints) {
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: systemInstruction || '' }] },
-          contents: [{ role: 'user', parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.2 }
-        })
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey
+      },
+      body: JSON.stringify({
+        model: 'gemini-3.8-flash',
+        input: fullPrompt
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(response.status).json({ 
+        error: data.error?.message || 'গুগল সার্ভার থেকে ত্রুটি এসেছে।' 
       });
-
-      const data = await response.json();
-
-      if (response.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
-        return res.status(200).json({
-          output: data.candidates[0].content.parts[0].text
-        });
-      } else {
-        lastError = data.error?.message || 'সঠিক উত্তর পাওয়া যায়নি';
-      }
-    } catch (err) {
-      lastError = err.message;
     }
-  }
 
-  return res.status(500).json({
-    error: `Gemini সার্ভার ব্যস্ত রয়েছে। অনুগ্রহ করে কয়েক সেকেন্ড পর আবার চেষ্টা করুন। (${lastError})`
-  });
+    // নতুন রেসপন্স স্ট্রাকচার থেকে টেক্সট এক্সট্র্যাক্ট করা
+    let outputText = '';
+    if (typeof data.output === 'string') {
+      outputText = data.output;
+    } else if (data.output?.text) {
+      outputText = data.output.text;
+    } else if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
+      outputText = data.candidates[0].content.parts[0].text;
+    }
+
+    return res.status(200).json({ output: outputText });
+
+  } catch (error) {
+    return res.status(500).json({ error: 'সার্ভার প্রসেসিং ব্যর্থ হয়েছে: ' + error.message });
+  }
 }

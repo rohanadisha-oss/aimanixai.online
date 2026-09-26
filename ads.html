@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>বিজ্ঞাপন বাজার | Aimanix Creative Ads Hub</title>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: প্রিমিয়াম ও স্পষ্ট বাংলা ফন্ট -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@600;800&family=Hind+Siliguri:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@600;800&family=Hind+Siliguri:wght@500;600;700;800&family=Noto+Sans+Bengali:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- Firebase Compat Libraries -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -36,26 +36,27 @@
       user-select: none;
     }
 
-    p, span, h1, h2, h3, h4, li {
+    p, span, h1, h2, h3, h4, li, a, button {
       user-select: text;
     }
 
     body {
       background: var(--bg-dark);
       color: var(--text-main);
-      font-family: 'Hind Siliguri', sans-serif;
+      font-family: 'Noto Sans Bengali', 'Hind Siliguri', sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
+      letter-spacing: 0.1px;
     }
 
-    /* সাইবার পার্পল সিন্যাপ্স ক্যানভাস ও গ্রিড ব্যাকগ্রাউন্ড */
+    /* সাইবার পার্পল সিন্যাপ্স গ্রিড ব্যাকগ্রাউন্ড */
     .purple-grid-bg {
       position: fixed;
       inset: 0;
       background-image: 
-        radial-gradient(circle at 15% 20%, rgba(168, 85, 247, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 85% 80%, rgba(217, 70, 239, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 15% 20%, rgba(168, 85, 247, 0.14) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(217, 70, 239, 0.14) 0%, transparent 45%),
         linear-gradient(to right, rgba(168, 85, 247, 0.05) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(217, 70, 239, 0.05) 1px, transparent 1px);
       background-size: 100% 100%, 100% 100%, 34px 34px, 34px 34px;
@@ -110,10 +111,16 @@
     }
 
     .brand-title {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       font-weight: 800;
       color: #fff;
       letter-spacing: -0.2px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .btn-nav-link {
@@ -129,6 +136,12 @@
       font-weight: 700;
       text-decoration: none;
       transition: all 0.2s ease;
+    }
+
+    .btn-nav-link.studio-link {
+      background: linear-gradient(135deg, rgba(217, 70, 239, 0.25), rgba(168, 85, 247, 0.25));
+      border-color: var(--magenta-neon);
+      color: #38bdf8;
     }
 
     .btn-nav-link:active {
@@ -170,8 +183,8 @@
 
     .hero-title {
       font-size: 2.4rem;
-      font-weight: 800;
-      line-height: 1.25;
+      font-weight: 900;
+      line-height: 1.3;
       color: #ffffff;
       margin-bottom: 0.75rem;
     }
@@ -184,10 +197,11 @@
 
     .hero-subtitle {
       color: #cbd5e1;
-      font-size: 1rem;
+      font-size: 1.05rem;
       max-width: 650px;
       margin: 0 auto 1.2rem;
       line-height: 1.6;
+      font-weight: 500;
     }
 
     /* গ্রিড কন্টেইনার */
@@ -203,7 +217,7 @@
       gap: 2rem;
     }
 
-    /* রানিং নিয়ন বর্ডারযুক্ত পোস্টার কার্ড */
+    /* রানিং নিয়ন বর্ডারযুক্ত কার্ড */
     .ad-card-wrapper {
       position: relative;
       border-radius: 24px;
@@ -217,7 +231,6 @@
       transform: scale(0.975);
     }
 
-    /* রানিং নিয়ন লাইট এফেক্ট */
     .ad-card-wrapper::before {
       content: '';
       position: absolute;
@@ -263,7 +276,7 @@
       background: #150930;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
       margin-bottom: 1rem;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 9 / 12;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -284,9 +297,10 @@
       color: #000;
       font-weight: 800;
       font-size: 0.75rem;
-      padding: 0.25rem 0.65rem;
+      padding: 0.28rem 0.7rem;
       border-radius: 6px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      letter-spacing: 0.5px;
     }
 
     .ad-info-box {
@@ -294,20 +308,21 @@
     }
 
     .ad-title {
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       font-weight: 800;
       color: #ffffff;
-      line-height: 1.35;
-      margin-bottom: 0.4rem;
+      line-height: 1.4;
+      margin-bottom: 0.45rem;
     }
 
     .ad-desc {
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       color: var(--text-muted);
-      line-height: 1.5;
+      line-height: 1.6;
+      font-weight: 500;
     }
 
-    /* সোশাল শেয়ার ও অ্যাকশন বাটন */
+    /* শেয়ার ও ডাউনলোড বাটন */
     .ad-actions-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -317,11 +332,11 @@
 
     .btn-share {
       border: none;
-      padding: 0.65rem;
+      padding: 0.7rem;
       border-radius: 12px;
       font-family: inherit;
-      font-weight: 800;
-      font-size: 0.85rem;
+      font-weight: 700;
+      font-size: 0.88rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -356,14 +371,15 @@
     }
 
     @media (max-width: 600px) {
-      .hero-title { font-size: 1.85rem; }
+      .hero-title { font-size: 1.9rem; }
       .ads-grid { grid-template-columns: 1fr; }
+      .ad-visual-frame { aspect-ratio: 9 / 13; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ব্যাকগ্রাউন্ড ও পার্টিকেল ক্যানভাস -->
+  <!-- ব্যাকগ্রাউন্ড ও সিন্যাপ্স ক্যানভাস -->
   <div class="purple-grid-bg"></div>
   <canvas id="ads-particle-canvas"></canvas>
 
@@ -373,19 +389,19 @@
       <span class="brand-badge">AIMANIX.AI</span>
       <span class="brand-title">বিজ্ঞাপন বাজার</span>
     </a>
-    <div style="display:flex; gap:0.5rem;">
-      <a href="jobs.html" class="btn-nav-link">💼 চাকরির বাজার</a>
+    <div class="nav-actions">
+      <a href="studio.html" class="btn-nav-link studio-link">🎨 বিজ্ঞাপন স্টুডিও</a>
       <a href="index.html" class="btn-nav-link">🏠 হোমপেজ</a>
     </div>
   </nav>
 
-  <!-- হিরো সেকশন -->
+  <!-- হিরো ব্যানার -->
   <header class="hero-container">
     <div class="poster-hero">
       <span class="hero-badge">VIRAL ADS & POSTER GALLERY</span>
       <h1 class="hero-title">স্মার্ট <span>বিজ্ঞাপন ও ক্রিয়েটিভ</span> হাব</h1>
       <p class="hero-subtitle">
-        সোশ্যাল মিডিয়া ক্যাম্পেইন, প্রফেশনাল কোর্স ও ডিজিটাল প্রোডাক্টের আকর্ষণীয় হাই-কনভার্সন বিজ্ঞাপন পোস্টার গ্যালারি।
+        সোশ্যাল মিডিয়া ক্যাম্পেইন, প্রফেশনাল প্রচার ও ডিজিটাল প্রোডাক্টের আকর্ষণীয় হাই-কনভার্সন বিজ্ঞাপন পোস্টার গ্যালারি।
       </p>
     </div>
   </header>
@@ -393,7 +409,7 @@
   <!-- পোস্টার গ্যালারি ফিড -->
   <main class="ads-feed-wrapper">
     <div class="ads-grid" id="ads-container">
-      <!-- লাইভ পোস্টার রেন্ডার হবে -->
+      <!-- রিয়েল-টাইমে পোস্টার রেন্ডার হবে -->
     </div>
   </main>
 
@@ -426,59 +442,107 @@
       }
     ];
 
-    // রিয়েল-টাইম বিজ্ঞাপন লোডার (ads এবং ad_posters উভয় কালেকশনের সাথে সামঞ্জস্যপূর্ণ)
+    // studio.html এবং admin.html - উভয়ের ডেটা সিঙ্ক করার ফাংশন
     function setupRealtimeAds() {
-      // studio.html থেকে প্রকাশিত কালেকশন 'ads' রিয়েল-টাইম শোনা
+      // Firebase Firestore 'ads' কালেকশন রিয়েল-টাইম শোনা
       db.collection("ads").onSnapshot((snapshot) => {
-        let ads = [];
+        let firestoreAds = [];
         if (!snapshot.empty) {
           snapshot.forEach(doc => {
             const data = doc.data();
-            ads.push({
+            firestoreAds.push({
               id: doc.id,
               title: data.title || "বিজ্ঞাপন ব্যানার",
-              desc: data.desc || "Aimanix AI স্টুডিও দ্বারা প্রস্তুতকৃত বিজ্ঞাপন পোস্টার।",
-              imageUrl: data.imageUrl || "",
+              desc: data.desc || data.description || "Aimanix AI স্টুডিও দ্বারা প্রস্তুতকৃত বিজ্ঞাপন পোস্টার।",
+              imageUrl: data.imageUrl || data.image || "",
               badge: data.badge || (data.type === 'poster' ? 'POSTER' : 'PROMO'),
               rawTime: data.createdAt || data.timestamp || 0
             });
           });
-
-          // নতুন পোস্ট আগে দেখানোর জন্য সর্টিং
-          ads.sort((a, b) => {
-            const timeA = a.rawTime?.toMillis ? a.rawTime.toMillis() : new Date(a.rawTime).getTime() || 0;
-            const timeB = b.rawTime?.toMillis ? b.rawTime.toMillis() : new Date(b.rawTime).getTime() || 0;
-            return timeB - timeA;
-          });
-
-          renderAdsGrid(ads);
-        } else {
-          // যদি 'ads'-এ কিছু না থাকে তবে পুরনো 'ad_posters' কালেকশন বা ডেমো চেক করা
-          fallbackOldCollection();
         }
+
+        // admin.html এবং studio.html এর লোকাল স্টোরেজ সিঙ্ক
+        const localSources = ["aimanix_ad_posters", "admin_ads", "user_market_ads", "ads"];
+        let localCombined = [];
+
+        localSources.forEach(key => {
+          try {
+            const items = JSON.parse(localStorage.getItem(key) || "[]");
+            if (Array.isArray(items)) {
+              items.forEach((item, index) => {
+                localCombined.push({
+                  id: item.id || `local_${key}_${index}`,
+                  title: item.title || "বিজ্ঞাপন ব্যানার",
+                  desc: item.desc || item.description || "",
+                  imageUrl: item.imageUrl || item.image || "",
+                  badge: item.badge || "ADMIN POST",
+                  rawTime: item.publishedAt || item.date || item.createdAt || 0
+                });
+              });
+            }
+          } catch(e) {}
+        });
+
+        // উভয় উৎসের ডেটা একত্রীকরণ এবং ডুপ্লিকেট রোধ
+        const allAdsMap = new Map();
+        
+        localCombined.forEach(ad => {
+          if (ad.imageUrl) allAdsMap.set(ad.imageUrl, ad);
+        });
+
+        firestoreAds.forEach(ad => {
+          if (ad.imageUrl) allAdsMap.set(ad.imageUrl, ad);
+        });
+
+        let finalList = Array.from(allAdsMap.values());
+
+        // নতুন পোস্ট প্রথমে দেখানোর জন্য সর্টিং
+        finalList.sort((a, b) => {
+          const timeA = a.rawTime?.toMillis ? a.rawTime.toMillis() : new Date(a.rawTime).getTime() || 0;
+          const timeB = b.rawTime?.toMillis ? b.rawTime.toMillis() : new Date(b.rawTime).getTime() || 0;
+          return timeB - timeA;
+        });
+
+        if (finalList.length === 0) {
+          finalList = DEMO_ADS;
+        }
+
+        renderAdsGrid(finalList);
+
       }, (error) => {
         console.warn("রিয়েল-টাইম লিসেনার ফলব্যাক:", error);
-        fallbackOldCollection();
+        loadLocalFallback();
       });
     }
 
-    async function fallbackOldCollection() {
-      try {
-        const snap = await db.collection("ad_posters").get();
-        let ads = [];
-        if (!snap.empty) {
-          snap.forEach(doc => ads.push({ id: doc.id, ...doc.data() }));
-          renderAdsGrid(ads);
-        } else {
-          const local = JSON.parse(localStorage.getItem("aimanix_ad_posters") || "[]");
-          renderAdsGrid(local.length > 0 ? local : DEMO_ADS);
-        }
-      } catch (err) {
-        const local = JSON.parse(localStorage.getItem("aimanix_ad_posters") || "[]");
-        renderAdsGrid(local.length > 0 ? local : DEMO_ADS);
-      }
+    // অফলাইন ফলব্যাক
+    function loadLocalFallback() {
+      const localSources = ["aimanix_ad_posters", "admin_ads", "user_market_ads", "ads"];
+      let localList = [];
+
+      localSources.forEach(key => {
+        try {
+          const items = JSON.parse(localStorage.getItem(key) || "[]");
+          if (Array.isArray(items)) {
+            items.forEach(item => {
+              if (item.imageUrl || item.image) {
+                localList.push({
+                  id: item.id || Math.random().toString(),
+                  title: item.title || "বিজ্ঞাপন ব্যানার",
+                  desc: item.desc || item.description || "",
+                  imageUrl: item.imageUrl || item.image || "",
+                  badge: item.badge || "LOCAL AD"
+                });
+              }
+            });
+          }
+        } catch(e) {}
+      });
+
+      renderAdsGrid(localList.length > 0 ? localList : DEMO_ADS);
     }
 
+    // গ্রিডে কার্ড রেন্ডার করা
     function renderAdsGrid(items) {
       const container = document.getElementById("ads-container");
       if (!container) return;
@@ -522,6 +586,7 @@
       }).join('');
     }
 
+    // ইমেজ ডাউনলোড
     function downloadImage(url, title) {
       const a = document.createElement('a');
       a.href = url;

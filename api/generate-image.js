@@ -45,18 +45,25 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // Velona কী পাঠাচ্ছে তা দেখার জন্য সরাসরি আউটপুট পরীক্ষা
-    const outputVal = data.data?.output || data.output;
+    // Velona রেসপন্সের পুরো ডেটা ব্রাউজারে ফেরত পাঠানো (যাতে লুকানো ফিল্ড ধরা যায়)
+    let imageUrl = "";
+    const rawOut = data.data?.output || data.output || "";
 
-    if (!outputVal || outputVal === "") {
-      return res.status(500).json({
-        error: "Velona আউটপুট ফাঁকা এসেছে: " + JSON.stringify(data)
-      });
+    if (typeof rawOut === 'string' && rawOut.trim().length > 0) {
+      const mdMatch = rawOut.match(/!\[.*?\]\((.*?)\)/);
+      imageUrl = mdMatch ? mdMatch[1] : (rawOut.startsWith('http') || rawOut.startsWith('data:image') ? rawOut : "");
     }
 
-    // Markdown বা URL এক্সট্র্যাক্ট করা
-    const mdMatch = typeof outputVal === 'string' ? outputVal.match(/!\[.*?\]\((.*?)\)/) : null;
-    const imageUrl = mdMatch ? mdMatch[1] : outputVal;
+    if (!imageUrl && data.data?.images?.[0]) {
+      imageUrl = data.data.images[0].url || data.data.images[0];
+    }
+
+    if (!imageUrl) {
+      return res.status(200).json({
+        error: "Velona ছবি পাঠায়নি",
+        full_velona_data: data
+      });
+    }
 
     return res.status(200).json({ imageUrl });
 

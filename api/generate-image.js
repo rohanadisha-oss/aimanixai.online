@@ -8,24 +8,15 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'শুধুমাত্র POST মেথড সমর্থিত।' });
   }
 
-  const { prompt, templateType, referenceImage } = req.body;
+  const { prompt } = req.body;
   const apiKey = "key_live_20260915_85b14a4c0cec48da612a8bd1bc4ccfa1";
 
   if (!prompt) {
-    return res.status(400).json({ error: 'পোস্টারের বিবরণ আবশ্যক।' });
-  }
-
-  const posterPrompt = `Generate a high quality vertical commercial advertising poster (portrait 9:16 layout) for: "${prompt}". Category: ${templateType || 'general'}. Clean 3D bold embossed typography, realistic graphics, vibrant lighting, modern badge ribbons, bottom contact strip with clear phone number. Full-bleed edge to edge design, highly detailed, no picture frame mockup, no wall mockup.`;
-
-  const userContent = [{ type: "text", text: posterPrompt }];
-  if (referenceImage) {
-    userContent.push({
-      type: "image_url",
-      image_url: { url: referenceImage }
-    });
+    return res.status(400).json({ error: 'অনুগ্রহ করে প্রম্পট লিখুন।' });
   }
 
   try {
+    // GPT Image 2.0 (openai/gpt-5.4-image-2) মডেল কল
     const response = await fetch("https://velona.in/gateway/v1/inference/run", {
       method: "POST",
       headers: {
@@ -33,11 +24,16 @@ export default async function handler(req, res) {
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash-image",
+        model: "openai/gpt-5.4-image-2",
         turns: [
           {
             role: "user",
-            content: userContent
+            content: [
+              {
+                type: "text",
+                text: prompt
+              }
+            ]
           }
         ]
       })
@@ -50,43 +46,20 @@ export default async function handler(req, res) {
       return res.status(response.status).json({ error: `Velona এরর: ${errMsg}` });
     }
 
+    // ইমেজ URL বা Base64 ডেটা পার্সিং
     let imageUrl = "";
-
-    // ১. images অ্যারে ফিল্ড চেক
-    if (data.data?.images && data.data.images.length > 0) {
-      imageUrl = data.data.images[0].url || data.data.images[0].image_url || data.data.images[0];
-    } else if (data.images && data.images.length > 0) {
-      imageUrl = data.images[0].url || data.images[0];
-    } 
-    // ২. artifacts বা parts চেক
-    else if (data.data?.artifacts && data.data.artifacts.length > 0) {
-      imageUrl = data.data.artifacts[0].url || data.data.artifacts[0].data;
-    } else if (data.data?.parts && data.data.parts.length > 0) {
-      const imgPart = data.data.parts.find(p => p.inline_data || p.image_url);
-      if (imgPart) {
-        imageUrl = imgPart.image_url?.url || (imgPart.inline_data ? `data:${imgPart.inline_data.mime_type};base64,${imgPart.inline_data.data}` : '');
-      }
-    }
-    // ৩. টেক্সটের ভেতরে মার্কডাউন লিঙ্ক বা সরাসরি URL চেক
-    else if (data.data?.output || data.output) {
-      const raw = data.data?.output || data.output;
-      const mdMatch = raw.match(/!\[.*?\]\((.*?)\)/);
-      if (mdMatch) {
-        imageUrl = mdMatch[1];
-      } else if (raw.startsWith('http') || raw.startsWith('data:image')) {
-        imageUrl = raw;
-      }
-    }
-
-    // Base64 স্ট্রিং ফরম্যাটিং
-    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:image')) {
-      imageUrl = `data:image/png;base64,${imageUrl}`;
+    if (data.data?.images?.[0]) {
+      imageUrl = data.data.images[0].url || data.data.images[0];
+    } else if (data.data?.output) {
+      const raw = data.data.output;
+      const mdMatch = typeof raw === 'string' ? raw.match(/!\[.*?\]\((.*?)\)/) : null;
+      imageUrl = mdMatch ? mdMatch[1] : (typeof raw === 'string' && (raw.startsWith('http') || raw.startsWith('data:image')) ? raw : "");
     }
 
     if (!imageUrl) {
-      return res.status(200).json({
-        error: "ছবির ফিল্ড পাওয়া যায়নি",
-        raw_response: data
+      return res.status(500).json({
+        error: "ছবি জেনারেট সম্পন্ন হয়নি",
+        raw: data
       });
     }
 

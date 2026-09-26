@@ -11,10 +11,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'পোস্টারের বিবরণ আবশ্যক।' });
   }
 
-  // পোস্টারের প্রম্পট
+  // রয়্যাল পার্পল ও গোল্ডেন থিমের নিখুঁত উল্লম্ব পোস্টার প্রম্পট
   let finalPrompt = '';
   if (templateType === 'ad_poster') {
-    finalPrompt = `Professional vertical commercial advertising poster banner for: "${prompt}". Highly elegant dark royal purple and midnight navy gradient background, illuminated glowing metallic gold borders. 3D embossed bold typography layout supporting bilingual Bengali and English lettering style, crisp legible headers, realistic central subject, festive event ribbon at bottom. 8k resolution, cinematic lighting, ultra-clean marketing graphic design.`;
+    finalPrompt = `Vertical commercial advertising poster banner for: "${prompt}". Highly elegant dark royal purple and midnight navy gradient background, illuminated glowing metallic gold borders, 3D embossed bold glowing typography layout, bilingual Bengali and English lettering style, ultra-clean marketing graphic design.`;
   } else if (templateType === 'shop_offer') {
     finalPrompt = `Ultra-modern vertical commercial promotional sale flyer for: "${prompt}". Rich deep violet background with neon magenta highlights, golden confetti sparkles, 3D glossy discount badge ribbons, bold eye-catching typography, modern retail showcase center. 8k octane render.`;
   } else {
@@ -22,7 +22,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch("https://velona.in/gateway/v1/images/generations", {
+    // gemini.js এর মতো আসল Velona এন্ডপয়েন্ট
+    const response = await fetch("https://velona.in/gateway/v1/inference/run", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,31 +31,40 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: "openai/dall-e-3",
-        prompt: finalPrompt,
-        n: 1,
-        size: "1024x1792"
+        input: finalPrompt,
+        parameters: {
+          size: "1024x1792",
+          quality: "standard"
+        }
       })
     });
 
-    // রেসপন্স সরাসরি JSON হিসেবে না পড়ে টেক্সট হিসেবে পড়া হচ্ছে (যাতে Internal Server Error এ ক্র্যাশ না করে)
     const rawText = await response.text();
     let data;
     try {
       data = JSON.parse(rawText);
     } catch (e) {
       return res.status(response.status || 500).json({
-        error: `গেটের ইন্টারনাল এরর (${response.status}): ${rawText.substring(0, 150)}`
+        error: `গেটের এরর (${response.status}): ${rawText.substring(0, 150)}`
       });
     }
 
     if (!response.ok) {
-      const errMsg = data.error?.message || data.message || JSON.stringify(data);
+      const errMsg = data.error?.message || data.message || data.detail || JSON.stringify(data);
       return res.status(response.status).json({
         error: `Velona এরর: ${errMsg}`
       });
     }
 
-    const imageUrl = data.data?.[0]?.url || data.images?.[0]?.url || data.output_url || data.url || '';
+    // Velona রেসপন্স থেকে ছবির লিংক শনাক্তকরণ
+    const imageUrl = 
+      data.data?.output || 
+      data.output || 
+      data.data?.[0]?.url || 
+      data.images?.[0]?.url || 
+      data.images?.[0] || 
+      data.url || 
+      '';
 
     if (!imageUrl) {
       return res.status(500).json({ 

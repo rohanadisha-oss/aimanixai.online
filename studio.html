@@ -346,7 +346,7 @@
       <span class="brand-title">Aimanix Studio</span>
     </div>
 
-    <!-- প্রিভিউ বক্স -->
+    <!-- প্রিভিউ কার্ড -->
     <div class="preview-card">
       <div class="preview-title">পোস্টার প্রিভিউ</div>
       <div class="preview-box" id="preview-box">
@@ -368,20 +368,20 @@
       <textarea id="prompt-input" class="prompt-input" placeholder="যেমন: একটা পোস্টার তৈরি করুন। যার ব্যাকগ্রাউন্ড হবে নিওন পার্পল। বড় সুন্দর ফন্টে থাকবে 'ফুলবাড়ি আমিনিয়া হাই মাদ্রাসা'..."></textarea>
       
       <div class="dock-actions">
-        <!-- ফোন থেকে আপলোড -->
+        <!-- অপশন ১: ফোন থেকে সরাসরি আপলোড -->
         <label class="upload-label">
           📁 <span>ফোন থেকে আপলোড</span>
           <input type="file" id="image-upload" accept="image/*" onchange="handleDirectUpload(event)">
         </label>
 
-        <!-- এআই তৈরি -->
+        <!-- অপশন ২: মুক্ত প্রম্পট এআই তৈরি -->
         <button class="generate-btn" id="generate-btn" onclick="generateWithAI()">
           <span id="btn-text">এআই পোস্টার তৈরি ➤</span>
         </button>
       </div>
     </div>
 
-    <!-- প্রকাশিত পোস্টার ডিলিট ও ম্যানেজমেন্ট -->
+    <!-- প্রকাশিত পোস্টার ডিলিট ও ম্যানেজমেন্ট সেকশন -->
     <div class="manage-section">
       <div class="manage-header">
         <span class="manage-title">🗑️ প্রকাশিত পোস্টার মুছুন</span>
@@ -407,7 +407,7 @@
 
     let currentPosterUrl = '';
 
-    // ছবি হালকা করার কম্প্রেসর
+    // ছবি কম্প্রেস করার ফাংশন (মেমরি ও ডেটাবেজ সেভিং)
     async function compressImageForStorage(base64Str) {
       return new Promise((resolve) => {
         const img = new Image();
@@ -436,7 +436,7 @@
       });
     }
 
-    // ফোন থেকে আপলোড
+    // ১. ফোন থেকে সরাসরি ছবি আপলোড
     function handleDirectUpload(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -448,7 +448,7 @@
       reader.readAsDataURL(file);
     }
 
-    // এআই দিয়ে পোস্টার তৈরি
+    // ২. ব্যাকএন্ড এপিআই দিয়ে এআই পোস্টার তৈরি
     async function generateWithAI() {
       const promptInput = document.getElementById('prompt-input');
       const generateBtn = document.getElementById('generate-btn');
@@ -456,7 +456,7 @@
 
       const userPrompt = promptInput.value.trim();
       if (!userPrompt) {
-        alert('অনুগ্রহ করে পোস্টারের বিবরণ লিখুন!');
+        alert('অনুগ্রহ করে পোস্টারের বিবরণ বা প্রম্পট লিখুন!');
         return;
       }
 
@@ -487,7 +487,7 @@
       }
     }
 
-    // প্রিভিউ প্রদর্শন
+    // প্রিভিউ ডিসপ্লে
     function showPreview(url) {
       currentPosterUrl = url;
       const previewImg = document.getElementById('preview-image');
@@ -498,7 +498,7 @@
       placeholder.style.display = 'none';
     }
 
-    // প্রিভিউ বাতিল ও পরিষ্কার
+    // প্রিভিউ বাতিল ও স্ক্রিন পরিষ্কার
     function cancelPreview() {
       currentPosterUrl = '';
       const previewImg = document.getElementById('preview-image');
@@ -510,7 +510,7 @@
       document.getElementById('image-upload').value = '';
     }
 
-    // বিজ্ঞাপন বাজারে লাইভ পোস্ট
+    // বিজ্ঞাপন বাজারে লাইভ পোস্ট (Firebase + LocalStorage Sync)
     async function publishLive() {
       if (!currentPosterUrl) {
         alert('আগে একটি পোস্টার তৈরি বা আপলোড করুন!');
@@ -538,20 +538,24 @@
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         };
 
-        // ১. ফায়ারবেস ডেটাবেজে সংরক্ষণ
+        // ১. ফায়ারবেস ডাটাবেজে সংরক্ষণ
         const docRef = await db.collection("ads").add(newAd);
 
         // ২. লোকাল স্টোরেজে সংরক্ষণ
-        try {
-          const localKey = "aimanix_ad_posters";
-          let localList = JSON.parse(localStorage.getItem(localKey) || "[]");
-          localList.unshift({
-            id: docRef.id,
-            title: newAd.title,
-            imageUrl: newAd.imageUrl
-          });
-          localStorage.setItem(localKey, JSON.stringify(localList));
-        } catch (e) {}
+        const storageKeys = ["aimanix_ad_posters", "user_market_ads", "ads"];
+        storageKeys.forEach(k => {
+          try {
+            let list = JSON.parse(localStorage.getItem(k) || "[]");
+            list.unshift({
+              id: docRef.id,
+              title: newAd.title,
+              desc: newAd.desc,
+              imageUrl: newAd.imageUrl,
+              badge: newAd.badge
+            });
+            localStorage.setItem(k, JSON.stringify(list));
+          } catch(e) {}
+        });
 
         alert('পোস্টারটি সফলভাবে বিজ্ঞাপন বাজারে লাইভ করা হয়েছে!');
         cancelPreview();
@@ -568,96 +572,116 @@
     // প্রকাশিত পোস্টারগুলো লোড করা
     async function loadPublishedAds() {
       const manageList = document.getElementById('manage-list');
+      if (!manageList) return;
       manageList.innerHTML = '<div class="empty-msg">পোস্টার লোড হচ্ছে...</div>';
 
-      try {
-        // ফায়ারবেস থেকে পড়া
-        const snap = await db.collection("ads").orderBy("createdAt", "desc").limit(10).get();
-        let ads = [];
+      let ads = [];
+      const seenUrls = new Set();
 
+      // ১. ফায়ারবেস থেকে পড়া
+      try {
+        const snap = await db.collection("ads").orderBy("createdAt", "desc").limit(20).get();
         if (!snap.empty) {
           snap.forEach(doc => {
             const data = doc.data();
-            ads.push({ id: doc.id, title: data.title, imageUrl: data.imageUrl, isFirebase: true });
+            const img = data.imageUrl || data.image || '';
+            if (img && !seenUrls.has(img)) {
+              seenUrls.add(img);
+              ads.push({ id: doc.id, title: data.title || 'বিজ্ঞাপন ব্যানার', imageUrl: img, isFirebase: true });
+            }
           });
         }
-
-        // লোকাল পোস্ট চেক করা
-        const localList = JSON.parse(localStorage.getItem("aimanix_ad_posters") || "[]");
-        localList.forEach(item => {
-          if (!ads.some(a => a.imageUrl === item.imageUrl)) {
-            ads.push({ id: item.id, title: item.title, imageUrl: item.imageUrl, isFirebase: false });
-          }
-        });
-
-        if (ads.length === 0) {
-          manageList.innerHTML = '<div class="empty-msg">কোনো পোস্টার পাওয়া যায়নি।</div>';
-          return;
-        }
-
-        manageList.innerHTML = ads.map(ad => `
-          <div class="manage-item" id="item-${ad.id}">
-            <div class="item-info">
-              <img src="${ad.imageUrl}" class="item-thumb" alt="thumb">
-              <div class="item-title">${escapeHtml(ad.title || 'বিজ্ঞাপন ব্যানার')}</div>
-            </div>
-            <button class="btn-delete" onclick="deleteAd('${ad.id}', ${ad.isFirebase})">
-              🗑️ ডিলিট
-            </button>
-          </div>
-        `).join('');
-
       } catch (err) {
-        // অফলাইন ফলব্যাক
-        const localList = JSON.parse(localStorage.getItem("aimanix_ad_posters") || "[]");
-        if (localList.length > 0) {
-          manageList.innerHTML = localList.map(ad => `
-            <div class="manage-item" id="item-${ad.id}">
-              <div class="item-info">
-                <img src="${ad.imageUrl}" class="item-thumb" alt="thumb">
-                <div class="item-title">${escapeHtml(ad.title || 'বিজ্ঞাপন ব্যানার')}</div>
-              </div>
-              <button class="btn-delete" onclick="deleteAd('${ad.id}', false)">
-                🗑️ ডিলিট
-              </button>
-            </div>
-          `).join('');
-        } else {
-          manageList.innerHTML = '<div class="empty-msg">কোনো পোস্টার নেই।</div>';
-        }
+        console.warn("ফায়ারবেস লোড নোটিশ:", err);
       }
-    }
 
-    // পোস্টার স্থায়ীভাবে ডিলিট করার ফাংশন
-    async function deleteAd(adId, isFirebase) {
-      if (!confirm("আপনি কি নিশ্চিত এই পোস্টারটি বিজ্ঞাপন বাজার থেকে মুছে ফেলতে চান?")) {
+      // ২. লোকাল স্টোরেজ থেকে পড়া (যদি ফায়ারবেসে না থাকে)
+      const storageKeys = ["aimanix_ad_posters", "user_market_ads", "ads", "admin_ads"];
+      storageKeys.forEach(k => {
+        try {
+          const list = JSON.parse(localStorage.getItem(k) || "[]");
+          if (Array.isArray(list)) {
+            list.forEach(item => {
+              const img = item.imageUrl || item.image || '';
+              if (img && !seenUrls.has(img)) {
+                seenUrls.add(img);
+                ads.push({ id: item.id || ('local_' + Math.random()), title: item.title || 'বিজ্ঞাপন ব্যানার', imageUrl: img, isFirebase: false });
+              }
+            });
+          }
+        } catch(e) {}
+      });
+
+      if (ads.length === 0) {
+        manageList.innerHTML = '<div class="empty-msg">কোনো পোস্টার পাওয়া যায়নি।</div>';
         return;
       }
 
+      // লিস্ট তৈরি
+      manageList.innerHTML = ads.map(ad => `
+        <div class="manage-item" id="item-${ad.id}">
+          <div class="item-info">
+            <img src="${ad.imageUrl}" class="item-thumb" alt="thumb">
+            <div class="item-title">${escapeHtml(ad.title || 'বিজ্ঞাপন ব্যানার')}</div>
+          </div>
+          <button class="btn-delete" onclick="deleteAd('${ad.id}', '${encodeURIComponent(ad.imageUrl)}', ${ad.isFirebase})">
+            🗑️ ডিলিট
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // পোস্টার স্থায়ীভাবে মুছে ফেলার লজিক (চিরতরে ডিলিট)
+    async function deleteAd(adId, encodedUrl, isFirebase) {
+      if (!confirm("আপনি কি নিশ্চিত এই পোস্টারটি বিজ্ঞাপন বাজার থেকে চিরতরে মুছে ফেলতে চান?")) {
+        return;
+      }
+
+      const targetUrl = decodeURIComponent(encodedUrl);
+      const itemEl = document.getElementById(`item-${adId}`);
+      if (itemEl) itemEl.style.opacity = '0.3';
+
       try {
-        // ১. ফায়ারবেস থেকে ডিলিট
+        // ১. ফায়ারবেস থেকে সরাসরি আইডি এবং ইমেজ দিয়ে ডিলিট
         if (isFirebase) {
-          await db.collection("ads").doc(adId).delete();
+          try {
+            await db.collection("ads").doc(adId).delete();
+          } catch(e) {}
+
+          try {
+            const querySnap = await db.collection("ads").where("imageUrl", "==", targetUrl).get();
+            querySnap.forEach(async (doc) => {
+              await doc.ref.delete();
+            });
+          } catch(e) {}
         }
 
-        // ২. লোকাল স্টোরেজ থেকে ডিলিট
-        const keys = ["aimanix_ad_posters", "user_market_ads", "ads"];
+        // ২. ব্রাউজারের সমস্ত লোকাল স্টোরেজ থেকে পরিষ্কার করা
+        const keys = ["aimanix_ad_posters", "user_market_ads", "ads", "admin_ads"];
         keys.forEach(key => {
           try {
             let list = JSON.parse(localStorage.getItem(key) || "[]");
-            list = list.filter(item => item.id !== adId);
-            localStorage.setItem(key, JSON.stringify(list));
+            if (Array.isArray(list)) {
+              list = list.filter(item => {
+                const itemImg = item.imageUrl || item.image;
+                return item.id !== adId && itemImg !== targetUrl;
+              });
+              localStorage.setItem(key, JSON.stringify(list));
+            }
           } catch(e) {}
         });
 
-        // UI থেকে সরানো
-        const el = document.getElementById(`item-${adId}`);
-        if (el) el.remove();
+        // ৩. সেশন স্টোরেজ ক্লিয়ার
+        sessionStorage.removeItem('latest_ad');
+
+        // ৪. UI থেকে ইনস্ট্যান্ট সরানো
+        if (itemEl) itemEl.remove();
 
         alert("পোস্টারটি সফলভাবে মুছে ফেলা হয়েছে!");
 
       } catch (err) {
         alert("ডিলিট করতে সমস্যা হয়েছে: " + err.message);
+        if (itemEl) itemEl.style.opacity = '1';
       }
     }
 
@@ -671,7 +695,7 @@
         .replace(/'/g, "&#039;");
     }
 
-    // পেজ লোড হলে তালিকা রিফ্রেশ
+    // পেজ প্রস্তুত হলে প্রকাশিত পোস্টার তালিকা লোড করা
     document.addEventListener("DOMContentLoaded", () => {
       loadPublishedAds();
     });

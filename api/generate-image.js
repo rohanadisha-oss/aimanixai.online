@@ -11,11 +11,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'পোস্টারের বিবরণ আবশ্যক।' });
   }
 
-  // ChatGPT-র মতো সুনির্দিষ্ট DALL-E 3 টাইপোগ্রাফি আর্কিটেকচার
-  const finalPrompt = `A professional commercial advertising poster flyer for: "${prompt}". Category: ${templateType || 'general'}. Clean 3D bold typography, sharp Bengali & English lettering, modern institutional graphics, computer tech elements, vibrant color ribbons, and a bottom contact badge with visible phone numbers. Vertical full-bleed poster design, 8k resolution, edge to edge composition, no picture frames, no wall mockups.`;
+  // কমার্শিয়াল পোস্টার প্রম্পট
+  const finalPrompt = `A dynamic commercial advertising poster flyer for: "${prompt}". Category: ${templateType || 'general'}. Bold 3D typography headers, crisp legible Bengali and English lettering, modern commercial product graphics, rich vibrant colors with neon accents, discount badge ribbons, bottom contact info bar with phone numbers. Vertical full-bleed poster design (9:16), octane render, highly detailed, edge to edge composition, no picture frames, no wall mockups.`;
 
   try {
-    // Velona-র অফিসিয়াল DALL-E 3 রেন্ডার এন্ডপয়েন্ট
     const response = await fetch("https://velona.in/gateway/v1/images/render", {
       method: "POST",
       headers: {
@@ -36,24 +35,23 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
-      const errMsg = data.error?.message || data.message || JSON.stringify(data);
+      const errMsg = data.error?.message || data.message || data.detail || JSON.stringify(data);
       return res.status(response.status).json({
         error: `Velona এরর: ${errMsg}`
       });
     }
 
-    // Velona DALL-E 3 আউটপুট লিঙ্ক
     const imageUrl = 
       data.data?.[0]?.url || 
-      data.images?.[0]?.url || 
       data.output_url || 
       data.output || 
+      data.images?.[0]?.url || 
       data.url || 
       '';
 
     if (!imageUrl) {
       return res.status(500).json({ 
-        error: 'ছবির লিঙ্ক পাওয়া যায়নি: ' + JSON.stringify(data) 
+        error: 'Velona থেকে ছবির লিংক পাওয়া যায়নি: ' + JSON.stringify(data) 
       });
     }
 

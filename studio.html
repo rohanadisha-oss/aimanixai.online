@@ -6,7 +6,12 @@
   <title>এআই বিজ্ঞাপন স্টুডিও | Aimanix AI</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Noto+Sans+Bengali:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Firebase Compat Libraries -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
   <style>
     :root {
       --bg-dark: #0a0614;
@@ -16,13 +21,14 @@
       --accent-cyan: #06b6d4;
       --text-main: #f3f4f6;
       --text-muted: #9ca3af;
+      --danger: #ef4444;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Hind Siliguri', sans-serif;
+      font-family: 'Noto Sans Bengali', 'Hind Siliguri', sans-serif;
     }
 
     body {
@@ -32,7 +38,7 @@
         radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 16px 12px 30px;
+      padding: 16px 12px 50px;
     }
 
     .container {
@@ -159,6 +165,7 @@
       border-radius: 16px;
       padding: 16px;
       backdrop-filter: blur(10px);
+      margin-bottom: 25px;
     }
 
     .dock-title {
@@ -233,6 +240,98 @@
       opacity: 0.6;
       cursor: not-allowed;
     }
+
+    /* পোস্টার ম্যানেজমেন্ট ও ডিলিট সেকশন */
+    .manage-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .manage-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .manage-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #facc15;
+    }
+
+    .manage-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .manage-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      padding: 8px 12px;
+    }
+
+    .item-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .item-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: #111;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .item-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 220px;
+    }
+
+    .btn-delete {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-delete:hover {
+      background: rgba(239, 68, 68, 0.3);
+      color: #fff;
+    }
+
+    .empty-msg {
+      color: var(--text-muted);
+      font-size: 13px;
+      text-align: center;
+      padding: 12px 0;
+    }
   </style>
 </head>
 <body>
@@ -247,47 +346,68 @@
       <span class="brand-title">Aimanix Studio</span>
     </div>
 
-    <!-- প্রিভিউ কার্ড -->
+    <!-- প্রিভিউ বক্স -->
     <div class="preview-card">
       <div class="preview-title">পোস্টার প্রিভিউ</div>
       <div class="preview-box" id="preview-box">
         <span class="placeholder-text" id="placeholder-text">
-          নিচে আপনার নিজের ভাষায় প্রম্পট লিখে এআই দিয়ে পোস্টার তৈরি করুন<br>অথবা ফোন থেকে ছবি আপলোড করুন
+          নিচে প্রম্পট লিখে এআই দিয়ে পোস্টার তৈরি করুন<br>অথবা ফোন থেকে ছবি আপলোড করুন
         </span>
         <img id="preview-image" alt="পোস্টার প্রিভিউ">
       </div>
 
       <div class="action-group">
         <button class="btn-live" id="live-btn" onclick="publishLive()">✅ বিজ্ঞাপন বাজারে লাইভ করুন</button>
-        <button class="btn-cancel" id="cancel-btn" onclick="cancelPreview()">বাতিল</button>
+        <button class="btn-cancel" id="cancel-btn" onclick="cancelPreview()">বাতিল / মুছুন</button>
       </div>
     </div>
 
     <!-- ইনপুট ও কন্ট্রোল ডক -->
     <div class="input-dock">
       <div class="dock-title">পোস্টারের নির্দেশ বা বিবরণ লিখুন:</div>
-      <textarea id="prompt-input" class="prompt-input" placeholder="যেমন: একটা পোস্টার তৈরি করুন। যার ব্যাক গ্রাউন্ড হবে নিওন পার্পল লাইট। বড় সুন্দর বাংলা ফন্ট থাকবে 'ফুলবাড়ি আমিনিয়া হাই মাদ্রাসা'..."></textarea>
+      <textarea id="prompt-input" class="prompt-input" placeholder="যেমন: একটা পোস্টার তৈরি করুন। যার ব্যাকগ্রাউন্ড হবে নিওন পার্পল। বড় সুন্দর ফন্টে থাকবে 'ফুলবাড়ি আমিনিয়া হাই মাদ্রাসা'..."></textarea>
       
       <div class="dock-actions">
-        <!-- অপশন ১: সরাসরি ফোন থেকে আপলোড -->
+        <!-- ফোন থেকে আপলোড -->
         <label class="upload-label">
           📁 <span>ফোন থেকে আপলোড</span>
           <input type="file" id="image-upload" accept="image/*" onchange="handleDirectUpload(event)">
         </label>
 
-        <!-- অপশন ২: GPT Image 2.0 এআই দিয়ে তৈরি -->
+        <!-- এআই তৈরি -->
         <button class="generate-btn" id="generate-btn" onclick="generateWithAI()">
           <span id="btn-text">এআই পোস্টার তৈরি ➤</span>
         </button>
       </div>
     </div>
 
+    <!-- প্রকাশিত পোস্টার ডিলিট ও ম্যানেজমেন্ট -->
+    <div class="manage-section">
+      <div class="manage-header">
+        <span class="manage-title">🗑️ প্রকাশিত পোস্টার মুছুন</span>
+        <button onclick="loadPublishedAds()" style="background:none; border:none; color:#38bdf8; font-size:12px; cursor:pointer;">🔄 রিফ্রেশ</button>
+      </div>
+      <div class="manage-list" id="manage-list">
+        <div class="empty-msg">পোস্টার লোড হচ্ছে...</div>
+      </div>
+    </div>
+
   </div>
 
   <script>
+    // ফায়ারবেস কনফিগারেশন
+    const firebaseConfig = {
+      authDomain: "aimanix-web.firebaseapp.com",
+      projectId: "aimanix-web",
+      storageBucket: "aimanix-web.appspot.com"
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
     let currentPosterUrl = '';
 
-    // ছবি কম্প্রেস করার ফাংশন (LocalStorage মেমরি বাঁচানোর জন্য)
+    // ছবি হালকা করার কম্প্রেসর
     async function compressImageForStorage(base64Str) {
       return new Promise((resolve) => {
         const img = new Image();
@@ -295,7 +415,7 @@
           const canvas = document.createElement('canvas');
           let width = img.width;
           let height = img.height;
-          const maxDim = 1200;
+          const maxDim = 1000;
 
           if (width > height && width > maxDim) {
             height = Math.round((height * maxDim) / width);
@@ -309,15 +429,14 @@
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
-          // কোয়ালিটি বজায় রেখে হালকা সাইজে রূপান্তর
-          resolve(canvas.toDataURL('image/jpeg', 0.85));
+          resolve(canvas.toDataURL('image/jpeg', 0.82));
         };
         img.onerror = () => resolve(base64Str);
         img.src = base64Str;
       });
     }
 
-    // বিকল্প ১: ফোন/গ্যালারি থেকে সরাসরি আপলোড
+    // ফোন থেকে আপলোড
     function handleDirectUpload(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -329,7 +448,7 @@
       reader.readAsDataURL(file);
     }
 
-    // বিকল্প ২: ব্যাকএন্ডের মাধ্যমে GPT Image তৈরি (CORS মুক্ত)
+    // এআই দিয়ে পোস্টার তৈরি
     async function generateWithAI() {
       const promptInput = document.getElementById('prompt-input');
       const generateBtn = document.getElementById('generate-btn');
@@ -337,7 +456,7 @@
 
       const userPrompt = promptInput.value.trim();
       if (!userPrompt) {
-        alert('অনুগ্রহ করে পোস্টারের বিবরণ বা প্রম্পট লিখুন!');
+        alert('অনুগ্রহ করে পোস্টারের বিবরণ লিখুন!');
         return;
       }
 
@@ -354,7 +473,7 @@
         const data = await response.json();
 
         if (!response.ok || !data.imageUrl) {
-          alert('সার্ভার থেকে প্রাপ্ত তথ্য:\n' + (data.error || JSON.stringify(data)));
+          alert('সমস্যা: ' + (data.error || 'ছবি প্রস্তুত হয়নি'));
           return;
         }
 
@@ -379,7 +498,19 @@
       placeholder.style.display = 'none';
     }
 
-    // বিজ্ঞাপন বাজারে নিশ্চিতভাবে লাইভ প্রকাশ
+    // প্রিভিউ বাতিল ও পরিষ্কার
+    function cancelPreview() {
+      currentPosterUrl = '';
+      const previewImg = document.getElementById('preview-image');
+      const placeholder = document.getElementById('placeholder-text');
+
+      previewImg.src = '';
+      previewImg.style.display = 'none';
+      placeholder.style.display = 'block';
+      document.getElementById('image-upload').value = '';
+    }
+
+    // বিজ্ঞাপন বাজারে লাইভ পোস্ট
     async function publishLive() {
       if (!currentPosterUrl) {
         alert('আগে একটি পোস্টার তৈরি বা আপলোড করুন!');
@@ -391,63 +522,159 @@
       liveBtn.innerText = 'পোস্ট হচ্ছে... ⏳';
 
       try {
-        // সাইজ কম্প্রেস করা যাতে লোকালস্টোরেজ কোটা পূর্ণ না হয়
         let finalImage = currentPosterUrl;
         if (currentPosterUrl.startsWith('data:image')) {
           finalImage = await compressImageForStorage(currentPosterUrl);
         }
 
-        const promptText = document.getElementById('prompt-input').value.trim() || 'বিশেষ বিজ্ঞাপন';
+        const promptText = document.getElementById('prompt-input').value.trim() || 'বিশেষ বিজ্ঞাপন ব্যানার';
 
-        const adData = {
-          id: Date.now(),
-          title: promptText.substring(0, 45),
-          image: finalImage,
-          category: 'school',
-          publishedAt: new Date().toISOString()
+        const newAd = {
+          title: promptText.substring(0, 50),
+          desc: promptText,
+          imageUrl: finalImage,
+          badge: 'NEW AD',
+          type: 'poster',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
         };
 
-        // ads.html যে নামেই ডেটা লোড করুক না কেন, সব কী-তে পুশ করা
-        const storageKeys = ['user_market_ads', 'ads', 'aimanix_ads'];
-        storageKeys.forEach(key => {
-          let list = [];
-          try {
-            list = JSON.parse(localStorage.getItem(key) || '[]');
-            if (!Array.isArray(list)) list = [];
-          } catch (e) {
-            list = [];
-          }
-          list.unshift(adData);
-          try {
-            localStorage.setItem(key, JSON.stringify(list));
-          } catch (storageErr) {
-            console.warn(`Storage quota alert on ${key}:`, storageErr);
-          }
-        });
+        // ১. ফায়ারবেস ডেটাবেজে সংরক্ষণ
+        const docRef = await db.collection("ads").add(newAd);
 
-        sessionStorage.setItem('latest_ad', JSON.stringify(adData));
+        // ২. লোকাল স্টোরেজে সংরক্ষণ
+        try {
+          const localKey = "aimanix_ad_posters";
+          let localList = JSON.parse(localStorage.getItem(localKey) || "[]");
+          localList.unshift({
+            id: docRef.id,
+            title: newAd.title,
+            imageUrl: newAd.imageUrl
+          });
+          localStorage.setItem(localKey, JSON.stringify(localList));
+        } catch (e) {}
 
-        alert('পোস্টারটি সফলভাবে বিজ্ঞাপন বাজারে প্রকাশিত হয়েছে!');
-        window.location.href = 'ads.html';
+        alert('পোস্টারটি সফলভাবে বিজ্ঞাপন বাজারে লাইভ করা হয়েছে!');
+        cancelPreview();
+        loadPublishedAds();
 
       } catch (err) {
-        alert('পোস্ট করতে সমস্যা হয়েছে: ' + err.message);
+        alert('বিজ্ঞাপন বাজারে প্রকাশে সমস্যা হয়েছে: ' + err.message);
+      } finally {
         liveBtn.disabled = false;
         liveBtn.innerText = '✅ বিজ্ঞাপন বাজারে লাইভ করুন';
       }
     }
 
-    // বাতিল
-    function cancelPreview() {
-      currentPosterUrl = '';
-      const previewImg = document.getElementById('preview-image');
-      const placeholder = document.getElementById('placeholder-text');
+    // প্রকাশিত পোস্টারগুলো লোড করা
+    async function loadPublishedAds() {
+      const manageList = document.getElementById('manage-list');
+      manageList.innerHTML = '<div class="empty-msg">পোস্টার লোড হচ্ছে...</div>';
 
-      previewImg.src = '';
-      previewImg.style.display = 'none';
-      placeholder.style.display = 'block';
-      document.getElementById('image-upload').value = '';
+      try {
+        // ফায়ারবেস থেকে পড়া
+        const snap = await db.collection("ads").orderBy("createdAt", "desc").limit(10).get();
+        let ads = [];
+
+        if (!snap.empty) {
+          snap.forEach(doc => {
+            const data = doc.data();
+            ads.push({ id: doc.id, title: data.title, imageUrl: data.imageUrl, isFirebase: true });
+          });
+        }
+
+        // লোকাল পোস্ট চেক করা
+        const localList = JSON.parse(localStorage.getItem("aimanix_ad_posters") || "[]");
+        localList.forEach(item => {
+          if (!ads.some(a => a.imageUrl === item.imageUrl)) {
+            ads.push({ id: item.id, title: item.title, imageUrl: item.imageUrl, isFirebase: false });
+          }
+        });
+
+        if (ads.length === 0) {
+          manageList.innerHTML = '<div class="empty-msg">কোনো পোস্টার পাওয়া যায়নি।</div>';
+          return;
+        }
+
+        manageList.innerHTML = ads.map(ad => `
+          <div class="manage-item" id="item-${ad.id}">
+            <div class="item-info">
+              <img src="${ad.imageUrl}" class="item-thumb" alt="thumb">
+              <div class="item-title">${escapeHtml(ad.title || 'বিজ্ঞাপন ব্যানার')}</div>
+            </div>
+            <button class="btn-delete" onclick="deleteAd('${ad.id}', ${ad.isFirebase})">
+              🗑️ ডিলিট
+            </button>
+          </div>
+        `).join('');
+
+      } catch (err) {
+        // অফলাইন ফলব্যাক
+        const localList = JSON.parse(localStorage.getItem("aimanix_ad_posters") || "[]");
+        if (localList.length > 0) {
+          manageList.innerHTML = localList.map(ad => `
+            <div class="manage-item" id="item-${ad.id}">
+              <div class="item-info">
+                <img src="${ad.imageUrl}" class="item-thumb" alt="thumb">
+                <div class="item-title">${escapeHtml(ad.title || 'বিজ্ঞাপন ব্যানার')}</div>
+              </div>
+              <button class="btn-delete" onclick="deleteAd('${ad.id}', false)">
+                🗑️ ডিলিট
+              </button>
+            </div>
+          `).join('');
+        } else {
+          manageList.innerHTML = '<div class="empty-msg">কোনো পোস্টার নেই।</div>';
+        }
+      }
     }
+
+    // পোস্টার স্থায়ীভাবে ডিলিট করার ফাংশন
+    async function deleteAd(adId, isFirebase) {
+      if (!confirm("আপনি কি নিশ্চিত এই পোস্টারটি বিজ্ঞাপন বাজার থেকে মুছে ফেলতে চান?")) {
+        return;
+      }
+
+      try {
+        // ১. ফায়ারবেস থেকে ডিলিট
+        if (isFirebase) {
+          await db.collection("ads").doc(adId).delete();
+        }
+
+        // ২. লোকাল স্টোরেজ থেকে ডিলিট
+        const keys = ["aimanix_ad_posters", "user_market_ads", "ads"];
+        keys.forEach(key => {
+          try {
+            let list = JSON.parse(localStorage.getItem(key) || "[]");
+            list = list.filter(item => item.id !== adId);
+            localStorage.setItem(key, JSON.stringify(list));
+          } catch(e) {}
+        });
+
+        // UI থেকে সরানো
+        const el = document.getElementById(`item-${adId}`);
+        if (el) el.remove();
+
+        alert("পোস্টারটি সফলভাবে মুছে ফেলা হয়েছে!");
+
+      } catch (err) {
+        alert("ডিলিট করতে সমস্যা হয়েছে: " + err.message);
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // পেজ লোড হলে তালিকা রিফ্রেশ
+    document.addEventListener("DOMContentLoaded", () => {
+      loadPublishedAds();
+    });
   </script>
 </body>
 </html>

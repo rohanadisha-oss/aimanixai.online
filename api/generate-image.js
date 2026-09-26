@@ -11,21 +11,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'পোস্টারের বিবরণ আবশ্যক।' });
   }
 
-  // টেমপ্লেট ভিত্তিক আর্কিটেকচারাল নির্দেশিকা
-  const templateGuides = {
-    school: "School/Madrasah admission flyer with decorative golden/cyan arches, bold typography headers, campus graphics, batch badges, and bottom contact pill.",
-    shop: "Retail commercial sale flyer, glossy 3D discount ribbons, promotional text, vibrant retail elements.",
-    jalsha: "Islamic gathering/Jalsha poster, traditional crescent & dome art, bold speaker names, golden borders.",
-    eid: "Festive Eid/Ramadan greetings flyer, golden lanterns, modern Arabic/Bengali typography, night sky.",
-    politics: "Political campaign poster, leadership frame, prominent national/party branding, bold slogans.",
-    custom: "Commercial modern vertical advertising poster flyer."
-  };
-
-  const styleContext = templateGuides[templateType] || templateGuides.custom;
-  const imageNote = referenceImage ? "Incorporate the user uploaded subject/building cleanly into the center frame." : "Generate a photorealistic central subject.";
-
   try {
-    // ১. Velona দিয়ে ভিডিওর স্টাইলে টাইপোগ্রাফি ও পোস্টার প্রম্পট প্রস্তুত করা
+    // ১. বাংলা ইনপুটকে Velona দিয়ে নিখুঁত কমার্শিয়াল প্রম্পটে অনুবাদ ও রূপান্তর
     const velonaResponse = await fetch("https://velona.in/gateway/v1/inference/run", {
       method: "POST",
       headers: {
@@ -37,22 +24,29 @@ export default async function handler(req, res) {
         turns: [
           {
             role: "system",
-            content: `You are an expert commercial poster designer. Generate an image generation prompt for a 1024x1792 vertical poster. Ensure high-contrast bold 3D Bengali & English typography, vibrant badges, and full-bleed layout. Rules: NO wall, NO picture frames, full edge-to-edge coverage.`
+            content: `You are a professional advertising poster art director. 
+Translate and transform the user's input into a highly detailed English image prompt for a vertical commercial banner (1024x1792).
+Strict rules:
+1. Always describe the core products prominently (e.g., luxury stylish shoes on floating glossy display shelves, retail store interior).
+2. Include rich advertising graphics: bold 3D promotional typography, percentage discount badges, glowing neon accents, elegant store lighting.
+3. NEVER return an empty room or plain background wall. Fill the entire canvas with dynamic commercial products and marketing elements.
+4. Output only the final prompt text without quotes or markdown.`
           },
           {
             role: "user",
-            content: `Design flyer for: "${prompt}". Style: ${styleContext}. ${imageNote}`
+            content: `Create a commercial poster for this: "${prompt}". Category: ${templateType || 'shop'}`
           }
         ]
       })
     });
 
     const velonaData = await velonaResponse.json();
-    let imagePrompt = velonaData.data?.output || velonaData.output || velonaData.choices?.[0]?.message?.content || prompt;
-    imagePrompt = imagePrompt.replace(/[\r\n]+/g, ' ').trim();
+    let refinedPrompt = velonaData.data?.output || velonaData.output || velonaData.choices?.[0]?.message?.content || prompt;
 
-    // ২. উল্লম্ব পোস্টার রেন্ডার (1024x1792)
-    const encodedPrompt = encodeURIComponent(imagePrompt);
+    // ফুল-ব্লিড কমার্শিয়াল ফিল্টার যুক্ত করা
+    const finalPrompt = `${refinedPrompt}, ultra realistic commercial advertising poster, floating shoes display, 3d sale badges, neon purple aesthetic, octane render 8k, edge to edge composition, no empty wall`.replace(/[\r\n]+/g, ' ').trim();
+
+    const encodedPrompt = encodeURIComponent(finalPrompt);
     const width = 1024;
     const height = 1792;
     const seed = Math.floor(Math.random() * 9999999);

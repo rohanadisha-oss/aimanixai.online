@@ -2,8 +2,8 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>এআই স্টুডিও - সিক্রেট অ্যাডমিন</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>এআই পোস্টার স্টুডিও | Aimanix Studio</title>
   
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -13,7 +13,7 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: #090d16;
+      background: #070314;
       color: #f8fafc;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       min-height: 100vh;
@@ -23,182 +23,105 @@
       padding: 16px;
     }
 
-    /* লগইন বক্স */
+    /* লগইন স্ক্রিন */
     #authContainer {
-      background: #111827;
-      border: 1px solid #1f2937;
+      background: #110826;
+      border: 1px solid rgba(168, 85, 247, 0.4);
       padding: 32px 24px;
-      border-radius: 20px;
+      border-radius: 24px;
       width: 100%;
       max-width: 360px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.8);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 20px rgba(168, 85, 247, 0.2);
       text-align: center;
     }
     #authContainer h2 { font-size: 20px; color: #c084fc; margin-bottom: 6px; }
     #authContainer p { font-size: 13px; color: #9ca3af; margin-bottom: 22px; }
-    .input-group {
-      margin-bottom: 14px;
-      text-align: left;
-    }
-    .input-group label {
-      display: block;
-      font-size: 12px;
-      color: #cbd5e1;
-      margin-bottom: 5px;
-    }
+    .input-group { margin-bottom: 14px; text-align: left; }
+    .input-group label { display: block; font-size: 12px; color: #cbd5e1; margin-bottom: 5px; }
     .input-group input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid #374151;
-      background: #1f2937;
-      color: #fff;
-      font-size: 14px;
-      outline: none;
+      width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #374151;
+      background: #190e38; color: #fff; font-size: 14px; outline: none;
     }
-    .input-group input:focus { border-color: #9333ea; }
+    .input-group input:focus { border-color: #a855f7; }
     .btn-login {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, #7c3aed, #9333ea);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 14px;
-      cursor: pointer;
-      margin-top: 10px;
+      width: 100%; padding: 12px; background: linear-gradient(135deg, #7c3aed, #d946ef);
+      color: #fff; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer;
+      box-shadow: 0 4px 15px rgba(217, 70, 239, 0.4);
     }
 
-    /* মূল ড্যাশবোর্ড */
+    /* ড্যাশবোর্ড */
     #studioDashboard {
       display: none;
       width: 100%;
-      max-width: 480px;
-      padding-bottom: 90px;
+      max-width: 500px;
+      padding-bottom: 110px;
     }
     .top-bar-admin {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #1e293b;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid rgba(168, 85, 247, 0.25);
     }
     .top-bar-admin h1 { font-size: 18px; color: #c084fc; }
     .btn-logout {
-      background: #374151;
-      color: #ef4444;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: bold;
-      cursor: pointer;
+      background: #374151; color: #ef4444; border: none;
+      padding: 6px 14px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer;
     }
 
     .templates-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;
     }
     .card {
-      background: #131b2e;
-      border: 1px solid #1e293b;
-      border-radius: 16px;
-      padding: 14px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s;
+      background: #140830; border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 16px;
+      padding: 14px; cursor: pointer; text-align: center; transition: all 0.2s;
     }
-    .card.active { border-color: #a855f7; background: #231245; }
+    .card.active { border-color: #d946ef; background: #260c50; box-shadow: 0 0 15px rgba(217, 70, 239, 0.3); }
     .card-icon { font-size: 26px; margin-bottom: 4px; }
     .card-name { font-size: 13px; font-weight: bold; color: #f1f5f9; }
 
+    /* প্রিভিউ কার্ড */
     #previewBox {
-      display: none;
-      background: #131b2e;
-      border-radius: 16px;
-      padding: 14px;
-      text-align: center;
-      margin-bottom: 20px;
-      border: 1px solid #38bdf8;
+      display: none; background: #140830; border-radius: 18px;
+      padding: 16px; text-align: center; margin-bottom: 20px; border: 1px solid #38bdf8;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     }
     #previewBox img {
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+      width: 100%; max-height: 480px; object-fit: contain;
+      border-radius: 14px; display: block; margin: 0 auto;
     }
     .action-btns {
-      margin-top: 14px;
-      display: flex;
-      gap: 10px;
-      justify-content: center;
+      margin-top: 14px; display: flex; gap: 10px; justify-content: center;
     }
     .btn-pub {
-      background: #059669;
-      color: #fff;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
+      background: #059669; color: #fff; border: none; padding: 10px 20px;
+      border-radius: 10px; font-weight: bold; cursor: pointer;
     }
     .btn-can {
-      background: #dc2626;
-      color: #fff;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 10px;
-      cursor: pointer;
+      background: #dc2626; color: #fff; border: none; padding: 10px 14px;
+      border-radius: 10px; cursor: pointer;
     }
 
+    /* ফ্লোটিং বটম বার */
     .bottom-bar {
-      position: fixed;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 32px);
-      max-width: 460px;
-      background: #131b2e;
-      border: 1px solid #334155;
-      border-radius: 999px;
-      padding: 6px 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+      position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+      width: calc(100% - 32px); max-width: 480px; background: #110826;
+      border: 1px solid #a855f7; border-radius: 999px; padding: 6px 14px;
+      display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     }
     .bottom-bar input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: #fff;
-      font-size: 14px;
+      flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 14px;
     }
     .submit-btn {
-      background: #a855f7;
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 16px;
+      background: #d946ef; color: #fff; border: none; width: 38px; height: 38px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 16px;
     }
   </style>
 </head>
 <body>
 
-<!-- লগইন স্ক্রিন -->
+<!-- লগইন ফর্ম -->
 <div id="authContainer">
-  <h2>🔐 স্টুডিও লগইন</h2>
-  <p>আপনার অ্যাডমিন ইমেইল ও পাসওয়ার্ড দিন</p>
+  <h2>🔐 এআই স্টুডিও লগইন</h2>
+  <p>অ্যাডমিন ইমেইল ও পাসওয়ার্ড প্রদান করুন</p>
   <div class="input-group">
     <label>ইমেইল</label>
     <input type="email" id="adminEmail" placeholder="admin@example.com" required />
@@ -214,54 +137,53 @@
 <div id="studioDashboard">
   <div class="top-bar-admin">
     <h1>✨ এআই পোস্টার স্টুডিও</h1>
-    <button class="btn-logout" onclick="logoutFirebase()">লগআউট</button>
+    <div style="display:flex; gap:8px;">
+      <a href="ads.html" target="_blank" style="background:#2e1065; color:#c084fc; text-decoration:none; padding:6px 12px; border-radius:8px; font-size:12px; font-weight:bold; border:1px solid #7c3aed;">বাজার দেখুন ↗</a>
+      <button class="btn-logout" onclick="logoutFirebase()">লগআউট</button>
+    </div>
   </div>
 
-  <div style="font-size: 13px; color: #cbd5e1; margin-bottom: 10px;">টেমপ্লেট নির্বাচন করুন:</div>
+  <div style="font-size: 13px; color: #cbd5e1; margin-bottom: 10px;">ডিজাইন টেমপ্লেট নির্বাচন করুন:</div>
   <div class="templates-grid">
-    <div class="card active" onclick="setTemplate('ad_poster', this)">
+    <div class="card active" onclick="setTemplate('ad_poster', 'POSTER', this)">
       <div class="card-icon">🏛️</div>
-      <div class="card-name">প্রতিষ্ঠান ব্যানার</div>
+      <div class="card-name">স্কুল/প্রতিষ্ঠান ব্যানার</div>
     </div>
-    <div class="card" onclick="setTemplate('shop_offer', this)">
+    <div class="card" onclick="setTemplate('shop_offer', 'OFFER', this)">
       <div class="card-icon">🛍️</div>
       <div class="card-name">দোকান ও অফার বিজ্ঞাপন</div>
     </div>
   </div>
 
+  <!-- লাইভ প্রিভিউ -->
   <div id="previewBox">
     <h3 style="color: #38bdf8; font-size: 15px; margin-bottom: 10px;">পোস্টার প্রিভিউ</h3>
     <img id="posterResultImg" src="" alt="Poster Preview" />
     <div class="action-btns">
-      <button class="btn-pub" onclick="publishToAdsMarket()">✅ বিজ্ঞাপন বাজারে পোস্ট করুন</button>
+      <button class="btn-pub" onclick="publishToAdsMarket()">✅ বিজ্ঞাপন বাজারে লাইভ করুন</button>
       <button class="btn-can" onclick="document.getElementById('previewBox').style.display='none'">বাতিল</button>
     </div>
   </div>
 
+  <!-- বটম ইনপুট কন্ট্রোল বার -->
   <div class="bottom-bar">
-    <input type="text" id="promptText" placeholder="পোস্টারের বিবরণ বা প্রতিষ্ঠানের নাম..." />
+    <input type="text" id="promptText" placeholder="পোস্টারের বিবরণ বা প্রতিষ্ঠানের নাম লিখুন..." />
     <button class="submit-btn" id="generateBtn" onclick="generatePoster()">➤</button>
   </div>
 </div>
 
 <script>
-  // আপনার admin.html থেকে হুবহু Firebase Config বসাবেন
+  // Firebase কনফিগারেশন
   const firebaseConfig = {
-    apiKey: "AIzaSy...",
-    authDomain: "aimanixai.firebaseapp.com",
-    projectId: "aimanixai",
-    storageBucket: "aimanixai.appspot.com",
-    messagingSenderId: "...",
-    appId: "..."
+    authDomain: "aimanix-web.firebaseapp.com",
+    projectId: "aimanix-web",
+    storageBucket: "aimanix-web.appspot.com"
   };
   
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  // ইউজার অথেনটিকেশন স্টেট
   auth.onAuthStateChanged((user) => {
     if (user) {
       document.getElementById("authContainer").style.display = "none";
@@ -278,15 +200,10 @@
     const email = document.getElementById("adminEmail").value.trim();
     const pass = document.getElementById("adminPass").value.trim();
     const btn = document.getElementById("btnLogin");
-
-    if (!email || !pass) {
-      alert("ইমেইল ও পাসওয়ার্ড উভয়ই দিন!");
-      return;
-    }
+    if (!email || !pass) return alert("ইমেইল ও পাসওয়ার্ড দিন!");
 
     btn.disabled = true;
     btn.innerText = "যাচাই হচ্ছে...";
-
     try {
       await auth.signInWithEmailAndPassword(email, pass);
     } catch (err) {
@@ -297,15 +214,15 @@
     }
   }
 
-  function logoutFirebase() {
-    auth.signOut();
-  }
+  function logoutFirebase() { auth.signOut(); }
 
   let selectedTemplate = "ad_poster";
+  let selectedBadge = "POSTER";
   let finalPosterUrl = "";
 
-  function setTemplate(type, el) {
+  function setTemplate(type, badge, el) {
     selectedTemplate = type;
+    selectedBadge = badge;
     document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
   }
@@ -313,11 +230,7 @@
   async function generatePoster() {
     const prompt = document.getElementById("promptText").value.trim();
     const btn = document.getElementById("generateBtn");
-
-    if (!prompt) {
-      alert("পোস্টারের বিবরণ লিখুন!");
-      return;
-    }
+    if (!prompt) return alert("পোস্টারের বিবরণ লিখুন!");
 
     btn.disabled = true;
     btn.innerText = "⏳";
@@ -326,10 +239,7 @@
       const res = await fetch("/api/generate-image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: prompt,
-          templateType: selectedTemplate
-        })
+        body: JSON.stringify({ prompt, templateType: selectedTemplate })
       });
 
       const data = await res.json();
@@ -338,7 +248,7 @@
       finalPosterUrl = data.imageUrl;
       document.getElementById("posterResultImg").src = finalPosterUrl;
       document.getElementById("previewBox").style.display = "block";
-
+      window.scrollTo({ top: document.getElementById("previewBox").offsetTop - 20, behavior: 'smooth' });
     } catch (err) {
       alert("ত্রুটি: " + err.message);
     } finally {
@@ -349,17 +259,18 @@
 
   async function publishToAdsMarket() {
     if (!finalPosterUrl) return;
-    const title = document.getElementById("promptText").value.trim() || "বিজ্ঞাপন ব্যানার";
+    const promptValue = document.getElementById("promptText").value.trim();
 
     try {
       await db.collection("ads").add({
-        title: title,
+        title: promptValue.slice(0, 50) || "বিজ্ঞাপন ব্যানার",
+        desc: promptValue,
         imageUrl: finalPosterUrl,
-        type: "poster",
+        badge: selectedBadge,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      alert("🎉 বিজ্ঞাপন বাজারে পোস্টার সফলভাবে লাইভ হয়েছে!");
+      alert("🎉 বিজ্ঞাপন বাজারে পোস্টার সফলভাবে প্রকাশিত হয়েছে!");
       document.getElementById("previewBox").style.display = "none";
       document.getElementById("promptText").value = "";
     } catch (err) {

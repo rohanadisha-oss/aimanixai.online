@@ -254,7 +254,7 @@
       height: 100%;
     }
 
-    /* পোস্টার প্রিভিউ ক্যানভাস বা ফ্রেম */
+    /* পোস্টার ফ্রেম */
     .ad-visual-frame {
       width: 100%;
       border-radius: 16px;
@@ -363,7 +363,7 @@
 </head>
 <body>
 
-  <!-- ডায়নামিক পার্পল ব্যাকগ্রাউন্ড ও পার্টিকেল ক্যানভাস -->
+  <!-- ব্যাকগ্রাউন্ড ও পার্টিকেল ক্যানভাস -->
   <div class="purple-grid-bg"></div>
   <canvas id="ads-particle-canvas"></canvas>
 
@@ -393,7 +393,7 @@
   <!-- পোস্টার গ্যালারি ফিড -->
   <main class="ads-feed-wrapper">
     <div class="ads-grid" id="ads-container">
-      <!-- ফায়ারবেস বা লোকালস্টোরেজ থেকে স্বয়ংক্রিয়ভাবে লোড হবে -->
+      <!-- লাইভ পোস্টার রেন্ডার হবে -->
     </div>
   </main>
 
@@ -408,40 +408,71 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ডিফল্ট ডেমো পোস্টার (যদি ফায়ারবেসে এখনও কোনো পোস্ট না থাকে)
+    // ডিফল্ট ডেমো পোস্টার
     const DEMO_ADS = [
       {
         id: "demo_1",
         title: "৮টি এআই কার্টুন ভিডিও জেনারেটর ২০২৬",
         desc: "শেয়ার দিয়ে কমেন্ট করুন এবং ফ্রিতে নিয়ে নিন কার্টুন ভিডিও তৈরির কমপ্লিট গাইডলাইন!",
         imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
-        badge: "AI COURSE",
-        ctaWord: "8"
+        badge: "AI COURSE"
       },
       {
         id: "demo_2",
         title: "ডাটাবেজ আর্কিটেকচার ও ডিজাইন গাইড",
         desc: "একটি রিয়েল সফটওয়্যারের ডাটাবেজ কীভাবে শুরু থেকে ডিজাইন করা হয় শিখুন।",
         imageUrl: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
-        badge: "DATABASE",
-        ctaWord: "DB"
+        badge: "DATABASE"
       }
     ];
 
-    async function loadAdvertisements() {
-      const container = document.getElementById("ads-container");
-      try {
-        const snap = await db.collection("ad_posters").orderBy("timestamp", "desc").get();
+    // রিয়েল-টাইম বিজ্ঞাপন লোডার (ads এবং ad_posters উভয় কালেকশনের সাথে সামঞ্জস্যপূর্ণ)
+    function setupRealtimeAds() {
+      // studio.html থেকে প্রকাশিত কালেকশন 'ads' রিয়েল-টাইম শোনা
+      db.collection("ads").onSnapshot((snapshot) => {
         let ads = [];
+        if (!snapshot.empty) {
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            ads.push({
+              id: doc.id,
+              title: data.title || "বিজ্ঞাপন ব্যানার",
+              desc: data.desc || "Aimanix AI স্টুডিও দ্বারা প্রস্তুতকৃত বিজ্ঞাপন পোস্টার।",
+              imageUrl: data.imageUrl || "",
+              badge: data.badge || (data.type === 'poster' ? 'POSTER' : 'PROMO'),
+              rawTime: data.createdAt || data.timestamp || 0
+            });
+          });
 
+          // নতুন পোস্ট আগে দেখানোর জন্য সর্টিং
+          ads.sort((a, b) => {
+            const timeA = a.rawTime?.toMillis ? a.rawTime.toMillis() : new Date(a.rawTime).getTime() || 0;
+            const timeB = b.rawTime?.toMillis ? b.rawTime.toMillis() : new Date(b.rawTime).getTime() || 0;
+            return timeB - timeA;
+          });
+
+          renderAdsGrid(ads);
+        } else {
+          // যদি 'ads'-এ কিছু না থাকে তবে পুরনো 'ad_posters' কালেকশন বা ডেমো চেক করা
+          fallbackOldCollection();
+        }
+      }, (error) => {
+        console.warn("রিয়েল-টাইম লিসেনার ফলব্যাক:", error);
+        fallbackOldCollection();
+      });
+    }
+
+    async function fallbackOldCollection() {
+      try {
+        const snap = await db.collection("ad_posters").get();
+        let ads = [];
         if (!snap.empty) {
           snap.forEach(doc => ads.push({ id: doc.id, ...doc.data() }));
+          renderAdsGrid(ads);
         } else {
           const local = JSON.parse(localStorage.getItem("aimanix_ad_posters") || "[]");
-          ads = local.length > 0 ? local : DEMO_ADS;
+          renderAdsGrid(local.length > 0 ? local : DEMO_ADS);
         }
-
-        renderAdsGrid(ads);
       } catch (err) {
         const local = JSON.parse(localStorage.getItem("aimanix_ad_posters") || "[]");
         renderAdsGrid(local.length > 0 ? local : DEMO_ADS);
@@ -450,9 +481,11 @@
 
     function renderAdsGrid(items) {
       const container = document.getElementById("ads-container");
+      if (!container) return;
+
       container.innerHTML = items.map(ad => {
         const shareUrl = window.location.href;
-        const shareText = encodeURIComponent(`${ad.title}\n${ad.desc}\nবিস্তারিত দেখুন: `);
+        const shareText = encodeURIComponent(`${ad.title}\n${ad.desc || ''}\nবিস্তারিত দেখুন: `);
         const waLink = `https://api.whatsapp.com/send?text=${shareText}${encodeURIComponent(shareUrl)}`;
         const fbLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
 
@@ -466,7 +499,7 @@
                 </div>
                 <div class="ad-info-box">
                   <h2 class="ad-title">${escapeHtml(ad.title)}</h2>
-                  <p class="ad-desc">${escapeHtml(ad.desc)}</p>
+                  <p class="ad-desc">${escapeHtml(ad.desc || '')}</p>
                 </div>
               </div>
 
@@ -617,7 +650,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      loadAdvertisements();
+      setupRealtimeAds();
       renderEngine();
     });
   </script>

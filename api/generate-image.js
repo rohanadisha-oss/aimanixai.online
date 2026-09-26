@@ -1,4 +1,10 @@
 // api/generate-image.js
+
+// ২ মিনিট (১২০ সেকেন্ড) টাইমআউট কনফিগারেশন
+export const config = {
+  maxDuration: 120,
+};
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'শুধুমাত্র POST মেথড সমর্থিত।' });

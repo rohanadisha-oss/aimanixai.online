@@ -173,37 +173,52 @@
 </div>
 
 <script>
-  // Firebase কনফিগারেশন
-  const firebaseConfig = {
+  // ১. Firebase কনফিগারেশন
+  var firebaseConfig = {
     authDomain: "aimanix-web.firebaseapp.com",
     projectId: "aimanix-web",
     storageBucket: "aimanix-web.appspot.com"
   };
-  
-  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
 
-  auth.onAuthStateChanged((user) => {
+  // ২. Firebase ইনিশিয়ালাইজেশন
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  // ৩. Auth এবং Firestore গ্লোবালি ডিক্লেয়ার করা হলো
+  var auth = firebase.auth();
+  var db = firebase.firestore();
+
+  // ৪. লগইন স্টেট লিসেনার
+  auth.onAuthStateChanged(function(user) {
+    var authBox = document.getElementById("authContainer");
+    var studioBox = document.getElementById("studioDashboard");
+
     if (user) {
-      document.getElementById("authContainer").style.display = "none";
-      document.getElementById("studioDashboard").style.display = "block";
+      if (authBox) authBox.style.display = "none";
+      if (studioBox) studioBox.style.display = "block";
       document.body.style.alignItems = "flex-start";
     } else {
-      document.getElementById("authContainer").style.display = "block";
-      document.getElementById("studioDashboard").style.display = "none";
+      if (authBox) authBox.style.display = "block";
+      if (studioBox) studioBox.style.display = "none";
       document.body.style.alignItems = "center";
     }
   });
 
+  // ৫. লগইন ফাংশন
   async function loginWithFirebase() {
-    const email = document.getElementById("adminEmail").value.trim();
-    const pass = document.getElementById("adminPass").value.trim();
-    const btn = document.getElementById("btnLogin");
-    if (!email || !pass) return alert("ইমেইল ও পাসওয়ার্ড দিন!");
+    var email = document.getElementById("adminEmail").value.trim();
+    var pass = document.getElementById("adminPass").value.trim();
+    var btn = document.getElementById("btnLogin");
+
+    if (!email || !pass) {
+      alert("ইমেইল ও পাসওয়ার্ড উভয়ই দিন!");
+      return;
+    }
 
     btn.disabled = true;
     btn.innerText = "যাচাই হচ্ছে...";
+
     try {
       await auth.signInWithEmailAndPassword(email, pass);
     } catch (err) {
@@ -214,35 +229,44 @@
     }
   }
 
-  function logoutFirebase() { auth.signOut(); }
+  function logoutFirebase() {
+    auth.signOut();
+  }
 
-  let selectedTemplate = "ad_poster";
-  let selectedBadge = "POSTER";
-  let finalPosterUrl = "";
+  var selectedTemplate = "ad_poster";
+  var selectedBadge = "POSTER";
+  var finalPosterUrl = "";
 
   function setTemplate(type, badge, el) {
     selectedTemplate = type;
     selectedBadge = badge;
-    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.card').forEach(function(c) {
+      c.classList.remove('active');
+    });
     el.classList.add('active');
   }
 
+  // ৬. ছবি জেনারেশন ফাংশন
   async function generatePoster() {
-    const prompt = document.getElementById("promptText").value.trim();
-    const btn = document.getElementById("generateBtn");
-    if (!prompt) return alert("পোস্টারের বিবরণ লিখুন!");
+    var prompt = document.getElementById("promptText").value.trim();
+    var btn = document.getElementById("generateBtn");
+
+    if (!prompt) {
+      alert("পোস্টারের বিবরণ লিখুন!");
+      return;
+    }
 
     btn.disabled = true;
     btn.innerText = "⏳";
 
     try {
-      const res = await fetch("/api/generate-image", {
+      var res = await fetch("/api/generate-image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, templateType: selectedTemplate })
+        body: JSON.stringify({ prompt: prompt, templateType: selectedTemplate })
       });
 
-      const data = await res.json();
+      var data = await res.json();
       if (!res.ok) throw new Error(data.error || "ছবি তৈরি করা যায়নি");
 
       finalPosterUrl = data.imageUrl;
@@ -257,9 +281,10 @@
     }
   }
 
+  // ৭. বিজ্ঞাপন বাজারে পাবলিশ
   async function publishToAdsMarket() {
     if (!finalPosterUrl) return;
-    const promptValue = document.getElementById("promptText").value.trim();
+    var promptValue = document.getElementById("promptText").value.trim();
 
     try {
       await db.collection("ads").add({

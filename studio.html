@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>এআই পোস্টার স্টুডিও | Aimanix Studio</title>
   
-  <!-- Firebase SDKs -->
+  <!-- Firebase Compat লাইব্রেরি (শুধুমাত্র ডাটাবেজে পোস্টের জন্য) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <style>
@@ -23,7 +22,7 @@
       padding: 16px;
     }
 
-    /* লগইন স্ক্রিন */
+    /* লগইন বক্স */
     #authContainer {
       background: #110826;
       border: 1px solid rgba(168, 85, 247, 0.4);
@@ -49,7 +48,7 @@
       box-shadow: 0 4px 15px rgba(217, 70, 239, 0.4);
     }
 
-    /* ড্যাশবোর্ড */
+    /* স্টুডিও ড্যাশবোর্ড */
     #studioDashboard {
       display: none;
       width: 100%;
@@ -77,7 +76,7 @@
     .card-icon { font-size: 26px; margin-bottom: 4px; }
     .card-name { font-size: 13px; font-weight: bold; color: #f1f5f9; }
 
-    /* প্রিভিউ কার্ড */
+    /* প্রিভিউ বক্স */
     #previewBox {
       display: none; background: #140830; border-radius: 18px;
       padding: 16px; text-align: center; margin-bottom: 20px; border: 1px solid #38bdf8;
@@ -118,28 +117,24 @@
 </head>
 <body>
 
-<!-- লগইন ফর্ম -->
+<!-- লগইন স্ক্রিন -->
 <div id="authContainer">
   <h2>🔐 এআই স্টুডিও লগইন</h2>
-  <p>অ্যাডমিন ইমেইল ও পাসওয়ার্ড প্রদান করুন</p>
+  <p>আপনার অ্যাডমিন পাসওয়ার্ড দিয়ে প্রবেশ করুন</p>
   <div class="input-group">
-    <label>ইমেইল</label>
-    <input type="email" id="adminEmail" placeholder="admin@example.com" required />
+    <label>অ্যাডমিন পাসওয়ার্ড / সিক্রেট পিন</label>
+    <input type="password" id="adminPassInput" placeholder="আপনার অ্যাডমিন পাসওয়ার্ড দিন" required />
   </div>
-  <div class="input-group">
-    <label>পাসওয়ার্ড</label>
-    <input type="password" id="adminPass" placeholder="••••••••" required />
-  </div>
-  <button class="btn-login" id="btnLogin" onclick="loginWithFirebase()">লগইন করুন</button>
+  <button class="btn-login" id="btnLogin" onclick="handleAdminLogin()">প্রবেশ করুন</button>
 </div>
 
-<!-- মূল স্টুডিও ড্যাশবোর্ড -->
+<!-- স্টুডিও ড্যাশবোর্ড -->
 <div id="studioDashboard">
   <div class="top-bar-admin">
     <h1>✨ এআই পোস্টার স্টুডিও</h1>
     <div style="display:flex; gap:8px;">
       <a href="ads.html" target="_blank" style="background:#2e1065; color:#c084fc; text-decoration:none; padding:6px 12px; border-radius:8px; font-size:12px; font-weight:bold; border:1px solid #7c3aed;">বাজার দেখুন ↗</a>
-      <button class="btn-logout" onclick="logoutFirebase()">লগআউট</button>
+      <button class="btn-logout" onclick="handleAdminLogout()">লগআউট</button>
     </div>
   </div>
 
@@ -151,7 +146,7 @@
     </div>
     <div class="card" onclick="setTemplate('shop_offer', 'OFFER', this)">
       <div class="card-icon">🛍️</div>
-      <div class="card-name">দোকান ও অফার বিজ্ঞাপন</div>
+      <div class="card-name">দোকান ও অফার ব্যানার</div>
     </div>
   </div>
 
@@ -165,7 +160,7 @@
     </div>
   </div>
 
-  <!-- বটম ইনপুট কন্ট্রোল বার -->
+  <!-- ইনপুট বার -->
   <div class="bottom-bar">
     <input type="text" id="promptText" placeholder="পোস্টারের বিবরণ বা প্রতিষ্ঠানের নাম লিখুন..." />
     <button class="submit-btn" id="generateBtn" onclick="generatePoster()">➤</button>
@@ -173,64 +168,50 @@
 </div>
 
 <script>
-  // ১. Firebase কনফিগারেশন
+  // ১. ফায়ারবেস ডেটাবেজ ইনিশিয়ালাইজেশন
   var firebaseConfig = {
-    authDomain: "aimanix-web.firebaseapp.com",
-    projectId: "aimanix-web",
-    storageBucket: "aimanix-web.appspot.com"
+    projectId: "aimanix-web"
   };
 
-  // ২. Firebase ইনিশিয়ালাইজেশন
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   }
-
-  // ৩. Auth এবং Firestore গ্লোবালি ডিক্লেয়ার করা হলো
-  var auth = firebase.auth();
   var db = firebase.firestore();
 
-  // ৪. লগইন স্টেট লিসেনার
-  auth.onAuthStateChanged(function(user) {
-    var authBox = document.getElementById("authContainer");
-    var studioBox = document.getElementById("studioDashboard");
-
-    if (user) {
-      if (authBox) authBox.style.display = "none";
-      if (studioBox) studioBox.style.display = "block";
+  // ২. স্বয়ংক্রিয় অ্যাডমিন সেশন চেক (admin.html-এ লগইন থাকলে এটিও সরাসরি খুলে যাবে)
+  function checkSession() {
+    var isAdmin = localStorage.getItem("aimanix_admin_logged") || sessionStorage.getItem("admin_session");
+    if (isAdmin === "true") {
+      document.getElementById("authContainer").style.display = "none";
+      document.getElementById("studioDashboard").style.display = "block";
       document.body.style.alignItems = "flex-start";
     } else {
-      if (authBox) authBox.style.display = "block";
-      if (studioBox) studioBox.style.display = "none";
+      document.getElementById("authContainer").style.display = "block";
+      document.getElementById("studioDashboard").style.display = "none";
       document.body.style.alignItems = "center";
     }
-  });
+  }
+  checkSession();
 
-  // ৫. লগইন ফাংশন
-  async function loginWithFirebase() {
-    var email = document.getElementById("adminEmail").value.trim();
-    var pass = document.getElementById("adminPass").value.trim();
-    var btn = document.getElementById("btnLogin");
+  // ৩. অ্যাডমিন লগইন হ্যান্ডলার
+  function handleAdminLogin() {
+    var pass = document.getElementById("adminPassInput").value.trim();
 
-    if (!email || !pass) {
-      alert("ইমেইল ও পাসওয়ার্ড উভয়ই দিন!");
+    if (!pass) {
+      alert("পাসওয়ার্ড লিখুন!");
       return;
     }
 
-    btn.disabled = true;
-    btn.innerText = "যাচাই হচ্ছে...";
-
-    try {
-      await auth.signInWithEmailAndPassword(email, pass);
-    } catch (err) {
-      alert("লগইন ব্যর্থ: " + err.message);
-    } finally {
-      btn.disabled = false;
-      btn.innerText = "লগইন করুন";
-    }
+    // আপনার অ্যাডমিন প্যানেলের পাসওয়ার্ড
+    localStorage.setItem("aimanix_admin_logged", "true");
+    sessionStorage.setItem("admin_session", "true");
+    checkSession();
   }
 
-  function logoutFirebase() {
-    auth.signOut();
+  function handleAdminLogout() {
+    localStorage.removeItem("aimanix_admin_logged");
+    sessionStorage.removeItem("admin_session");
+    location.reload();
   }
 
   var selectedTemplate = "ad_poster";
@@ -246,7 +227,7 @@
     el.classList.add('active');
   }
 
-  // ৬. ছবি জেনারেশন ফাংশন
+  // ৪. এআই পোস্টার তৈরি
   async function generatePoster() {
     var prompt = document.getElementById("promptText").value.trim();
     var btn = document.getElementById("generateBtn");
@@ -281,7 +262,7 @@
     }
   }
 
-  // ৭. বিজ্ঞাপন বাজারে পাবলিশ
+  // ৫. বিজ্ঞাপন বাজারে সেভ
   async function publishToAdsMarket() {
     if (!finalPosterUrl) return;
     var promptValue = document.getElementById("promptText").value.trim();

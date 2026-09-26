@@ -4,50 +4,78 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'শুধুমাত্র POST মেথড সমর্থিত।' });
   }
 
-  const { prompt, templateType } = req.body;
+  const { prompt, templateType, referenceImage } = req.body;
   const apiKey = "key_live_20260915_85b14a4c0cec48da612a8bd1bc4ccfa1";
 
   if (!prompt) {
     return res.status(400).json({ error: 'পোস্টারের বিবরণ আবশ্যক।' });
   }
 
+  // পোস্টার তৈরির বিস্তারিত প্রম্পট
+  const posterPrompt = `Create a high quality vertical commercial advertising poster (portrait 9:16 layout) for: "${prompt}". Category: ${templateType || 'general'}. Clean 3D bold embossed typography, realistic graphics, vibrant lighting, modern badge ribbons, bottom contact strip with clear phone number. Full-bleed edge to edge design, highly detailed, no picture frame mockup, no wall mockup.`;
+
+  // Velona রিকোয়েস্ট কনটেন্ট
+  const userContent = [];
+  userContent.push({ type: "text", text: posterPrompt });
+  
+  if (referenceImage) {
+    userContent.push({
+      type: "image_url",
+      image_url: { url: referenceImage }
+    });
+  }
+
   try {
-    // ১. Velona দিয়ে পোস্টারের মূল ইংরেজি ডিরেকশন তৈরি
-    const velonaRes = await fetch("https://velona.in/gateway/v1/inference/run", {
+    // Velona-র তালিকাভুক্ত Gemini 2.5 Flash Image মডেল
+    const response = await fetch("https://velona.in/gateway/v1/inference/run", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "openai/gpt-4o-mini",
+        model: "google/gemini-2.5-flash-image",
         turns: [
           {
-            role: "system",
-            content: "You are a graphic design director. Create a 1-sentence vibrant visual description for an advertising poster flyer. Strict rules: Include modern 3D shapes, vibrant neon lighting, dynamic product displays, and sleek marketing badges. NO walls, NO picture frames, full edge-to-edge poster layout."
-          },
-          {
             role: "user",
-            content: `Create advertising flyer visual description for: ${prompt}. Template: ${templateType || 'general'}`
+            content: userContent
           }
         ]
       })
     });
 
-    const velonaJson = await velonaRes.json();
-    let visualPrompt = velonaJson.data?.output || prompt;
-    visualPrompt = visualPrompt.replace(/[\r\n]+/g, ' ').trim();
+    const data = await response.json();
 
-    // ২. হাই-কোয়ালিটি আল্ট্রা-রেন্ডার (1024x1792 উল্লম্ব পোস্টার)
-    const seed = Math.floor(Math.random() * 9999999);
-    const finalQuery = encodeURIComponent(`${visualPrompt}, full-bleed modern advertising flyer, vibrant commercial background, ultra crisp 8k, edge to edge graphic design`);
+    if (!response.ok) {
+      const errMsg = data.error?.message || data.message || JSON.stringify(data);
+      return res.status(response.status).json({
+        error: `Velona এরর: ${errMsg}`
+      });
+    }
+
+    // রেসপন্স থেকে ছবির লিঙ্ক বা Base64 ডাটা বের করা
+    let rawOutput = data.data?.output || data.output || "";
     
-    // হাই-স্পিড টার্বো ইঞ্জিন
-    const generatedUrl = `https://image.pollinations.ai/prompt/${finalQuery}?width=1024&height=1792&model=turbo&seed=${seed}&nologo=true`;
+    // যদি Markdown ফরম্যাটে ছবি আসে (![image](url))
+    const mdMatch = rawOutput.match(/!\[.*?\]\((.*?)\)/);
+    let imageUrl = mdMatch ? mdMatch[1] : rawOutput;
 
-    return res.status(200).json({ imageUrl: generatedUrl });
+    // যদি সরাসরি URL না হয়ে কোনো অবজেক্ট থাকে
+    if (!imageUrl && data.data?.images?.[0]) {
+      imageUrl = data.data.images[0].url || data.data.images[0];
+    }
 
-  } catch (err) {
-    return res.status(500).json({ error: 'প্রসেসিং এরর: ' + err.message });
+    if (!imageUrl || imageUrl.length < 5) {
+      return res.status(500).json({ 
+        error: 'Velona থেকে ছবির ডাটা পাওয়া যায়নি: ' + JSON.stringify(data) 
+      });
+    }
+
+    return res.status(200).json({ imageUrl });
+
+  } catch (error) {
+    return res.status(500).json({ 
+      error: 'সার্ভার সমস্যা: ' + error.message 
+    });
   }
 }

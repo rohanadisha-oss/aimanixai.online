@@ -383,7 +383,118 @@
       reader.readAsDataURL(file);
     }
 
-    // পোস্টার জেনারেশন কল
+    // ক্যানভাস দিয়ে হাই-রেজোলিউশন কমার্শিয়াল পোস্টার তৈরি করার ইঞ্জিন (Fallback Engine)
+    async function renderCanvasPoster(userText, template, uploadedImg) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1080;
+      canvas.height = 1920;
+      const ctx = canvas.getContext('2d');
+
+      // ব্যাকগ্রাউন্ড গ্রেডিয়েন্ট (ডার্ক নিয়ন পার্পল স্টাইল)
+      const grad = ctx.createLinearGradient(0, 0, 1080, 1920);
+      grad.addColorStop(0, '#0a0414');
+      grad.addColorStop(0.3, '#24063d');
+      grad.addColorStop(0.7, '#160228');
+      grad.addColorStop(1, '#05010a');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 1080, 1920);
+
+      // নিয়ন সার্কেল ও হাই-গ্লো বর্ডার
+      ctx.shadowBlur = 90;
+      ctx.shadowColor = '#c084fc';
+      ctx.strokeStyle = 'rgba(168, 85, 247, 0.45)';
+      ctx.lineWidth = 16;
+      ctx.beginPath();
+      ctx.arc(540, 720, 340, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // ইউজার আপলোড করা ছবি থাকলে সেন্টারে বসানো
+      if (uploadedImg) {
+        try {
+          const imgObj = new Image();
+          await new Promise((resolve) => {
+            imgObj.onload = resolve;
+            imgObj.onerror = resolve;
+            imgObj.src = uploadedImg;
+          });
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(540, 720, 320, 0, Math.PI * 2);
+          ctx.clip();
+          ctx.drawImage(imgObj, 220, 400, 640, 640);
+          ctx.restore();
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        // ইমেজ না থাকলে ক্যাটাগরি আইকন প্রদর্শন
+        ctx.fillStyle = 'rgba(168, 85, 247, 0.15)';
+        ctx.beginPath();
+        ctx.arc(540, 720, 320, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.font = '160px sans-serif';
+        ctx.textAlign = 'center';
+        let icon = '🏛️';
+        if (template === 'shop') icon = '🛍️';
+        if (template === 'jalsa') icon = '🕌';
+        if (template === 'eid') icon = '🌙';
+        if (template === 'political') icon = '📢';
+        if (template === 'custom') icon = '🎨';
+        ctx.fillText(icon, 540, 770);
+      }
+
+      // উপরের প্রিমিয়াম টাইটেল ব্যাজ
+      ctx.fillStyle = '#f59e0b';
+      if (ctx.roundRect) {
+        ctx.beginPath();
+        ctx.roundRect(140, 120, 800, 110, 55);
+        ctx.fill();
+      } else {
+        ctx.fillRect(140, 120, 800, 110);
+      }
+
+      let headerBadge = '⭐ বিশেষ ভর্তি ও তথ্য বিজ্ঞপ্তি ⭐';
+      if (template === 'shop') headerBadge = '🔥 মেগা ধামাকা অফার ও সেল 🔥';
+      if (template === 'jalsa') headerBadge = '🌙 ঐতিহাসিক দ্বীনি জলসা ও মাহফিল 🌙';
+      if (template === 'eid') headerBadge = '✨ পবিত্র ঈদ ও রমজানুল মোবারক ✨';
+      if (template === 'political') headerBadge = '📢 বিশেষ গণসমাবেশ ও প্রচারণা 📢';
+      if (template === 'custom') headerBadge = '✨ বিশেষ অফিশিয়াল বিজ্ঞপ্তি ✨';
+
+      ctx.fillStyle = '#000000';
+      ctx.font = 'bold 50px "Hind Siliguri", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(headerBadge, 540, 195);
+
+      // মূল টেক্সট টাইপোগ্রাফি (বাংলা ফন্ট)
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = 'rgba(0,0,0,0.9)';
+      ctx.shadowBlur = 25;
+      ctx.font = 'bold 72px "Hind Siliguri", sans-serif';
+      
+      const cleanParts = userText.split(/[,\n।]/).map(t => t.trim()).filter(Boolean);
+      let textY = 1200;
+      cleanParts.slice(0, 3).forEach((line) => {
+        ctx.fillText(line, 540, textY);
+        textY += 110;
+      });
+
+      // নিচের যোগাযোগ বার (Footer Contact Strip)
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = '#06b6d4';
+      ctx.fillRect(0, 1680, 1080, 240);
+
+      ctx.fillStyle = '#000000';
+      ctx.font = 'bold 54px "Hind Siliguri", sans-serif';
+      ctx.fillText('📞 আজই যোগাযোগ করুন | Aimanix Studio', 540, 1780);
+      ctx.font = '40px "Hind Siliguri", sans-serif';
+      ctx.fillText('আপনার বিশ্বস্ত ডিজিটাল প্রচার সহযোগী', 540, 1850);
+
+      return canvas.toDataURL('image/png');
+    }
+
+    // পোস্টার তৈরি হ্যান্ডলার (API এবং Canvas সমন্বিত)
     async function generatePoster() {
       const promptInput = document.getElementById('prompt-input');
       const generateBtn = document.getElementById('generate-btn');
@@ -397,38 +508,47 @@
         return;
       }
 
-      // লোডিং অবস্থা
       generateBtn.disabled = true;
       btnText.innerText = 'তৈরি হচ্ছে... ⏳';
 
       try {
-        const response = await fetch('/api/generate-image', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            prompt: text,
-            templateType: currentTemplate,
-            referenceImage: uploadedImageBase64
-          })
-        });
+        let finalImage = null;
 
-        const data = await response.json();
+        // ১. প্রথমে API থেকে ইমেজ জেনারেট করার চেষ্টা
+        try {
+          const response = await fetch('/api/generate-image', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              prompt: text,
+              templateType: currentTemplate,
+              referenceImage: uploadedImageBase64
+            })
+          });
 
-        // সঠিক ছবির লিংক না এলে এরর প্রদর্শন (কোনো ব্রোকেন ইমেজ দেখাবে না)
-        if (!response.ok || !data.imageUrl || data.imageUrl.length < 5) {
-          const errMsg = data.error || (data.full_velona_data ? JSON.stringify(data.full_velona_data) : 'ছবি প্রস্তুত হয়নি');
-          alert('সার্ভার থেকে প্রাপ্ত তথ্য:\n' + errMsg);
-          return;
+          if (response.ok) {
+            const data = await response.json();
+            if (data.imageUrl && data.imageUrl.length > 10) {
+              finalImage = data.imageUrl;
+            }
+          }
+        } catch (apiErr) {
+          console.warn("এপিআই রিকোয়েস্টে সমস্যা, ক্যানভাস সক্রিয় হচ্ছে:", apiErr);
         }
 
-        // সফল ছবি ডিসপ্লে
-        generatedImageUrl = data.imageUrl;
-        previewImg.src = data.imageUrl;
+        // ২. যদি এপিআই কোনো কারণে ফেইল করে, সরাসরি ক্যানভাস দিয়ে তৈরি হবে
+        if (!finalImage) {
+          finalImage = await renderCanvasPoster(text, currentTemplate, uploadedImageBase64);
+        }
+
+        // স্ক্রিনে ডিসপ্লে
+        generatedImageUrl = finalImage;
+        previewImg.src = finalImage;
         previewImg.style.display = 'block';
         placeholderText.style.display = 'none';
 
       } catch (err) {
-        alert('কানেকশন এরর: ' + err.message);
+        alert('ডিজাইন তৈরিতে সমস্যা: ' + err.message);
       } finally {
         generateBtn.disabled = false;
         btnText.innerText = 'পোস্টার তৈরি ➤';
@@ -441,7 +561,7 @@
         alert('আগে একটি পোস্টার তৈরি করুন!');
         return;
       }
-      alert('পোস্টারটি সফলভাবে বিজ্ঞাপন বাজারে লাইভ করার জন্য পাঠানো হয়েছে!');
+      alert('পোস্টারটি সফলভাবে বিজ্ঞাপন বাজারে লাইভ করার জন্য প্রস্তুত!');
       window.location.href = 'ads.html';
     }
 

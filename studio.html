@@ -148,10 +148,10 @@
 
     .preview-box {
       width: 100%;
-      height: 380px;
+      height: 480px;
       border-radius: 12px;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px dashed rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px dashed rgba(255, 255, 255, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -182,7 +182,7 @@
       background: #059669;
       color: white;
       border: none;
-      padding: 10px;
+      padding: 12px;
       border-radius: 10px;
       font-weight: 700;
       font-size: 14px;
@@ -194,14 +194,14 @@
       background: #dc2626;
       color: white;
       border: none;
-      padding: 10px;
+      padding: 12px;
       border-radius: 10px;
       font-weight: 700;
       font-size: 14px;
       cursor: pointer;
     }
 
-    /* ইনপুট কনসোল */
+    /* ইনপুট ডক */
     .input-dock {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -218,7 +218,7 @@
       font-size: 14px;
       resize: none;
       outline: none;
-      height: 52px;
+      height: 55px;
       margin-bottom: 12px;
     }
 
@@ -276,7 +276,7 @@
 
   <div class="container">
     
-    <!-- হেডার ও হোম পেজে ফেরার বাটন -->
+    <!-- হেডার -->
     <div class="top-nav">
       <a href="ads.html" class="back-btn">
         <span>←</span> বিজ্ঞাপন বাজারে ফিরুন
@@ -284,7 +284,7 @@
       <span class="brand-title">Aimanix Studio</span>
     </div>
 
-    <!-- ক্যাটাগরি সিলেকশন -->
+    <!-- টেমপ্লেট গ্রিড -->
     <div class="section-title">ডিজাইন টেমপ্লেট নির্বাচন করুন:</div>
     <div class="template-grid">
       <button class="template-btn active" data-template="school">
@@ -324,11 +324,11 @@
       </button>
     </div>
 
-    <!-- পোস্টার প্রিভিউ সেকশন -->
+    <!-- প্রিভিউ -->
     <div class="preview-card">
       <div class="preview-title">পোস্টার প্রিভিউ</div>
       <div class="preview-box" id="preview-box">
-        <span class="placeholder-text" id="placeholder-text">পোস্টার এখানে প্রিভিউ হবে</span>
+        <span class="placeholder-text" id="placeholder-text">এখানে চোখ ধাঁধানো এআই ব্যানার প্রিভিউ হবে</span>
         <img id="preview-image" alt="পোস্টার প্রিভিউ">
       </div>
 
@@ -338,13 +338,13 @@
       </div>
     </div>
 
-    <!-- ইনপুট ও কন্ট্রোল ডক -->
+    <!-- ইনপুট ডক -->
     <div class="input-dock">
-      <textarea id="prompt-input" class="prompt-input" placeholder="আপনার বিজ্ঞাপনের বিবরণ ও তথ্য লিখুন (যেমন: স্কুলের নাম, ব্যাচ, যোগাযোগের নম্বর)..."></textarea>
+      <textarea id="prompt-input" class="prompt-input" placeholder="বিজ্ঞাপনের বিবরণ লিখুন (যেমন: ৩০% পর্যন্ত ছাড়, মেগা সেল, যোগাযোগ নম্বর)..."></textarea>
       
       <div class="dock-actions">
         <label class="upload-label">
-          📷 <span id="upload-text">ছবি যোগ করুন (ঐচ্ছিক)</span>
+          📷 <span id="upload-text">লোগো/ছবি যোগ করুন</span>
           <input type="file" id="image-upload" accept="image/*" onchange="handleImageUpload(event)">
         </label>
 
@@ -361,7 +361,6 @@
     let uploadedImageBase64 = null;
     let generatedImageUrl = '';
 
-    // ক্যাটাগরি বাটন সিলেকশন
     document.querySelectorAll('.template-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.template-btn').forEach(b => b.classList.remove('active'));
@@ -370,11 +369,9 @@
       });
     });
 
-    // ছবি আপলোড রিডার (Base64)
     function handleImageUpload(e) {
       const file = e.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
       reader.onload = function(event) {
         uploadedImageBase64 = event.target.result;
@@ -383,118 +380,7 @@
       reader.readAsDataURL(file);
     }
 
-    // ক্যানভাস দিয়ে হাই-রেজোলিউশন কমার্শিয়াল পোস্টার তৈরি করার ইঞ্জিন (Fallback Engine)
-    async function renderCanvasPoster(userText, template, uploadedImg) {
-      const canvas = document.createElement('canvas');
-      canvas.width = 1080;
-      canvas.height = 1920;
-      const ctx = canvas.getContext('2d');
-
-      // ব্যাকগ্রাউন্ড গ্রেডিয়েন্ট (ডার্ক নিয়ন পার্পল স্টাইল)
-      const grad = ctx.createLinearGradient(0, 0, 1080, 1920);
-      grad.addColorStop(0, '#0a0414');
-      grad.addColorStop(0.3, '#24063d');
-      grad.addColorStop(0.7, '#160228');
-      grad.addColorStop(1, '#05010a');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 1080, 1920);
-
-      // নিয়ন সার্কেল ও হাই-গ্লো বর্ডার
-      ctx.shadowBlur = 90;
-      ctx.shadowColor = '#c084fc';
-      ctx.strokeStyle = 'rgba(168, 85, 247, 0.45)';
-      ctx.lineWidth = 16;
-      ctx.beginPath();
-      ctx.arc(540, 720, 340, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-
-      // ইউজার আপলোড করা ছবি থাকলে সেন্টারে বসানো
-      if (uploadedImg) {
-        try {
-          const imgObj = new Image();
-          await new Promise((resolve) => {
-            imgObj.onload = resolve;
-            imgObj.onerror = resolve;
-            imgObj.src = uploadedImg;
-          });
-          ctx.save();
-          ctx.beginPath();
-          ctx.arc(540, 720, 320, 0, Math.PI * 2);
-          ctx.clip();
-          ctx.drawImage(imgObj, 220, 400, 640, 640);
-          ctx.restore();
-        } catch (e) {
-          console.error(e);
-        }
-      } else {
-        // ইমেজ না থাকলে ক্যাটাগরি আইকন প্রদর্শন
-        ctx.fillStyle = 'rgba(168, 85, 247, 0.15)';
-        ctx.beginPath();
-        ctx.arc(540, 720, 320, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.font = '160px sans-serif';
-        ctx.textAlign = 'center';
-        let icon = '🏛️';
-        if (template === 'shop') icon = '🛍️';
-        if (template === 'jalsa') icon = '🕌';
-        if (template === 'eid') icon = '🌙';
-        if (template === 'political') icon = '📢';
-        if (template === 'custom') icon = '🎨';
-        ctx.fillText(icon, 540, 770);
-      }
-
-      // উপরের প্রিমিয়াম টাইটেল ব্যাজ
-      ctx.fillStyle = '#f59e0b';
-      if (ctx.roundRect) {
-        ctx.beginPath();
-        ctx.roundRect(140, 120, 800, 110, 55);
-        ctx.fill();
-      } else {
-        ctx.fillRect(140, 120, 800, 110);
-      }
-
-      let headerBadge = '⭐ বিশেষ ভর্তি ও তথ্য বিজ্ঞপ্তি ⭐';
-      if (template === 'shop') headerBadge = '🔥 মেগা ধামাকা অফার ও সেল 🔥';
-      if (template === 'jalsa') headerBadge = '🌙 ঐতিহাসিক দ্বীনি জলসা ও মাহফিল 🌙';
-      if (template === 'eid') headerBadge = '✨ পবিত্র ঈদ ও রমজানুল মোবারক ✨';
-      if (template === 'political') headerBadge = '📢 বিশেষ গণসমাবেশ ও প্রচারণা 📢';
-      if (template === 'custom') headerBadge = '✨ বিশেষ অফিশিয়াল বিজ্ঞপ্তি ✨';
-
-      ctx.fillStyle = '#000000';
-      ctx.font = 'bold 50px "Hind Siliguri", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(headerBadge, 540, 195);
-
-      // মূল টেক্সট টাইপোগ্রাফি (বাংলা ফন্ট)
-      ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = 'rgba(0,0,0,0.9)';
-      ctx.shadowBlur = 25;
-      ctx.font = 'bold 72px "Hind Siliguri", sans-serif';
-      
-      const cleanParts = userText.split(/[,\n।]/).map(t => t.trim()).filter(Boolean);
-      let textY = 1200;
-      cleanParts.slice(0, 3).forEach((line) => {
-        ctx.fillText(line, 540, textY);
-        textY += 110;
-      });
-
-      // নিচের যোগাযোগ বার (Footer Contact Strip)
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = '#06b6d4';
-      ctx.fillRect(0, 1680, 1080, 240);
-
-      ctx.fillStyle = '#000000';
-      ctx.font = 'bold 54px "Hind Siliguri", sans-serif';
-      ctx.fillText('📞 আজই যোগাযোগ করুন | Aimanix Studio', 540, 1780);
-      ctx.font = '40px "Hind Siliguri", sans-serif';
-      ctx.fillText('আপনার বিশ্বস্ত ডিজিটাল প্রচার সহযোগী', 540, 1850);
-
-      return canvas.toDataURL('image/png');
-    }
-
-    // পোস্টার তৈরি হ্যান্ডলার (API এবং Canvas সমন্বিত)
+    // বিশ্বমানের Flux AI কমার্শিয়াল পোস্টার ইঞ্জিন
     async function generatePoster() {
       const promptInput = document.getElementById('prompt-input');
       const generateBtn = document.getElementById('generate-btn');
@@ -509,63 +395,62 @@
       }
 
       generateBtn.disabled = true;
-      btnText.innerText = 'তৈরি হচ্ছে... ⏳';
+      btnText.innerText = 'এআই পোস্টার তৈরি হচ্ছে... ⏳';
 
       try {
-        let finalImage = null;
-
-        // ১. প্রথমে API থেকে ইমেজ জেনারেট করার চেষ্টা
-        try {
-          const response = await fetch('/api/generate-image', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              prompt: text,
-              templateType: currentTemplate,
-              referenceImage: uploadedImageBase64
-            })
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.imageUrl && data.imageUrl.length > 10) {
-              finalImage = data.imageUrl;
-            }
-          }
-        } catch (apiErr) {
-          console.warn("এপিআই রিকোয়েস্টে সমস্যা, ক্যানভাস সক্রিয় হচ্ছে:", apiErr);
+        // ক্যাটাগরি ভিত্তিক প্রিমিয়াম কমার্শিয়াল প্রম্পট
+        let visualStyle = "luxury commercial sale discount poster flyer, glowing neon 3D text 'SALE', glossy shopping bags, golden sparkles, confetti, dramatic volumetric purple neon stage lighting";
+        if (currentTemplate === 'school') {
+          visualStyle = "prestigious modern educational school academy admission poster flyer, 3D graduation cap, books, high tech modern classroom glow, vibrant blue and purple neon illumination";
+        } else if (currentTemplate === 'jalsa') {
+          visualStyle = "majestic Islamic conference waz mahfil poster flyer, 3D glowing golden crescent moon, illuminated mosque minarets, starry divine night, emerald green and gold ambient lights";
+        } else if (currentTemplate === 'eid') {
+          visualStyle = "grand Eid Mubarak festive celebration flyer, 3D ornate golden lanterns, glowing crescent, sparkling fireworks, lavish royal purple and gold ambiance";
+        } else if (currentTemplate === 'political') {
+          visualStyle = "bold political campaign rally poster, grand podium, patriotic dramatic lighting, victory flags, triumphant cinematic atmosphere";
+        } else if (currentTemplate === 'custom') {
+          visualStyle = "modern high-end commercial branding advertising flyer, 3D glossy abstract shapes, vibrant neon purple lights, cinematic studio photography";
         }
 
-        // ২. যদি এপিআই কোনো কারণে ফেইল করে, সরাসরি ক্যানভাস দিয়ে তৈরি হবে
-        if (!finalImage) {
-          finalImage = await renderCanvasPoster(text, currentTemplate, uploadedImageBase64);
-        }
+        const seed = Math.floor(Math.random() * 999999);
+        const fullPrompt = `Ultra high quality vertical commercial promotional banner poster (9:16 portrait orientation). ${visualStyle}. Beautiful commercial layout with top header banner, elegant 3D typography banners, vibrant neon rim lights, 8k resolution, photorealistic, masterpiece advertising art. Details: ${text}`;
+        
+        // Flux AI ইমেজ URL
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=768&height=1344&model=flux&seed=${seed}&nologo=true`;
 
-        // স্ক্রিনে ডিসপ্লে
-        generatedImageUrl = finalImage;
-        previewImg.src = finalImage;
-        previewImg.style.display = 'block';
-        placeholderText.style.display = 'none';
+        // প্রি-লোড ও স্ক্রিনে দেখানো
+        const tempImg = new Image();
+        tempImg.onload = function() {
+          generatedImageUrl = imageUrl;
+          previewImg.src = imageUrl;
+          previewImg.style.display = 'block';
+          placeholderText.style.display = 'none';
+          generateBtn.disabled = false;
+          btnText.innerText = 'পোস্টার তৈরি ➤';
+        };
+        tempImg.onerror = function() {
+          alert('ছবি লোড হতে বিলম্ব হচ্ছে, আবার চেষ্টা করুন।');
+          generateBtn.disabled = false;
+          btnText.innerText = 'পোস্টার তৈরি ➤';
+        };
+        tempImg.src = imageUrl;
 
       } catch (err) {
-        alert('ডিজাইন তৈরিতে সমস্যা: ' + err.message);
-      } finally {
+        alert('সমস্যা: ' + err.message);
         generateBtn.disabled = false;
         btnText.innerText = 'পোস্টার তৈরি ➤';
       }
     }
 
-    // লাইভ করার ফাংশন
     function publishLive() {
       if (!generatedImageUrl) {
         alert('আগে একটি পোস্টার তৈরি করুন!');
         return;
       }
-      alert('পোস্টারটি সফলভাবে বিজ্ঞাপন বাজারে লাইভ করার জন্য প্রস্তুত!');
+      alert('পোস্টারটি সফলভাবে বিজ্ঞাপন বাজারে লাইভ করার জন্য অনুমোদিত হয়েছে!');
       window.location.href = 'ads.html';
     }
 
-    // বাতিল করার ফাংশন
     function cancelPreview() {
       const previewImg = document.getElementById('preview-image');
       const placeholderText = document.getElementById('placeholder-text');

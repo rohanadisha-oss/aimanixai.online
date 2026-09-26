@@ -1,14 +1,12 @@
 // api/gemini.js
 export default async function handler(req, res) {
+  // CORS ও মেথড গার্ড
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'শুধুমাত্র POST মেথড অনুমোদিত।' });
   }
 
   const { prompt, systemInstruction } = req.body;
-
-  // সরাসরি আপনার Velona API Key
   const apiKey = "key_live_20260915_85b14a4c0cec48da612a8bd1bc4ccfa1";
-  // আপনার Velona Base URL
   const baseUrl = "https://velona.in/gateway/v1";
 
   try {
@@ -47,11 +45,12 @@ export default async function handler(req, res) {
       });
     }
 
-    const outputText = data.choices?.[0]?.message?.content || data.output || '';
-
-    return res.status(200).json({ output: outputText });
+    const output = data.choices?.[0]?.message?.content || data.output || '';
+    return res.status(200).json({ output });
 
   } catch (error) {
-    return res.status(500).json({ error: 'সার্ভার প্রসেসিং ব্যর্থ হয়েছে: ' + error.message });
+    return res.status(500).json({ 
+      error: 'সার্ভার প্রসেসিং ব্যর্থ হয়েছে: ' + error.message 
+    });
   }
 }

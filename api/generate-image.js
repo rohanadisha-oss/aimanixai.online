@@ -1,12 +1,13 @@
 // api/generate-image.js
 export default async function handler(req, res) {
+  // ১. মেথড যাচাই
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'শুধুমাত্র POST মেথড অনুমোদিত।' });
   }
 
   const { prompt, templateType } = req.body;
 
-  // Vercel Environment Variables থেকে সরাসরি কি (Key) নেওয়া হচ্ছে
+  // ২. Vercel Environment Variables থেকে এপিআই কি নেওয়া
   const apiKey = process.env.VELONA_API_KEY;
 
   if (!apiKey) {
@@ -17,15 +18,16 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'পোস্টারের বিবরণ বা প্রম্পট দেওয়া আবশ্যক।' });
   }
 
-  // পোস্টার ও বিজ্ঞাপনের জন্য এআই প্রম্পট কাঠামো
+  // ৩. নিখুঁত পোর্ট্রেট ব্যানার ও বিজ্ঞাপনের জন্য প্রম্পট ইঞ্জিনিয়ারিং
   let finalPrompt = prompt;
   if (templateType === 'ad_poster') {
-    finalPrompt = `Ultra-detailed commercial 3D marketing advertising poster banner for: "${prompt}". Glossy embossed royal purple, deep violet and reflective metallic golden 3D typography, cinematic lighting, 8k render, octane render style, professional marketing print graphic composition.`;
+    finalPrompt = `Vertical commercial advertising poster flyer for: "${prompt}". Highly detailed architectural rendering, vibrant royal purple, deep violet, and metallic gold glowing frame borders. 3D embossed bold glossy headers, realistic center subject, clean bottom ribbons. 8k octane render, professional marketing print design.`;
   } else if (templateType === 'shop_offer') {
-    finalPrompt = `3D promotional discount retail banner for: "${prompt}". Vibrant commercial colors, bold retail badges, modern flyer layout.`;
+    finalPrompt = `Vertical promotional discount sale flyer for: "${prompt}". Eye-catching vibrant retail store theme, 3D sale badges, bold promotional typography.`;
   }
 
   try {
+    // ৪. Velona AI Gateway-তে রিকোয়েস্ট পাঠানো (DALL-E 3 Portrait সাইজ সহ)
     const response = await fetch("https://velona.in/gateway/v1/images/generations", {
       method: "POST",
       headers: {
@@ -36,7 +38,7 @@ export default async function handler(req, res) {
         model: "openai/dall-e-3",
         prompt: finalPrompt,
         n: 1,
-        size: "1024x1024"
+        size: "1024x1792" // লম্বা খাড়া পোর্ট্রেট পোস্টারের জন্য উপযুক্ত সাইজ
       })
     });
 
@@ -47,6 +49,7 @@ export default async function handler(req, res) {
       return res.status(response.status).json({ error: `ইমেজ গেটওয়ে এরর: ${errMsg}` });
     }
 
+    // ৫. রেসপন্স থেকে ছবির লিংক বের করা
     const imageUrl = data.data?.[0]?.url || data.output_url || data.url || '';
 
     if (!imageUrl) {

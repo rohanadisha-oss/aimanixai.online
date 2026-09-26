@@ -5,20 +5,18 @@ export default async function handler(req, res) {
   }
 
   const { prompt, templateType } = req.body;
-
-  // gemini.js-এর মতো সরাসরি একই কি
   const apiKey = "key_live_20260915_85b14a4c0cec48da612a8bd1bc4ccfa1";
 
   if (!prompt) {
     return res.status(400).json({ error: 'পোস্টারের বিবরণ আবশ্যক।' });
   }
 
-  // রয়্যাল পার্পল ও গোল্ডেন থিমের নিখুঁত উল্লম্ব পোস্টার প্রম্পট
+  // পোস্টারের প্রম্পট
   let finalPrompt = '';
   if (templateType === 'ad_poster') {
-    finalPrompt = `Professional vertical commercial advertising poster banner for: "${prompt}". Highly elegant dark royal purple and midnight navy gradient background, illuminated glowing metallic gold borders. 3D embossed bold glowing typography layout supporting clean bilingual Bengali script and English text, crisp legible headers, realistic central institutional subject, festive event ribbon at bottom. 8k resolution, cinematic lighting, ultra-clean marketing graphic design.`;
+    finalPrompt = `Professional vertical commercial advertising poster banner for: "${prompt}". Highly elegant dark royal purple and midnight navy gradient background, illuminated glowing metallic gold borders. 3D embossed bold typography layout supporting bilingual Bengali and English lettering style, crisp legible headers, realistic central subject, festive event ribbon at bottom. 8k resolution, cinematic lighting, ultra-clean marketing graphic design.`;
   } else if (templateType === 'shop_offer') {
-    finalPrompt = `Ultra-modern vertical commercial promotional sale flyer for: "${prompt}". Rich deep violet background with neon magenta highlights, golden confetti sparkles, 3D glossy discount badge ribbons, bold eye-catching bilingual typography layout with crisp Bengali text styling, modern retail store showcase center. 8k octane render, premium advertising aesthetic.`;
+    finalPrompt = `Ultra-modern vertical commercial promotional sale flyer for: "${prompt}". Rich deep violet background with neon magenta highlights, golden confetti sparkles, 3D glossy discount badge ribbons, bold eye-catching typography, modern retail showcase center. 8k octane render.`;
   } else {
     finalPrompt = `Vertical commercial advertising poster flyer for: "${prompt}". Dark royal purple background, glowing gold borders, 3D typography, premium print design.`;
   }
@@ -31,14 +29,23 @@ export default async function handler(req, res) {
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "dall-e-3",
+        model: "openai/dall-e-3",
         prompt: finalPrompt,
         n: 1,
         size: "1024x1792"
       })
     });
 
-    const data = await response.json();
+    // রেসপন্স সরাসরি JSON হিসেবে না পড়ে টেক্সট হিসেবে পড়া হচ্ছে (যাতে Internal Server Error এ ক্র্যাশ না করে)
+    const rawText = await response.text();
+    let data;
+    try {
+      data = JSON.parse(rawText);
+    } catch (e) {
+      return res.status(response.status || 500).json({
+        error: `গেটের ইন্টারনাল এরর (${response.status}): ${rawText.substring(0, 150)}`
+      });
+    }
 
     if (!response.ok) {
       const errMsg = data.error?.message || data.message || JSON.stringify(data);
@@ -47,17 +54,11 @@ export default async function handler(req, res) {
       });
     }
 
-    // রেসপন্স থেকে ছবির লিংক নেওয়া
-    const imageUrl = 
-      data.data?.[0]?.url || 
-      data.images?.[0]?.url || 
-      data.output_url || 
-      data.url || 
-      '';
+    const imageUrl = data.data?.[0]?.url || data.images?.[0]?.url || data.output_url || data.url || '';
 
     if (!imageUrl) {
       return res.status(500).json({ 
-        error: 'Velona থেকে ছবির লিঙ্ক পাওয়া যায়নি: ' + JSON.stringify(data) 
+        error: 'ছবির লিংক পাওয়া যায়নি: ' + JSON.stringify(data) 
       });
     }
 

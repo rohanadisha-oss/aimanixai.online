@@ -12,7 +12,6 @@
       --bg-dark: #0a0614;
       --card-bg: rgba(22, 14, 40, 0.7);
       --card-border: rgba(147, 51, 234, 0.3);
-      --primary-purple: #9333ea;
       --primary-gradient: linear-gradient(135deg, #7e22ce 0%, #a855f7 100%);
       --accent-cyan: #06b6d4;
       --text-main: #f3f4f6;
@@ -63,11 +62,6 @@
       padding: 6px 14px;
       border-radius: 20px;
       border: 1px solid rgba(6, 182, 212, 0.3);
-      transition: all 0.2s ease;
-    }
-
-    .back-btn:hover {
-      background: rgba(6, 182, 212, 0.2);
     }
 
     .brand-title {
@@ -78,57 +72,7 @@
       -webkit-text-fill-color: transparent;
     }
 
-    .section-title {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-      padding-left: 2px;
-    }
-
-    /* ক্যাটাগরি গ্রিড */
-    .template-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .template-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 12px 10px;
-      text-align: left;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      transition: all 0.2s ease;
-      color: var(--text-main);
-    }
-
-    .template-btn.active {
-      border-color: #c084fc;
-      background: rgba(147, 51, 234, 0.25);
-      box-shadow: 0 0 14px rgba(168, 85, 247, 0.35);
-    }
-
-    .template-btn .icon {
-      font-size: 20px;
-      margin-bottom: 2px;
-    }
-
-    .template-btn .title {
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .template-btn .subtitle {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    /* প্রিভিউ কার্ড */
+    /* প্রিভিউ উইন্ডো */
     .preview-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -140,7 +84,7 @@
     }
 
     .preview-title {
-      font-size: 14px;
+      font-size: 15px;
       color: #38bdf8;
       font-weight: 700;
       margin-bottom: 12px;
@@ -150,7 +94,7 @@
       width: 100%;
       height: 480px;
       border-radius: 12px;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.4);
       border: 1px dashed rgba(255, 255, 255, 0.2);
       display: flex;
       align-items: center;
@@ -163,13 +107,15 @@
     .preview-box img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       display: none;
     }
 
     .placeholder-text {
       color: var(--text-muted);
       font-size: 14px;
+      padding: 20px;
+      line-height: 1.5;
     }
 
     .action-group {
@@ -206,43 +152,49 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 16px;
-      padding: 14px;
+      padding: 16px;
       backdrop-filter: blur(10px);
+    }
+
+    .dock-title {
+      font-size: 13px;
+      color: #c084fc;
+      font-weight: 600;
+      margin-bottom: 8px;
     }
 
     .prompt-input {
       width: 100%;
-      background: transparent;
-      border: none;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
       color: white;
       font-size: 14px;
+      padding: 10px;
       resize: none;
       outline: none;
-      height: 55px;
+      height: 80px;
       margin-bottom: 12px;
-    }
-
-    .prompt-input::placeholder {
-      color: rgba(255, 255, 255, 0.4);
     }
 
     .dock-actions {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
       gap: 10px;
+      align-items: center;
     }
 
     .upload-label {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 8px 12px;
+      flex: 1;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 11px;
       border-radius: 10px;
-      font-size: 12px;
-      color: var(--text-muted);
+      font-size: 13px;
+      color: #e5e7eb;
       cursor: pointer;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       white-space: nowrap;
     }
@@ -252,18 +204,19 @@
     }
 
     .generate-btn {
+      flex: 1.2;
       background: var(--primary-gradient);
       color: white;
       border: none;
-      padding: 10px 18px;
+      padding: 11px;
       border-radius: 10px;
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      transition: opacity 0.2s ease;
     }
 
     .generate-btn:disabled {
@@ -284,51 +237,13 @@
       <span class="brand-title">Aimanix Studio</span>
     </div>
 
-    <!-- টেমপ্লেট গ্রিড -->
-    <div class="section-title">ডিজাইন টেমপ্লেট নির্বাচন করুন:</div>
-    <div class="template-grid">
-      <button class="template-btn active" data-template="school">
-        <span class="icon">🏛️</span>
-        <span class="title">স্কুল/মাদ্রাসা ভর্তি</span>
-        <span class="subtitle">এডমিশন ব্যানার ও ফ্লায়ার</span>
-      </button>
-
-      <button class="template-btn" data-template="shop">
-        <span class="icon">🛍️</span>
-        <span class="title">দোকান ও অফার</span>
-        <span class="subtitle">সেলস ও ছাড় ব্যানার</span>
-      </button>
-
-      <button class="template-btn" data-template="jalsa">
-        <span class="icon">🕌</span>
-        <span class="title">জলসা ও মাহফিল</span>
-        <span class="subtitle">ওয়াজ ও দ্বীনি প্রচারণা</span>
-      </button>
-
-      <button class="template-btn" data-template="eid">
-        <span class="icon">🌙</span>
-        <span class="title">ঈদ ও রমজান</span>
-        <span class="subtitle">মোবারকবাদ ও শুভেচ্ছা</span>
-      </button>
-
-      <button class="template-btn" data-template="political">
-        <span class="icon">📢</span>
-        <span class="title">রাজনৈতিক পোস্টার</span>
-        <span class="subtitle">প্রচারণা, সভা ও অভিনন্দন</span>
-      </button>
-
-      <button class="template-btn" data-template="custom">
-        <span class="icon">🎨</span>
-        <span class="title">কাস্টম প্রম্পট</span>
-        <span class="subtitle">যেকোনো বিজ্ঞাপন আইডিয়া</span>
-      </button>
-    </div>
-
-    <!-- প্রিভিউ -->
+    <!-- প্রিভিউ বক্স -->
     <div class="preview-card">
       <div class="preview-title">পোস্টার প্রিভিউ</div>
       <div class="preview-box" id="preview-box">
-        <span class="placeholder-text" id="placeholder-text">এখানে চোখ ধাঁধানো এআই ব্যানার প্রিভিউ হবে</span>
+        <span class="placeholder-text" id="placeholder-text">
+          নিচে প্রম্পট লিখে এআই দিয়ে পোস্টার তৈরি করুন<br>অথবা ফোন থেকে ছবি আপলোড করুন
+        </span>
         <img id="preview-image" alt="পোস্টার প্রিভিউ">
       </div>
 
@@ -338,18 +253,21 @@
       </div>
     </div>
 
-    <!-- ইনপুট ডক -->
+    <!-- ইনপুট ও অ্যাকশন ডক -->
     <div class="input-dock">
-      <textarea id="prompt-input" class="prompt-input" placeholder="বিজ্ঞাপনের বিবরণ লিখুন (যেমন: ৩০% পর্যন্ত ছাড়, মেগা সেল, যোগাযোগ নম্বর)..."></textarea>
+      <div class="dock-title">পোস্টারের নির্দেশ বা বিবরণ লিখুন:</div>
+      <textarea id="prompt-input" class="prompt-input" placeholder="যেমন: একটা পোস্টার তৈরি করুন। যার ব্যাকগ্রাউন্ড হবে নিওন পার্পল লাইট। বড় সুন্দর বাংলা ফন্টে থাকবে 'ফুলবাড়ি আমিনিয়া হাই মাদ্রাসা'..."></textarea>
       
       <div class="dock-actions">
+        <!-- ফোন থেকে আপলোড বাটন -->
         <label class="upload-label">
-          📷 <span id="upload-text">লোগো/ছবি যোগ করুন</span>
-          <input type="file" id="image-upload" accept="image/*" onchange="handleImageUpload(event)">
+          📁 <span>ফোন থেকে আপলোড</span>
+          <input type="file" id="image-upload" accept="image/*" onchange="handleDirectUpload(event)">
         </label>
 
-        <button class="generate-btn" id="generate-btn" onclick="generatePoster()">
-          <span id="btn-text">পোস্টার তৈরি ➤</span>
+        <!-- GPT Image 2.0 জেনারেশন বাটন -->
+        <button class="generate-btn" id="generate-btn" onclick="generateWithAI()">
+          <span id="btn-text">এআই পোস্টার তৈরি ➤</span>
         </button>
       </div>
     </div>
@@ -357,107 +275,103 @@
   </div>
 
   <script>
-    let currentTemplate = 'school';
-    let uploadedImageBase64 = null;
-    let generatedImageUrl = '';
+    let currentPosterUrl = '';
 
-    document.querySelectorAll('.template-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.template-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentTemplate = btn.dataset.template;
-      });
-    });
-
-    function handleImageUpload(e) {
+    // বিকল্প ১: ফোন/গ্যালারি থেকে সরাসরি আপলোড
+    function handleDirectUpload(e) {
       const file = e.target.files[0];
       if (!file) return;
+
       const reader = new FileReader();
       reader.onload = function(event) {
-        uploadedImageBase64 = event.target.result;
-        document.getElementById('upload-text').innerText = 'ছবি যুক্ত হয়েছে ✓';
+        showPreview(event.target.result);
       };
       reader.readAsDataURL(file);
     }
 
-    // বিশ্বমানের Flux AI কমার্শিয়াল পোস্টার ইঞ্জিন
-    async function generatePoster() {
+    // বিকল্প ২: GPT Image 2.0 দিয়ে ছবি তৈরি
+    async function generateWithAI() {
       const promptInput = document.getElementById('prompt-input');
       const generateBtn = document.getElementById('generate-btn');
       const btnText = document.getElementById('btn-text');
-      const previewImg = document.getElementById('preview-image');
-      const placeholderText = document.getElementById('placeholder-text');
 
-      const text = promptInput.value.trim();
-      if (!text) {
-        alert('অনুগ্রহ করে বিজ্ঞাপনের কিছু বিবরণ লিখুন!');
+      const userPrompt = promptInput.value.trim();
+      if (!userPrompt) {
+        alert('অনুগ্রহ করে পোস্টারের বিবরণ বা প্রম্পট লিখুন!');
         return;
       }
 
       generateBtn.disabled = true;
-      btnText.innerText = 'এআই পোস্টার তৈরি হচ্ছে... ⏳';
+      btnText.innerText = 'তৈরি হচ্ছে... ⏳';
 
       try {
-        // ক্যাটাগরি ভিত্তিক প্রিমিয়াম কমার্শিয়াল প্রম্পট
-        let visualStyle = "luxury commercial sale discount poster flyer, glowing neon 3D text 'SALE', glossy shopping bags, golden sparkles, confetti, dramatic volumetric purple neon stage lighting";
-        if (currentTemplate === 'school') {
-          visualStyle = "prestigious modern educational school academy admission poster flyer, 3D graduation cap, books, high tech modern classroom glow, vibrant blue and purple neon illumination";
-        } else if (currentTemplate === 'jalsa') {
-          visualStyle = "majestic Islamic conference waz mahfil poster flyer, 3D glowing golden crescent moon, illuminated mosque minarets, starry divine night, emerald green and gold ambient lights";
-        } else if (currentTemplate === 'eid') {
-          visualStyle = "grand Eid Mubarak festive celebration flyer, 3D ornate golden lanterns, glowing crescent, sparkling fireworks, lavish royal purple and gold ambiance";
-        } else if (currentTemplate === 'political') {
-          visualStyle = "bold political campaign rally poster, grand podium, patriotic dramatic lighting, victory flags, triumphant cinematic atmosphere";
-        } else if (currentTemplate === 'custom') {
-          visualStyle = "modern high-end commercial branding advertising flyer, 3D glossy abstract shapes, vibrant neon purple lights, cinematic studio photography";
+        const response = await fetch('/api/generate-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: userPrompt })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.imageUrl) {
+          alert('সমস্যা: ' + (data.error || 'ছবি প্রস্তুত হয়নি'));
+          return;
         }
 
-        const seed = Math.floor(Math.random() * 999999);
-        const fullPrompt = `Ultra high quality vertical commercial promotional banner poster (9:16 portrait orientation). ${visualStyle}. Beautiful commercial layout with top header banner, elegant 3D typography banners, vibrant neon rim lights, 8k resolution, photorealistic, masterpiece advertising art. Details: ${text}`;
-        
-        // Flux AI ইমেজ URL
-        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=768&height=1344&model=flux&seed=${seed}&nologo=true`;
-
-        // প্রি-লোড ও স্ক্রিনে দেখানো
-        const tempImg = new Image();
-        tempImg.onload = function() {
-          generatedImageUrl = imageUrl;
-          previewImg.src = imageUrl;
-          previewImg.style.display = 'block';
-          placeholderText.style.display = 'none';
-          generateBtn.disabled = false;
-          btnText.innerText = 'পোস্টার তৈরি ➤';
-        };
-        tempImg.onerror = function() {
-          alert('ছবি লোড হতে বিলম্ব হচ্ছে, আবার চেষ্টা করুন।');
-          generateBtn.disabled = false;
-          btnText.innerText = 'পোস্টার তৈরি ➤';
-        };
-        tempImg.src = imageUrl;
+        showPreview(data.imageUrl);
 
       } catch (err) {
-        alert('সমস্যা: ' + err.message);
+        alert('সার্ভার এরর: ' + err.message);
+      } finally {
         generateBtn.disabled = false;
-        btnText.innerText = 'পোস্টার তৈরি ➤';
+        btnText.innerText = 'এআই পোস্টার তৈরি ➤';
       }
     }
 
+    // প্রিভিউ ডিসপ্লে
+    function showPreview(url) {
+      currentPosterUrl = url;
+      const previewImg = document.getElementById('preview-image');
+      const placeholder = document.getElementById('placeholder-text');
+
+      previewImg.src = url;
+      previewImg.style.display = 'block';
+      placeholder.style.display = 'none';
+    }
+
+    // বিজ্ঞাপন বাজারে প্রকাশ
     function publishLive() {
-      if (!generatedImageUrl) {
-        alert('আগে একটি পোস্টার তৈরি করুন!');
+      if (!currentPosterUrl) {
+        alert('আগে একটি পোস্টার তৈরি বা আপলোড করুন!');
         return;
       }
-      alert('পোস্টারটি সফলভাবে বিজ্ঞাপন বাজারে লাইভ করার জন্য অনুমোদিত হয়েছে!');
+
+      const promptText = document.getElementById('prompt-input').value.trim() || 'বিজ্ঞাপন পোস্টার';
+
+      const adData = {
+        title: promptText.substring(0, 45),
+        image: currentPosterUrl,
+        publishedAt: new Date().toISOString()
+      };
+
+      const allAds = JSON.parse(localStorage.getItem('user_market_ads') || '[]');
+      allAds.unshift(adData);
+      localStorage.setItem('user_market_ads', JSON.stringify(allAds));
+
+      alert('পোস্টারটি সফলভাবে বিজ্ঞাপন বাজারে প্রকাশিত হয়েছে!');
       window.location.href = 'ads.html';
     }
 
+    // বাতিল
     function cancelPreview() {
+      currentPosterUrl = '';
       const previewImg = document.getElementById('preview-image');
-      const placeholderText = document.getElementById('placeholder-text');
+      const placeholder = document.getElementById('placeholder-text');
+
       previewImg.src = '';
       previewImg.style.display = 'none';
-      placeholderText.style.display = 'block';
-      generatedImageUrl = '';
+      placeholder.style.display = 'block';
+      document.getElementById('image-upload').value = '';
     }
   </script>
 </body>

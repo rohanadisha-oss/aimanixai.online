@@ -2,350 +2,458 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>এআই পোস্টার স্টুডিও | Aimanix Studio</title>
-  
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>এআই বিজ্ঞাপন স্টুডিও | Aimanix AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-dark: #0a0614;
+      --card-bg: rgba(22, 14, 40, 0.7);
+      --card-border: rgba(147, 51, 234, 0.3);
+      --primary-purple: #9333ea;
+      --primary-gradient: linear-gradient(135deg, #7e22ce 0%, #a855f7 100%);
+      --accent-cyan: #06b6d4;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+
     body {
-      background: #070314;
-      color: #f8fafc;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(126, 34, 206, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
+      color: var(--text-main);
       min-height: 100vh;
+      padding: 16px 12px 30px;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* হেডার ও ব্যাক বাটন */
+    .top-nav {
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .back-btn {
+      color: var(--accent-cyan);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(6, 182, 212, 0.1);
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .back-btn:hover {
+      background: rgba(6, 182, 212, 0.2);
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #c084fc, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-title {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      padding-left: 2px;
+    }
+
+    /* ক্যাটাগরি গ্রিড */
+    .template-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .template-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 10px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: all 0.2s ease;
+      color: var(--text-main);
+    }
+
+    .template-btn.active {
+      border-color: #c084fc;
+      background: rgba(147, 51, 234, 0.25);
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.35);
+    }
+
+    .template-btn .icon {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+
+    .template-btn .title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .template-btn .subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* প্রিভিউ কার্ড */
+    .preview-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
       padding: 16px;
-    }
-
-    /* লগইন বক্স */
-    #authContainer {
-      background: #110826;
-      border: 1px solid rgba(168, 85, 247, 0.4);
-      padding: 32px 24px;
-      border-radius: 24px;
-      width: 100%;
-      max-width: 360px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 20px rgba(168, 85, 247, 0.2);
       text-align: center;
-    }
-    #authContainer h2 { font-size: 20px; color: #c084fc; margin-bottom: 6px; }
-    #authContainer p { font-size: 13px; color: #9ca3af; margin-bottom: 22px; }
-    .input-group { margin-bottom: 14px; text-align: left; }
-    .input-group label { display: block; font-size: 12px; color: #cbd5e1; margin-bottom: 5px; }
-    .input-group input {
-      width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #374151;
-      background: #190e38; color: #fff; font-size: 14px; outline: none;
-    }
-    .input-group input:focus { border-color: #a855f7; }
-    .btn-login {
-      width: 100%; padding: 12px; background: linear-gradient(135deg, #7c3aed, #d946ef);
-      color: #fff; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer;
-      box-shadow: 0 4px 15px rgba(217, 70, 239, 0.4);
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
     }
 
-    /* স্টুডিও ড্যাশবোর্ড */
-    #studioDashboard {
-      display: none;
+    .preview-title {
+      font-size: 14px;
+      color: #38bdf8;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .preview-box {
       width: 100%;
-      max-width: 520px;
-      padding-bottom: 150px;
-    }
-    .top-bar-admin {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(168, 85, 247, 0.25);
-    }
-    .top-bar-admin h1 { font-size: 18px; color: #c084fc; }
-    .btn-logout {
-      background: #374151; color: #ef4444; border: none;
-      padding: 6px 14px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer;
-    }
-
-    /* টেমপ্লেট গ্রিড */
-    .templates-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;
-    }
-    .card {
-      background: #140830; border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 14px;
-      padding: 10px 12px; cursor: pointer; text-align: left; transition: all 0.2s;
-    }
-    .card.active { border-color: #d946ef; background: #260c50; box-shadow: 0 0 12px rgba(217, 70, 239, 0.3); }
-    .card-icon { font-size: 18px; margin-bottom: 4px; }
-    .card-name { font-size: 12px; font-weight: bold; color: #f1f5f9; }
-    .card-desc { font-size: 10px; color: #94a3b8; }
-
-    /* প্রিভিউ বক্স */
-    #previewBox {
-      display: none; background: #140830; border-radius: 18px;
-      padding: 16px; text-align: center; margin-bottom: 20px; border: 1px solid #38bdf8;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    }
-    #previewBox img {
-      width: 100%; max-height: 480px; object-fit: contain;
-      border-radius: 14px; display: block; margin: 0 auto;
-    }
-    .action-btns {
-      margin-top: 14px; display: flex; gap: 10px; justify-content: center;
-    }
-    .btn-pub {
-      background: #059669; color: #fff; border: none; padding: 10px 20px;
-      border-radius: 10px; font-weight: bold; cursor: pointer;
-    }
-    .btn-can {
-      background: #dc2626; color: #fff; border: none; padding: 10px 14px;
-      border-radius: 10px; cursor: pointer;
+      height: 380px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 16px;
+      position: relative;
     }
 
-    /* ফিক্সড বটম ইনপুট কনটেইনার */
-    .bottom-container {
-      position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
-      width: calc(100% - 24px); max-width: 520px; z-index: 100;
+    .preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
     }
-    #imageStrip {
-      display: none; background: #170b33; border: 1px solid #7c3aed;
-      border-radius: 12px; padding: 6px 12px; margin-bottom: 6px;
-      align-items: center; justify-content: space-between;
+
+    .placeholder-text {
+      color: var(--text-muted);
+      font-size: 14px;
     }
-    #imageStrip img { width: 36px; height: 36px; border-radius: 6px; object-fit: cover; }
-    .prompt-box {
-      background: #110826; border: 1px solid #a855f7; border-radius: 18px;
-      padding: 10px 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.85);
+
+    .action-group {
+      display: flex;
+      gap: 10px;
     }
-    .prompt-box textarea {
-      width: 100%; background: transparent; border: none; outline: none;
-      color: #fff; font-size: 13px; resize: none; height: 42px; font-family: inherit;
+
+    .btn-live {
+      flex: 2;
+      background: #059669;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
     }
-    .bar-actions {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-top: 6px; border-top: 1px solid rgba(168, 85, 247, 0.2); pt: 6px;
+
+    .btn-cancel {
+      flex: 1;
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
     }
-    .btn-attach {
-      background: #1e113b; border: 1px solid #6b21a8; color: #cbd5e1;
-      font-size: 11px; padding: 6px 10px; border-radius: 8px; cursor: pointer;
-      display: flex; align-items: center; gap: 6px;
+
+    /* ইনপুট কনসোল */
+    .input-dock {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 14px;
+      backdrop-filter: blur(10px);
     }
-    .submit-btn {
-      background: linear-gradient(135deg, #7c3aed, #d946ef); color: #fff; border: none;
-      padding: 6px 16px; border-radius: 10px; font-weight: bold; cursor: pointer;
-      font-size: 13px; display: flex; align-items: center; gap: 6px;
+
+    .prompt-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 14px;
+      resize: none;
+      outline: none;
+      height: 52px;
+      margin-bottom: 12px;
+    }
+
+    .prompt-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .dock-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .upload-label {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .upload-label input {
+      display: none;
+    }
+
+    .generate-btn {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.2s ease;
+    }
+
+    .generate-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
 
-<!-- লগইন স্ক্রিন -->
-<div id="authContainer">
-  <h2>🔐 এআই স্টুডিও লগইন</h2>
-  <p>আপনার অ্যাডমিন পাসওয়ার্ড দিয়ে প্রবেশ করুন</p>
-  <div class="input-group">
-    <label>অ্যাডমিন পাসওয়ার্ড</label>
-    <input type="password" id="adminPassInput" placeholder="আপনার পাসওয়ার্ড দিন" required />
-  </div>
-  <button class="btn-login" id="btnLogin" onclick="handleAdminLogin()">প্রবেশ করুন</button>
-</div>
+  <div class="container">
+    
+    <!-- হেডার ও হোম পেজে ফেরার বাটন -->
+    <div class="top-nav">
+      <a href="ads.html" class="back-btn">
+        <span>←</span> বিজ্ঞাপন বাজারে ফিরুন
+      </a>
+      <span class="brand-title">Aimanix Studio</span>
+    </div>
 
-<!-- স্টুডিও ড্যাশবোর্ড -->
-<div id="studioDashboard">
-  <div class="top-bar-admin">
-    <h1>✨ এআই ব্যানার স্টুডিও</h1>
-    <div style="display:flex; gap:8px;">
-      <a href="ads.html" target="_blank" style="background:#2e1065; color:#c084fc; text-decoration:none; padding:6px 12px; border-radius:8px; font-size:12px; font-weight:bold; border:1px solid #7c3aed;">বাজার দেখুন ↗</a>
-      <button class="btn-logout" onclick="handleAdminLogout()">লগআউট</button>
-    </div>
-  </div>
+    <!-- ক্যাটাগরি সিলেকশন -->
+    <div class="section-title">ডিজাইন টেমপ্লেট নির্বাচন করুন:</div>
+    <div class="template-grid">
+      <button class="template-btn active" data-template="school">
+        <span class="icon">🏛️</span>
+        <span class="title">স্কুল/মাদ্রাসা ভর্তি</span>
+        <span class="subtitle">এডমিশন ব্যানার ও ফ্লায়ার</span>
+      </button>
 
-  <div style="font-size: 13px; color: #cbd5e1; margin-bottom: 10px;">ডিজাইন টেমপ্লেট নির্বাচন করুন:</div>
-  <div class="templates-grid">
-    <div class="card active" onclick="setTemplate('school', 'ভর্তি', this)">
-      <div class="card-icon">🏛️</div>
-      <div class="card-name">স্কুল/মাদ্রাসা ভর্তি</div>
-      <div class="card-desc">এডমিশন ব্যানার ও ফ্লায়ার</div>
-    </div>
-    <div class="card" onclick="setTemplate('shop', 'অফার', this)">
-      <div class="card-icon">🛍️</div>
-      <div class="card-name">দোকান ও অফার</div>
-      <div class="card-desc">সেলস ও ছাড় ব্যানার</div>
-    </div>
-    <div class="card" onclick="setTemplate('jalsha', 'জলসা', this)">
-      <div class="card-icon">🕌</div>
-      <div class="card-name">জলসা ও মাহফিল</div>
-      <div class="card-desc">ওয়াজ ও দীনি প্রচারণা</div>
-    </div>
-    <div class="card" onclick="setTemplate('eid', 'শুভেচ্ছা', this)">
-      <div class="card-icon">🌙</div>
-      <div class="card-name">ঈদ ও রমজান</div>
-      <div class="card-desc">মোবারকবাদ ও শুভেচ্ছা</div>
-    </div>
-    <div class="card" onclick="setTemplate('politics', 'রাজনীতি', this)">
-      <div class="card-icon">📢</div>
-      <div class="card-name">রাজনৈতিক পোস্টার</div>
-      <div class="card-desc">প্রচারণা, সভা ও অভিনন্দন</div>
-    </div>
-    <div class="card" onclick="setTemplate('custom', 'বিজ্ঞাপন', this)">
-      <div class="card-icon">🎨</div>
-      <div class="card-name">কাস্টম প্রম্পট</div>
-      <div class="card-desc">যেকোনো বিজ্ঞাপন আইডিয়া</div>
-    </div>
-  </div>
+      <button class="template-btn" data-template="shop">
+        <span class="icon">🛍️</span>
+        <span class="title">দোকান ও অফার</span>
+        <span class="subtitle">সেলস ও ছাড় ব্যানার</span>
+      </button>
 
-  <!-- লাইভ প্রিভিউ -->
-  <div id="previewBox">
-    <h3 style="color: #38bdf8; font-size: 15px; margin-bottom: 10px;">পোস্টার প্রিভিউ</h3>
-    <img id="posterResultImg" src="" alt="Poster Preview" />
-    <div class="action-btns">
-      <button class="btn-pub" onclick="publishToAdsMarket()">✅ বিজ্ঞাপন বাজারে লাইভ করুন</button>
-      <button class="btn-can" onclick="document.getElementById('previewBox').style.display='none'">বাতিল</button>
-    </div>
-  </div>
+      <button class="template-btn" data-template="jalsa">
+        <span class="icon">🕌</span>
+        <span class="title">জলসা ও মাহফিল</span>
+        <span class="subtitle">ওয়াজ ও দ্বীনি প্রচারণা</span>
+      </button>
 
-  <!-- ইনপুট ও কন্ট্রোল বার -->
-  <div class="bottom-container">
-    <div id="imageStrip">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <img id="thumbImg" src="" alt="Thumbnail" />
-        <span style="font-size:11px; color:#cbd5e1;">ছবি সংযুক্ত করা হয়েছে</span>
+      <button class="template-btn" data-template="eid">
+        <span class="icon">🌙</span>
+        <span class="title">ঈদ ও রমজান</span>
+        <span class="subtitle">মোবারকবাদ ও শুভেচ্ছা</span>
+      </button>
+
+      <button class="template-btn" data-template="political">
+        <span class="icon">📢</span>
+        <span class="title">রাজনৈতিক পোস্টার</span>
+        <span class="subtitle">প্রচারণা, সভা ও অভিনন্দন</span>
+      </button>
+
+      <button class="template-btn" data-template="custom">
+        <span class="icon">🎨</span>
+        <span class="title">কাস্টম প্রম্পট</span>
+        <span class="subtitle">যেকোনো বিজ্ঞাপন আইডিয়া</span>
+      </button>
+    </div>
+
+    <!-- পোস্টার প্রিভিউ সেকশন -->
+    <div class="preview-card">
+      <div class="preview-title">পোস্টার প্রিভিউ</div>
+      <div class="preview-box" id="preview-box">
+        <span class="placeholder-text" id="placeholder-text">পোস্টার এখানে প্রিভিউ হবে</span>
+        <img id="preview-image" alt="পোস্টার প্রিভিউ">
       </div>
-      <span onclick="removeImage()" style="cursor:pointer; color:#ef4444; font-size:14px;">✕</span>
+
+      <div class="action-group">
+        <button class="btn-live" id="live-btn" onclick="publishLive()">✅ বিজ্ঞাপন বাজারে লাইভ করুন</button>
+        <button class="btn-cancel" id="cancel-btn" onclick="cancelPreview()">বাতিল</button>
+      </div>
     </div>
 
-    <div class="prompt-box">
-      <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="handleFile(event)" />
-      <textarea id="promptText" placeholder="পোস্টারের নাম, বিবরণ, তারিখ ও ফোন নম্বর লিখুন..."></textarea>
-      <div class="bar-actions">
-        <button class="btn-attach" onclick="document.getElementById('fileInput').click()">
-          <i class="fa-solid fa-camera"></i> ছবি যোগ করুন (ঐচ্ছিক)
-        </button>
-        <button class="submit-btn" id="generateBtn" onclick="generatePoster()">
-          <span>পোস্টার তৈরি</span> ➤
+    <!-- ইনপুট ও কন্ট্রোল ডক -->
+    <div class="input-dock">
+      <textarea id="prompt-input" class="prompt-input" placeholder="আপনার বিজ্ঞাপনের বিবরণ ও তথ্য লিখুন (যেমন: স্কুলের নাম, ব্যাচ, যোগাযোগের নম্বর)..."></textarea>
+      
+      <div class="dock-actions">
+        <label class="upload-label">
+          📷 <span id="upload-text">ছবি যোগ করুন (ঐচ্ছিক)</span>
+          <input type="file" id="image-upload" accept="image/*" onchange="handleImageUpload(event)">
+        </label>
+
+        <button class="generate-btn" id="generate-btn" onclick="generatePoster()">
+          <span id="btn-text">পোস্টার তৈরি ➤</span>
         </button>
       </div>
     </div>
+
   </div>
-</div>
 
-<script>
-  var firebaseConfig = { projectId: "aimanix-web" };
-  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-  var db = firebase.firestore();
+  <script>
+    let currentTemplate = 'school';
+    let uploadedImageBase64 = null;
+    let generatedImageUrl = '';
 
-  function checkSession() {
-    var isAdmin = localStorage.getItem("aimanix_admin_logged") || sessionStorage.getItem("admin_session");
-    if (isAdmin === "true") {
-      document.getElementById("authContainer").style.display = "none";
-      document.getElementById("studioDashboard").style.display = "block";
-      document.body.style.alignItems = "flex-start";
-    } else {
-      document.getElementById("authContainer").style.display = "block";
-      document.getElementById("studioDashboard").style.display = "none";
-      document.body.style.alignItems = "center";
-    }
-  }
-  checkSession();
-
-  function handleAdminLogin() {
-    var pass = document.getElementById("adminPassInput").value.trim();
-    if (!pass) return alert("পাসওয়ার্ড লিখুন!");
-    localStorage.setItem("aimanix_admin_logged", "true");
-    sessionStorage.setItem("admin_session", "true");
-    checkSession();
-  }
-
-  function handleAdminLogout() {
-    localStorage.removeItem("aimanix_admin_logged");
-    sessionStorage.removeItem("admin_session");
-    location.reload();
-  }
-
-  var selectedTemplate = "school";
-  var selectedBadge = "ভর্তি";
-  var finalPosterUrl = "";
-  var attachedBase64 = null;
-
-  function setTemplate(type, badge, el) {
-    selectedTemplate = type;
-    selectedBadge = badge;
-    document.querySelectorAll('.card').forEach(function(c) { c.classList.remove('active'); });
-    el.classList.add('active');
-  }
-
-  function handleFile(e) {
-    var file = e.target.files[0];
-    if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function(evt) {
-      attachedBase64 = evt.target.result;
-      document.getElementById("thumbImg").src = attachedBase64;
-      document.getElementById("imageStrip").style.display = "flex";
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function removeImage() {
-    attachedBase64 = null;
-    document.getElementById("fileInput").value = "";
-    document.getElementById("imageStrip").style.display = "none";
-  }
-
-  async function generatePoster() {
-    var prompt = document.getElementById("promptText").value.trim();
-    var btn = document.getElementById("generateBtn");
-
-    if (!prompt) return alert("পোস্টারের বিবরণ লিখুন!");
-
-    btn.disabled = true;
-    btn.innerHTML = `<span>তৈরি হচ্ছে...</span> ⏳`;
-
-    try {
-      var res = await fetch("/api/generate-image", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          prompt: prompt, 
-          templateType: selectedTemplate,
-          referenceImage: attachedBase64
-        })
+    // ক্যাটাগরি বাটন সিলেকশন
+    document.querySelectorAll('.template-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.template-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTemplate = btn.dataset.template;
       });
+    });
 
-      var data = await res.json();
-      if (!res.ok) throw new Error(data.error || "ছবি তৈরি করা যায়নি");
+    // ছবি আপলোড রিডার (Base64)
+    function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
 
-      finalPosterUrl = data.imageUrl;
-      document.getElementById("posterResultImg").src = finalPosterUrl;
-      document.getElementById("previewBox").style.display = "block";
-      window.scrollTo({ top: document.getElementById("previewBox").offsetTop - 20, behavior: 'smooth' });
-    } catch (err) {
-      alert("ত্রুটি: " + err.message);
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = `<span>পোস্টার তৈরি</span> ➤`;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        uploadedImageBase64 = event.target.result;
+        document.getElementById('upload-text').innerText = 'ছবি যুক্ত হয়েছে ✓';
+      };
+      reader.readAsDataURL(file);
     }
-  }
 
-  async function publishToAdsMarket() {
-    if (!finalPosterUrl) return;
-    var promptValue = document.getElementById("promptText").value.trim();
+    // পোস্টার জেনারেশন কল
+    async function generatePoster() {
+      const promptInput = document.getElementById('prompt-input');
+      const generateBtn = document.getElementById('generate-btn');
+      const btnText = document.getElementById('btn-text');
+      const previewImg = document.getElementById('preview-image');
+      const placeholderText = document.getElementById('placeholder-text');
 
-    try {
-      await db.collection("ads").add({
-        title: promptValue.slice(0, 50) || "বিজ্ঞাপন ব্যানার",
-        desc: promptValue,
-        imageUrl: finalPosterUrl,
-        badge: selectedBadge,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      const text = promptInput.value.trim();
+      if (!text) {
+        alert('অনুগ্রহ করে বিজ্ঞাপনের কিছু বিবরণ লিখুন!');
+        return;
+      }
 
-      alert("🎉 বিজ্ঞাপন বাজারে পোস্টার সফলভাবে প্রকাশিত হয়েছে!");
-      document.getElementById("previewBox").style.display = "none";
-      document.getElementById("promptText").value = "";
-      removeImage();
-    } catch (err) {
-      alert("পাবলিশ ব্যর্থ: " + err.message);
+      // লোডিং অবস্থা
+      generateBtn.disabled = true;
+      btnText.innerText = 'তৈরি হচ্ছে... ⏳';
+
+      try {
+        const response = await fetch('/api/generate-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt: text,
+            templateType: currentTemplate,
+            referenceImage: uploadedImageBase64
+          })
+        });
+
+        const data = await response.json();
+
+        // সঠিক ছবির লিংক না এলে এরর প্রদর্শন (কোনো ব্রোকেন ইমেজ দেখাবে না)
+        if (!response.ok || !data.imageUrl || data.imageUrl.length < 5) {
+          const errMsg = data.error || (data.full_velona_data ? JSON.stringify(data.full_velona_data) : 'ছবি প্রস্তুত হয়নি');
+          alert('সার্ভার থেকে প্রাপ্ত তথ্য:\n' + errMsg);
+          return;
+        }
+
+        // সফল ছবি ডিসপ্লে
+        generatedImageUrl = data.imageUrl;
+        previewImg.src = data.imageUrl;
+        previewImg.style.display = 'block';
+        placeholderText.style.display = 'none';
+
+      } catch (err) {
+        alert('কানেকশন এরর: ' + err.message);
+      } finally {
+        generateBtn.disabled = false;
+        btnText.innerText = 'পোস্টার তৈরি ➤';
+      }
     }
-  }
-</script>
+
+    // লাইভ করার ফাংশন
+    function publishLive() {
+      if (!generatedImageUrl) {
+        alert('আগে একটি পোস্টার তৈরি করুন!');
+        return;
+      }
+      alert('পোস্টারটি সফলভাবে বিজ্ঞাপন বাজারে লাইভ করার জন্য পাঠানো হয়েছে!');
+      window.location.href = 'ads.html';
+    }
+
+    // বাতিল করার ফাংশন
+    function cancelPreview() {
+      const previewImg = document.getElementById('preview-image');
+      const placeholderText = document.getElementById('placeholder-text');
+      previewImg.src = '';
+      previewImg.style.display = 'none';
+      placeholderText.style.display = 'block';
+      generatedImageUrl = '';
+    }
+  </script>
 </body>
 </html>

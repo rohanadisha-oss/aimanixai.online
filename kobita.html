@@ -223,15 +223,15 @@
       gap: 2rem;
     }
 
-    /* বর্ডার অ্যানিমেশনের জন্য আউটার কন্টেইনার */
     .poem-card {
       position: relative;
       border-radius: 24px;
       overflow: hidden;
-      padding: 3px; /* ঘুরন্ত বর্ডারের পুরুত্ব */
+      padding: 3px;
       display: flex;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      scroll-margin-top: 100px;
     }
 
     .poem-card:hover {
@@ -239,7 +239,17 @@
       box-shadow: 0 20px 45px rgba(255, 42, 122, 0.3);
     }
 
-    /* ঘুরন্ত নিয়ন গ্রেডিয়েন্ট রেখা */
+    /* শেয়ার করা লিঙ্কে ক্লিক করে আসলে স্পেশাল গ্লো এফেক্ট */
+    .poem-card.highlight-target {
+      animation: pulseHighlight 2s ease-in-out 3;
+    }
+
+    @keyframes pulseHighlight {
+      0%, 100% { box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); }
+      50% { box-shadow: 0 0 45px rgba(255, 42, 122, 0.8), 0 0 20px rgba(0, 242, 254, 0.9); }
+    }
+
+    /* ঘুরন্ত নিয়ন বর্ডার */
     .poem-card::before {
       content: '';
       position: absolute;
@@ -259,15 +269,10 @@
     }
 
     @keyframes rotateBorder {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
-    /* কার্ডের ভেতরের মূল কন্টেন্ট ও ব্যাকগ্রাউন্ড */
     .poem-card-inner {
       position: relative;
       z-index: 1;
@@ -350,11 +355,19 @@
       margin-bottom: 1.6rem;
     }
 
+    /* বাটন অ্যাকশন গ্রুপ */
+    .poem-actions-wrapper {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.65rem;
+      margin-top: auto;
+    }
+
     .poem-action-btn {
       background: var(--coral-gradient);
       color: #fff;
       border: none;
-      padding: 0.75rem 1.4rem;
+      padding: 0.75rem 1.1rem;
       border-radius: 12px;
       font-weight: 800;
       font-size: 0.92rem;
@@ -362,14 +375,71 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
       text-decoration: none;
       box-shadow: 0 6px 18px var(--pink-glow);
       transition: all 0.25s ease;
+      white-space: nowrap;
     }
 
     .poem-action-btn:active {
       transform: scale(0.96);
+    }
+
+    .btn-share-poem {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(0, 242, 254, 0.35);
+      color: #00f2fe;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .btn-share-poem:hover {
+      background: rgba(0, 242, 254, 0.15);
+      border-color: #00f2fe;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .btn-share-poem:active {
+      transform: scale(0.94);
+    }
+
+    /* টোস্ট মেসেজ */
+    .share-toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: linear-gradient(135deg, rgba(14, 8, 28, 0.96), rgba(35, 12, 58, 0.96));
+      border: 1px solid var(--accent-cyan);
+      box-shadow: 0 10px 30px rgba(0, 242, 254, 0.35);
+      color: #fff;
+      padding: 0.8rem 1.6rem;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 9999;
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+    }
+
+    .share-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
 
     .loading-notice {
@@ -384,6 +454,7 @@
       .hero-headline { font-size: 2.2rem; }
       .portal-main { margin-top: 1.6rem; }
       .poem-grid { grid-template-columns: 1fr; }
+      .poem-actions-wrapper { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -436,6 +507,11 @@
     </div>
   </main>
 
+  <!-- কাস্টম শেয়ার নোটিফিকেশন টোস্ট -->
+  <div id="share-toast" class="share-toast">
+    <span>✨</span> <span id="toast-text">কবিতার লিঙ্ক কপি করা হয়েছে!</span>
+  </div>
+
   <script>
     // ==========================================================
     // 1. FIREBASE CONFIGURATION (aimanix-web)
@@ -454,9 +530,10 @@
     let allPoemsList = [];
     let currentFilter = 'all';
 
-    // ডিফল্ট ডেমো কবিতা (যদি ডেটাবেজ খালি বা অফলাইন থাকে)
+    // ডিফল্ট ডেমো কবিতা
     const fallbackPoems = [
       {
+        id: "poem_demo_1",
         title: "মেঘের দেশে বৃষ্টিগান",
         author: "অনুভবের ছায়া | Aimanix AI",
         category: "VIII",
@@ -464,6 +541,7 @@
         body: `নীল আকাশের সীমানা ছাড়িয়ে,\nমেঘেরা পাঠালো চিঠি।\nভিজে যাওয়া ঘাসে সবুজ আলপনা,\nজুড়িয়ে দিল এ দিঘি।\n\nবৃষ্টির কণা সুর তোলে মনে,\nবাতাসে বকুল ঘ্রাণ।\nঅচেনা পথের বাঁকে দাঁড়িয়ে,\nগেয়ে উঠি নব গান।`
       },
       {
+        id: "poem_demo_2",
         title: "তটিনীর বাঁকে",
         author: "কবির স্বপ্ন | নবম সংকলন",
         category: "IX",
@@ -471,6 +549,7 @@
         body: `উত্তাল ঢেউয়ে জাগে প্রতিধ্বনি,\nবালুকাবেলায় স্মৃতি।\nঅস্তমিত রবির সোনালী মায়ায়,\nলিখে রাখি এক গীতি।\n\nদূর দিগন্তে জ্বলে ওঠা তারা,\nনিদ্রাহীন এক রাত।\nঅসীম সাহসে এগিয়ে চলেছি,\nছুঁয়ে দিতে ভোর-প্রভাত।`
       },
       {
+        id: "poem_demo_3",
         title: "কুয়াশা ঢাকা ভোর",
         author: "আনোয়ার হোসেন",
         category: "special",
@@ -508,10 +587,11 @@
       }
 
       renderPoems();
+      handleDirectPoemScroll();
     }
 
     // ==========================================================
-    // 3. RENDER POEMS GRID
+    // 3. RENDER POEMS GRID WITH SHARE BUTTON
     // ==========================================================
     function renderPoems() {
       const container = document.getElementById("poem-container");
@@ -529,18 +609,21 @@
       }
 
       container.innerHTML = "";
-      filtered.forEach(poem => {
+      filtered.forEach((poem) => {
         const categoryLabel = poem.category === 'VIII' ? 'Class VIII সাহিত্য'
                             : poem.category === 'IX' ? 'Class IX সাহিত্য'
                             : 'সৃজনশীল আসর';
 
         const coverImg = poem.imageUrl || "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80";
 
+        // ইউনিক আইডি তৈরি
+        const poemSlugId = poem.id ? `poem-${poem.id}` : `poem-${encodeURIComponent(poem.title.replace(/\s+/g, '-'))}`;
+
         const card = document.createElement("div");
         card.className = "poem-card";
+        card.id = poemSlugId;
         card.setAttribute("data-category", poem.category);
 
-        // ভেতরের লেয়ার হিসেবে poem-card-inner রাখা হয়েছে যেন ঘুরন্ত বর্ডারটি ব্যাকগ্রাউন্ডে দৃশ্যমান থাকে
         card.innerHTML = `
           <div class="poem-card-inner">
             <div class="poem-cover-wrap">
@@ -551,9 +634,15 @@
               <h3 class="poem-title">${poem.title}</h3>
               <div class="poem-author">✍️ কলমে: ${poem.author}</div>
               <div class="poem-verses">${poem.body}</div>
-              <a href="https://wa.me/919143181401?text=আমি%20কবিতার%20আকাশ%20থেকে%20'${encodeURIComponent(poem.title)}'%20কবিতাটি%20পড়েছি" target="_blank" class="poem-action-btn">
-                <span>সরাসরি আবৃত্তি শুনুন</span> →
-              </a>
+              
+              <div class="poem-actions-wrapper">
+                <a href="https://wa.me/919143181401?text=আমি%20কবিতার%20আকাশ%20থেকে%20'${encodeURIComponent(poem.title)}'%20কবিতাটি%20পড়েছি" target="_blank" class="poem-action-btn">
+                  <span>সরাসরি আবৃত্তি শুনুন</span> →
+                </a>
+                <button class="btn-share-poem" onclick="sharePoem('${poemSlugId}', '${escapeJs(poem.title)}', '${escapeJs(poem.author)}')">
+                  🔗 <span>শেয়ার</span>
+                </button>
+              </div>
             </div>
           </div>
         `;
@@ -561,7 +650,91 @@
       });
     }
 
-    // Filter Logic
+    // ==========================================================
+    // 4. SMART POEM SHARE HANDLER (Web Share API + Deep Link)
+    // ==========================================================
+    async function sharePoem(elementId, title, author) {
+      // kobita.html ফাইলের সঠিক লিঙ্ক তৈরি
+      const currentUrl = new URL(window.location.href);
+      currentUrl.hash = elementId;
+      const shareUrl = currentUrl.toString();
+
+      const shareData = {
+        title: `${title} | কবিতার আকাশ - Aimanix AI`,
+        text: `✨ '${title}' - কবিতাটি পড়ুন (কলমে: ${author})\nকবিতার আকাশ সাহিত্য আসর থেকে:\n`,
+        url: shareUrl
+      };
+
+      // মোবাইলের নেটিভ শেয়ার শিট (WhatsApp, FB, Telegram ইত্যাদি)
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+          return;
+        } catch (err) {
+          if (err.name !== 'AbortError') {
+            fallbackCopyToClipboard(shareUrl);
+          }
+        }
+      } else {
+        fallbackCopyToClipboard(shareUrl);
+      }
+    }
+
+    // ব্রাউজারে লিঙ্ক কপি ও টোস্ট প্রদর্শন
+    function fallbackCopyToClipboard(url) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(url).then(() => {
+          showShareToast("কবিতার সরাসরি লিঙ্ক কপি হয়েছে! বন্ধুদের পাঠান।");
+        }).catch(() => {
+          legacyCopy(url);
+        });
+      } else {
+        legacyCopy(url);
+      }
+    }
+
+    function legacyCopy(url) {
+      const input = document.createElement("input");
+      input.value = url;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+      showShareToast("কবিতার সরাসরি লিঙ্ক কপি হয়েছে! বন্ধুদের পাঠান।");
+    }
+
+    function showShareToast(message) {
+      const toast = document.getElementById("share-toast");
+      const toastText = document.getElementById("toast-text");
+      toastText.innerText = message;
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    // শেয়ার লিঙ্কে ক্লিক করে আসলে স্বয়ংক্রিয়ভাবে সেই কবিতায় স্ক্রল করা
+    function handleDirectPoemScroll() {
+      const hash = window.location.hash;
+      if (hash) {
+        setTimeout(() => {
+          const target = document.querySelector(hash);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            target.classList.add('highlight-target');
+            setTimeout(() => target.classList.remove('highlight-target'), 6000);
+          }
+        }, 500);
+      }
+    }
+
+    function escapeJs(str) {
+      if (!str) return "";
+      return String(str).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    // ফিল্টার লজিক
     function filterCategory(cat, btnElement) {
       currentFilter = cat;
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));

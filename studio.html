@@ -8,8 +8,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@600;700&family=Hind+Siliguri:wght@400;600;700&family=Noto+Sans+Bengali:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Firebase Compat Libraries -->
+  <!-- Firebase Compat Libraries (App, Firestore & Auth) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <style>
@@ -42,12 +43,12 @@
     }
 
     /* =========================================
-       লক স্ক্রিন মডাল (Password Protection Gate)
+       Firebase Email/Password Auth Modal
        ========================================= */
     #auth-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(8, 3, 20, 0.95);
+      background: rgba(8, 3, 20, 0.96);
       backdrop-filter: blur(25px);
       z-index: 10000;
       display: flex;
@@ -57,11 +58,11 @@
     }
 
     .auth-card {
-      background: rgba(26, 14, 48, 0.9);
+      background: rgba(26, 14, 48, 0.95);
       border: 1px solid rgba(168, 85, 247, 0.4);
       border-radius: 24px;
       padding: 2.2rem 1.8rem;
-      max-width: 400px;
+      max-width: 420px;
       width: 100%;
       text-align: center;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(168, 85, 247, 0.2);
@@ -74,16 +75,23 @@
     }
 
     .auth-title {
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: #fff;
       margin-bottom: 0.4rem;
     }
 
     .auth-sub {
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       color: var(--text-muted);
       margin-bottom: 1.6rem;
+    }
+
+    .auth-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 1.4rem;
     }
 
     .auth-input {
@@ -93,11 +101,9 @@
       border-radius: 12px;
       padding: 12px 16px;
       color: #fff;
-      font-size: 1rem;
+      font-size: 0.95rem;
       outline: none;
-      margin-bottom: 1.2rem;
-      text-align: center;
-      letter-spacing: 2px;
+      transition: all 0.2s ease;
     }
 
     .auth-input:focus {
@@ -110,7 +116,7 @@
       background: var(--primary-gradient);
       color: #fff;
       border: none;
-      padding: 12px;
+      padding: 13px;
       border-radius: 12px;
       font-size: 1rem;
       font-weight: 700;
@@ -119,22 +125,28 @@
       transition: all 0.2s ease;
     }
 
+    .auth-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .auth-btn:active {
       transform: scale(0.97);
     }
 
     .auth-error {
       color: #f87171;
-      font-size: 0.85rem;
-      margin-top: 0.8rem;
+      font-size: 0.88rem;
+      margin-top: 0.9rem;
       display: none;
+      line-height: 1.4;
     }
 
     /* মূল অ্যাপ কন্টেইনার */
     .container {
       max-width: 480px;
       margin: 0 auto;
-      display: none; /* ডিফল্টভাবে লুকানো */
+      display: none; /* লগইন না হওয়া পর্যন্ত লুকানো থাকবে */
     }
 
     /* হেডার ও ব্যাক বাটন */
@@ -447,21 +459,25 @@
 <body>
 
   <!-- =========================================
-       পাসওয়ার্ড ভেরিফিকেশন গেট (Lock Screen)
+       Firebase Email/Password Auth Modal
        ========================================= -->
   <div id="auth-overlay">
     <div class="auth-card">
       <div class="auth-icon">🔐</div>
-      <h2 class="auth-title">স্টুডিও লক স্ক্রিন</h2>
-      <p class="auth-sub">অ্যাডমিন পাসওয়ার্ড দিয়ে স্টুডিও আনলক করুন</p>
+      <h2 class="auth-title">স্টুডিও অ্যাডমিন লগইন</h2>
+      <p class="auth-sub">আপনার রেজিস্টার্ড Firebase অ্যাডমিন ইমেল ও পাসওয়ার্ড দিন</p>
       
-      <input type="password" id="auth-pass-input" class="auth-input" placeholder="পাসওয়ার্ড লিখুন..." onkeydown="if(event.key === 'Enter') verifyStudioAuth()">
-      <button class="auth-btn" onclick="verifyStudioAuth()">প্রবেশ করুন ➤</button>
-      <div id="auth-error-msg" class="auth-error">ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।</div>
+      <div class="auth-input-group">
+        <input type="email" id="auth-email-input" class="auth-input" placeholder="অ্যাডমিন ইমেল (Admin Email)..." autocomplete="email">
+        <input type="password" id="auth-pass-input" class="auth-input" placeholder="পাসওয়ার্ড (Password)..." autocomplete="current-password" onkeydown="if(event.key === 'Enter') handleFirebaseAuthLogin()">
+      </div>
+
+      <button class="auth-btn" id="auth-submit-btn" onclick="handleFirebaseAuthLogin()">লগইন করুন ➤</button>
+      <div id="auth-error-msg" class="auth-error"></div>
     </div>
   </div>
 
-  <!-- মূল স্টুডিও কন্টেইনার (আনলক করার পর দৃশ্যমান হবে) -->
+  <!-- মূল স্টুডিও কন্টেইনার (অথেনটিকেশন সফল হলে লোড হবে) -->
   <div class="container" id="main-studio-app">
     
     <!-- হেডার -->
@@ -470,7 +486,7 @@
         <a href="ads.html" class="back-btn">
           <span>←</span> বিজ্ঞাপন বাজারে ফিরুন
         </a>
-        <button class="btn-logout" onclick="logoutStudio()">🔒 লগআউট</button>
+        <button class="btn-logout" onclick="handleFirebaseAuthLogout()">🔒 লগআউট</button>
       </div>
       <span class="brand-title">Aimanix Studio</span>
     </div>
@@ -525,49 +541,7 @@
 
   <script>
     // ==========================================================
-    // 1. পাসওয়ার্ড সুরক্ষা ও অথেনটিকেশন ইঞ্জিন (Same as Admin)
-    // ==========================================================
-    // আপনার admin.html এর যে মাস্টার কি (পাসওয়ার্ড) রয়েছে, প্রয়োজনে তা পরিবর্তন করতে পারেন
-    const STUDIO_ADMIN_KEY = "admin123"; 
-
-    function checkStudioAuth() {
-      const isAuth = sessionStorage.getItem("studio_authenticated") === "true";
-      const overlay = document.getElementById("auth-overlay");
-      const appContainer = document.getElementById("main-studio-app");
-
-      if (isAuth) {
-        overlay.style.display = "none";
-        appContainer.style.display = "block";
-        loadPublishedAds();
-      } else {
-        overlay.style.display = "flex";
-        appContainer.style.display = "none";
-        document.getElementById("auth-pass-input").focus();
-      }
-    }
-
-    function verifyStudioAuth() {
-      const input = document.getElementById("auth-pass-input");
-      const err = document.getElementById("auth-error-msg");
-
-      if (input.value.trim() === STUDIO_ADMIN_KEY) {
-        sessionStorage.setItem("studio_authenticated", "true");
-        err.style.display = "none";
-        checkStudioAuth();
-      } else {
-        err.style.display = "block";
-        input.value = "";
-        input.focus();
-      }
-    }
-
-    function logoutStudio() {
-      sessionStorage.removeItem("studio_authenticated");
-      location.reload();
-    }
-
-    // ==========================================================
-    // 2. ফায়ারবেস কনফিগারেশন
+    // 1. ফায়ারবেস কনফিগারেশন ও অথেনটিকেশন ইনিশিয়ালাইজেশন
     // ==========================================================
     const firebaseConfig = {
       authDomain: "aimanix-web.firebaseapp.com",
@@ -576,8 +550,77 @@
     };
 
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
     const db = firebase.firestore();
 
+    // Firebase Auth State Listener (admin.html এর সাথে নিখুঁত সিঙ্ক)
+    auth.onAuthStateChanged((user) => {
+      const overlay = document.getElementById("auth-overlay");
+      const appContainer = document.getElementById("main-studio-app");
+
+      if (user) {
+        // লগইন থাকলে লকস্ক্রিন বন্ধ হয়ে স্টুডিও খুলবে
+        overlay.style.display = "none";
+        appContainer.style.display = "block";
+        loadPublishedAds();
+      } else {
+        // লগআউট থাকলে লকস্ক্রিন চলে আসবে
+        overlay.style.display = "flex";
+        appContainer.style.display = "none";
+        document.getElementById("auth-email-input").focus();
+      }
+    });
+
+    // Firebase Email/Password Login Function
+    async function handleFirebaseAuthLogin() {
+      const emailInput = document.getElementById("auth-email-input");
+      const passInput = document.getElementById("auth-pass-input");
+      const submitBtn = document.getElementById("auth-submit-btn");
+      const errorMsg = document.getElementById("auth-error-msg");
+
+      const email = emailInput.value.trim();
+      const password = passInput.value.trim();
+
+      if (!email || !password) {
+        errorMsg.innerText = "অনুগ্রহ করে ইমেল ও পাসওয়ার্ড উভয়ই লিখুন।";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = "যাচাই হচ্ছে... ⏳";
+      errorMsg.style.display = "none";
+
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+        // সফল হলে onAuthStateChanged স্বয়ংক্রিয়ভাবে পেজ আনলক করবে
+      } catch (error) {
+        let bengaliErr = "লগইন ব্যর্থ হয়েছে: " + error.message;
+        if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+          bengaliErr = "ভুল ইমেল অথবা পাসওয়ার্ড! অনুগ্রহ করে সঠিক তথ্য দিন।";
+        } else if (error.code === 'auth/invalid-email') {
+          bengaliErr = "ইমেল ফরম্যাটটি সঠিক নয়।";
+        }
+        errorMsg.innerText = bengaliErr;
+        errorMsg.style.display = "block";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "লগইন করুন ➤";
+      }
+    }
+
+    // Firebase Logout Function
+    async function handleFirebaseAuthLogout() {
+      try {
+        await auth.signOut();
+      } catch (err) {
+        alert("লগআউট ব্যর্থ: " + err.message);
+      }
+    }
+
+    // ==========================================================
+    // 2. স্টুডিও কোর ইঞ্জিন (ইমেজ জেনারেশন ও ম্যানেজমেন্ট)
+    // ==========================================================
     let currentPosterUrl = '';
 
     // ছবি কম্প্রেস করার ফাংশন (মেমরি ও ডেটাবেজ সেভিং)
@@ -768,7 +811,7 @@
         console.warn("ফায়ারবেস লোড নোটিশ:", err);
       }
 
-      // ২. লোকাল স্টোরেজ থেকে পড়া (যদি ফায়ারবেসে না থাকে)
+      // ২. লোকাল স্টোরেজ থেকে পড়া
       const storageKeys = ["aimanix_ad_posters", "user_market_ads", "ads", "admin_ads"];
       storageKeys.forEach(k => {
         try {
@@ -864,11 +907,6 @@
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
     }
-
-    // পেজ লোড হলে সবার আগে অথেনটিকেশন চেক
-    document.addEventListener("DOMContentLoaded", () => {
-      checkStudioAuth();
-    });
   </script>
 </body>
 </html>

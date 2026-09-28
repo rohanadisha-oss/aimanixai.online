@@ -120,28 +120,29 @@
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
 
     .btn-nav-link {
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(168, 85, 247, 0.35);
       color: #fff;
-      padding: 0.45rem 0.85rem;
-      border-radius: 10px;
-      font-size: 0.82rem;
+      padding: 0.5rem 0.95rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
       font-weight: 700;
       text-decoration: none;
       transition: all 0.2s ease;
     }
 
-    .btn-nav-link.studio-link {
-      background: linear-gradient(135deg, rgba(217, 70, 239, 0.25), rgba(168, 85, 247, 0.25));
-      border-color: var(--magenta-neon);
-      color: #38bdf8;
+    .btn-nav-link.home-highlight {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(168, 85, 247, 0.25));
+      border-color: var(--cyan-neon);
+      color: #00f2fe;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
     }
 
     .btn-nav-link:active {
@@ -383,15 +384,15 @@
   <div class="purple-grid-bg"></div>
   <canvas id="ads-particle-canvas"></canvas>
 
-  <!-- টপ নেভ -->
+  <!-- টপ নেভ (সোজা index.html এ যাওয়ার ব্যবস্থা) -->
   <nav class="ads-nav">
     <a href="index.html" class="brand-group">
       <span class="brand-badge">AIMANIX.AI</span>
       <span class="brand-title">বিজ্ঞাপন বাজার</span>
     </a>
     <div class="nav-actions">
-      <a href="studio.html" class="btn-nav-link studio-link">🎨 বিজ্ঞাপন স্টুডিও</a>
-      <a href="index.html" class="btn-nav-link">🏠 হোমপেজ</a>
+      <a href="jobs.html" class="btn-nav-link">💼 চাকরির বাজার</a>
+      <a href="index.html" class="btn-nav-link home-highlight">🏠 হোমপেজে ফিরুন</a>
     </div>
   </nav>
 
@@ -442,7 +443,7 @@
       }
     ];
 
-    // studio.html এবং admin.html - উভয়ের ডেটা সিঙ্ক করার ফাংশন
+    // রিয়েল-টাইমে পোস্টার সিঙ্ক ফাংশন
     function setupRealtimeAds() {
       // Firebase Firestore 'ads' কালেকশন রিয়েল-টাইম শোনা
       db.collection("ads").onSnapshot((snapshot) => {
@@ -461,7 +462,7 @@
           });
         }
 
-        // admin.html এবং studio.html এর লোকাল স্টোরেজ সিঙ্ক
+        // লোকাল স্টোরেজ সিঙ্ক
         const localSources = ["aimanix_ad_posters", "admin_ads", "user_market_ads", "ads"];
         let localCombined = [];
 
@@ -475,7 +476,7 @@
                   title: item.title || "বিজ্ঞাপন ব্যানার",
                   desc: item.desc || item.description || "",
                   imageUrl: item.imageUrl || item.image || "",
-                  badge: item.badge || "ADMIN POST",
+                  badge: item.badge || "PROMO",
                   rawTime: item.publishedAt || item.date || item.createdAt || 0
                 });
               });
@@ -483,7 +484,7 @@
           } catch(e) {}
         });
 
-        // উভয় উৎসের ডেটা একত্রীকরণ এবং ডুপ্লিকেট রোধ
+        // উভয় উৎসের ডেটা একত্রীকরণ
         const allAdsMap = new Map();
         
         localCombined.forEach(ad => {
@@ -496,7 +497,7 @@
 
         let finalList = Array.from(allAdsMap.values());
 
-        // নতুন পোস্ট প্রথমে দেখানোর জন্য সর্টিং
+        // নতুন পোস্ট প্রথমে সাজানো
         finalList.sort((a, b) => {
           const timeA = a.rawTime?.toMillis ? a.rawTime.toMillis() : new Date(a.rawTime).getTime() || 0;
           const timeB = b.rawTime?.toMillis ? b.rawTime.toMillis() : new Date(b.rawTime).getTime() || 0;
@@ -531,7 +532,7 @@
                   title: item.title || "বিজ্ঞাপন ব্যানার",
                   desc: item.desc || item.description || "",
                   imageUrl: item.imageUrl || item.image || "",
-                  badge: item.badge || "LOCAL AD"
+                  badge: item.badge || "PROMO"
                 });
               }
             });

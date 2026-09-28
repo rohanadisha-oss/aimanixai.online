@@ -6,7 +6,7 @@
   <title>এআই বিজ্ঞাপন স্টুডিও | Aimanix AI</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Noto+Sans+Bengali:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@600;700&family=Hind+Siliguri:wght@400;600;700&family=Noto+Sans+Bengali:wght@500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Firebase Compat Libraries -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -15,7 +15,7 @@
   <style>
     :root {
       --bg-dark: #0a0614;
-      --card-bg: rgba(22, 14, 40, 0.7);
+      --card-bg: rgba(22, 14, 40, 0.75);
       --card-border: rgba(147, 51, 234, 0.3);
       --primary-gradient: linear-gradient(135deg, #7e22ce 0%, #a855f7 100%);
       --accent-cyan: #06b6d4;
@@ -41,9 +41,100 @@
       padding: 16px 12px 50px;
     }
 
+    /* =========================================
+       লক স্ক্রিন মডাল (Password Protection Gate)
+       ========================================= */
+    #auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 3, 20, 0.95);
+      backdrop-filter: blur(25px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .auth-card {
+      background: rgba(26, 14, 48, 0.9);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      border-radius: 24px;
+      padding: 2.2rem 1.8rem;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(168, 85, 247, 0.2);
+    }
+
+    .auth-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.8rem;
+      display: inline-block;
+    }
+
+    .auth-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .auth-sub {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1.6rem;
+    }
+
+    .auth-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      margin-bottom: 1.2rem;
+      text-align: center;
+      letter-spacing: 2px;
+    }
+
+    .auth-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+    }
+
+    .auth-btn {
+      width: 100%;
+      background: var(--primary-gradient);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(126, 34, 206, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .auth-btn:active {
+      transform: scale(0.97);
+    }
+
+    .auth-error {
+      color: #f87171;
+      font-size: 0.85rem;
+      margin-top: 0.8rem;
+      display: none;
+    }
+
+    /* মূল অ্যাপ কন্টেইনার */
     .container {
       max-width: 480px;
       margin: 0 auto;
+      display: none; /* ডিফল্টভাবে লুকানো */
     }
 
     /* হেডার ও ব্যাক বাটন */
@@ -56,23 +147,42 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
+    .nav-left-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .back-btn {
       color: var(--accent-cyan);
       text-decoration: none;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: rgba(6, 182, 212, 0.1);
-      padding: 6px 14px;
+      padding: 6px 12px;
       border-radius: 20px;
       border: 1px solid rgba(6, 182, 212, 0.3);
       transition: all 0.2s ease;
     }
 
-    .back-btn:hover {
-      background: rgba(6, 182, 212, 0.2);
+    .btn-logout {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-logout:hover {
+      background: rgba(239, 68, 68, 0.25);
+      color: #fff;
     }
 
     .brand-title {
@@ -336,13 +446,32 @@
 </head>
 <body>
 
-  <div class="container">
+  <!-- =========================================
+       পাসওয়ার্ড ভেরিফিকেশন গেট (Lock Screen)
+       ========================================= -->
+  <div id="auth-overlay">
+    <div class="auth-card">
+      <div class="auth-icon">🔐</div>
+      <h2 class="auth-title">স্টুডিও লক স্ক্রিন</h2>
+      <p class="auth-sub">অ্যাডমিন পাসওয়ার্ড দিয়ে স্টুডিও আনলক করুন</p>
+      
+      <input type="password" id="auth-pass-input" class="auth-input" placeholder="পাসওয়ার্ড লিখুন..." onkeydown="if(event.key === 'Enter') verifyStudioAuth()">
+      <button class="auth-btn" onclick="verifyStudioAuth()">প্রবেশ করুন ➤</button>
+      <div id="auth-error-msg" class="auth-error">ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।</div>
+    </div>
+  </div>
+
+  <!-- মূল স্টুডিও কন্টেইনার (আনলক করার পর দৃশ্যমান হবে) -->
+  <div class="container" id="main-studio-app">
     
     <!-- হেডার -->
     <div class="top-nav">
-      <a href="ads.html" class="back-btn">
-        <span>←</span> বিজ্ঞাপন বাজারে ফিরুন
-      </a>
+      <div class="nav-left-group">
+        <a href="ads.html" class="back-btn">
+          <span>←</span> বিজ্ঞাপন বাজারে ফিরুন
+        </a>
+        <button class="btn-logout" onclick="logoutStudio()">🔒 লগআউট</button>
+      </div>
       <span class="brand-title">Aimanix Studio</span>
     </div>
 
@@ -395,7 +524,51 @@
   </div>
 
   <script>
-    // ফায়ারবেস কনফিগারেশন
+    // ==========================================================
+    // 1. পাসওয়ার্ড সুরক্ষা ও অথেনটিকেশন ইঞ্জিন (Same as Admin)
+    // ==========================================================
+    // আপনার admin.html এর যে মাস্টার কি (পাসওয়ার্ড) রয়েছে, প্রয়োজনে তা পরিবর্তন করতে পারেন
+    const STUDIO_ADMIN_KEY = "admin123"; 
+
+    function checkStudioAuth() {
+      const isAuth = sessionStorage.getItem("studio_authenticated") === "true";
+      const overlay = document.getElementById("auth-overlay");
+      const appContainer = document.getElementById("main-studio-app");
+
+      if (isAuth) {
+        overlay.style.display = "none";
+        appContainer.style.display = "block";
+        loadPublishedAds();
+      } else {
+        overlay.style.display = "flex";
+        appContainer.style.display = "none";
+        document.getElementById("auth-pass-input").focus();
+      }
+    }
+
+    function verifyStudioAuth() {
+      const input = document.getElementById("auth-pass-input");
+      const err = document.getElementById("auth-error-msg");
+
+      if (input.value.trim() === STUDIO_ADMIN_KEY) {
+        sessionStorage.setItem("studio_authenticated", "true");
+        err.style.display = "none";
+        checkStudioAuth();
+      } else {
+        err.style.display = "block";
+        input.value = "";
+        input.focus();
+      }
+    }
+
+    function logoutStudio() {
+      sessionStorage.removeItem("studio_authenticated");
+      location.reload();
+    }
+
+    // ==========================================================
+    // 2. ফায়ারবেস কনফিগারেশন
+    // ==========================================================
     const firebaseConfig = {
       authDomain: "aimanix-web.firebaseapp.com",
       projectId: "aimanix-web",
@@ -617,7 +790,6 @@
         return;
       }
 
-      // লিস্ট তৈরি
       manageList.innerHTML = ads.map(ad => `
         <div class="manage-item" id="item-${ad.id}">
           <div class="item-info">
@@ -631,7 +803,7 @@
       `).join('');
     }
 
-    // পোস্টার স্থায়ীভাবে মুছে ফেলার লজিক (চিরতরে ডিলিট)
+    // পোস্টার স্থায়ীভাবে মুছে ফেলার লজিক
     async function deleteAd(adId, encodedUrl, isFirebase) {
       if (!confirm("আপনি কি নিশ্চিত এই পোস্টারটি বিজ্ঞাপন বাজার থেকে চিরতরে মুছে ফেলতে চান?")) {
         return;
@@ -671,10 +843,8 @@
           } catch(e) {}
         });
 
-        // ৩. সেশন স্টোরেজ ক্লিয়ার
         sessionStorage.removeItem('latest_ad');
 
-        // ৪. UI থেকে ইনস্ট্যান্ট সরানো
         if (itemEl) itemEl.remove();
 
         alert("পোস্টারটি সফলভাবে মুছে ফেলা হয়েছে!");
@@ -695,9 +865,9 @@
         .replace(/'/g, "&#039;");
     }
 
-    // পেজ প্রস্তুত হলে প্রকাশিত পোস্টার তালিকা লোড করা
+    // পেজ লোড হলে সবার আগে অথেনটিকেশন চেক
     document.addEventListener("DOMContentLoaded", () => {
-      loadPublishedAds();
+      checkStudioAuth();
     });
   </script>
 </body>

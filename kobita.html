@@ -40,7 +40,7 @@
       position: relative;
     }
 
-    /* Ambient Touch & Cosmic Particles Canvas */
+    /* Ambient Touch Canvas */
     #touch-canvas {
       position: fixed;
       inset: 0;
@@ -50,7 +50,6 @@
       z-index: 1;
     }
 
-    /* Ambient Aurora Glow Circles */
     .aurora-blur-1 {
       position: fixed;
       top: -120px;
@@ -76,7 +75,7 @@
       z-index: 0;
     }
 
-    /* Top Navigation Bar */
+    /* Top Bar */
     .top-bar {
       position: sticky;
       top: 0;
@@ -216,10 +215,10 @@
       box-shadow: 0 6px 20px var(--pink-glow);
     }
 
-    /* Poem Grid & Animated Glowing Cards */
+    /* Poem Grid & Glowing Cards */
     .poem-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 2rem;
     }
 
@@ -239,7 +238,6 @@
       box-shadow: 0 20px 45px rgba(255, 42, 122, 0.3);
     }
 
-    /* শেয়ার করা লিঙ্কে ক্লিক করে আসলে স্পেশাল গ্লো এফেক্ট */
     .poem-card.highlight-target {
       animation: pulseHighlight 2s ease-in-out 3;
     }
@@ -249,7 +247,6 @@
       50% { box-shadow: 0 0 45px rgba(255, 42, 122, 0.8), 0 0 20px rgba(0, 242, 254, 0.9); }
     }
 
-    /* ঘুরন্ত নিয়ন বর্ডার */
     .poem-card::before {
       content: '';
       position: absolute;
@@ -355,15 +352,88 @@
       margin-bottom: 1.6rem;
     }
 
-    /* বাটন অ্যাকশন গ্রুপ */
-    .poem-actions-wrapper {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 0.65rem;
-      margin-top: auto;
+    /* ===================================================
+       Like, Love, Share & Recitation Actions Ribbon
+       =================================================== */
+    .poem-social-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+      background: rgba(14, 8, 28, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 6px 10px;
+      margin-bottom: 0.9rem;
+    }
+
+    .social-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-react {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      padding: 0.45rem 0.75rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-react:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .btn-react:active {
+      transform: scale(0.92);
+    }
+
+    /* সক্রিয় রিঅ্যাকশন স্টাইল (একবার দিলে স্থায়ী থাকবে) */
+    .btn-react.active-like {
+      background: rgba(6, 182, 212, 0.22);
+      border-color: var(--accent-cyan);
+      color: #38bdf8;
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
+    }
+
+    .btn-react.active-love {
+      background: rgba(255, 42, 122, 0.22);
+      border-color: var(--accent-pink);
+      color: #ff6097;
+      box-shadow: 0 0 12px rgba(255, 42, 122, 0.35);
+    }
+
+    .btn-react-share {
+      background: rgba(0, 242, 254, 0.08);
+      border: 1px solid rgba(0, 242, 254, 0.35);
+      color: #00f2fe;
+      padding: 0.45rem 0.8rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-react-share:hover {
+      background: rgba(0, 242, 254, 0.2);
+      transform: translateY(-2px);
     }
 
     .poem-action-btn {
+      width: 100%;
       background: var(--coral-gradient);
       color: #fff;
       border: none;
@@ -384,34 +454,6 @@
 
     .poem-action-btn:active {
       transform: scale(0.96);
-    }
-
-    .btn-share-poem {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(0, 242, 254, 0.35);
-      color: #00f2fe;
-      padding: 0.75rem 1rem;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.88rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      transition: all 0.25s ease;
-      white-space: nowrap;
-    }
-
-    .btn-share-poem:hover {
-      background: rgba(0, 242, 254, 0.15);
-      border-color: #00f2fe;
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.35);
-      transform: translateY(-2px);
-    }
-
-    .btn-share-poem:active {
-      transform: scale(0.94);
     }
 
     /* টোস্ট মেসেজ */
@@ -454,13 +496,12 @@
       .hero-headline { font-size: 2.2rem; }
       .portal-main { margin-top: 1.6rem; }
       .poem-grid { grid-template-columns: 1fr; }
-      .poem-actions-wrapper { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Ambient Glow & Touch Fluid Particles -->
+  <!-- Ambient Glow & Canvas -->
   <div class="aurora-blur-1"></div>
   <div class="aurora-blur-2"></div>
   <canvas id="touch-canvas"></canvas>
@@ -507,9 +548,9 @@
     </div>
   </main>
 
-  <!-- কাস্টম শেয়ার নোটিফিকেশন টোস্ট -->
+  <!-- কাস্টম টোস্ট নোটিফিকেশন -->
   <div id="share-toast" class="share-toast">
-    <span>✨</span> <span id="toast-text">কবিতার লিঙ্ক কপি করা হয়েছে!</span>
+    <span>✨</span> <span id="toast-text"></span>
   </div>
 
   <script>
@@ -530,6 +571,22 @@
     let allPoemsList = [];
     let currentFilter = 'all';
 
+    // ইউজারের প্রদত্ত রিঅ্যাকশন লোকাল রেজিস্ট্রি
+    function getUserReactions() {
+      try {
+        return JSON.parse(localStorage.getItem("poem_user_reactions") || "{}");
+      } catch(e) {
+        return {};
+      }
+    }
+
+    function saveUserReaction(poemId, type) {
+      const reactions = getUserReactions();
+      if (!reactions[poemId]) reactions[poemId] = {};
+      reactions[poemId][type] = true;
+      localStorage.setItem("poem_user_reactions", JSON.stringify(reactions));
+    }
+
     // ডিফল্ট ডেমো কবিতা
     const fallbackPoems = [
       {
@@ -538,7 +595,9 @@
         author: "অনুভবের ছায়া | Aimanix AI",
         category: "VIII",
         imageUrl: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80",
-        body: `নীল আকাশের সীমানা ছাড়িয়ে,\nমেঘেরা পাঠালো চিঠি।\nভিজে যাওয়া ঘাসে সবুজ আলপনা,\nজুড়িয়ে দিল এ দিঘি।\n\nবৃষ্টির কণা সুর তোলে মনে,\nবাতাসে বকুল ঘ্রাণ।\nঅচেনা পথের বাঁকে দাঁড়িয়ে,\nগেয়ে উঠি নব গান।`
+        body: `নীল আকাশের সীমানা ছাড়িয়ে,\nমেঘেরা পাঠালো চিঠি।\nভিজে যাওয়া ঘাসে সবুজ আলপনা,\nজুড়িয়ে দিল এ দিঘি।\n\nবৃষ্টির কণা সুর তোলে মনে,\nবাতাসে বকুল ঘ্রাণ।\nঅচেনা পথের বাঁকে দাঁড়িয়ে,\nগেয়ে উঠি নব গান।`,
+        likes: 12,
+        loves: 25
       },
       {
         id: "poem_demo_2",
@@ -546,7 +605,9 @@
         author: "কবির স্বপ্ন | নবম সংকলন",
         category: "IX",
         imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
-        body: `উত্তাল ঢেউয়ে জাগে প্রতিধ্বনি,\nবালুকাবেলায় স্মৃতি।\nঅস্তমিত রবির সোনালী মায়ায়,\nলিখে রাখি এক গীতি।\n\nদূর দিগন্তে জ্বলে ওঠা তারা,\nনিদ্রাহীন এক রাত।\nঅসীম সাহসে এগিয়ে চলেছি,\nছুঁয়ে দিতে ভোর-প্রভাত।`
+        body: `উত্তাল ঢেউয়ে জাগে প্রতিধ্বনি,\nবালুকাবেলায় স্মৃতি।\nঅস্তমিত রবির সোনালী মায়ায়,\nলিখে রাখি এক গীতি।\n\nদূর দিগন্তে জ্বলে ওঠা তারা,\nনিদ্রাহীন এক রাত।\nঅসীম সাহসে এগিয়ে চলেছি,\nছুঁয়ে দিতে ভোর-প্রভাত।`,
+        likes: 18,
+        loves: 34
       },
       {
         id: "poem_demo_3",
@@ -554,7 +615,9 @@
         author: "আনোয়ার হোসেন",
         category: "special",
         imageUrl: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=800&q=80",
-        body: `শীতল কুয়াশা ভেঙে আলো আসে,\nজাগে পৃথিবীর প্রাণ।\nশিশিরবিন্দু ঘাসের ডগায়,\nকরে যে আলোকরশ্মি পান।\n\nচলার পথে থেমে থাকা নয়,\nসামনে যে স্বপ্ন অপার।\nএ জীবনে গড়ে তুলব আমি,\nনতুন এক অহংকার।`
+        body: `শীতল কুয়াশা ভেঙে আলো আসে,\nজাগে পৃথিবীর প্রাণ।\nশিশিরবিন্দু ঘাসের ডগায়,\nকরে যে আলোকরশ্মি পান।\n\nচলার পথে থেমে থাকা নয়,\nসামনে যে স্বপ্ন অপার।\nএ জীবনে গড়ে তুলব আমি,\nনতুন এক অহংকার।`,
+        likes: 45,
+        loves: 89
       }
     ];
 
@@ -573,10 +636,9 @@
           allPoemsList.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
         }
       } catch (err) {
-        console.warn("Firestore fetch error, loading from local cache:", err);
+        console.warn("Firestore fetch error, fallback cache:", err);
       }
 
-      // লোকাল ক্যাশ ব্যাকআপ লোড
       if (allPoemsList.length === 0) {
         const cached = JSON.parse(localStorage.getItem("aimanix_poems") || "[]");
         if (cached.length > 0) {
@@ -591,7 +653,7 @@
     }
 
     // ==========================================================
-    // 3. RENDER POEMS GRID WITH SHARE BUTTON
+    // 3. RENDER POEMS GRID WITH LIKE, LOVE & SHARE
     // ==========================================================
     function renderPoems() {
       const container = document.getElementById("poem-container");
@@ -608,16 +670,23 @@
         return;
       }
 
+      const userReactions = getUserReactions();
       container.innerHTML = "";
+
       filtered.forEach((poem) => {
         const categoryLabel = poem.category === 'VIII' ? 'Class VIII সাহিত্য'
                             : poem.category === 'IX' ? 'Class IX সাহিত্য'
                             : 'সৃজনশীল আসর';
 
         const coverImg = poem.imageUrl || "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80";
-
-        // ইউনিক আইডি তৈরি
         const poemSlugId = poem.id ? `poem-${poem.id}` : `poem-${encodeURIComponent(poem.title.replace(/\s+/g, '-'))}`;
+        const poemId = poem.id || poemSlugId;
+
+        const hasLiked = userReactions[poemId]?.like ? 'active-like' : '';
+        const hasLoved = userReactions[poemId]?.love ? 'active-love' : '';
+
+        const likeCount = poem.likes || 0;
+        const loveCount = poem.loves || 0;
 
         const card = document.createElement("div");
         card.className = "poem-card";
@@ -634,15 +703,26 @@
               <h3 class="poem-title">${poem.title}</h3>
               <div class="poem-author">✍️ কলমে: ${poem.author}</div>
               <div class="poem-verses">${poem.body}</div>
-              
-              <div class="poem-actions-wrapper">
-                <a href="https://wa.me/919143181401?text=আমি%20কবিতার%20আকাশ%20থেকে%20'${encodeURIComponent(poem.title)}'%20কবিতাটি%20পড়েছি" target="_blank" class="poem-action-btn">
-                  <span>সরাসরি আবৃত্তি শুনুন</span> →
-                </a>
-                <button class="btn-share-poem" onclick="sharePoem('${poemSlugId}', '${escapeJs(poem.title)}', '${escapeJs(poem.author)}')">
-                  🔗 <span>শেয়ার</span>
+
+              <!-- Like, Love & Share বাটন বার -->
+              <div class="poem-social-bar">
+                <div class="social-btn-group">
+                  <button class="btn-react ${hasLiked}" id="btn-like-${poemId}" onclick="handleReaction('${poemId}', 'like')">
+                    👍 <span id="count-like-${poemId}">${likeCount}</span>
+                  </button>
+                  <button class="btn-react ${hasLoved}" id="btn-love-${poemId}" onclick="handleReaction('${poemId}', 'love')">
+                    ❤️ <span id="count-love-${poemId}">${loveCount}</span>
+                  </button>
+                </div>
+                
+                <button class="btn-react-share" onclick="sharePoem('${poemSlugId}', '${escapeJs(poem.title)}', '${escapeJs(poem.author)}')">
+                  🔗 <span>শেয়ার</span>
                 </button>
               </div>
+              
+              <a href="https://wa.me/919143181401?text=আমি%20কবিতার%20আকাশ%20থেকে%20'${encodeURIComponent(poem.title)}'%20কবিতাটি%20পড়েছি" target="_blank" class="poem-action-btn">
+                <span>সরাসরি আবৃত্তি শুনুন</span> →
+              </a>
             </div>
           </div>
         `;
@@ -651,10 +731,57 @@
     }
 
     // ==========================================================
-    // 4. SMART POEM SHARE HANDLER (Web Share API + Deep Link)
+    // 4. DUPLICATE-PROTECTED REACTION HANDLER (Like & Love)
+    // ==========================================================
+    async function handleReaction(poemId, type) {
+      const userReactions = getUserReactions();
+      
+      // একবার দেওয়া থাকলে দ্বিতীয়বার গ্রান্ট হবে না
+      if (userReactions[poemId] && userReactions[poemId][type]) {
+        const typeName = type === 'like' ? 'লাইক' : 'লাভ';
+        showToast(`⚠️ আপনি ইতিমধ্যে এই কবিতায় ${typeName} দিয়েছেন!`);
+        return;
+      }
+
+      // ১. লোকাল স্টেটে ইউজারকে লক করা
+      saveUserReaction(poemId, type);
+
+      // ২. UI আপডেট (তাৎক্ষণিক কাউন্ট বাড়ানো ও সক্রিয় ক্লাস যোগ)
+      const countEl = document.getElementById(`count-${type}-${poemId}`);
+      const btnEl = document.getElementById(`btn-${type}-${poemId}`);
+
+      if (countEl) {
+        let current = parseInt(countEl.innerText) || 0;
+        countEl.innerText = current + 1;
+      }
+
+      if (btnEl) {
+        btnEl.classList.add(type === 'like' ? 'active-like' : 'active-love');
+      }
+
+      showToast(type === 'like' ? '👍 লাইক করার জন্য ধন্যবাদ!' : '❤️ আপনার ভালোবাসা যুক্ত হয়েছে!');
+
+      // ৩. ফায়ারবেস ডেটাবেজে এটমিক ইনক্রিমেন্ট পাঠানো
+      try {
+        const fieldName = type === 'like' ? 'likes' : 'loves';
+        await db.collection("poems").doc(poemId).update({
+          [fieldName]: firebase.firestore.FieldValue.increment(1)
+        });
+      } catch (err) {
+        // যদি ডেমো আইডি হয় বা অফলাইন থাকে, লোকাল অবজেক্টে রাখা
+        const targetPoem = allPoemsList.find(p => p.id === poemId);
+        if (targetPoem) {
+          const field = type === 'like' ? 'likes' : 'loves';
+          targetPoem[field] = (targetPoem[field] || 0) + 1;
+          localStorage.setItem("aimanix_poems", JSON.stringify(allPoemsList));
+        }
+      }
+    }
+
+    // ==========================================================
+    // 5. SMART POEM SHARE HANDLER (Web Share API + Deep Link)
     // ==========================================================
     async function sharePoem(elementId, title, author) {
-      // kobita.html ফাইলের সঠিক লিঙ্ক তৈরি
       const currentUrl = new URL(window.location.href);
       currentUrl.hash = elementId;
       const shareUrl = currentUrl.toString();
@@ -665,7 +792,6 @@
         url: shareUrl
       };
 
-      // মোবাইলের নেটিভ শেয়ার শিট (WhatsApp, FB, Telegram ইত্যাদি)
       if (navigator.share) {
         try {
           await navigator.share(shareData);
@@ -680,11 +806,10 @@
       }
     }
 
-    // ব্রাউজারে লিঙ্ক কপি ও টোস্ট প্রদর্শন
     function fallbackCopyToClipboard(url) {
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(url).then(() => {
-          showShareToast("কবিতার সরাসরি লিঙ্ক কপি হয়েছে! বন্ধুদের পাঠান।");
+          showToast("✨ কবিতার সরাসরি লিঙ্ক কপি হয়েছে!");
         }).catch(() => {
           legacyCopy(url);
         });
@@ -700,10 +825,10 @@
       input.select();
       document.execCommand("copy");
       document.body.removeChild(input);
-      showShareToast("কবিতার সরাসরি লিঙ্ক কপি হয়েছে! বন্ধুদের পাঠান।");
+      showToast("✨ কবিতার সরাসরি লিঙ্ক কপি হয়েছে!");
     }
 
-    function showShareToast(message) {
+    function showToast(message) {
       const toast = document.getElementById("share-toast");
       const toastText = document.getElementById("toast-text");
       toastText.innerText = message;
@@ -714,7 +839,6 @@
       }, 3000);
     }
 
-    // শেয়ার লিঙ্কে ক্লিক করে আসলে স্বয়ংক্রিয়ভাবে সেই কবিতায় স্ক্রল করা
     function handleDirectPoemScroll() {
       const hash = window.location.hash;
       if (hash) {
@@ -734,7 +858,7 @@
       return String(str).replace(/'/g, "\\'").replace(/"/g, '&quot;');
     }
 
-    // ফিল্টার লজিক
+    // Filter Logic
     function filterCategory(cat, btnElement) {
       currentFilter = cat;
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -745,7 +869,7 @@
     window.addEventListener('DOMContentLoaded', loadPublishedPoems);
 
     /* ==========================================================
-       COLORFUL TOUCH & COSMIC NEON RIPPLE ENGINE
+       TOUCH & COSMIC NEON RIPPLE ENGINE
        ========================================================== */
     const canvas = document.getElementById('touch-canvas');
     const ctx = canvas.getContext('2d');
@@ -759,11 +883,11 @@
     resizeCanvas();
 
     const colorPalette = [
-      '255, 42, 122',   // Neon Pink
-      '255, 94, 98',    // Coral
-      '224, 36, 195',   // Deep Magenta
-      '0, 242, 254',    // Cyan Spark
-      '255, 160, 122'   // Peach Glow
+      '255, 42, 122',
+      '255, 94, 98',
+      '224, 36, 195',
+      '0, 242, 254',
+      '255, 160, 122'
     ];
 
     class SparkleParticle {

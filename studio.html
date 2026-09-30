@@ -553,27 +553,29 @@
       firebase.initializeApp(firebaseConfig);
     }
     
-    // ভ্যারিয়েবল ডিক্লেয়ারেশন সবার উপরে
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    // উইন্ডো অবজেক্টে সুরক্ষিত ইনিশিয়ালাইজেশন
+    window.auth = firebase.auth();
+    window.db = firebase.firestore();
 
     // ==========================================================
     // ২. অথেনটিকেশন ও স্টেট লিসেনার
     // ==========================================================
-    auth.onAuthStateChanged((user) => {
-      const overlay = document.getElementById("auth-overlay");
-      const appContainer = document.getElementById("main-studio-app");
+    window.addEventListener('load', () => {
+      window.auth.onAuthStateChanged((user) => {
+        const overlay = document.getElementById("auth-overlay");
+        const appContainer = document.getElementById("main-studio-app");
 
-      if (user) {
-        if (overlay) overlay.style.display = "none";
-        if (appContainer) appContainer.style.display = "block";
-        loadPublishedAds();
-      } else {
-        if (overlay) overlay.style.display = "flex";
-        if (appContainer) appContainer.style.display = "none";
-        const emailField = document.getElementById("auth-email-input");
-        if (emailField) emailField.focus();
-      }
+        if (user) {
+          if (overlay) overlay.style.display = "none";
+          if (appContainer) appContainer.style.display = "block";
+          loadPublishedAds();
+        } else {
+          if (overlay) overlay.style.display = "flex";
+          if (appContainer) appContainer.style.display = "none";
+          const emailField = document.getElementById("auth-email-input");
+          if (emailField) emailField.focus();
+        }
+      });
     });
 
     async function handleFirebaseAuthLogin() {
@@ -596,7 +598,7 @@
       errorMsg.style.display = "none";
 
       try {
-        await auth.signInWithEmailAndPassword(email, password);
+        await window.auth.signInWithEmailAndPassword(email, password);
       } catch (error) {
         let bengaliErr = "লগইন ব্যর্থ হয়েছে: " + error.message;
         if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
@@ -614,7 +616,7 @@
 
     async function handleFirebaseAuthLogout() {
       try {
-        await auth.signOut();
+        await window.auth.signOut();
       } catch (err) {
         alert("লগআউট ব্যর্থ: " + err.message);
       }
@@ -750,7 +752,7 @@
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         };
 
-        const docRef = await db.collection("ads").add(newAd);
+        const docRef = await window.db.collection("ads").add(newAd);
 
         const storageKeys = ["aimanix_ad_posters", "user_market_ads", "ads"];
         storageKeys.forEach(k => {
@@ -788,7 +790,7 @@
       const seenUrls = new Set();
 
       try {
-        const snap = await db.collection("ads").orderBy("createdAt", "desc").limit(20).get();
+        const snap = await window.db.collection("ads").orderBy("createdAt", "desc").limit(20).get();
         if (!snap.empty) {
           snap.forEach(doc => {
             const data = doc.data();
@@ -849,11 +851,11 @@
       try {
         if (isFirebase) {
           try {
-            await db.collection("ads").doc(adId).delete();
+            await window.db.collection("ads").doc(adId).delete();
           } catch(e) {}
 
           try {
-            const querySnap = await db.collection("ads").where("imageUrl", "==", targetUrl).get();
+            const querySnap = await window.db.collection("ads").where("imageUrl", "==", targetUrl).get();
             querySnap.forEach(async (doc) => {
               await doc.ref.delete();
             });

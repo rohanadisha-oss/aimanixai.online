@@ -146,7 +146,7 @@
     .container {
       max-width: 480px;
       margin: 0 auto;
-      display: none; /* লগইন না হওয়া পর্যন্ত লুকানো থাকবে */
+      display: none;
     }
 
     /* হেডার ও ব্যাক বাটন */
@@ -513,13 +513,13 @@
       <textarea id="prompt-input" class="prompt-input" placeholder="যেমন: একটা পোস্টার তৈরি করুন। যার ব্যাকগ্রাউন্ড হবে নিওন পার্পল। বড় সুন্দর ফন্টে থাকবে 'ফুলবাড়ি আমিনিয়া হাই মাদ্রাসা'..."></textarea>
       
       <div class="dock-actions">
-        <!-- অপশন ১: ফোন থেকে সরাসরি আপলোড -->
+        <!-- ফোন থেকে আপলোড -->
         <label class="upload-label">
           📁 <span>ফোন থেকে আপলোড</span>
           <input type="file" id="image-upload" accept="image/*" onchange="handleDirectUpload(event)">
         </label>
 
-        <!-- অপশন ২: মুক্ত প্রম্পট এআই তৈরি -->
+        <!-- মুক্ত প্রম্পট এআই তৈরি -->
         <button class="generate-btn" id="generate-btn" onclick="generateWithAI()">
           <span id="btn-text">এআই পোস্টার তৈরি ➤</span>
         </button>
@@ -541,7 +541,7 @@
 
   <script>
     // ==========================================================
-    // 1. ফায়ারবেস কনফিগারেশন ও অথেনটিকেশন ইনিশিয়ালাইজেশন
+    // ১. ফায়ারবেস কনফিগারেশন ও ক্লায়েন্ট ইনিশিয়ালাইজেশন
     // ==========================================================
     const firebaseConfig = {
       authDomain: "aimanix-web.firebaseapp.com",
@@ -549,29 +549,33 @@
       storageBucket: "aimanix-web.appspot.com"
     };
 
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    
+    // ভ্যারিয়েবল ডিক্লেয়ারেশন সবার উপরে
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // Firebase Auth State Listener (admin.html এর সাথে নিখুঁত সিঙ্ক)
+    // ==========================================================
+    // ২. অথেনটিকেশন ও স্টেট লিসেনার
+    // ==========================================================
     auth.onAuthStateChanged((user) => {
       const overlay = document.getElementById("auth-overlay");
       const appContainer = document.getElementById("main-studio-app");
 
       if (user) {
-        // লগইন থাকলে লকস্ক্রিন বন্ধ হয়ে স্টুডিও খুলবে
-        overlay.style.display = "none";
-        appContainer.style.display = "block";
+        if (overlay) overlay.style.display = "none";
+        if (appContainer) appContainer.style.display = "block";
         loadPublishedAds();
       } else {
-        // লগআউট থাকলে লকস্ক্রিন চলে আসবে
-        overlay.style.display = "flex";
-        appContainer.style.display = "none";
-        document.getElementById("auth-email-input").focus();
+        if (overlay) overlay.style.display = "flex";
+        if (appContainer) appContainer.style.display = "none";
+        const emailField = document.getElementById("auth-email-input");
+        if (emailField) emailField.focus();
       }
     });
 
-    // Firebase Email/Password Login Function
     async function handleFirebaseAuthLogin() {
       const emailInput = document.getElementById("auth-email-input");
       const passInput = document.getElementById("auth-pass-input");
@@ -593,7 +597,6 @@
 
       try {
         await auth.signInWithEmailAndPassword(email, password);
-        // সফল হলে onAuthStateChanged স্বয়ংক্রিয়ভাবে পেজ আনলক করবে
       } catch (error) {
         let bengaliErr = "লগইন ব্যর্থ হয়েছে: " + error.message;
         if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
@@ -609,7 +612,6 @@
       }
     }
 
-    // Firebase Logout Function
     async function handleFirebaseAuthLogout() {
       try {
         await auth.signOut();
@@ -619,11 +621,10 @@
     }
 
     // ==========================================================
-    // 2. স্টুডিও কোর ইঞ্জিন (ইমেজ জেনারেশন ও ম্যানেজমেন্ট)
+    // ৩. স্টুডিও কোর ইঞ্জিন (ইমেজ জেনারেশন ও ম্যানেজমেন্ট)
     // ==========================================================
     let currentPosterUrl = '';
 
-    // ছবি কম্প্রেস করার ফাংশন (মেমরি ও ডেটাবেজ সেভিং)
     async function compressImageForStorage(base64Str) {
       return new Promise((resolve) => {
         const img = new Image();
@@ -652,7 +653,6 @@
       });
     }
 
-    // ১. ফোন থেকে সরাসরি ছবি আপলোড
     function handleDirectUpload(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -664,7 +664,6 @@
       reader.readAsDataURL(file);
     }
 
-    // ২. ব্যাকএন্ড এপিআই দিয়ে এআই পোস্টার তৈরি
     async function generateWithAI() {
       const promptInput = document.getElementById('prompt-input');
       const generateBtn = document.getElementById('generate-btn');
@@ -703,7 +702,6 @@
       }
     }
 
-    // প্রিভিউ ডিসপ্লে
     function showPreview(url) {
       currentPosterUrl = url;
       const previewImg = document.getElementById('preview-image');
@@ -714,7 +712,6 @@
       placeholder.style.display = 'none';
     }
 
-    // প্রিভিউ বাতিল ও স্ক্রিন পরিষ্কার
     function cancelPreview() {
       currentPosterUrl = '';
       const previewImg = document.getElementById('preview-image');
@@ -726,7 +723,6 @@
       document.getElementById('image-upload').value = '';
     }
 
-    // বিজ্ঞাপন বাজারে লাইভ পোস্ট (Firebase + LocalStorage Sync)
     async function publishLive() {
       if (!currentPosterUrl) {
         alert('আগে একটি পোস্টার তৈরি বা আপলোড করুন!');
@@ -754,10 +750,8 @@
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         };
 
-        // ১. ফায়ারবেস ডাটাবেজে সংরক্ষণ
         const docRef = await db.collection("ads").add(newAd);
 
-        // ২. লোকাল স্টোরেজে সংরক্ষণ
         const storageKeys = ["aimanix_ad_posters", "user_market_ads", "ads"];
         storageKeys.forEach(k => {
           try {
@@ -785,7 +779,6 @@
       }
     }
 
-    // প্রকাশিত পোস্টারগুলো লোড করা
     async function loadPublishedAds() {
       const manageList = document.getElementById('manage-list');
       if (!manageList) return;
@@ -794,7 +787,6 @@
       let ads = [];
       const seenUrls = new Set();
 
-      // ১. ফায়ারবেস থেকে পড়া
       try {
         const snap = await db.collection("ads").orderBy("createdAt", "desc").limit(20).get();
         if (!snap.empty) {
@@ -811,7 +803,6 @@
         console.warn("ফায়ারবেস লোড নোটিশ:", err);
       }
 
-      // ২. লোকাল স্টোরেজ থেকে পড়া
       const storageKeys = ["aimanix_ad_posters", "user_market_ads", "ads", "admin_ads"];
       storageKeys.forEach(k => {
         try {
@@ -846,7 +837,6 @@
       `).join('');
     }
 
-    // পোস্টার স্থায়ীভাবে মুছে ফেলার লজিক
     async function deleteAd(adId, encodedUrl, isFirebase) {
       if (!confirm("আপনি কি নিশ্চিত এই পোস্টারটি বিজ্ঞাপন বাজার থেকে চিরতরে মুছে ফেলতে চান?")) {
         return;
@@ -857,7 +847,6 @@
       if (itemEl) itemEl.style.opacity = '0.3';
 
       try {
-        // ১. ফায়ারবেস থেকে সরাসরি আইডি এবং ইমেজ দিয়ে ডিলিট
         if (isFirebase) {
           try {
             await db.collection("ads").doc(adId).delete();
@@ -871,7 +860,6 @@
           } catch(e) {}
         }
 
-        // ২. ব্রাউজারের সমস্ত লোকাল স্টোরেজ থেকে পরিষ্কার করা
         const keys = ["aimanix_ad_posters", "user_market_ads", "ads", "admin_ads"];
         keys.forEach(key => {
           try {
